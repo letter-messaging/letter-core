@@ -49,6 +49,15 @@ public class UserService {
 		userRepository.save(new User(null, login, Hasher.getHash(password)));
 	}
 	
+	public User getUser(Long id) throws NoSuchEntityException {
+		return userRepository.findById(id).orElseThrow(() -> new NoSuchEntityException("no such user"));
+	}
+	
+	public User getUser(String login) throws NoSuchEntityException {
+		return Optional.ofNullable(userRepository.findByLogin(login))
+				.orElseThrow(() -> new NoSuchEntityException("no such user"));
+	}
+	
 	public Long getUserId(String token) throws NoSuchEntityException {
 		return Optional.ofNullable(userRepository.getId(token)).orElseThrow(() -> new NoSuchEntityException("no such user"));
 	}

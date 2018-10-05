@@ -5,6 +5,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 
+import java.util.Optional;
+
 public interface UserRepository extends CrudRepository<User, Long> {
 	
 	User findByLogin(String login);
@@ -13,5 +15,7 @@ public interface UserRepository extends CrudRepository<User, Long> {
 			"from User u, Token t\n" +
 			"where u.id = t.id and t.token = :token")
 	Long getId(@Param("token") String token);
+	
+	Optional<User> findById(Long id);
 	
 }
