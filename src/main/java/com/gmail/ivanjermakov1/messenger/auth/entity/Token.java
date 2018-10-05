@@ -7,7 +7,9 @@ import javax.persistence.*;
 public class Token {
 	
 	@Id
-	@JoinColumn(name = "id")
+	@JoinColumn(name = "id",
+			foreignKey = @ForeignKey(name = "token_user_id_fk")
+	)
 	private Long id;
 	
 	@Column(name = "token")
