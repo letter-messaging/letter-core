@@ -1,5 +1,6 @@
 plugins {
     id 'java'
+    id 'org.springframework.boot' version '2.0.3.RELEASE'
 }
 
 group 'com.gmail.ivanjermakov1'
@@ -11,5 +12,16 @@ repositories {
     mavenCentral()
 }
 
+bootRun {
+    systemProperties System.properties
+}
+
 dependencies {
+    compile "org.springframework.boot:spring-boot-starter-web:2.0.3.RELEASE"
+    compile "org.springframework.boot:spring-boot-starter-data-jpa:2.0.3.RELEASE"
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter-mail', version: '2.0.3.RELEASE'
+
+    compile group: 'org.postgresql', name: 'postgresql', version: '42.2.4'
+
+    compile group: 'commons-codec', name: 'commons-codec', version: '1.9'
 }
