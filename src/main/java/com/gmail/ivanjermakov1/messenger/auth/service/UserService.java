@@ -7,11 +7,13 @@ import com.gmail.ivanjermakov1.messenger.auth.repository.UserRepository;
 import com.gmail.ivanjermakov1.messenger.auth.security.Hasher;
 import com.gmail.ivanjermakov1.messenger.auth.security.TokenGenerator;
 import com.gmail.ivanjermakov1.messenger.exception.AuthenticationException;
+import com.gmail.ivanjermakov1.messenger.exception.NoSuchEntityException;
 import com.gmail.ivanjermakov1.messenger.exception.RegistrationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -45,6 +47,10 @@ public class UserService {
 	public void register(String login, String password) throws RegistrationException {
 		if (userRepository.findByLogin(login) != null) throw new RegistrationException("user already exits.");
 		userRepository.save(new User(null, login, Hasher.getHash(password)));
+	}
+	
+	public Long getUserId(String token) throws NoSuchEntityException {
+		return Optional.ofNullable(userRepository.getId(token)).orElseThrow(() -> new NoSuchEntityException("no such user"));
 	}
 	
 }
