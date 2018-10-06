@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Messenger.</title>
+
+	<!--STYLES-->
+	<link rel="stylesheet" type="text/css" href="css/scrollbar.css">
+	<link rel="stylesheet" type="text/css" href="css/style.css">
+	<link rel="stylesheet" type="text/css" href="css/header-left.css">
+	<link rel="stylesheet" type="text/css" href="css/header-right.css">
+	<link rel="stylesheet" type="text/css" href="css/search.css">
+	<link rel="stylesheet" type="text/css" href="css/preview.css">
+	<link rel="stylesheet" type="text/css" href="css/conversation.css">
+
+	<!--FONTS-->
+	<link href="https://fonts.googleapis.com/css?family=Krub" rel="stylesheet">
+
+	<!--ICONS-->
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css"
+	      integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+
+	<script type="text/javascript"
+	        src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.7.2/angular.min.js"></script>
+</head>
+<body>
+<div class="content">
+
+	<header class="header-left">
+		<div class="logo">
+			<i class="fas fa-comment"></i>
+		</div>
+		<div class="logo-name">
+			Messenger.
+		</div>
+	</header>
+
+	<header class="header-right">
+		<div class="conversation-name">Андрей Алексеев</div>
+		<div class="status">online</div>
+		<div class="search">
+			<div class="icon"><i class="fas fa-search"></i></div>
+		</div>
+	</header>
+
+	<div class="preview-wrapper">
+		<div class="search">
+			<div class="icon"><i class="fas fa-search"></i></div>
+			<input id="search-conversations" type="text" placeholder="Search">
+		</div>
+
+		<div class="preview">
+			<img class="avatar" src="img/default-avatar.png">
+			<div class="info">Андрей Алексеев</div>
+			<div class="message">
+				<div class="from"></div>
+				<div class="text">Как твои дела? Давно не видел тебя в уличных гонках!</div>
+			</div>
+			<div class="delete"><i class="fas fa-times"></i></div>
+			<div class="unread"><i class="fas fa-circle"></i></div>
+			<div class="sent">12:43</div>
+		</div>
+		<div class="preview">
+			<img class="avatar" src="img/default-avatar.png">
+			<div class="info">Андрей Алексеев</div>
+			<div class="message">
+				<div class="from"></div>
+				<div class="text">Как твои дела?</div>
+			</div>
+			<div class="delete"><i class="fas fa-times"></i></div>
+			<div class="unread"><i class="fas fa-circle"></i></div>
+			<div class="sent">12:43</div>
+		</div>
+		<div class="preview">
+			<img class="avatar" src="img/default-avatar.png">
+			<div class="info">Андрей Алексеев</div>
+			<div class="message">
+				<div class="from"></div>
+				<div class="text">Как твои дела?</div>
+			</div>
+			<div class="delete"><i class="fas fa-times"></i></div>
+			<div class="unread"><i class="fas fa-circle"></i></div>
+			<div class="sent">12:43</div>
+		</div>
+		<div class="preview">
+			<img class="avatar" src="img/default-avatar.png">
+			<div class="info">Андрей Алексеев</div>
+			<div class="message">
+				<div class="from"></div>
+				<div class="text">Как твои дела?</div>
+			</div>
+			<div class="delete"><i class="fas fa-times"></i></div>
+			<div class="unread"><i class="fas fa-circle"></i></div>
+			<div class="sent">12:43</div>
+		</div>
+		<div class="preview">
+			<img class="avatar" src="img/default-avatar.png">
+			<div class="info">Андрей Алексеев</div>
+			<div class="message">
+				<div class="from"></div>
+				<div class="text">Как твои дела?</div>
+			</div>
+			<div class="delete"><i class="fas fa-times"></i></div>
+			<div class="unread"><i class="fas fa-circle"></i></div>
+			<div class="sent">12:43</div>
+		</div>
+		<div class="preview">
+			<img class="avatar" src="img/default-avatar.png">
+			<div class="info">Андрей Алексеев</div>
+			<div class="message">
+				<div class="from"></div>
+				<div class="text">Как твои дела?</div>
+			</div>
+			<div class="delete"><i class="fas fa-times"></i></div>
+			<div class="unread"><i class="fas fa-circle"></i></div>
+			<div class="sent">12:43</div>
+		</div>
+		<div class="preview">
+			<img class="avatar" src="img/default-avatar.png">
+			<div class="info">Андрей Алексеев</div>
+			<div class="message">
+				<div class="from"></div>
+				<div class="text">Как твои дела?</div>
+			</div>
+			<div class="delete"><i class="fas fa-times"></i></div>
+			<div class="unread"><i class="fas fa-circle"></i></div>
+			<div class="sent">12:43</div>
+		</div>
+		<div class="preview">
+			<img class="avatar" src="img/default-avatar.png">
+			<div class="info">Андрей Алексеев</div>
+			<div class="message">
+				<div class="from"></div>
+				<div class="text">Как твои дела?</div>
+			</div>
+			<div class="delete"><i class="fas fa-times"></i></div>
+			<div class="unread"><i class="fas fa-circle"></i></div>
+			<div class="sent">12:43</div>
+		</div>
+		<div class="preview">
+			<img class="avatar" src="img/default-avatar.png">
+			<div class="info">Андрей Алексеев</div>
+			<div class="message">
+				<div class="from"></div>
+				<div class="text">Как твои дела?</div>
+			</div>
+			<div class="delete"><i class="fas fa-times"></i></div>
+			<div class="unread"><i class="fas fa-circle"></i></div>
+			<div class="sent">12:43</div>
+		</div>
+		<div class="preview">
+			<img class="avatar" src="img/default-avatar.png">
+			<div class="info">Андрей Алексеев</div>
+			<div class="message">
+				<div class="from"></div>
+				<div class="text">Как твои дела?</div>
+			</div>
+			<div class="delete"><i class="fas fa-times"></i></div>
+			<div class="unread"><i class="fas fa-circle"></i></div>
+			<div class="sent">12:43</div>
+		</div>
+		<div class="preview">
+			<img class="avatar" src="img/default-avatar.png">
+			<div class="info">Андрей Алексеев</div>
+			<div class="message">
+				<div class="from"></div>
+				<div class="text">Как твои дела?</div>
+			</div>
+			<div class="delete"><i class="fas fa-times"></i></div>
+			<div class="unread"><i class="fas fa-circle"></i></div>
+			<div class="sent">12:43</div>
+		</div>
+		<div class="preview">
+			<img class="avatar" src="img/default-avatar.png">
+			<div class="info">Андрей Алексеев</div>
+			<div class="message">
+				<div class="from"></div>
+				<div class="text">Как твои дела?</div>
+			</div>
+			<div class="delete"><i class="fas fa-times"></i></div>
+			<div class="unread"><i class="fas fa-circle"></i></div>
+			<div class="sent">12:43</div>
+		</div>
+		<div class="preview">
+			<img class="avatar" src="img/default-avatar.png">
+			<div class="info">Андрей Алексеев</div>
+			<div class="message">
+				<div class="from"></div>
+				<div class="text">Как твои дела?</div>
+			</div>
+			<div class="delete"><i class="fas fa-times"></i></div>
+			<div class="unread"><i class="fas fa-circle"></i></div>
+			<div class="sent">12:43</div>
+		</div>
+		<div class="preview">
+			<img class="avatar" src="img/default-avatar.png">
+			<div class="info">Андрей Алексеев</div>
+			<div class="message">
+				<div class="from"></div>
+				<div class="text">Как твои дела?</div>
+			</div>
+			<div class="delete"><i class="fas fa-times"></i></div>
+			<div class="unread"><i class="fas fa-circle"></i></div>
+			<div class="sent">12:43</div>
+		</div>
+
+	</div>
+
+	<div class="conversation">
+		<!--<div id="no-conversation">
+			Select conversation to start messaging.
+		</div>-->
+		<div class="message-wrapper">
+			<div class="message">
+
+			</div>
+		</div>
+		<div class="send-message-wrapper">
+			<div class="attachment">
+				<i class="fas fa-paperclip"></i>
+			</div>
+			<textarea id="send-message-text" onkeydown="resize(this)" rows="1"
+			          placeholder="Write a message..."></textarea>
+			<div class="emoji">
+				<i class="fas fa-smile"></i>
+			</div>
+			<div class="send-message">
+				<i class="fas fa-angle-right"></i>
+			</div>
+		</div>
+	</div>
+
+</div>
+
+<script type="text/javascript" src="js/textarea.js"></script>
+
+</body>
+</html>
