@@ -1,0 +1,31 @@
+.header-right {
+	display: flex;
+	align-items: center;
+
+	margin: 2px 2px 2px 0;
+
+	background: #666666;
+
+	border-radius: 0 2px 2px 0;
+
+	color: white;
+}
+
+.header-right .conversation-name {
+	font-weight: bold;
+	margin: 0 10px;
+}
+
+.header-right .status {
+	font-size: 20px;
+}
+
+.header-right .search {
+	margin-left: auto;
+
+	background: unset;
+}
+
+.header-right .search i {
+	color: white;
+}

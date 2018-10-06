@@ -1,0 +1,54 @@
+.conversation {
+	display: grid;
+}
+
+.conversation i {
+	padding: 10px;
+
+	font-size: 28px;
+
+	cursor: pointer;
+
+	color: #666666;
+}
+
+.conversation i:hover {
+	color: #6490d8;
+}
+
+#no-conversation {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+
+	background: white;
+	border-radius: 2px;
+
+	color: #aaaaaa;
+}
+
+.send-message-wrapper {
+	display: flex;
+	align-self: end;
+	align-items: center;
+
+	padding: 5px;
+
+	background: white;
+	border-radius: 2px;
+}
+
+#send-message-text {
+	resize: none;
+	outline: none;
+
+	width: 100%;
+
+	padding: 4px;
+
+	max-height: 120px;
+	overflow-y: scroll;
+
+	border: 1px solid silver;
+	border-radius: 4px;
+}
