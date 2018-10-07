@@ -2,8 +2,6 @@
 	display: flex;
 	flex-direction: column;
 
-	flex: 0 0 1;
-
 	margin: 0 2px 2px 2px;
 
 	overflow-y: auto;
@@ -65,18 +63,18 @@
 	text-overflow: ellipsis;
 }
 
-.preview .message {
+.preview .message-preview {
 	grid-column: 2/3;
 	grid-row: 2/4;
 
 	max-width: 240px;
 }
 
-.preview .message .from {
+.preview .message-preview .from {
 	font-size: 16px;
 }
 
-.preview .message .text {
+.preview .message-preview .text {
 	font-size: 16px;
 
 	white-space: nowrap;

@@ -12,6 +12,7 @@
 	<link rel="stylesheet" type="text/css" href="css/search.css">
 	<link rel="stylesheet" type="text/css" href="css/preview.css">
 	<link rel="stylesheet" type="text/css" href="css/conversation.css">
+	<link rel="stylesheet" type="text/css" href="css/message.css">
 
 	<!--FONTS-->
 	<link href="https://fonts.googleapis.com/css?family=Krub" rel="stylesheet">
@@ -52,7 +53,7 @@
 		<div class="preview">
 			<img class="avatar" src="img/default-avatar.png">
 			<div class="info">Андрей Алексеев</div>
-			<div class="message">
+			<div class="message-preview">
 				<div class="from"></div>
 				<div class="text">Как твои дела? Давно не видел тебя в уличных гонках!</div>
 			</div>
@@ -63,7 +64,7 @@
 		<div class="preview">
 			<img class="avatar" src="img/default-avatar.png">
 			<div class="info">Андрей Алексеев</div>
-			<div class="message">
+			<div class="message-preview">
 				<div class="from"></div>
 				<div class="text">Как твои дела?</div>
 			</div>
@@ -74,7 +75,7 @@
 		<div class="preview">
 			<img class="avatar" src="img/default-avatar.png">
 			<div class="info">Андрей Алексеев</div>
-			<div class="message">
+			<div class="message-preview">
 				<div class="from"></div>
 				<div class="text">Как твои дела?</div>
 			</div>
@@ -85,7 +86,7 @@
 		<div class="preview">
 			<img class="avatar" src="img/default-avatar.png">
 			<div class="info">Андрей Алексеев</div>
-			<div class="message">
+			<div class="message-preview">
 				<div class="from"></div>
 				<div class="text">Как твои дела?</div>
 			</div>
@@ -96,7 +97,7 @@
 		<div class="preview">
 			<img class="avatar" src="img/default-avatar.png">
 			<div class="info">Андрей Алексеев</div>
-			<div class="message">
+			<div class="message-preview">
 				<div class="from"></div>
 				<div class="text">Как твои дела?</div>
 			</div>
@@ -107,7 +108,7 @@
 		<div class="preview">
 			<img class="avatar" src="img/default-avatar.png">
 			<div class="info">Андрей Алексеев</div>
-			<div class="message">
+			<div class="message-preview">
 				<div class="from"></div>
 				<div class="text">Как твои дела?</div>
 			</div>
@@ -118,7 +119,7 @@
 		<div class="preview">
 			<img class="avatar" src="img/default-avatar.png">
 			<div class="info">Андрей Алексеев</div>
-			<div class="message">
+			<div class="message-preview">
 				<div class="from"></div>
 				<div class="text">Как твои дела?</div>
 			</div>
@@ -129,7 +130,7 @@
 		<div class="preview">
 			<img class="avatar" src="img/default-avatar.png">
 			<div class="info">Андрей Алексеев</div>
-			<div class="message">
+			<div class="message-preview">
 				<div class="from"></div>
 				<div class="text">Как твои дела?</div>
 			</div>
@@ -140,7 +141,7 @@
 		<div class="preview">
 			<img class="avatar" src="img/default-avatar.png">
 			<div class="info">Андрей Алексеев</div>
-			<div class="message">
+			<div class="message-preview">
 				<div class="from"></div>
 				<div class="text">Как твои дела?</div>
 			</div>
@@ -151,7 +152,7 @@
 		<div class="preview">
 			<img class="avatar" src="img/default-avatar.png">
 			<div class="info">Андрей Алексеев</div>
-			<div class="message">
+			<div class="message-preview">
 				<div class="from"></div>
 				<div class="text">Как твои дела?</div>
 			</div>
@@ -162,7 +163,7 @@
 		<div class="preview">
 			<img class="avatar" src="img/default-avatar.png">
 			<div class="info">Андрей Алексеев</div>
-			<div class="message">
+			<div class="message-preview">
 				<div class="from"></div>
 				<div class="text">Как твои дела?</div>
 			</div>
@@ -173,7 +174,7 @@
 		<div class="preview">
 			<img class="avatar" src="img/default-avatar.png">
 			<div class="info">Андрей Алексеев</div>
-			<div class="message">
+			<div class="message-preview">
 				<div class="from"></div>
 				<div class="text">Как твои дела?</div>
 			</div>
@@ -184,7 +185,7 @@
 		<div class="preview">
 			<img class="avatar" src="img/default-avatar.png">
 			<div class="info">Андрей Алексеев</div>
-			<div class="message">
+			<div class="message-preview">
 				<div class="from"></div>
 				<div class="text">Как твои дела?</div>
 			</div>
@@ -195,7 +196,7 @@
 		<div class="preview">
 			<img class="avatar" src="img/default-avatar.png">
 			<div class="info">Андрей Алексеев</div>
-			<div class="message">
+			<div class="message-preview">
 				<div class="from"></div>
 				<div class="text">Как твои дела?</div>
 			</div>
@@ -207,13 +208,71 @@
 	</div>
 
 	<div class="conversation">
-		<!--<div id="no-conversation">
-			Select conversation to start messaging.
-		</div>-->
+		<!--<div id="no-conversation">-->
+		<!--Select conversation to start messaging.-->
+		<!--</div>-->
+		<!--<div id="no-messages">-->
+		<!--Be the first. Messages will be displayed here.-->
+		<!--</div>-->
 		<div class="message-wrapper">
-			<div class="message">
 
+			<div class="message">
+				<img class="avatar" src="img/default-avatar.png">
+				<div class="from">Андрей Алексеев</div>
+				<div class="text">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum
+					has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a
+					galley of type and scrambled it to make a type specimen book. It has survived not only five
+					centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was
+					popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and
+					more recently with desktop publishing software like Aldus PageMaker including versions of Lorem
+					Ipsum.
+				</div>
+				<div class="info">
+					<div class="sent">12:43</div>
+					<div class="status"><i class="fas fa-check"></i></div>
+					<!--<div class="status"><i class="fas fa-check-double"></i></div>-->
+					<!--<div class="status"><i class="far fa-clock"></i></div>-->
+				</div>
 			</div>
+
+			<div class="message">
+				<img class="avatar" src="img/default-avatar.png">
+				<div class="from">Андрей Алексеев</div>
+				<div class="text">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum
+					has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a
+					galley of type and scrambled it to make a type specimen book. It has survived not only five
+					centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was
+					popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and
+					more recently with desktop publishing software like Aldus PageMaker including versions of Lorem
+					Ipsum.
+				</div>
+				<div class="info">
+					<div class="sent">12:43</div>
+					<div class="status"><i class="fas fa-check"></i></div>
+					<!--<div class="status"><i class="fas fa-check-double"></i></div>-->
+					<!--<div class="status"><i class="far fa-clock"></i></div>-->
+				</div>
+			</div>
+
+			<div class="message">
+				<img class="avatar" src="img/default-avatar.png">
+				<div class="from">Андрей Алексеев</div>
+				<div class="text">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum
+					has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a
+					galley of type and scrambled it to make a type specimen book. It has survived not only five
+					centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was
+					popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and
+					more recently with desktop publishing software like Aldus PageMaker including versions of Lorem
+					Ipsum.
+				</div>
+				<div class="info">
+					<div class="sent">12:43</div>
+					<div class="status"><i class="fas fa-check"></i></div>
+					<!--<div class="status"><i class="fas fa-check-double"></i></div>-->
+					<!--<div class="status"><i class="far fa-clock"></i></div>-->
+				</div>
+			</div>
+
 		</div>
 		<div class="send-message-wrapper">
 			<div class="attachment">

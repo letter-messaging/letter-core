@@ -1,5 +1,9 @@
 .conversation {
-	display: grid;
+	display: flex;
+	flex-direction: column;
+	align-items: stretch;
+
+	width: 100%;
 }
 
 .conversation i {
@@ -27,12 +31,34 @@
 	color: #aaaaaa;
 }
 
+#no-messages {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+
+	background: white;
+	border-radius: 2px;
+
+	height: 100%;
+
+	color: #aaaaaa;
+}
+
+.message-wrapper {
+	width: 100%;
+	height: calc(100vh - 46px - 58px - 8px);
+
+	overflow-y: auto;
+	overflow-x: hidden;
+}
+
 .send-message-wrapper {
 	display: flex;
-	align-self: end;
 	align-items: center;
 
 	padding: 5px;
+	margin-top: 2px;
+	margin-right: 2px;
 
 	background: white;
 	border-radius: 2px;
