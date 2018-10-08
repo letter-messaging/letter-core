@@ -1,7 +1,9 @@
 package com.gmail.ivanjermakov1.messenger.auth.controller;
 
+import com.gmail.ivanjermakov1.messenger.auth.entity.User;
 import com.gmail.ivanjermakov1.messenger.auth.service.UserService;
 import com.gmail.ivanjermakov1.messenger.exception.AuthenticationException;
+import com.gmail.ivanjermakov1.messenger.exception.NoSuchEntityException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,6 +24,11 @@ public class AuthenticationController {
 	@GetMapping
 	public String authenticate(@RequestParam("login") String login, @RequestParam("password") String password) throws AuthenticationException {
 		return userService.authenticate(login, password);
+	}
+	
+	@GetMapping("validate")
+	public User validate(@RequestParam("token") String token) throws NoSuchEntityException {
+		return userService.getUser(userService.getUserId(token));
 	}
 	
 }
