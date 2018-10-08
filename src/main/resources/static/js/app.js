@@ -4,13 +4,6 @@ let app = angular.module("app", []);
 
 app.controller('MainController', ($document, $scope, $http) => {
 
-	$document.bind('keydown', (e) => {
-		if (e.keyCode === 27) {
-			$scope.state = "out";
-			$scope.$apply();
-		}
-	});
-
 	$scope.token = null;
 	$scope.credentials = {
 		"login": null,
@@ -21,6 +14,8 @@ app.controller('MainController', ($document, $scope, $http) => {
 	$scope.conversations = [];
 	$scope.messages = [];
 
+	$scope.isLoaded = false;
+
 	$scope.isAuth = true;
 	$scope.isLogin = true;
 
@@ -28,6 +23,38 @@ app.controller('MainController', ($document, $scope, $http) => {
 	// in - in certain conversation
 	// empty - in empty conversation
 	$scope.state = "out";
+
+	$document.bind('keydown', (e) => {
+		if (e.keyCode === 27) {
+			$scope.state = "out";
+			$scope.$apply();
+		}
+	});
+
+	// init
+	(() => {
+		// autologin
+		if (localStorage.getItem("token")) {
+			let token = localStorage.getItem("token");
+			$http({
+				url: "/auth/validate",
+				method: "GET",
+				params: {
+					"token": token
+				},
+				transformResponse: undefined
+			}).then(
+				(response) => {
+					$scope.token = token;
+					$scope.initialize();
+					$scope.isAuth = false;
+					$scope.isLoaded = true;
+				},
+				(error) => {
+					$scope.isLoaded = true;
+				});
+		}
+	})();
 
 	$scope.login = () => {
 		$http({
@@ -43,6 +70,7 @@ app.controller('MainController', ($document, $scope, $http) => {
 			$scope.credentials.password = null;
 
 			$scope.token = response.data;
+			localStorage.setItem("token", $scope.token);
 			$scope.initialize();
 			$scope.isAuth = false;
 		});
