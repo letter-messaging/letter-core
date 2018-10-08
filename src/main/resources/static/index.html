@@ -33,7 +33,7 @@
 <div class="content" ng-controller="MainController">
 
 	<header class="header-left">
-		<div class="logo">
+		<div class="logo" ng-click="state = 'out'">
 			<i class="fas fa-comment"></i>
 		</div>
 		<div class="logo-name">
@@ -74,14 +74,13 @@
 	</div>
 
 	<div class="conversation">
-		<!--<div id="no-conversation">-->
-		<!--Select conversation to start messaging.-->
-		<!--</div>-->
-		<!--<div id="no-messages">-->
-		<!--Be the first. Messages will be displayed here.-->
-		<!--</div>-->
-		<div class="message-wrapper">
-
+		<div id="no-conversation" ng-show="state === 'out'">
+		Select conversation to start messaging.
+		</div>
+		<div id="no-messages" ng-show="state === 'empty'">
+		Be the first. Messages will be displayed here.
+		</div>
+		<div class="message-wrapper" ng-show="state === 'in'">
 			<div ng-repeat="message in messages" class="message {{message.message.id}}"
 			     ng-class="{'message-mine' : message.mine === true}">
 				<img class="avatar" src="img/default-avatar.png">
@@ -93,9 +92,8 @@
 					</div>
 				</div>
 			</div>
-
 		</div>
-		<div class="send-message-wrapper">
+		<div class="send-message-wrapper" ng-show="state === 'in' || state === 'empty'">
 			<div class="attachment">
 				<i class="fas fa-paperclip"></i>
 			</div>
@@ -113,6 +111,7 @@
 </div>
 
 <script type="text/javascript" src="js/textarea.js"></script>
+<script type="text/javascript" src="js/event.js"></script>
 
 </body>
 </html>

@@ -11,7 +11,8 @@ public interface MessageRepository extends CrudRepository<Message, Long> {
 	
 	Message getTop1ByConversationIdOrderBySentDesc(Long conversationId);
 	
-	@Query(value = "select * from Message m where m.conversation_id = :conversationId order by m.sent desc offset :offset limit :limit", nativeQuery = true)
+	@Query(value = "select * from Message m where m.conversation_id = :conversationId " +
+			"order by m.sent desc offset :offset limit :limit", nativeQuery = true)
 	Set<Message> get(@Param("conversationId") Long conversationId,
 	                 @Param("offset") Integer offset,
 	                 @Param("limit") Integer limit);
