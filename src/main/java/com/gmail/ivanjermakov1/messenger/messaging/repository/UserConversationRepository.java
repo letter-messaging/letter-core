@@ -19,4 +19,9 @@ public interface UserConversationRepository extends CrudRepository<UserConversat
 			"where uc.conversationId = :conversationId")
 	Set<Long> getUsersIds(@Param("conversationId") Long conversationId);
 	
+	@Query("select uc.conversationId " +
+			"from UserConversation uc " +
+			"where uc.userId = :userId")
+	Set<Long> getConversationIds(@Param("userId") Long userId);
+	
 }

@@ -1,5 +1,7 @@
 package com.gmail.ivanjermakov1.messenger.auth.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 
 @Entity
@@ -14,6 +16,7 @@ public class User {
 	@Column(name = "login")
 	private String login;
 	
+	@JsonIgnore
 	@Column(name = "hash")
 	private String hash;
 	

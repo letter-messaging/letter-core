@@ -52,4 +52,8 @@ public class ConversationService {
 		return userConversationRepository.getUsersIds(conversationId);
 	}
 	
+	public Set<Long> allIds(User user) {
+		return userConversationRepository.getConversationIds(user.getId());
+	}
+	
 }

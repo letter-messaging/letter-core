@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" ng-app="app">
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
@@ -23,11 +23,14 @@
 	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css"
 	      integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
 
-	<script type="text/javascript"
-	        src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.7.2/angular.min.js"></script>
+	<!--LIBS-->
+	<script language="JavaScript" src="lib/angular.js"></script>
+	<script type="text/javascript" src="lib/moment.js"></script>
+
+	<script type="text/javascript" src="js/app.js"></script>
 </head>
 <body>
-<div class="content">
+<div class="content" ng-controller="MainController">
 
 	<header class="header-left">
 		<div class="logo">
@@ -54,159 +57,17 @@
 
 		<div class="preview-wrapper">
 
-			<div class="preview">
+			<div ng-repeat="preview in conversations" class="preview {{preview.conversationId}}"
+			     ng-click="openConversation(preview.conversationId)">
 				<img class="avatar" src="img/default-avatar.png">
-				<div class="info">Андрей Алексеев</div>
+				<div class="info">{{preview.firstName}} {{preview.lastName}}</div>
 				<div class="message-preview">
 					<div class="from"></div>
-					<div class="text">Как твои дела? Давно не видел тебя в уличных гонках!</div>
+					<div class="text">{{preview.lastMessage.text}}</div>
 				</div>
 				<div class="delete"><i class="fas fa-times"></i></div>
 				<div class="unread"><i class="fas fa-circle"></i></div>
-				<div class="sent">12:43</div>
-			</div>
-			<div class="preview">
-				<img class="avatar" src="img/default-avatar.png">
-				<div class="info">Андрей Алексеев</div>
-				<div class="message-preview">
-					<div class="from"></div>
-					<div class="text">Как твои дела?</div>
-				</div>
-				<div class="delete"><i class="fas fa-times"></i></div>
-				<div class="unread"><i class="fas fa-circle"></i></div>
-				<div class="sent">12:43</div>
-			</div>
-			<div class="preview">
-				<img class="avatar" src="img/default-avatar.png">
-				<div class="info">Андрей Алексеев</div>
-				<div class="message-preview">
-					<div class="from"></div>
-					<div class="text">Как твои дела?</div>
-				</div>
-				<div class="delete"><i class="fas fa-times"></i></div>
-				<div class="unread"><i class="fas fa-circle"></i></div>
-				<div class="sent">12:43</div>
-			</div>
-			<div class="preview">
-				<img class="avatar" src="img/default-avatar.png">
-				<div class="info">Андрей Алексеев</div>
-				<div class="message-preview">
-					<div class="from"></div>
-					<div class="text">Как твои дела?</div>
-				</div>
-				<div class="delete"><i class="fas fa-times"></i></div>
-				<div class="unread"><i class="fas fa-circle"></i></div>
-				<div class="sent">12:43</div>
-			</div>
-			<div class="preview">
-				<img class="avatar" src="img/default-avatar.png">
-				<div class="info">Андрей Алексеев</div>
-				<div class="message-preview">
-					<div class="from"></div>
-					<div class="text">Как твои дела?</div>
-				</div>
-				<div class="delete"><i class="fas fa-times"></i></div>
-				<div class="unread"><i class="fas fa-circle"></i></div>
-				<div class="sent">12:43</div>
-			</div>
-			<div class="preview">
-				<img class="avatar" src="img/default-avatar.png">
-				<div class="info">Андрей Алексеев</div>
-				<div class="message-preview">
-					<div class="from"></div>
-					<div class="text">Как твои дела?</div>
-				</div>
-				<div class="delete"><i class="fas fa-times"></i></div>
-				<div class="unread"><i class="fas fa-circle"></i></div>
-				<div class="sent">12:43</div>
-			</div>
-			<div class="preview">
-				<img class="avatar" src="img/default-avatar.png">
-				<div class="info">Андрей Алексеев</div>
-				<div class="message-preview">
-					<div class="from"></div>
-					<div class="text">Как твои дела?</div>
-				</div>
-				<div class="delete"><i class="fas fa-times"></i></div>
-				<div class="unread"><i class="fas fa-circle"></i></div>
-				<div class="sent">12:43</div>
-			</div>
-			<div class="preview">
-				<img class="avatar" src="img/default-avatar.png">
-				<div class="info">Андрей Алексеев</div>
-				<div class="message-preview">
-					<div class="from"></div>
-					<div class="text">Как твои дела?</div>
-				</div>
-				<div class="delete"><i class="fas fa-times"></i></div>
-				<div class="unread"><i class="fas fa-circle"></i></div>
-				<div class="sent">12:43</div>
-			</div>
-			<div class="preview">
-				<img class="avatar" src="img/default-avatar.png">
-				<div class="info">Андрей Алексеев</div>
-				<div class="message-preview">
-					<div class="from"></div>
-					<div class="text">Как твои дела?</div>
-				</div>
-				<div class="delete"><i class="fas fa-times"></i></div>
-				<div class="unread"><i class="fas fa-circle"></i></div>
-				<div class="sent">12:43</div>
-			</div>
-			<div class="preview">
-				<img class="avatar" src="img/default-avatar.png">
-				<div class="info">Андрей Алексеев</div>
-				<div class="message-preview">
-					<div class="from"></div>
-					<div class="text">Как твои дела?</div>
-				</div>
-				<div class="delete"><i class="fas fa-times"></i></div>
-				<div class="unread"><i class="fas fa-circle"></i></div>
-				<div class="sent">12:43</div>
-			</div>
-			<div class="preview">
-				<img class="avatar" src="img/default-avatar.png">
-				<div class="info">Андрей Алексеев</div>
-				<div class="message-preview">
-					<div class="from"></div>
-					<div class="text">Как твои дела?</div>
-				</div>
-				<div class="delete"><i class="fas fa-times"></i></div>
-				<div class="unread"><i class="fas fa-circle"></i></div>
-				<div class="sent">12:43</div>
-			</div>
-			<div class="preview">
-				<img class="avatar" src="img/default-avatar.png">
-				<div class="info">Андрей Алексеев</div>
-				<div class="message-preview">
-					<div class="from"></div>
-					<div class="text">Как твои дела?</div>
-				</div>
-				<div class="delete"><i class="fas fa-times"></i></div>
-				<div class="unread"><i class="fas fa-circle"></i></div>
-				<div class="sent">12:43</div>
-			</div>
-			<div class="preview">
-				<img class="avatar" src="img/default-avatar.png">
-				<div class="info">Андрей Алексеев</div>
-				<div class="message-preview">
-					<div class="from"></div>
-					<div class="text">Как твои дела?</div>
-				</div>
-				<div class="delete"><i class="fas fa-times"></i></div>
-				<div class="unread"><i class="fas fa-circle"></i></div>
-				<div class="sent">12:43</div>
-			</div>
-			<div class="preview">
-				<img class="avatar" src="img/default-avatar.png">
-				<div class="info">Андрей Алексеев</div>
-				<div class="message-preview">
-					<div class="from"></div>
-					<div class="text">Как твои дела?</div>
-				</div>
-				<div class="delete"><i class="fas fa-times"></i></div>
-				<div class="unread"><i class="fas fa-circle"></i></div>
-				<div class="sent">12:43</div>
+				<div class="sent">{{preview.lastMessage.sent}}</div>
 			</div>
 
 		</div>
@@ -221,91 +82,14 @@
 		<!--</div>-->
 		<div class="message-wrapper">
 
-			<div class="message">
+			<div ng-repeat="message in messages" class="message {{message.message.id}}"
+			     ng-class="{'message-mine' : message.mine === true}">
 				<img class="avatar" src="img/default-avatar.png">
 				<div class="message-content">
-					<div class="from">Андрей Алексеев</div>
-					<div class="text">Lodesktop publishing software like Aldus PageMaker including versions of Lorem
-						Ipsum.
-					</div>
+					<div class="from">{{message.senderInfo.firstName}} {{message.senderInfo.lastName}}</div>
+					<div class="text">{{message.text}}</div>
 					<div class="info">
-						<div class="sent">12:43</div>
-					</div>
-				</div>
-			</div>
-
-			<div class="message message-mine">
-				<img class="avatar" src="img/default-avatar.png">
-				<div class="message-content">
-					<div class="text">Lodesktop publishing software like Aldus PageMaker including versions of Lorem
-						Ipsum.
-					</div>
-					<div class="info">
-						<div class="sent">12:43</div>
-						<div class="status"><i class="fas fa-check"></i></div>
-						<!--<div class="status"><i class="fas fa-check-double"></i></div>-->
-						<!--<div class="status"><i class="far fa-clock"></i></div>-->
-					</div>
-				</div>
-			</div>
-
-			<div class="message message-mine">
-				<img class="avatar" src="img/default-avatar.png">
-				<div class="message-content">
-					<div class="text">Lodm.
-					</div>
-					<div class="info">
-						<div class="sent">12:43</div>
-						<div class="status"><i class="fas fa-check"></i></div>
-						<!--<div class="status"><i class="fas fa-check-double"></i></div>-->
-						<!--<div class="status"><i class="far fa-clock"></i></div>-->
-					</div>
-				</div>
-			</div>
-
-			<div class="message">
-				<img class="avatar" src="img/default-avatar.png">
-				<div class="message-content">
-					<div class="from">Андрей Алексеев</div>
-					<div class="text">Lodesktop publishing software like Aldus PageMaker including versions of Lorem
-						Ipsum.lishing software like Aldus PageMaker including versions of Lorem
-						Ipslishing software like Aldus PageMaker including versions of Lorem
-						Ips
-					</div>
-					<div class="info">
-						<div class="sent">12:43</div>
-					</div>
-				</div>
-			</div>
-
-			<div class="message message-mine">
-				<img class="avatar" src="img/default-avatar.png">
-				<div class="message-content">
-					<div class="text">LoLodesktop publishing software like Aldus PageMaker including versions of Lorem
-						Ipsum.lishing software like Aldus PageMaker including versions of Lorem
-						Ipslishing software like Aldus PageMaker including versions of Lorem
-						Ipsdm.
-					</div>
-					<div class="info">
-						<div class="sent">12:43</div>
-						<div class="status"><i class="fas fa-check"></i></div>
-						<!--<div class="status"><i class="fas fa-check-double"></i></div>-->
-						<!--<div class="status"><i class="far fa-clock"></i></div>-->
-					</div>
-				</div>
-			</div>
-
-			<div class="message message-mine">
-				<img class="avatar" src="img/default-avatar.png">
-				<div class="message-content">
-					<div class="text">Lodesktop publishing software like Aldus PageMaker including versions of Lorem
-						Ipsum.
-					</div>
-					<div class="info">
-						<div class="sent">12:43</div>
-						<div class="status"><i class="fas fa-check"></i></div>
-						<!--<div class="status"><i class="fas fa-check-double"></i></div>-->
-						<!--<div class="status"><i class="far fa-clock"></i></div>-->
+						<div class="sent">{{message.message.sent}}</div>
 					</div>
 				</div>
 			</div>

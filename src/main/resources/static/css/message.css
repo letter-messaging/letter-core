@@ -9,7 +9,7 @@
 	margin: 2px;
 }
 
-.message-mine{
+.message-mine {
 	flex-direction: row-reverse;
 	align-self: flex-end;
 }
