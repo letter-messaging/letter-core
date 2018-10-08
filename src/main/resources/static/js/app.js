@@ -2,44 +2,74 @@ const MESSAGES_PER_PAGE = 20;
 
 let app = angular.module("app", []);
 
-let token;
-let login;
-
 app.controller('MainController', ($document, $scope, $http) => {
+
+	$document.bind('keydown', (e) => {
+		if (e.keyCode === 27) {
+			$scope.state = "out";
+			$scope.$apply();
+		}
+	});
+
+	$scope.token = null;
+	$scope.credentials = {
+		"login": null,
+		"password": null,
+		"confirmPassword": null
+	};
 
 	$scope.conversations = [];
 	$scope.messages = [];
+
+	$scope.isAuth = true;
+	$scope.isLogin = true;
 
 	// out - outside certain conversation
 	// in - in certain conversation
 	// empty - in empty conversation
 	$scope.state = "out";
 
-	(() => {
-		login = prompt("login:");
-		let password = prompt("password:");
-
-		token = $http({
+	$scope.login = () => {
+		$http({
 			url: "/auth",
 			method: "GET",
 			params: {
-				"login": login,
-				"password": password
+				"login": $scope.credentials.login,
+				"password": $scope.credentials.password
 			},
 			transformResponse: undefined
 		}).then((response) => {
-			token = response.data;
-			$scope.init(token);
+			// storing password is bad habit!
+			$scope.credentials.password = null;
+
+			$scope.token = response.data;
+			$scope.initialize();
+			$scope.isAuth = false;
 		});
+	};
 
-	})();
+	$scope.register = () => {
+		if ($scope.credentials.password === $scope.credentials.confirmPassword) {
+			$http({
+				url: "/auth",
+				method: "GET",
+				params: {
+					"login": $scope.credentials.login,
+					"password": $scope.credentials.password
+				},
+				transformResponse: undefined
+			}).then((response) => {
+				$scope.isAuth = false;
+			});
+		}
+	};
 
-	$scope.init = (token) => {
+	$scope.initialize = () => {
 		$http({
 			url: "/preview/all",
 			method: "GET",
 			params: {
-				"token": token
+				"token": $scope.token
 			}
 		}).then((response) => {
 			for (let conversation of response.data) {
@@ -50,19 +80,12 @@ app.controller('MainController', ($document, $scope, $http) => {
 		});
 	};
 
-	$document.bind('keydown', (e) => {
-		if (e.keyCode === 27) {
-			$scope.state = "out";
-			$scope.$apply();
-		}
-	});
-
 	$scope.openConversation = (conversationId) => {
 		$http({
 			url: "/message/get",
 			method: "GET",
 			params: {
-				"token": token,
+				"token": $scope.token,
 				"conversationId": conversationId,
 				"offset": 0,
 				"amount": MESSAGES_PER_PAGE
@@ -71,7 +94,7 @@ app.controller('MainController', ($document, $scope, $http) => {
 			for (let message of response.data) {
 				message.message.sent = moment(new Date(message.message.sent)).format("hh:MM");
 
-				message.mine = login === message.sender.login;
+				message.mine = $scope.credentials.login === message.sender.login;
 			}
 			$scope.messages = response.data;
 

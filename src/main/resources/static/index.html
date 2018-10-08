@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" ng-app="app">
+
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
@@ -7,6 +8,7 @@
 	<title>Messenger.</title>
 
 	<!--STYLES-->
+	<link rel="stylesheet" type="text/css" href="css/auth.css">
 	<link rel="stylesheet" type="text/css" href="css/scrollbar.css">
 	<link rel="stylesheet" type="text/css" href="css/style.css">
 	<link rel="stylesheet" type="text/css" href="css/header-left.css">
@@ -29,8 +31,34 @@
 
 	<script type="text/javascript" src="js/app.js"></script>
 </head>
-<body>
-<div class="content" ng-controller="MainController">
+
+<body ng-controller="MainController">
+
+<div class="auth-wrapper" ng-show="isAuth">
+	<div class="auth">
+		<div class="auth-content" ng-show="isLogin">
+			<form ng-submit="login()">
+				<div class="heading">Log in</div>
+				<input autofocus type="text" placeholder="Login" ng-model="credentials.login">
+				<input type="password" placeholder="Password" ng-model="credentials.password">
+				<div class="register-hint">Haven't join yet? <a ng-click="isLogin = false">Register</a>.</div>
+				<input type="submit" value="Login">
+			</form>
+		</div>
+		<div class="register-content" ng-show="!isLogin">
+			<form ng-submit="register()">
+				<div class="heading">Register</div>
+				<input autofocus type="text" placeholder="Login" ng-model="credentials.login">
+				<input type="password" placeholder="Password" ng-model="credentials.password">
+				<input type="password" placeholder="Confirm password" ng-model="credentials.confirmPassword">
+				<div class="register-hint">Change your mind? <a ng-click="isLogin = true">Login</a>.</div>
+				<input type="submit" value="Register">
+			</form>
+		</div>
+	</div>
+</div>
+
+<div class="content" ng-show="!isAuth">
 
 	<header class="header-left">
 		<div class="logo" ng-click="state = 'out'">
@@ -75,10 +103,10 @@
 
 	<div class="conversation">
 		<div id="no-conversation" ng-show="state === 'out'">
-		Select conversation to start messaging.
+			Select conversation to start messaging.
 		</div>
 		<div id="no-messages" ng-show="state === 'empty'">
-		Be the first. Messages will be displayed here.
+			Be the first. Messages will be displayed here.
 		</div>
 		<div class="message-wrapper" ng-show="state === 'in'">
 			<div ng-repeat="message in messages" class="message {{message.message.id}}"
