@@ -12,12 +12,16 @@ app.controller('MainController', ($document, $scope, $http) => {
 	};
 
 	$scope.conversations = [];
+	$scope.searchConversations = [];
 	$scope.messages = [];
 
 	$scope.isLoaded = false;
 
 	$scope.isAuth = true;
 	$scope.isLogin = true;
+
+	$scope.isConversationSearch = false;
+	$scope.searchConversationsText = null;
 
 	// out - outside certain conversation
 	// in - in certain conversation
@@ -36,6 +40,7 @@ app.controller('MainController', ($document, $scope, $http) => {
 		// autologin
 		if (localStorage.getItem("token")) {
 			let token = localStorage.getItem("token");
+
 			$http({
 				url: "/auth/validate",
 				method: "GET",
@@ -53,6 +58,8 @@ app.controller('MainController', ($document, $scope, $http) => {
 				(error) => {
 					$scope.isLoaded = true;
 				});
+		} else {
+			$scope.isLoaded = true;
 		}
 	})();
 
@@ -132,6 +139,34 @@ app.controller('MainController', ($document, $scope, $http) => {
 				$scope.state = "in";
 			}
 		});
+	};
+
+	$scope.conversationsOrSearch = () => {
+		return $scope.isConversationSearch ? $scope.searchConversations : $scope.conversations;
+	};
+
+	$scope.searchForConversations = () => {
+		$scope.isConversationSearch = $scope.searchConversationsText.length !== 0;
+
+		$http({
+			url: "/search/conversations",
+			method: "GET",
+			params: {
+				"token": $scope.token,
+				"search": $scope.searchConversationsText
+			}
+		}).then((response) => {
+			for (let conversation of response.data) {
+				if (conversation.lastMessage)
+					conversation.lastMessage.sent = moment(new Date(conversation.lastMessage.sent)).format("hh:MM");
+			}
+			$scope.searchConversations = response.data;
+		});
+	};
+
+	$scope.logout = () => {
+		localStorage.removeItem("token");
+		$scope.isAuth = true;
 	}
 
 });

@@ -71,20 +71,21 @@
 	<header class="header-right">
 		<div class="conversation-name">Андрей Алексеев</div>
 		<div class="status">online</div>
-		<div class="search">
+		<div class="right">
 			<div class="icon"><i class="fas fa-search"></i></div>
+			<i class="fas fa-sign-out-alt" ng-click="logout()"></i>
 		</div>
 	</header>
 
 	<div class="content-left">
 		<div class="search">
 			<div class="icon"><i class="fas fa-search"></i></div>
-			<input id="search-conversations" type="text" placeholder="Search">
+			<input id="search-conversations" type="text" placeholder="Search" ng-model="searchConversationsText"
+			       ng-change="searchForConversations()">
 		</div>
 
 		<div class="preview-wrapper">
-
-			<div ng-repeat="preview in conversations" class="preview {{preview.conversationId}}"
+			<div ng-repeat="preview in conversationsOrSearch()" class="preview {{preview.conversationId}}"
 			     ng-click="openConversation(preview.conversationId)">
 				<img class="avatar" src="img/default-avatar.png">
 				<div class="info">{{preview.firstName}} {{preview.lastName}}</div>
@@ -96,7 +97,6 @@
 				<div class="unread"><i class="fas fa-circle"></i></div>
 				<div class="sent">{{preview.lastMessage.sent}}</div>
 			</div>
-
 		</div>
 	</div>
 
