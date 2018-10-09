@@ -35,6 +35,9 @@
 }
 
 .message .from {
+	font-size: 16px;
+	font-weight: bold;
+
 	grid-row: 1;
 	margin-bottom: 2px;
 }

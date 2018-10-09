@@ -7,10 +7,12 @@ import com.gmail.ivanjermakov1.messenger.exception.NoSuchEntityException;
 import com.gmail.ivanjermakov1.messenger.messaging.service.ConversationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@RequestMapping("conversation")
 public class ConversationController {
 	
 	private final ConversationService conversationService;
@@ -22,11 +24,11 @@ public class ConversationController {
 		this.userService = userService;
 	}
 	
-	@GetMapping("conversation/create")
+	@GetMapping("create")
 	public Long create(@RequestParam(name = "token") String token, @RequestParam(name = "with") String withLogin) throws AuthenticationException {
 		try {
 			User user = userService.getUser(userService.getUserId(token));
-			return conversationService.create(user, withLogin);
+			return conversationService.create(user, userService.getUser(withLogin));
 		} catch (NoSuchEntityException e) {
 			throw new AuthenticationException("invalid token");
 		}

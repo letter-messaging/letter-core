@@ -1,6 +1,7 @@
 package com.gmail.ivanjermakov1.messenger.messaging.service;
 
 import com.gmail.ivanjermakov1.messenger.auth.entity.User;
+import com.gmail.ivanjermakov1.messenger.messaging.entity.Conversation;
 import com.gmail.ivanjermakov1.messenger.messaging.entity.Message;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,7 +12,6 @@ import java.time.Instant;
 import java.util.AbstractMap;
 import java.util.Map;
 import java.util.Queue;
-import java.util.Set;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 @Service
@@ -42,11 +42,11 @@ public class MessagingService {
 		message.setSent(Instant.now());
 		messageService.save(message);
 		
-		Set<Long> usersIds = conversationService.getUsersIds(message.getConversationId());
+		Conversation conversation = conversationService.getById(message.getConversationId());
 		
 		results.stream()
-				.filter(e -> usersIds.stream()
-						.anyMatch(i -> i.equals(e.getKey().getId())))
+				.filter(e -> conversation.getUsers().stream()
+						.anyMatch(i -> i.getId().equals(e.getKey().getId())))
 				.forEach(e -> {
 					e.getValue().setResult(message);
 					removeRequest(e.getValue());

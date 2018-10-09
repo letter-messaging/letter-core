@@ -2,62 +2,40 @@ package com.gmail.ivanjermakov1.messenger.messaging.entity;
 
 public class Preview {
 	
-	private Long conversationId;
-	
-	private Long senderId;
-	private String firstName;
-	private String lastName;
-	
-	private Message lastMessage;
+	private Conversation conversation;
+	private FullUser with;
+	private FullMessage lastMessage;
 	
 	public Preview() {
 	}
 	
-	public Preview(Long conversationId, Long senderId, String firstName, String lastName, Message lastMessage) {
-		this.conversationId = conversationId;
-		this.senderId = senderId;
-		this.firstName = firstName;
-		this.lastName = lastName;
+	public Preview(Conversation conversation, FullUser with, FullMessage lastMessage) {
+		this.conversation = conversation;
+		this.with = with;
 		this.lastMessage = lastMessage;
 	}
 	
-	public Long getConversationId() {
-		return conversationId;
+	public Conversation getConversation() {
+		return conversation;
 	}
 	
-	public void setConversationId(Long conversationId) {
-		this.conversationId = conversationId;
+	public void setConversation(Conversation conversation) {
+		this.conversation = conversation;
 	}
 	
-	public Long getSenderId() {
-		return senderId;
+	public FullUser getWith() {
+		return with;
 	}
 	
-	public void setSenderId(Long senderId) {
-		this.senderId = senderId;
+	public void setWith(FullUser with) {
+		this.with = with;
 	}
 	
-	public String getFirstName() {
-		return firstName;
-	}
-	
-	public void setFirstName(String firstName) {
-		this.firstName = firstName;
-	}
-	
-	public String getLastName() {
-		return lastName;
-	}
-	
-	public void setLastName(String lastName) {
-		this.lastName = lastName;
-	}
-	
-	public Message getLastMessage() {
+	public FullMessage getLastMessage() {
 		return lastMessage;
 	}
 	
-	public void setLastMessage(Message lastMessage) {
+	public void setLastMessage(FullMessage lastMessage) {
 		this.lastMessage = lastMessage;
 	}
 	

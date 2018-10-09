@@ -5,9 +5,9 @@ import com.gmail.ivanjermakov1.messenger.auth.service.UserService;
 import com.gmail.ivanjermakov1.messenger.exception.AuthenticationException;
 import com.gmail.ivanjermakov1.messenger.messaging.entity.Conversation;
 import com.gmail.ivanjermakov1.messenger.messaging.entity.FullMessage;
+import com.gmail.ivanjermakov1.messenger.messaging.entity.FullUser;
 import com.gmail.ivanjermakov1.messenger.messaging.entity.Message;
 import com.gmail.ivanjermakov1.messenger.messaging.repository.MessageRepository;
-import com.gmail.ivanjermakov1.messenger.messaging.repository.UserConversationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,14 +23,15 @@ public class MessageService {
 	private final MessageRepository messageRepository;
 	private final UserService userService;
 	private final UserMainInfoService userMainInfoService;
-	private final UserConversationRepository userConversationRepository;
+	private final ConversationService conversationService;
+	
 	
 	@Autowired
-	public MessageService(MessageRepository messageRepository, UserService userService, UserMainInfoService userMainInfoService, UserConversationRepository userConversationRepository) {
+	public MessageService(MessageRepository messageRepository, UserService userService, UserMainInfoService userMainInfoService, ConversationService conversationService) {
 		this.messageRepository = messageRepository;
 		this.userService = userService;
 		this.userMainInfoService = userMainInfoService;
-		this.userConversationRepository = userConversationRepository;
+		this.conversationService = conversationService;
 	}
 	
 	public void save(Message message) {
@@ -42,7 +43,7 @@ public class MessageService {
 	}
 	
 	public List<FullMessage> get(Long userId, Long conversationId, Integer offset, Integer limit) throws AuthenticationException {
-		if (userConversationRepository.getConversationIds(userId).stream().noneMatch(i -> i.equals(conversationId)))
+		if (conversationService.getById(conversationId).getUsers().stream().noneMatch(u -> u.getId().equals(userId)))
 			throw new AuthenticationException("invalid conversation id");
 		
 		Set<Message> messagesIds = messageRepository.get(conversationId, offset, limit);
@@ -52,15 +53,14 @@ public class MessageService {
 				.collect(Collectors.toList());
 	}
 	
-	private FullMessage getFullMessage(Message message) {
+	public FullMessage getFullMessage(Message message) {
 		FullMessage fullMessage = new FullMessage();
 		fullMessage.setMessage(message);
 		fullMessage.setConversation(new Conversation(message.getConversationId()));
 		
 		try {
 			User user = userService.getUser(message.getSenderId());
-			fullMessage.setSender(user);
-			fullMessage.setSenderInfo(userMainInfoService.getById(user.getId()));
+			fullMessage.setSender(new FullUser(user, userMainInfoService.getById(user.getId())));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

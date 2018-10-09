@@ -1,59 +1,43 @@
 package com.gmail.ivanjermakov1.messenger.messaging.service;
 
 import com.gmail.ivanjermakov1.messenger.auth.entity.User;
-import com.gmail.ivanjermakov1.messenger.auth.service.UserService;
-import com.gmail.ivanjermakov1.messenger.exception.NoSuchEntityException;
 import com.gmail.ivanjermakov1.messenger.messaging.entity.Conversation;
-import com.gmail.ivanjermakov1.messenger.messaging.entity.UserConversation;
 import com.gmail.ivanjermakov1.messenger.messaging.repository.ConversationRepository;
-import com.gmail.ivanjermakov1.messenger.messaging.repository.UserConversationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @Transactional
 public class ConversationService {
 	
 	private final ConversationRepository conversationRepository;
-	private final UserConversationRepository userConversationRepository;
-	private final UserService userService;
 	
 	@Autowired
-	public ConversationService(ConversationRepository conversationRepository, UserConversationRepository userConversationRepository, UserService userService) {
+	public ConversationService(ConversationRepository conversationRepository) {
 		this.conversationRepository = conversationRepository;
-		this.userConversationRepository = userConversationRepository;
-		this.userService = userService;
 	}
 	
-	public Long create(User user, String withLogin) throws NoSuchEntityException {
-		Long conversationId = userConversationRepository.findConversationIdsByUsersIds(
-				user.getId(),
-				userService.getUser(withLogin).getId()
-		);
+	public Long create(User user, User with) {
+		Conversation conversation = new Conversation(null);
+		conversation.setUsers(new ArrayList<>());
+		conversation.getUsers().add(user);
+		conversation.getUsers().add(with);
 		
-		if (conversationId == null) {
-			Conversation conversation = new Conversation(null);
-			conversationRepository.save(conversation);
-			
-			userConversationRepository.save(new UserConversation(user.getId(), conversation.getId()));
-			userConversationRepository.save(new UserConversation(userService.getUser(withLogin).getId(), conversation.getId()));
-			
-			return conversation.getId();
-		} else {
-			return conversationId;
-		}
+		conversationRepository.save(conversation);
 		
+		return conversation.getId();
 	}
 	
-	public Set<Long> getUsersIds(Long conversationId) {
-		return userConversationRepository.getUsersIds(conversationId);
+	public Conversation getById(Long conversationId) {
+		return conversationRepository.findById(conversationId).get();
 	}
 	
-	public Set<Long> allIds(User user) {
-		return userConversationRepository.getConversationIds(user.getId());
+	public List<Conversation> getConversations(User user) {
+		return conversationRepository.getConversations(user.getId());
 	}
 	
 }

@@ -4,7 +4,9 @@ import com.gmail.ivanjermakov1.messenger.auth.entity.User;
 import com.gmail.ivanjermakov1.messenger.auth.service.UserService;
 import com.gmail.ivanjermakov1.messenger.exception.AuthenticationException;
 import com.gmail.ivanjermakov1.messenger.exception.NoSuchEntityException;
+import com.gmail.ivanjermakov1.messenger.messaging.entity.FullUser;
 import com.gmail.ivanjermakov1.messenger.messaging.entity.Preview;
+import com.gmail.ivanjermakov1.messenger.messaging.entity.UserMainInfo;
 import com.gmail.ivanjermakov1.messenger.messaging.service.SearchService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,6 +35,17 @@ public class SearchController {
 		try {
 			User user = userService.getUser(userService.getUserId(token));
 			return searchService.searchConversations(user, search);
+		} catch (NoSuchEntityException e) {
+			throw new AuthenticationException("invalid token");
+		}
+	}
+	
+	@GetMapping("users")
+	public List<FullUser> searchUsers(@RequestParam("token") String token,
+	                                  @RequestParam("search") String search) throws AuthenticationException {
+		try {
+			userService.getUser(userService.getUserId(token));
+			return searchService.searchUsers(search);
 		} catch (NoSuchEntityException e) {
 			throw new AuthenticationException("invalid token");
 		}

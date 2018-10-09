@@ -9,11 +9,13 @@ import com.gmail.ivanjermakov1.messenger.auth.security.TokenGenerator;
 import com.gmail.ivanjermakov1.messenger.exception.AuthenticationException;
 import com.gmail.ivanjermakov1.messenger.exception.NoSuchEntityException;
 import com.gmail.ivanjermakov1.messenger.exception.RegistrationException;
+import com.gmail.ivanjermakov1.messenger.messaging.entity.Conversation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 @Transactional
