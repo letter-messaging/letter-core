@@ -80,22 +80,31 @@
 	<div class="content-left">
 		<div class="search">
 			<div class="icon"><i class="fas fa-search"></i></div>
-			<input id="search-conversations" type="text" placeholder="Search" ng-model="searchConversationsText"
+			<input id="search-conversations" type="text" placeholder="Search" ng-model="searchText"
 			       ng-change="searchForConversations()">
 		</div>
 
 		<div class="preview-wrapper">
-			<div ng-repeat="preview in conversationsOrSearch()" class="preview {{preview.conversationId}}"
-			     ng-click="openConversation(preview.conversationId)">
+			<div ng-repeat="preview in conversationsOrSearch()" class="preview"
+			     ng-click="openConversation(preview.conversation.id)" ng-show="!isUserSearch">
 				<img class="avatar" src="img/default-avatar.png">
-				<div class="info">{{preview.firstName}} {{preview.lastName}}</div>
+				<div class="info">{{preview.with.userMainInfo.firstName}} {{preview.with.userMainInfo.lastName}}</div>
 				<div class="message-preview">
-					<div class="from"></div>
-					<div class="text">{{preview.lastMessage.text}}</div>
+					<div class="from" ng-show="preview.lastMessage">
+						{{preview.lastMessage.sender.user.login === credentials.login ? 'You' :
+						preview.lastMessage.sender.userMainInfo.firstName}}:
+					</div>
+					<div class="text">{{preview.lastMessage.message.text}}</div>
 				</div>
 				<div class="delete"><i class="fas fa-times"></i></div>
 				<div class="unread"><i class="fas fa-circle"></i></div>
-				<div class="sent">{{preview.lastMessage.sent}}</div>
+				<div class="sent">{{preview.lastMessage.message.sent}}</div>
+			</div>
+			<div ng-repeat="user in searchUsers" class="user-preview" ng-click="createConversation(user.user.login)"
+			     ng-show="isUserSearch">
+				<img class="avatar" src="img/default-avatar.png">
+				<div class="info">{{user.userMainInfo.firstName}} {{user.userMainInfo.lastName}}</div>
+				<div class="login">@{{user.user.login}}</div>
 			</div>
 		</div>
 	</div>
@@ -112,8 +121,8 @@
 			     ng-class="{'message-mine' : message.mine === true}">
 				<img class="avatar" src="img/default-avatar.png">
 				<div class="message-content">
-					<div class="from">{{message.senderInfo.firstName}} {{message.senderInfo.lastName}}</div>
-					<div class="text">{{message.text}}</div>
+					<div class="from">{{message.sender.userMainInfo.firstName}}</div>
+					<div class="text">{{message.message.text}}</div>
 					<div class="info">
 						<div class="sent">{{message.message.sent}}</div>
 					</div>

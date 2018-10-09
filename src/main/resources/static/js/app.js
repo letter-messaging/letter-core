@@ -12,16 +12,20 @@ app.controller('MainController', ($document, $scope, $http) => {
 	};
 
 	$scope.conversations = [];
-	$scope.searchConversations = [];
 	$scope.messages = [];
+
+	$scope.searchConversations = [];
+	$scope.searchUsers = [];
 
 	$scope.isLoaded = false;
 
 	$scope.isAuth = true;
 	$scope.isLogin = true;
 
-	$scope.isConversationSearch = false;
-	$scope.searchConversationsText = null;
+	$scope.isSearch = false;
+	$scope.isUserSearch = false;
+
+	$scope.searchText = null;
 
 	// out - outside certain conversation
 	// in - in certain conversation
@@ -107,9 +111,9 @@ app.controller('MainController', ($document, $scope, $http) => {
 				"token": $scope.token
 			}
 		}).then((response) => {
-			for (let conversation of response.data) {
-				if (conversation.lastMessage)
-					conversation.lastMessage.sent = moment(new Date(conversation.lastMessage.sent)).format("hh:MM");
+			for (let preview of response.data) {
+				if (preview.lastMessage)
+					preview.lastMessage.message.sent = moment(new Date(preview.lastMessage.message.sent)).format("hh:MM");
 			}
 			$scope.conversations = response.data;
 		});
@@ -129,7 +133,7 @@ app.controller('MainController', ($document, $scope, $http) => {
 			for (let message of response.data) {
 				message.message.sent = moment(new Date(message.message.sent)).format("hh:MM");
 
-				message.mine = $scope.credentials.login === message.sender.login;
+				message.mine = $scope.credentials.login === message.sender.user.login;
 			}
 			$scope.messages = response.data;
 
@@ -142,30 +146,78 @@ app.controller('MainController', ($document, $scope, $http) => {
 	};
 
 	$scope.conversationsOrSearch = () => {
-		return $scope.isConversationSearch ? $scope.searchConversations : $scope.conversations;
+		if ($scope.isSearch) {
+			if ($scope.searchText[0] === '@') return $scope.searchUsers;
+			return $scope.searchConversations;
+		} else {
+			return $scope.conversations;
+		}
 	};
 
 	$scope.searchForConversations = () => {
-		$scope.isConversationSearch = $scope.searchConversationsText.length !== 0;
+		$scope.isSearch = $scope.searchText.length !== 0;
 
+		if (!$scope.isSearch) {
+			$scope.isUserSearch = false;
+			return;
+		}
+
+		if ($scope.searchText[0] === '@') {
+			$scope.isUserSearch = true;
+			$http({
+				url: "/search/users",
+				method: "GET",
+				params: {
+					"token": $scope.token,
+					"search": $scope.searchText
+				}
+			}).then((response) => {
+				$scope.searchUsers = response.data;
+			});
+		} else {
+			$scope.isUserSearch = false;
+			$http({
+				url: "/search/conversations",
+				method: "GET",
+				params: {
+					"token": $scope.token,
+					"search": $scope.searchText
+				}
+			}).then((response) => {
+				for (let preview of response.data) {
+					if (preview.lastMessage)
+						preview.lastMessage.message.sent = moment(new Date(preview.lastMessage.message.sent)).format("hh:MM");
+				}
+				$scope.searchConversations = response.data;
+			});
+		}
+	};
+
+	$scope.createConversation = (withLogin) => {
 		$http({
-			url: "/search/conversations",
+			url: "/conversation/create",
 			method: "GET",
 			params: {
 				"token": $scope.token,
-				"search": $scope.searchConversationsText
+				"with": withLogin
 			}
 		}).then((response) => {
-			for (let conversation of response.data) {
-				if (conversation.lastMessage)
-					conversation.lastMessage.sent = moment(new Date(conversation.lastMessage.sent)).format("hh:MM");
-			}
-			$scope.searchConversations = response.data;
+			let conversationId = response.data;
+
+			$scope.initialize();
+			$scope.openConversation(conversationId);
 		});
 	};
 
 	$scope.logout = () => {
 		localStorage.removeItem("token");
+
+		$scope.conversations = [];
+		$scope.messages = [];
+
+		$scope.searchConversations = [];
+		$scope.searchUsers = [];
+
 		$scope.isAuth = true;
 	}
 
