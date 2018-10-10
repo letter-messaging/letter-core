@@ -2,6 +2,20 @@ const MESSAGES_PER_PAGE = 20;
 
 let app = angular.module("app", []);
 
+app.directive('myEnter', function () {
+	return function (scope, element, attrs) {
+		element.bind("keydown keypress", function (event) {
+			if (event.which === 13) {
+				scope.$apply(function () {
+					scope.$eval(attrs.myEnter);
+				});
+
+				event.preventDefault();
+			}
+		});
+	};
+});
+
 app.controller('MainController', ($document, $scope, $http) => {
 
 	$scope.token = null;
@@ -16,6 +30,9 @@ app.controller('MainController', ($document, $scope, $http) => {
 
 	$scope.searchConversations = [];
 	$scope.searchUsers = [];
+
+	$scope.currentConversationId = null;
+	$scope.currentConversationWith = null;
 
 	$scope.isLoaded = false;
 
@@ -32,9 +49,15 @@ app.controller('MainController', ($document, $scope, $http) => {
 	// empty - in empty conversation
 	$scope.state = "out";
 
+	$scope.messageText = null;
+
+	$scope.listen = false;
+
 	$document.bind('keydown', (e) => {
 		if (e.keyCode === 27) {
 			$scope.state = "out";
+			$scope.currentConversationId = null;
+
 			$scope.$apply();
 		}
 	});
@@ -51,12 +74,17 @@ app.controller('MainController', ($document, $scope, $http) => {
 				params: {
 					"token": token
 				},
-				transformResponse: undefined
 			}).then(
 				(response) => {
+					$scope.credentials.login = response.data.login;
+
 					$scope.token = token;
 					$scope.initialize();
 					$scope.isAuth = false;
+
+					$scope.listen = true;
+					$scope.getMessages();
+
 					$scope.isLoaded = true;
 				},
 				(error) => {
@@ -83,6 +111,10 @@ app.controller('MainController', ($document, $scope, $http) => {
 			$scope.token = response.data;
 			localStorage.setItem("token", $scope.token);
 			$scope.initialize();
+
+			$scope.listen = true;
+			$scope.getMessages();
+
 			$scope.isAuth = false;
 		});
 	};
@@ -90,13 +122,12 @@ app.controller('MainController', ($document, $scope, $http) => {
 	$scope.register = () => {
 		if ($scope.credentials.password === $scope.credentials.confirmPassword) {
 			$http({
-				url: "/auth",
+				url: "/register",
 				method: "GET",
 				params: {
 					"login": $scope.credentials.login,
 					"password": $scope.credentials.password
 				},
-				transformResponse: undefined
 			}).then((response) => {
 				$scope.isAuth = false;
 			});
@@ -119,17 +150,19 @@ app.controller('MainController', ($document, $scope, $http) => {
 		});
 	};
 
-	$scope.openConversation = (conversationId) => {
+	$scope.openConversation = (preview) => {
 		$http({
 			url: "/message/get",
 			method: "GET",
 			params: {
 				"token": $scope.token,
-				"conversationId": conversationId,
+				"conversationId": preview.conversation.id,
 				"offset": 0,
 				"amount": MESSAGES_PER_PAGE
 			}
 		}).then((response) => {
+			$scope.currentConversationId = preview.conversation.id;
+
 			for (let message of response.data) {
 				message.message.sent = moment(new Date(message.message.sent)).format("hh:MM");
 
@@ -142,6 +175,8 @@ app.controller('MainController', ($document, $scope, $http) => {
 			} else {
 				$scope.state = "in";
 			}
+
+			$scope.currentConversationWith = preview.with;
 		});
 	};
 
@@ -209,6 +244,70 @@ app.controller('MainController', ($document, $scope, $http) => {
 		});
 	};
 
+	$scope.sendMessage = () => {
+		$http({
+			url: "/message/init",
+			method: "GET"
+		}).then((response) => {
+			let message = response.data;
+			message.conversationId = $scope.currentConversationId;
+			message.text = $scope.messageText;
+
+			$http({
+				url: "/messaging/send",
+				method: "POST",
+				data: message,
+				params: {
+					"token": $scope.token
+				}
+			}).then((response) => {
+				$scope.messageText = "";
+			});
+		});
+	};
+
+	$scope.enterMessage = (e) => {
+		if (e.which === 13) {
+			$scope.sendMessage();
+		}
+	};
+
+	$scope.getMessages = () => {
+		if ($scope.listen) {
+			$http({
+				url: "/messaging/get",
+				method: "GET",
+				params: {
+					"token": $scope.token
+				}
+			}).then(
+				(response) => {
+					let messageReceived = response.data;
+					messageReceived.message.sent = moment(new Date(messageReceived.message.sent)).format("hh:MM");
+					messageReceived.mine = $scope.credentials.login === messageReceived.sender.user.login;
+
+					if ($scope.state === 'in') {
+						$scope.messages.unshift(messageReceived);
+					}
+
+					for (let preview of $scope.conversations) {
+						if (preview.conversation.id === messageReceived.conversation.id) {
+							preview.lastMessage = messageReceived;
+							break;
+						}
+					}
+
+					console.log(messageReceived);
+
+					$scope.getMessages();
+				},
+				(error) => {
+					console.log(error);
+					$scope.getMessages();
+				});
+		}
+	};
+
 	$scope.logout = () => {
 		localStorage.removeItem("token");
 
@@ -219,6 +318,7 @@ app.controller('MainController', ($document, $scope, $http) => {
 		$scope.searchUsers = [];
 
 		$scope.isAuth = true;
+		$scope.listen = false;
 	}
 
 });

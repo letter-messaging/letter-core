@@ -69,8 +69,10 @@
 	</header>
 
 	<header class="header-right">
-		<div class="conversation-name">Андрей Алексеев</div>
-		<div class="status">online</div>
+		<div class="conversation-name" ng-show="state === 'in'">{{currentConversationWith.userMainInfo.firstName}}
+			{{currentConversationWith.userMainInfo.lastName}}
+		</div>
+		<div class="status" ng-show="state === 'in'">online</div>
 		<div class="right">
 			<div class="icon"><i class="fas fa-search"></i></div>
 			<i class="fas fa-sign-out-alt" ng-click="logout()"></i>
@@ -86,7 +88,7 @@
 
 		<div class="preview-wrapper">
 			<div ng-repeat="preview in conversationsOrSearch()" class="preview"
-			     ng-click="openConversation(preview.conversation.id)" ng-show="!isUserSearch">
+			     ng-click="openConversation(preview)" ng-show="!isUserSearch">
 				<img class="avatar" src="img/default-avatar.png">
 				<div class="info">{{preview.with.userMainInfo.firstName}} {{preview.with.userMainInfo.lastName}}</div>
 				<div class="message-preview">
@@ -133,12 +135,12 @@
 			<div class="attachment">
 				<i class="fas fa-paperclip"></i>
 			</div>
-			<textarea id="send-message-text" onkeydown="resize(this)" rows="1"
-			          placeholder="Write a message..."></textarea>
+			<textarea id="send-message-text" ng-model="messageText" onkeydown="resize(this)" rows="1"
+			          ng-keyup="enterMessage($event)" placeholder="Write a message..."></textarea>
 			<div class="emoji">
 				<i class="fas fa-smile"></i>
 			</div>
-			<div class="send-message">
+			<div ng-click="sendMessage()" class="send-message">
 				<i class="fas fa-angle-right"></i>
 			</div>
 		</div>

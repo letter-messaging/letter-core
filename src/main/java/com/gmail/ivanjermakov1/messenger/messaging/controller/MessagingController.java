@@ -4,6 +4,7 @@ import com.gmail.ivanjermakov1.messenger.auth.entity.User;
 import com.gmail.ivanjermakov1.messenger.auth.service.UserService;
 import com.gmail.ivanjermakov1.messenger.exception.AuthenticationException;
 import com.gmail.ivanjermakov1.messenger.exception.NoSuchEntityException;
+import com.gmail.ivanjermakov1.messenger.messaging.entity.FullMessage;
 import com.gmail.ivanjermakov1.messenger.messaging.entity.Message;
 import com.gmail.ivanjermakov1.messenger.messaging.service.MessagingService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,11 +26,11 @@ public class MessagingController {
 	
 	@RequestMapping("get")
 	@GetMapping
-	public DeferredResult<Message> getMessage(@RequestParam("token") String token) throws AuthenticationException {
+	public DeferredResult<FullMessage> getMessage(@RequestParam("token") String token) throws AuthenticationException {
 		try {
 			User user = userService.getUser(userService.getUserId(token));
 			
-			DeferredResult<Message> request = new DeferredResult<>();
+			DeferredResult<FullMessage> request = new DeferredResult<>();
 			request.onTimeout(() -> messagingService.removeRequest(request));
 			messagingService.addRequest(user, request);
 			

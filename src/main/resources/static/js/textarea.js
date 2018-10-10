@@ -10,8 +10,7 @@ document.querySelector('#send-message-text').addEventListener('keydown', functio
 			if (e.ctrlKey) {
 				textarea.value += "\n";
 				resize(textarea);
-			}
-			else {
+			} else {
 				e.preventDefault();
 			}
 		}
