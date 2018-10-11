@@ -14,13 +14,33 @@
 	align-self: flex-end;
 }
 
+.message-mine .message-content {
+	background: #666666;
+}
+
+.message-mine .from {
+	color: white;
+}
+
+.message-mine .text {
+	color: white;
+}
+
+.message-mine .sent {
+	color: white;
+}
+
+.message-mine .status {
+	color: white;
+}
+
 .message-content {
 	display: grid;
 
 	grid-template-columns: auto;
 	grid-template-rows: auto auto auto;
 
-	padding: 5px;
+	padding: 5px 15px;
 
 	background: white;
 
@@ -39,11 +59,13 @@
 	font-weight: bold;
 
 	grid-row: 1;
-	margin-bottom: 2px;
 }
 
 .message .text {
 	grid-row: 2;
+
+	/*preserving line brakes*/
+	white-space: pre-wrap;
 }
 
 .conversation .info {

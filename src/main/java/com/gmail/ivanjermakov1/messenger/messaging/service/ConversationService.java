@@ -2,6 +2,7 @@ package com.gmail.ivanjermakov1.messenger.messaging.service;
 
 import com.gmail.ivanjermakov1.messenger.auth.entity.User;
 import com.gmail.ivanjermakov1.messenger.messaging.entity.Conversation;
+import com.gmail.ivanjermakov1.messenger.messaging.entity.Preview;
 import com.gmail.ivanjermakov1.messenger.messaging.repository.ConversationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,7 +22,10 @@ public class ConversationService {
 		this.conversationRepository = conversationRepository;
 	}
 	
-	public Long create(User user, User with) {
+	public Conversation create(User user, User with) {
+		Conversation existingConversation = conversationWith(user, with);
+		if (existingConversation != null) return existingConversation;
+		
 		Conversation conversation = new Conversation(null);
 		conversation.setUsers(new ArrayList<>());
 		conversation.getUsers().add(user);
@@ -29,7 +33,7 @@ public class ConversationService {
 		
 		conversationRepository.save(conversation);
 		
-		return conversation.getId();
+		return conversation;
 	}
 	
 	public Conversation getById(Long conversationId) {
@@ -38,6 +42,13 @@ public class ConversationService {
 	
 	public List<Conversation> getConversations(User user) {
 		return conversationRepository.getConversations(user.getId());
+	}
+	
+	private Conversation conversationWith(User user1, User user2) {
+		return conversationRepository.getConversations(user1.getId()).stream()
+				.filter(c -> c.getUsers().stream().anyMatch(u -> u.getId().equals(user2.getId())) &&
+						c.getUsers().size() == 2)
+				.findFirst().orElse(null);
 	}
 	
 }

@@ -4,7 +4,7 @@ let app = angular.module("app", []);
 
 app.directive('myEnter', function () {
 	return function (scope, element, attrs) {
-		element.bind("keydown keypress", function (event) {
+		element.bind("keydown", function (event) {
 			if (event.which === 13) {
 				scope.$apply(function () {
 					scope.$eval(attrs.myEnter);
@@ -22,7 +22,9 @@ app.controller('MainController', ($document, $scope, $http) => {
 	$scope.credentials = {
 		"login": null,
 		"password": null,
-		"confirmPassword": null
+		"confirmPassword": null,
+		"firstName": null,
+		"lastName": null
 	};
 
 	$scope.conversations = [];
@@ -125,11 +127,13 @@ app.controller('MainController', ($document, $scope, $http) => {
 				url: "/register",
 				method: "GET",
 				params: {
+					"firstName": $scope.credentials.firstName,
+					"lastName": $scope.credentials.lastName,
 					"login": $scope.credentials.login,
 					"password": $scope.credentials.password
 				},
 			}).then((response) => {
-				$scope.isAuth = false;
+				$scope.isLogin = true;
 			});
 		}
 	};
@@ -144,7 +148,7 @@ app.controller('MainController', ($document, $scope, $http) => {
 		}).then((response) => {
 			for (let preview of response.data) {
 				if (preview.lastMessage)
-					preview.lastMessage.message.sent = moment(new Date(preview.lastMessage.message.sent)).format("hh:MM");
+					preview.lastMessage.message.sent = moment(preview.lastMessage.message.sent).format("H:mm");
 			}
 			$scope.conversations = response.data;
 		});
@@ -164,7 +168,7 @@ app.controller('MainController', ($document, $scope, $http) => {
 			$scope.currentConversationId = preview.conversation.id;
 
 			for (let message of response.data) {
-				message.message.sent = moment(new Date(message.message.sent)).format("hh:MM");
+				message.message.sent = moment(message.message.sent).format("H:mm");
 
 				message.mine = $scope.credentials.login === message.sender.user.login;
 			}
@@ -221,30 +225,42 @@ app.controller('MainController', ($document, $scope, $http) => {
 			}).then((response) => {
 				for (let preview of response.data) {
 					if (preview.lastMessage)
-						preview.lastMessage.message.sent = moment(new Date(preview.lastMessage.message.sent)).format("hh:MM");
+						preview.lastMessage.message.sent = moment(preview.lastMessage.message.sent).format("H:mm");
 				}
 				$scope.searchConversations = response.data;
 			});
 		}
 	};
 
-	$scope.createConversation = (withLogin) => {
+	$scope.createConversation = (user) => {
 		$http({
 			url: "/conversation/create",
 			method: "GET",
 			params: {
 				"token": $scope.token,
-				"with": withLogin
+				"with": user.user.login
 			}
 		}).then((response) => {
-			let conversationId = response.data;
+			let conversation = response.data;
 
 			$scope.initialize();
-			$scope.openConversation(conversationId);
+
+			$http({
+				url: "/preview/get",
+				method: "GET",
+				params: {
+					"token": $scope.token,
+					"conversationId": conversation.id
+				}
+			}).then((response) => {
+				$scope.openConversation(response.data);
+			});
 		});
 	};
 
 	$scope.sendMessage = () => {
+		if ($scope.messageText.replace(/\s/g, '').length === 0) return;
+
 		$http({
 			url: "/message/init",
 			method: "GET"
@@ -267,7 +283,7 @@ app.controller('MainController', ($document, $scope, $http) => {
 	};
 
 	$scope.enterMessage = (e) => {
-		if (e.which === 13) {
+		if (e.which === 13 && !e.ctrlKey) {
 			$scope.sendMessage();
 		}
 	};
@@ -283,26 +299,19 @@ app.controller('MainController', ($document, $scope, $http) => {
 			}).then(
 				(response) => {
 					let messageReceived = response.data;
-					messageReceived.message.sent = moment(new Date(messageReceived.message.sent)).format("hh:MM");
+
+					messageReceived.message.sent = moment(messageReceived.message.sent).format("H:mm");
+					console.log(messageReceived.message.sent);
 					messageReceived.mine = $scope.credentials.login === messageReceived.sender.user.login;
 
-					if ($scope.state === 'in') {
+					if ($scope.state === 'in' && $scope.currentConversationId === messageReceived.conversation.id) {
 						$scope.messages.unshift(messageReceived);
 					}
 
-					for (let preview of $scope.conversations) {
-						if (preview.conversation.id === messageReceived.conversation.id) {
-							preview.lastMessage = messageReceived;
-							break;
-						}
-					}
-
-					console.log(messageReceived);
-
+					$scope.initialize();
 					$scope.getMessages();
 				},
 				(error) => {
-					console.log(error);
 					$scope.getMessages();
 				});
 		}

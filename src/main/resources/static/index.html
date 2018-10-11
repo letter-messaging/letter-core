@@ -47,7 +47,9 @@
 		<div class="register-content" ng-show="!isLogin">
 			<form ng-submit="register()">
 				<div class="heading">Register</div>
-				<input autofocus type="text" placeholder="Login" ng-model="credentials.login">
+				<input autofocus type="text" placeholder="First name" ng-model="credentials.firstName">
+				<input type="text" placeholder="Last name" ng-model="credentials.lastName">
+				<input type="text" placeholder="Login" ng-model="credentials.login">
 				<input type="password" placeholder="Password" ng-model="credentials.password">
 				<input type="password" placeholder="Confirm password" ng-model="credentials.confirmPassword">
 				<div class="register-hint">Change your mind? <a ng-click="isLogin = true">Login</a>.</div>
@@ -88,7 +90,8 @@
 
 		<div class="preview-wrapper">
 			<div ng-repeat="preview in conversationsOrSearch()" class="preview"
-			     ng-click="openConversation(preview)" ng-show="!isUserSearch">
+			     ng-click="openConversation(preview)" ng-show="!isUserSearch"
+			     ng-class="preview.conversation.id === currentConversationId ? 'selected' : ''">
 				<img class="avatar" src="img/default-avatar.png">
 				<div class="info">{{preview.with.userMainInfo.firstName}} {{preview.with.userMainInfo.lastName}}</div>
 				<div class="message-preview">
@@ -102,7 +105,7 @@
 				<div class="unread"><i class="fas fa-circle"></i></div>
 				<div class="sent">{{preview.lastMessage.message.sent}}</div>
 			</div>
-			<div ng-repeat="user in searchUsers" class="user-preview" ng-click="createConversation(user.user.login)"
+			<div ng-repeat="user in searchUsers" class="user-preview" ng-click="createConversation(user)"
 			     ng-show="isUserSearch">
 				<img class="avatar" src="img/default-avatar.png">
 				<div class="info">{{user.userMainInfo.firstName}} {{user.userMainInfo.lastName}}</div>

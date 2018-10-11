@@ -18,22 +18,37 @@ import java.util.List;
 @RestController
 @RequestMapping("preview")
 public class PreviewController {
-
+	
 	private final UserService userService;
 	private final PreviewService previewService;
+	private final ConversationService conversationService;
+	
 	
 	@Autowired
-	public PreviewController(PreviewService previewService, UserService userService) {
+	public PreviewController(PreviewService previewService, UserService userService, ConversationService conversationService) {
 		this.previewService = previewService;
 		this.userService = userService;
+		this.conversationService = conversationService;
 	}
 	
 	@GetMapping("all")
-	public List<Preview> all(@RequestParam(name = "token") String token) throws AuthenticationException {
+	public List<Preview> all(@RequestParam("token") String token) throws AuthenticationException {
 		try {
 			User user = userService.getUser(userService.getUserId(token));
 			
 			return previewService.all(user);
+		} catch (NoSuchEntityException e) {
+			throw new AuthenticationException("invalid token");
+		}
+	}
+	
+	@GetMapping("get")
+	public Preview get(@RequestParam("token") String token,
+	                   @RequestParam("conversationId") Long conversationId) throws AuthenticationException {
+		try {
+			User user = userService.getUser(userService.getUserId(token));
+			
+			return previewService.getPreview(user, conversationService.getById(conversationId));
 		} catch (NoSuchEntityException e) {
 			throw new AuthenticationException("invalid token");
 		}

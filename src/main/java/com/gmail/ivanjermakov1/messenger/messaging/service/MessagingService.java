@@ -1,6 +1,7 @@
 package com.gmail.ivanjermakov1.messenger.messaging.service;
 
 import com.gmail.ivanjermakov1.messenger.auth.entity.User;
+import com.gmail.ivanjermakov1.messenger.exception.InvalidMessageException;
 import com.gmail.ivanjermakov1.messenger.messaging.entity.Conversation;
 import com.gmail.ivanjermakov1.messenger.messaging.entity.FullMessage;
 import com.gmail.ivanjermakov1.messenger.messaging.entity.Message;
@@ -59,7 +60,6 @@ public class MessagingService {
 		messageService.save(message);
 		
 		Conversation conversation = conversationService.getById(message.getConversationId());
-		
 		FullMessage fullMessage = messageService.getFullMessage(message);
 		
 		results.stream()

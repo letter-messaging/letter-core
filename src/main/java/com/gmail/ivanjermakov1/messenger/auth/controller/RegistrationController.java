@@ -20,8 +20,11 @@ public class RegistrationController {
 	}
 	
 	@GetMapping
-	public void register(@RequestParam("login") String login, @RequestParam("password") String password) throws RegistrationException {
-		userService.register(login, password);
+	public void register(@RequestParam("firstName") String firstName,
+	                     @RequestParam("lastName") String lastName,
+	                     @RequestParam("login") String login,
+	                     @RequestParam("password") String password) throws RegistrationException {
+		userService.register(firstName, lastName, login, password);
 	}
 	
 }

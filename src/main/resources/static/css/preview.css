@@ -24,6 +24,36 @@
 	border-bottom: 1px solid #f3f3f3;
 }
 
+.selected {
+	background-color: #666666 !important;
+
+	color: white;
+}
+
+.selected .info {
+	color: white;
+}
+
+.selected .from {
+	color: white !important;
+}
+
+.selected .text {
+	color: white;
+}
+
+.selected .delete i {
+	color: white;
+}
+
+.selected .unread i {
+	color: white;
+}
+
+.selected .sent {
+	color: white;
+}
+
 .preview:hover {
 	background: #fafafa;
 	cursor: pointer;

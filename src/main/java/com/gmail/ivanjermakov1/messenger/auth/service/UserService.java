@@ -9,13 +9,13 @@ import com.gmail.ivanjermakov1.messenger.auth.security.TokenGenerator;
 import com.gmail.ivanjermakov1.messenger.exception.AuthenticationException;
 import com.gmail.ivanjermakov1.messenger.exception.NoSuchEntityException;
 import com.gmail.ivanjermakov1.messenger.exception.RegistrationException;
-import com.gmail.ivanjermakov1.messenger.messaging.entity.Conversation;
+import com.gmail.ivanjermakov1.messenger.messaging.entity.UserMainInfo;
+import com.gmail.ivanjermakov1.messenger.messaging.repository.UserMainInfoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.Optional;
-import java.util.Set;
 
 @Service
 @Transactional
@@ -23,11 +23,14 @@ public class UserService {
 	
 	private final UserRepository userRepository;
 	private final TokenRepository tokenRepository;
+	private final UserMainInfoRepository userMainInfoRepository;
+	
 	
 	@Autowired
-	public UserService(UserRepository userRepository, TokenRepository tokenRepository) {
+	public UserService(UserRepository userRepository, TokenRepository tokenRepository, UserMainInfoRepository userMainInfoRepository) {
 		this.userRepository = userRepository;
 		this.tokenRepository = tokenRepository;
+		this.userMainInfoRepository = userMainInfoRepository;
 	}
 	
 	public String authenticate(String login, String password) throws AuthenticationException {
@@ -46,9 +49,12 @@ public class UserService {
 		return token.getToken();
 	}
 	
-	public void register(String login, String password) throws RegistrationException {
+	public void register(String firstName, String lastName, String login, String password) throws RegistrationException {
 		if (userRepository.findByLogin(login) != null) throw new RegistrationException("user already exits.");
-		userRepository.save(new User(null, login, Hasher.getHash(password)));
+		
+		User user = new User(null, login, Hasher.getHash(password));
+		userRepository.save(user);
+		userMainInfoRepository.save(new UserMainInfo(user.getId(), firstName, lastName));
 	}
 	
 	public User getUser(Long id) throws NoSuchEntityException {
