@@ -1,8 +1,6 @@
 package com.gmail.ivanjermakov1.messenger.messaging.service;
 
-import com.gmail.ivanjermakov1.messenger.messaging.entity.Message;
 import com.gmail.ivanjermakov1.messenger.messaging.entity.UserMainInfo;
-import com.gmail.ivanjermakov1.messenger.messaging.repository.MessageRepository;
 import com.gmail.ivanjermakov1.messenger.messaging.repository.UserMainInfoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
