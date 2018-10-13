@@ -39,7 +39,6 @@ public class MessagingService {
 		results.removeIf(e -> e.getValue() == result);
 	}
 	
-	
 	@Scheduled(fixedDelay = 60000)
 	public void clearTimeoutRequests() {
 		results.stream()

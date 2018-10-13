@@ -22,6 +22,8 @@ public class ConversationService {
 	}
 	
 	public Conversation create(User user, User with) {
+		if (user.getId().equals(with.getId())) return createSelf(user);
+		
 		Conversation existingConversation = conversationWith(user, with);
 		if (existingConversation != null) return existingConversation;
 		
@@ -48,6 +50,23 @@ public class ConversationService {
 				.filter(c -> c.getUsers().stream().anyMatch(u -> u.getId().equals(user2.getId())) &&
 						c.getUsers().size() == 2)
 				.findFirst().orElse(null);
+	}
+	
+	private Conversation createSelf(User user) {
+		Conversation self = conversationRepository.getConversations(user.getId())
+				.stream()
+				.filter(c -> c.getUsers().size() == 1)
+				.findFirst().orElse(null);
+		
+		if (self != null) return self;
+		
+		self = new Conversation(null);
+		self.setUsers(new ArrayList<>());
+		self.getUsers().add(user);
+		
+		conversationRepository.save(self);
+		
+		return self;
 	}
 	
 }

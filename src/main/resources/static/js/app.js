@@ -18,6 +18,9 @@ app.directive('myEnter', function () {
 
 app.controller('MainController', ($document, $scope, $http) => {
 
+	$scope.ME = null;
+	$scope.FULL_MESSAGE = null;
+
 	$scope.token = null;
 	$scope.credentials = {
 		"login": null,
@@ -27,7 +30,7 @@ app.controller('MainController', ($document, $scope, $http) => {
 		"lastName": null
 	};
 
-	$scope.conversations = [];
+	$scope.previews = [];
 	$scope.messages = [];
 
 	$scope.searchConversations = [];
@@ -82,6 +85,7 @@ app.controller('MainController', ($document, $scope, $http) => {
 
 					$scope.token = token;
 					$scope.initialize();
+					$scope.updatePreviews();
 					$scope.isAuth = false;
 
 					$scope.listen = true;
@@ -95,6 +99,13 @@ app.controller('MainController', ($document, $scope, $http) => {
 		} else {
 			$scope.isLoaded = true;
 		}
+
+		$http({
+			url: "/message/init/full",
+			method: "GET"
+		}).then((response) => {
+			$scope.FULL_MESSAGE = response.data;
+		});
 	})();
 
 	$scope.login = () => {
@@ -113,6 +124,7 @@ app.controller('MainController', ($document, $scope, $http) => {
 			$scope.token = response.data;
 			localStorage.setItem("token", $scope.token);
 			$scope.initialize();
+			$scope.updatePreviews();
 
 			$scope.listen = true;
 			$scope.getMessages();
@@ -140,21 +152,43 @@ app.controller('MainController', ($document, $scope, $http) => {
 
 	$scope.initialize = () => {
 		$http({
+			url: "/auth/validate",
+			method: "GET",
+			params: {
+				"token": $scope.token
+			}
+		}).then((response) => {
+			$scope.ME = response.data;
+		});
+
+		$scope.updatePreviews();
+	};
+
+	$scope.updatePreviews = () => {
+		$http({
 			url: "/preview/all",
 			method: "GET",
 			params: {
 				"token": $scope.token
 			}
 		}).then((response) => {
+			response.data = response.data.filter((p) => p.lastMessage != null);
+
+			console.log(response.data);
+			response.data.sort((a, b) => moment(a.lastMessage.message.sent).isAfter(b.lastMessage.message.sent) ? -1 : 1);
+
 			for (let preview of response.data) {
 				if (preview.lastMessage)
 					preview.lastMessage.message.sent = moment(preview.lastMessage.message.sent).format("H:mm");
 			}
-			$scope.conversations = response.data;
+			$scope.previews = response.data;
 		});
 	};
 
 	$scope.openConversation = (preview) => {
+		$scope.searchText = "";
+		$scope.isSearch = false;
+
 		$http({
 			url: "/message/get",
 			method: "GET",
@@ -170,7 +204,8 @@ app.controller('MainController', ($document, $scope, $http) => {
 			for (let message of response.data) {
 				message.message.sent = moment(message.message.sent).format("H:mm");
 
-				message.mine = $scope.credentials.login === message.sender.user.login;
+				message.mine = $scope.ME.user.login === message.sender.user.login;
+				message.status = "received";
 			}
 			$scope.messages = response.data;
 
@@ -189,7 +224,7 @@ app.controller('MainController', ($document, $scope, $http) => {
 			if ($scope.searchText[0] === '@') return $scope.searchUsers;
 			return $scope.searchConversations;
 		} else {
-			return $scope.conversations;
+			return $scope.previews;
 		}
 	};
 
@@ -241,9 +276,13 @@ app.controller('MainController', ($document, $scope, $http) => {
 				"with": user.user.login
 			}
 		}).then((response) => {
+			$scope.searchText = "";
+			$scope.isUserSearch = false;
+			$scope.isSearch = false;
+
 			let conversation = response.data;
 
-			$scope.initialize();
+			$scope.updatePreviews();
 
 			$http({
 				url: "/preview/get",
@@ -261,24 +300,33 @@ app.controller('MainController', ($document, $scope, $http) => {
 	$scope.sendMessage = () => {
 		if ($scope.messageText.replace(/\s/g, '').length === 0) return;
 
-		$http({
-			url: "/message/init",
-			method: "GET"
-		}).then((response) => {
-			let message = response.data;
-			message.conversationId = $scope.currentConversationId;
-			message.text = $scope.messageText;
+		let messageText = $scope.messageText;
+		$scope.messageText = "";
 
-			$http({
-				url: "/messaging/send",
-				method: "POST",
-				data: message,
-				params: {
-					"token": $scope.token
-				}
-			}).then((response) => {
-				$scope.messageText = "";
-			});
+		let message = $scope.FULL_MESSAGE;
+		console.log(message);
+		message.conversation.id = $scope.currentConversationId;
+		message.message.conversationId = $scope.currentConversationId;
+		message.message.text = messageText;
+		message.sender = $scope.ME;
+		message.mine = true;
+		message.status = "sending";
+
+		$scope.messages.unshift(message);
+
+		let preview = $scope.previews.find(c => c.conversation.id === message.conversation.id);
+		if (preview != null) preview.lastMessage = message;
+
+		$http({
+			url: "/messaging/send",
+			method: "POST",
+			data: message.message,
+			params: {
+				"token": $scope.token
+			}
+		}).then((response) => {
+			$scope.messages = $scope.messages.filter(m => m !== message);
+			$scope.updatePreviews();
 		});
 	};
 
@@ -301,14 +349,15 @@ app.controller('MainController', ($document, $scope, $http) => {
 					let messageReceived = response.data;
 
 					messageReceived.message.sent = moment(messageReceived.message.sent).format("H:mm");
-					console.log(messageReceived.message.sent);
-					messageReceived.mine = $scope.credentials.login === messageReceived.sender.user.login;
+					messageReceived.mine = $scope.ME.user.login === messageReceived.sender.user.login;
+					messageReceived.status = "received";
 
-					if ($scope.state === 'in' && $scope.currentConversationId === messageReceived.conversation.id) {
+					if ($scope.state === 'in' &&
+						$scope.currentConversationId === messageReceived.conversation.id) {
 						$scope.messages.unshift(messageReceived);
 					}
 
-					$scope.initialize();
+					$scope.updatePreviews();
 					$scope.getMessages();
 				},
 				(error) => {
@@ -320,7 +369,7 @@ app.controller('MainController', ($document, $scope, $http) => {
 	$scope.logout = () => {
 		localStorage.removeItem("token");
 
-		$scope.conversations = [];
+		$scope.previews = [];
 		$scope.messages = [];
 
 		$scope.searchConversations = [];

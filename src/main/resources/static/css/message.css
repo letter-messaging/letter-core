@@ -83,14 +83,22 @@
 }
 
 .conversation .info .sent {
-	font-size: 16px;
+	font-size: 12px;
 }
 
 .conversation .info .status {
 	display: grid;
 }
 
+.conversation .info .status div {
+	display: grid;
+}
+
 .conversation .status i {
-	font-size: 16px;
+	font-size: 14px;
 	padding: 4px;
+}
+
+.message-mine .status i {
+	color: white;
 }

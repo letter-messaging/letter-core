@@ -102,7 +102,7 @@
 					<div class="text">{{preview.lastMessage.message.text}}</div>
 				</div>
 				<div class="delete"><i class="fas fa-times"></i></div>
-				<div class="unread"><i class="fas fa-circle"></i></div>
+				<div class="unread" ng-show="preview.lastMessage.read === false"><i class="fas fa-circle"></i></div>
 				<div class="sent">{{preview.lastMessage.message.sent}}</div>
 			</div>
 			<div ng-repeat="user in searchUsers" class="user-preview" ng-click="createConversation(user)"
@@ -130,6 +130,18 @@
 					<div class="text">{{message.message.text}}</div>
 					<div class="info">
 						<div class="sent">{{message.message.sent}}</div>
+						<div class="status" ng-show="message.mine">
+							<div class="sending" ng-show="message.status === 'sending'">
+								<i class="far fa-clock"></i>
+							</div>
+							<div class="received"
+							     ng-show="message.status === 'received' && message.message.read === false">
+								<i class="fas fa-check"></i>
+							</div>
+							<div class="read" ng-show="message.status === 'received' && message.message.read">
+								<i class="fas fa-eye"></i>
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>

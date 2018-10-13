@@ -4,6 +4,8 @@ import com.gmail.ivanjermakov1.messenger.auth.entity.User;
 import com.gmail.ivanjermakov1.messenger.auth.service.UserService;
 import com.gmail.ivanjermakov1.messenger.exception.AuthenticationException;
 import com.gmail.ivanjermakov1.messenger.exception.NoSuchEntityException;
+import com.gmail.ivanjermakov1.messenger.messaging.entity.FullUser;
+import com.gmail.ivanjermakov1.messenger.messaging.service.UserMainInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,10 +17,13 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthenticationController {
 	
 	private final UserService userService;
+	private final UserMainInfoService userMainInfoService;
+	
 	
 	@Autowired
-	public AuthenticationController(UserService userService) {
+	public AuthenticationController(UserService userService, UserMainInfoService userMainInfoService) {
 		this.userService = userService;
+		this.userMainInfoService = userMainInfoService;
 	}
 	
 	@GetMapping
@@ -27,8 +32,9 @@ public class AuthenticationController {
 	}
 	
 	@GetMapping("validate")
-	public User validate(@RequestParam("token") String token) throws NoSuchEntityException {
-		return userService.getUser(userService.getUserId(token));
+	public FullUser validate(@RequestParam("token") String token) throws NoSuchEntityException {
+		User user = userService.getUser(userService.getUserId(token));
+		return new FullUser(user, userMainInfoService.getById(user.getId()));
 	}
 	
 }

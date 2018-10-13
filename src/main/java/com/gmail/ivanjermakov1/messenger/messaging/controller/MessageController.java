@@ -4,8 +4,7 @@ import com.gmail.ivanjermakov1.messenger.auth.entity.User;
 import com.gmail.ivanjermakov1.messenger.auth.service.UserService;
 import com.gmail.ivanjermakov1.messenger.exception.AuthenticationException;
 import com.gmail.ivanjermakov1.messenger.exception.NoSuchEntityException;
-import com.gmail.ivanjermakov1.messenger.messaging.entity.FullMessage;
-import com.gmail.ivanjermakov1.messenger.messaging.entity.Message;
+import com.gmail.ivanjermakov1.messenger.messaging.entity.*;
 import com.gmail.ivanjermakov1.messenger.messaging.service.MessageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -32,6 +31,11 @@ public class MessageController {
 	@GetMapping("init")
 	public Message init() {
 		return new Message();
+	}
+	
+	@GetMapping("init/full")
+	public FullMessage initFull() {
+		return new FullMessage(new Message(), new FullUser(new User(), new UserMainInfo()), new Conversation());
 	}
 	
 	@GetMapping("get")
