@@ -2,7 +2,7 @@
 	display: flex;
 	align-items: center;
 
-	padding: 5px;
+	padding: 10px;
 
 	background: #666666;
 
@@ -23,6 +23,10 @@
 .logo i {
 	font-size: 32px;
 	color: white;
+}
+
+.logo i:hover {
+	color: #6490d8;
 }
 
 .logo-name {

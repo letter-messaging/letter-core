@@ -3,6 +3,13 @@
 	font-size: 24px;
 }
 
+/*ios*/
+input {
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	appearance: none;
+}
+
 body {
 	padding: 0;
 	margin: 0;
@@ -25,13 +32,4 @@ body {
 	background: white;
 
 	overflow-y: hidden;
-}
-
-.content-left {
-	display: flex;
-	flex-direction: column;
-
-	max-height: calc(100vh - 52px);
-
-	border-right: 2px solid #e6e6e6;
 }

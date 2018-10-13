@@ -19,6 +19,8 @@
 	<link rel="stylesheet" type="text/css" href="css/message.css">
 	<link rel="stylesheet" type="text/css" href="css/angular.css">
 
+	<link rel="stylesheet" type="text/css" href="css/responsive.css">
+
 	<!--FONTS-->
 	<link href="https://fonts.googleapis.com/css?family=Krub" rel="stylesheet">
 
@@ -59,25 +61,22 @@
 	</div>
 </div>
 
-<div class="content" ng-show="!isAuth && isLoaded">
+<div class="content" ng-class="isLeftView ? 'mobile-left' : 'mobile-right'" ng-show="!isAuth && isLoaded">
 
 	<header class="header-left">
-		<div class="logo" ng-click="state = 'out'">
-			<i class="fas fa-comment"></i>
-		</div>
-		<div class="logo-name">
-			Messenger.
-		</div>
+		<div class="logo" ng-click="state = 'out'"><i class="fas fa-comment"></i></div>
+		<div class="logo-name">Messenger.</div>
 	</header>
 
 	<header class="header-right">
+		<div class="menu" ng-click="changeMobileView()"><i class="fas fa-bars"></i></div>
 		<div class="conversation-name" ng-show="state === 'in'">{{currentConversationWith.userMainInfo.firstName}}
 			{{currentConversationWith.userMainInfo.lastName}}
 		</div>
 		<div class="status" ng-show="state === 'in'">online</div>
 		<div class="right">
-			<div class="icon"><i class="fas fa-search"></i></div>
-			<i class="fas fa-sign-out-alt" ng-click="logout()"></i>
+			<div class="search"><i class="fas fa-search"></i></div>
+			<div class="logout" ng-click="logout()"><i class="fas fa-sign-out-alt"></i></div>
 		</div>
 	</header>
 
@@ -150,7 +149,7 @@
 			<div class="attachment">
 				<i class="fas fa-paperclip"></i>
 			</div>
-			<textarea id="send-message-text" ng-model="messageText" onkeydown="resize(this)" rows="1"
+			<textarea autofocus id="send-message-text" ng-model="messageText" onkeydown="resize(this)" rows="1"
 			          ng-keyup="enterMessage($event)" placeholder="Write a message..."></textarea>
 			<div class="emoji">
 				<i class="fas fa-smile"></i>

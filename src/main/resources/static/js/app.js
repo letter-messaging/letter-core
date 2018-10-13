@@ -58,10 +58,13 @@ app.controller('MainController', ($document, $scope, $http) => {
 
 	$scope.listen = false;
 
+	$scope.isLeftView = true;
+
 	$document.bind('keydown', (e) => {
 		if (e.keyCode === 27) {
 			$scope.state = "out";
 			$scope.currentConversationId = null;
+			$scope.isLeftView = true;
 
 			$scope.$apply();
 		}
@@ -188,6 +191,7 @@ app.controller('MainController', ($document, $scope, $http) => {
 	$scope.openConversation = (preview) => {
 		$scope.searchText = "";
 		$scope.isSearch = false;
+		$scope.isLeftView = false;
 
 		$http({
 			url: "/message/get",
@@ -377,6 +381,15 @@ app.controller('MainController', ($document, $scope, $http) => {
 
 		$scope.isAuth = true;
 		$scope.listen = false;
+	};
+
+	$scope.changeMobileView = () => {
+		if (!$scope.isLeftView) {
+			$scope.state = "out";
+			$scope.currentConversationId = null;
+		}
+
+		$scope.isLeftView = !$scope.isLeftView;
 	}
 
 });
