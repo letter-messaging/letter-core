@@ -92,7 +92,7 @@ app.controller('MainController', ($document, $scope, $http) => {
 					$scope.isAuth = false;
 
 					$scope.listen = true;
-					$scope.getMessages();
+					$scope.get();
 
 					$scope.isLoaded = true;
 				},
@@ -130,7 +130,7 @@ app.controller('MainController', ($document, $scope, $http) => {
 			$scope.updatePreviews();
 
 			$scope.listen = true;
-			$scope.getMessages();
+			$scope.get();
 
 			$scope.isAuth = false;
 		});
@@ -177,7 +177,6 @@ app.controller('MainController', ($document, $scope, $http) => {
 		}).then((response) => {
 			response.data = response.data.filter((p) => p.lastMessage != null);
 
-			console.log(response.data);
 			response.data.sort((a, b) => moment(a.lastMessage.message.sent).isAfter(b.lastMessage.message.sent) ? -1 : 1);
 
 			for (let preview of response.data) {
@@ -340,7 +339,7 @@ app.controller('MainController', ($document, $scope, $http) => {
 		}
 	};
 
-	$scope.getMessages = () => {
+	$scope.get = () => {
 		if ($scope.listen) {
 			$http({
 				url: "/messaging/get",
@@ -350,22 +349,29 @@ app.controller('MainController', ($document, $scope, $http) => {
 				}
 			}).then(
 				(response) => {
-					let messageReceived = response.data;
+					$scope.get();
 
-					messageReceived.message.sent = moment(messageReceived.message.sent).format("H:mm");
-					messageReceived.mine = $scope.ME.user.login === messageReceived.sender.user.login;
-					messageReceived.status = "received";
+					let action = response.data;
+					console.log(action);
 
-					if ($scope.state === 'in' &&
-						$scope.currentConversationId === messageReceived.conversation.id) {
-						$scope.messages.unshift(messageReceived);
+					if (action.type === "NEW_MESSAGE") {
+						let messageReceived = action.message;
+
+						messageReceived.message.sent = moment(messageReceived.message.sent).format("H:mm");
+						messageReceived.mine = $scope.ME.user.login === messageReceived.sender.user.login;
+						messageReceived.status = "received";
+
+						if ($scope.state === 'in' &&
+							$scope.currentConversationId === messageReceived.conversation.id) {
+							$scope.messages.unshift(messageReceived);
+						}
 					}
 
 					$scope.updatePreviews();
-					$scope.getMessages();
+					$scope.updatePreviews();
 				},
 				(error) => {
-					$scope.getMessages();
+					$scope.get();
 				});
 		}
 	};
