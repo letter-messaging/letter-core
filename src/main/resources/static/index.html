@@ -30,6 +30,7 @@
 
 	<!--LIBS-->
 	<script language="JavaScript" src="lib/angular.js"></script>
+	<script language="JavaScript" src="lib/jquery-3.3.1.min.js"></script>
 	<script type="text/javascript" src="lib/moment.js"></script>
 </head>
 
@@ -120,7 +121,7 @@
 		<div id="no-messages" ng-show="state === 'empty'">
 			Be the first. Messages will be displayed here.
 		</div>
-		<div class="message-wrapper" ng-show="state === 'in'">
+		<div class="message-wrapper" ng-show="state === 'in'" scrolly="loadMore()">
 			<div ng-repeat="message in messages" class="message {{message.message.id}}"
 			     ng-class="{'message-mine' : message.mine === true}">
 				<img class="avatar" src="img/default-avatar.png">
@@ -164,7 +165,6 @@
 
 <script type="text/javascript" src="js/app.js"></script>
 <script type="text/javascript" src="js/textarea.js"></script>
-<script type="text/javascript" src="js/event.js"></script>
 
 </body>
 </html>

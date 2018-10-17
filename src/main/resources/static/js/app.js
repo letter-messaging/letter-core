@@ -1,3 +1,5 @@
+'use strict';
+
 const MESSAGES_PER_PAGE = 20;
 
 let app = angular.module("app", []);
@@ -13,6 +15,21 @@ app.directive('myEnter', function () {
 				event.preventDefault();
 			}
 		});
+	};
+});
+
+app.directive('scrolly', function () {
+	return {
+		restrict: 'A',
+		link: function (scope, element, attrs) {
+			let raw = element[0];
+
+			element.bind('scroll', function () {
+				if (raw.scrollTop === 0) {
+					scope.$apply(attrs.scrolly);
+				}
+			});
+		}
 	};
 });
 
@@ -367,6 +384,7 @@ app.controller('MainController', ($document, $scope, $http) => {
 						}
 					}
 
+					// TODO: investigate
 					$scope.updatePreviews();
 					$scope.updatePreviews();
 				},
@@ -396,6 +414,32 @@ app.controller('MainController', ($document, $scope, $http) => {
 		}
 
 		$scope.isLeftView = !$scope.isLeftView;
-	}
+	};
+
+	$scope.loadMore = () => {
+		$http({
+			url: "/message/get",
+			method: "GET",
+			params: {
+				"token": $scope.token,
+				"conversationId": $scope.currentConversationId,
+				"offset": $scope.messages.length,
+				"amount": MESSAGES_PER_PAGE
+			}
+		}).then(
+			(response) => {
+				let newMessages = response.data;
+				console.log(newMessages);
+
+				for (let message of newMessages) {
+					message.message.sent = moment(message.message.sent).format("H:mm");
+
+					message.mine = $scope.ME.user.login === message.sender.user.login;
+					message.status = "received";
+
+					$scope.messages.push(message);
+				}
+			});
+	};
 
 });
