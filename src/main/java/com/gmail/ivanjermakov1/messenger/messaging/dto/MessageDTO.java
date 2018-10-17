@@ -1,15 +1,18 @@
-package com.gmail.ivanjermakov1.messenger.messaging.entity;
+package com.gmail.ivanjermakov1.messenger.messaging.dto;
 
-public class FullMessage {
+import com.gmail.ivanjermakov1.messenger.messaging.entity.Conversation;
+import com.gmail.ivanjermakov1.messenger.messaging.entity.Message;
+
+public class MessageDTO {
 	
 	private Message message;
-	private FullUser sender;
+	private UserDTO sender;
 	private Conversation conversation;
 	
-	public FullMessage() {
+	public MessageDTO() {
 	}
 	
-	public FullMessage(Message message, FullUser sender, Conversation conversation) {
+	public MessageDTO(Message message, UserDTO sender, Conversation conversation) {
 		this.message = message;
 		this.sender = sender;
 		this.conversation = conversation;
@@ -23,11 +26,11 @@ public class FullMessage {
 		this.message = message;
 	}
 	
-	public FullUser getSender() {
+	public UserDTO getSender() {
 		return sender;
 	}
 	
-	public void setSender(FullUser sender) {
+	public void setSender(UserDTO sender) {
 		this.sender = sender;
 	}
 	

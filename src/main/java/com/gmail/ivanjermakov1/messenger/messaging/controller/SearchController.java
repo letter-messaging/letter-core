@@ -4,8 +4,8 @@ import com.gmail.ivanjermakov1.messenger.auth.entity.User;
 import com.gmail.ivanjermakov1.messenger.auth.service.UserService;
 import com.gmail.ivanjermakov1.messenger.exception.AuthenticationException;
 import com.gmail.ivanjermakov1.messenger.exception.NoSuchEntityException;
-import com.gmail.ivanjermakov1.messenger.messaging.entity.FullUser;
-import com.gmail.ivanjermakov1.messenger.messaging.entity.Preview;
+import com.gmail.ivanjermakov1.messenger.messaging.dto.UserDTO;
+import com.gmail.ivanjermakov1.messenger.messaging.dto.PreviewDTO;
 import com.gmail.ivanjermakov1.messenger.messaging.service.SearchService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,8 +29,8 @@ public class SearchController {
 	}
 	
 	@GetMapping("conversations")
-	public List<Preview> searchConversations(@RequestParam("token") String token,
-	                                         @RequestParam("search") String search) throws AuthenticationException {
+	public List<PreviewDTO> searchConversations(@RequestParam("token") String token,
+	                                            @RequestParam("search") String search) throws AuthenticationException {
 		try {
 			User user = userService.getUser(userService.getUserId(token));
 			return searchService.searchConversations(user, search);
@@ -40,8 +40,8 @@ public class SearchController {
 	}
 	
 	@GetMapping("users")
-	public List<FullUser> searchUsers(@RequestParam("token") String token,
-	                                  @RequestParam("search") String search) throws AuthenticationException {
+	public List<UserDTO> searchUsers(@RequestParam("token") String token,
+	                                 @RequestParam("search") String search) throws AuthenticationException {
 		try {
 			userService.getUser(userService.getUserId(token));
 			return searchService.searchUsers(search);

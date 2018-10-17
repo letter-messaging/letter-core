@@ -2,8 +2,8 @@ package com.gmail.ivanjermakov1.messenger.messaging.service;
 
 import com.gmail.ivanjermakov1.messenger.auth.entity.User;
 import com.gmail.ivanjermakov1.messenger.auth.repository.UserRepository;
-import com.gmail.ivanjermakov1.messenger.messaging.entity.FullUser;
-import com.gmail.ivanjermakov1.messenger.messaging.entity.Preview;
+import com.gmail.ivanjermakov1.messenger.messaging.dto.UserDTO;
+import com.gmail.ivanjermakov1.messenger.messaging.dto.PreviewDTO;
 import com.gmail.ivanjermakov1.messenger.messaging.repository.UserMainInfoRepository;
 import com.gmail.ivanjermakov1.messenger.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +27,7 @@ public class SearchService {
 		this.userMainInfoService = userMainInfoService;
 	}
 	
-	public List<Preview> searchConversations(User user, String search) {
+	public List<PreviewDTO> searchConversations(User user, String search) {
 		return previewService.all(user)
 				.stream()
 				.filter(p -> Strings.startsWith(search, p.getWith().getUserMainInfo().getFirstName()) ||
@@ -39,10 +39,10 @@ public class SearchService {
 				.collect(Collectors.toList());
 	}
 	
-	public List<FullUser> searchUsers(String search) {
+	public List<UserDTO> searchUsers(String search) {
 		return userRepository.searchUsersAmount(search, 20)
 				.stream()
-				.map(u -> new FullUser(u, userMainInfoService.getById(u.getId())))
+				.map(u -> new UserDTO(u, userMainInfoService.getById(u.getId())))
 				.collect(Collectors.toList());
 	}
 	

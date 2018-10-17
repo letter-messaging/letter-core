@@ -4,7 +4,7 @@ import com.gmail.ivanjermakov1.messenger.auth.entity.User;
 import com.gmail.ivanjermakov1.messenger.auth.service.UserService;
 import com.gmail.ivanjermakov1.messenger.exception.AuthenticationException;
 import com.gmail.ivanjermakov1.messenger.exception.NoSuchEntityException;
-import com.gmail.ivanjermakov1.messenger.messaging.entity.Preview;
+import com.gmail.ivanjermakov1.messenger.messaging.dto.PreviewDTO;
 import com.gmail.ivanjermakov1.messenger.messaging.service.ConversationService;
 import com.gmail.ivanjermakov1.messenger.messaging.service.PreviewService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +32,7 @@ public class PreviewController {
 	}
 	
 	@GetMapping("all")
-	public List<Preview> all(@RequestParam("token") String token) throws AuthenticationException {
+	public List<PreviewDTO> all(@RequestParam("token") String token) throws AuthenticationException {
 		try {
 			User user = userService.getUser(userService.getUserId(token));
 			
@@ -43,8 +43,8 @@ public class PreviewController {
 	}
 	
 	@GetMapping("get")
-	public Preview get(@RequestParam("token") String token,
-	                   @RequestParam("conversationId") Long conversationId) throws AuthenticationException {
+	public PreviewDTO get(@RequestParam("token") String token,
+	                      @RequestParam("conversationId") Long conversationId) throws AuthenticationException {
 		try {
 			User user = userService.getUser(userService.getUserId(token));
 			

@@ -4,7 +4,11 @@ import com.gmail.ivanjermakov1.messenger.auth.entity.User;
 import com.gmail.ivanjermakov1.messenger.auth.service.UserService;
 import com.gmail.ivanjermakov1.messenger.exception.AuthenticationException;
 import com.gmail.ivanjermakov1.messenger.exception.NoSuchEntityException;
-import com.gmail.ivanjermakov1.messenger.messaging.entity.*;
+import com.gmail.ivanjermakov1.messenger.messaging.dto.MessageDTO;
+import com.gmail.ivanjermakov1.messenger.messaging.dto.UserDTO;
+import com.gmail.ivanjermakov1.messenger.messaging.entity.Conversation;
+import com.gmail.ivanjermakov1.messenger.messaging.entity.Message;
+import com.gmail.ivanjermakov1.messenger.messaging.entity.UserMainInfo;
 import com.gmail.ivanjermakov1.messenger.messaging.service.MessageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -34,15 +38,15 @@ public class MessageController {
 	}
 	
 	@GetMapping("init/full")
-	public FullMessage initFull() {
-		return new FullMessage(new Message(), new FullUser(new User(), new UserMainInfo()), new Conversation());
+	public MessageDTO initFull() {
+		return new MessageDTO(new Message(), new UserDTO(new User(), new UserMainInfo()), new Conversation());
 	}
 	
 	@GetMapping("get")
-	public List<FullMessage> get(@RequestParam("token") String token,
-	                             @RequestParam("conversationId") Long conversationId,
-	                             @RequestParam("offset") Integer offset,
-	                             @RequestParam("amount") Integer amount) throws AuthenticationException {
+	public List<MessageDTO> get(@RequestParam("token") String token,
+	                            @RequestParam("conversationId") Long conversationId,
+	                            @RequestParam("offset") Integer offset,
+	                            @RequestParam("amount") Integer amount) throws AuthenticationException {
 		try {
 			User user = userService.getUser(userService.getUserId(token));
 			

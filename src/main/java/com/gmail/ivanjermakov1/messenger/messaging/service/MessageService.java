@@ -3,9 +3,9 @@ package com.gmail.ivanjermakov1.messenger.messaging.service;
 import com.gmail.ivanjermakov1.messenger.auth.entity.User;
 import com.gmail.ivanjermakov1.messenger.auth.service.UserService;
 import com.gmail.ivanjermakov1.messenger.exception.AuthenticationException;
+import com.gmail.ivanjermakov1.messenger.messaging.dto.MessageDTO;
+import com.gmail.ivanjermakov1.messenger.messaging.dto.UserDTO;
 import com.gmail.ivanjermakov1.messenger.messaging.entity.Conversation;
-import com.gmail.ivanjermakov1.messenger.messaging.entity.FullMessage;
-import com.gmail.ivanjermakov1.messenger.messaging.entity.FullUser;
 import com.gmail.ivanjermakov1.messenger.messaging.entity.Message;
 import com.gmail.ivanjermakov1.messenger.messaging.repository.MessageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,7 +41,7 @@ public class MessageService {
 		return messageRepository.getTop1ByConversationIdOrderBySentDesc(conversationId);
 	}
 	
-	public List<FullMessage> get(Long userId, Long conversationId, Integer offset, Integer limit) throws AuthenticationException {
+	public List<MessageDTO> get(Long userId, Long conversationId, Integer offset, Integer limit) throws AuthenticationException {
 		if (conversationService.getById(conversationId).getUsers().stream().noneMatch(u -> u.getId().equals(userId)))
 			throw new AuthenticationException("invalid conversation id");
 		
@@ -52,19 +52,19 @@ public class MessageService {
 				.collect(Collectors.toList());
 	}
 	
-	public FullMessage getFullMessage(Message message) {
-		FullMessage fullMessage = new FullMessage();
-		fullMessage.setMessage(message);
-		fullMessage.setConversation(new Conversation(message.getConversationId()));
+	public MessageDTO getFullMessage(Message message) {
+		MessageDTO messageDTO = new MessageDTO();
+		messageDTO.setMessage(message);
+		messageDTO.setConversation(new Conversation(message.getConversationId()));
 		
 		try {
 			User user = userService.getUser(message.getSenderId());
-			fullMessage.setSender(new FullUser(user, userMainInfoService.getById(user.getId())));
+			messageDTO.setSender(new UserDTO(user, userMainInfoService.getById(user.getId())));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		
-		return fullMessage;
+		return messageDTO;
 	}
 	
 }

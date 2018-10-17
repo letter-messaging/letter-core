@@ -1,16 +1,17 @@
-package com.gmail.ivanjermakov1.messenger.messaging.entity;
+package com.gmail.ivanjermakov1.messenger.messaging.dto;
 
 import com.gmail.ivanjermakov1.messenger.auth.entity.User;
+import com.gmail.ivanjermakov1.messenger.messaging.entity.UserMainInfo;
 
-public class FullUser {
+public class UserDTO {
 	
 	private User user;
 	private UserMainInfo userMainInfo;
 	
-	public FullUser() {
+	public UserDTO() {
 	}
 	
-	public FullUser(User user, UserMainInfo userMainInfo) {
+	public UserDTO(User user, UserMainInfo userMainInfo) {
 		this.user = user;
 		this.userMainInfo = userMainInfo;
 	}

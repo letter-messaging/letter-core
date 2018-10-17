@@ -1,8 +1,8 @@
 package com.gmail.ivanjermakov1.messenger.messaging.service;
 
 import com.gmail.ivanjermakov1.messenger.auth.entity.User;
+import com.gmail.ivanjermakov1.messenger.messaging.dto.MessageDTO;
 import com.gmail.ivanjermakov1.messenger.messaging.entity.Conversation;
-import com.gmail.ivanjermakov1.messenger.messaging.entity.FullMessage;
 import com.gmail.ivanjermakov1.messenger.messaging.entity.Message;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -23,7 +23,7 @@ public class MessagingService {
 	private final MessageService messageService;
 	private final ConversationService conversationService;
 	
-	private final Queue<Map.Entry<User, DeferredResult<FullMessage>>> results = new ConcurrentLinkedQueue<>();
+	private final Queue<Map.Entry<User, DeferredResult<MessageDTO>>> results = new ConcurrentLinkedQueue<>();
 	
 	@Autowired
 	public MessagingService(MessageService messageService, ConversationService conversationService) {
@@ -31,11 +31,11 @@ public class MessagingService {
 		this.conversationService = conversationService;
 	}
 	
-	public void addRequest(User user, DeferredResult<FullMessage> result) {
+	public void addRequest(User user, DeferredResult<MessageDTO> result) {
 		results.add(new AbstractMap.SimpleEntry<>(user, result));
 	}
 	
-	public void removeRequest(DeferredResult<FullMessage> result) {
+	public void removeRequest(DeferredResult<MessageDTO> result) {
 		results.removeIf(e -> e.getValue() == result);
 	}
 	
@@ -58,13 +58,13 @@ public class MessagingService {
 		messageService.save(message);
 		
 		Conversation conversation = conversationService.getById(message.getConversationId());
-		FullMessage fullMessage = messageService.getFullMessage(message);
+		MessageDTO messageDTO = messageService.getFullMessage(message);
 		
 		results.stream()
 				.filter(e -> conversation.getUsers().stream()
 						.anyMatch(i -> i.getId().equals(e.getKey().getId())))
 				.forEach(e -> {
-					e.getValue().setResult(fullMessage);
+					e.getValue().setResult(messageDTO);
 					removeRequest(e.getValue());
 				});
 	}
