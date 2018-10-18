@@ -70,4 +70,12 @@ public class UserService {
 		return Optional.ofNullable(userRepository.getId(token)).orElseThrow(() -> new NoSuchEntityException("no such user"));
 	}
 	
+	public User auth(String token) throws AuthenticationException {
+		try {
+			return getUser(getUserId(token));
+		} catch (NoSuchEntityException e) {
+			throw new AuthenticationException("invalid token");
+		}
+	}
+	
 }

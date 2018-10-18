@@ -4,7 +4,6 @@ import com.gmail.ivanjermakov1.messenger.auth.entity.User;
 import com.gmail.ivanjermakov1.messenger.auth.service.UserService;
 import com.gmail.ivanjermakov1.messenger.exception.AuthenticationException;
 import com.gmail.ivanjermakov1.messenger.exception.InvalidMessageException;
-import com.gmail.ivanjermakov1.messenger.exception.NoSuchEntityException;
 import com.gmail.ivanjermakov1.messenger.messaging.entity.Message;
 import com.gmail.ivanjermakov1.messenger.messaging.entity.action.Action;
 import com.gmail.ivanjermakov1.messenger.messaging.service.MessagingService;
@@ -28,17 +27,13 @@ public class MessagingController {
 	@RequestMapping("get")
 	@GetMapping
 	public DeferredResult<Action> get(@RequestParam("token") String token) throws AuthenticationException {
-		try {
-			User user = userService.getUser(userService.getUserId(token));
-			
-			DeferredResult<Action> request = new DeferredResult<>();
-			request.onTimeout(() -> messagingService.removeRequest(request));
-			messagingService.addRequest(user, request);
-			
-			return request;
-		} catch (NoSuchEntityException e) {
-			throw new AuthenticationException("invalid token");
-		}
+		User user = userService.auth(token);
+		
+		DeferredResult<Action> request = new DeferredResult<>();
+		request.onTimeout(() -> messagingService.removeRequest(request));
+		messagingService.addRequest(user, request);
+		
+		return request;
 	}
 	
 	@RequestMapping("send")
@@ -47,12 +42,8 @@ public class MessagingController {
 		if (message.getText() == null || message.getConversationId() == null)
 			throw new InvalidMessageException("invalid message");
 		
-		try {
-			User user = userService.getUser(userService.getUserId(token));
-			messagingService.process(user, message);
-		} catch (NoSuchEntityException e) {
-			throw new AuthenticationException("invalid token");
-		}
+		User user = userService.auth(token);
+		messagingService.process(user, message);
 	}
 	
 	

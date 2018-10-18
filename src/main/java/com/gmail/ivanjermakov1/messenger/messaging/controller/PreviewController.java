@@ -45,13 +45,8 @@ public class PreviewController {
 	@GetMapping("get")
 	public PreviewDTO get(@RequestParam("token") String token,
 	                      @RequestParam("conversationId") Long conversationId) throws AuthenticationException {
-		try {
-			User user = userService.getUser(userService.getUserId(token));
-			
-			return previewService.getPreview(user, conversationService.getById(conversationId));
-		} catch (NoSuchEntityException e) {
-			throw new AuthenticationException("invalid token");
-		}
+		User user = userService.auth(token);
+		return previewService.getPreview(user, conversationService.getById(conversationId));
 	}
 	
 }

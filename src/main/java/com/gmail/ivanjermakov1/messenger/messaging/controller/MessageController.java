@@ -3,7 +3,6 @@ package com.gmail.ivanjermakov1.messenger.messaging.controller;
 import com.gmail.ivanjermakov1.messenger.auth.entity.User;
 import com.gmail.ivanjermakov1.messenger.auth.service.UserService;
 import com.gmail.ivanjermakov1.messenger.exception.AuthenticationException;
-import com.gmail.ivanjermakov1.messenger.exception.NoSuchEntityException;
 import com.gmail.ivanjermakov1.messenger.messaging.dto.MessageDTO;
 import com.gmail.ivanjermakov1.messenger.messaging.dto.UserDTO;
 import com.gmail.ivanjermakov1.messenger.messaging.entity.Conversation;
@@ -47,13 +46,8 @@ public class MessageController {
 	                            @RequestParam("conversationId") Long conversationId,
 	                            @RequestParam("offset") Integer offset,
 	                            @RequestParam("amount") Integer amount) throws AuthenticationException {
-		try {
-			User user = userService.getUser(userService.getUserId(token));
-			
-			return messageService.get(user.getId(), conversationId, offset, amount);
-		} catch (NoSuchEntityException e) {
-			throw new AuthenticationException("invalid token");
-		}
+		User user = userService.auth(token);
+		return messageService.get(user.getId(), conversationId, offset, amount);
 	}
 	
 }

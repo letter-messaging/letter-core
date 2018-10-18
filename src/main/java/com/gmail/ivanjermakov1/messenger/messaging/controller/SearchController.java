@@ -3,7 +3,6 @@ package com.gmail.ivanjermakov1.messenger.messaging.controller;
 import com.gmail.ivanjermakov1.messenger.auth.entity.User;
 import com.gmail.ivanjermakov1.messenger.auth.service.UserService;
 import com.gmail.ivanjermakov1.messenger.exception.AuthenticationException;
-import com.gmail.ivanjermakov1.messenger.exception.NoSuchEntityException;
 import com.gmail.ivanjermakov1.messenger.messaging.dto.PreviewDTO;
 import com.gmail.ivanjermakov1.messenger.messaging.dto.UserDTO;
 import com.gmail.ivanjermakov1.messenger.messaging.service.SearchService;
@@ -31,23 +30,15 @@ public class SearchController {
 	@GetMapping("conversations")
 	public List<PreviewDTO> searchConversations(@RequestParam("token") String token,
 	                                            @RequestParam("search") String search) throws AuthenticationException {
-		try {
-			User user = userService.getUser(userService.getUserId(token));
-			return searchService.searchConversations(user, search);
-		} catch (NoSuchEntityException e) {
-			throw new AuthenticationException("invalid token");
-		}
+		User user = userService.auth(token);
+		return searchService.searchConversations(user, search);
 	}
 	
 	@GetMapping("users")
 	public List<UserDTO> searchUsers(@RequestParam("token") String token,
 	                                 @RequestParam("search") String search) throws AuthenticationException {
-		try {
-			userService.getUser(userService.getUserId(token));
-			return searchService.searchUsers(search);
-		} catch (NoSuchEntityException e) {
-			throw new AuthenticationException("invalid token");
-		}
+		userService.auth(token);
+		return searchService.searchUsers(search);
 	}
 	
 }

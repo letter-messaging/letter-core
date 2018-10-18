@@ -324,7 +324,6 @@ app.controller('MainController', ($document, $scope, $http) => {
 		$scope.messageText = "";
 
 		let message = $scope.FULL_MESSAGE;
-		console.log(message);
 		message.conversation.id = $scope.currentConversationId;
 		message.message.conversationId = $scope.currentConversationId;
 		message.message.text = messageText;

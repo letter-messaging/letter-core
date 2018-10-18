@@ -27,11 +27,11 @@ public class ConversationController {
 	
 	@GetMapping("create")
 	public Conversation create(@RequestParam("token") String token, @RequestParam("with") String withLogin) throws AuthenticationException {
+		User user = userService.auth(token);
 		try {
-			User user = userService.getUser(userService.getUserId(token));
 			return conversationService.create(user, userService.getUser(withLogin));
 		} catch (NoSuchEntityException e) {
-			throw new AuthenticationException("invalid token");
+			throw new AuthenticationException();
 		}
 	}
 	
