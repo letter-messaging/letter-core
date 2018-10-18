@@ -7,14 +7,16 @@ public class PreviewDTO {
 	private Conversation conversation;
 	private UserDTO with;
 	private MessageDTO lastMessage;
+	private Integer unread;
 	
 	public PreviewDTO() {
 	}
 	
-	public PreviewDTO(Conversation conversation, UserDTO with, MessageDTO lastMessage) {
+	public PreviewDTO(Conversation conversation, UserDTO with, MessageDTO lastMessage, Integer unread) {
 		this.conversation = conversation;
 		this.with = with;
 		this.lastMessage = lastMessage;
+		this.unread = unread;
 	}
 	
 	public Conversation getConversation() {
@@ -39,6 +41,14 @@ public class PreviewDTO {
 	
 	public void setLastMessage(MessageDTO lastMessage) {
 		this.lastMessage = lastMessage;
+	}
+	
+	public Integer getUnread() {
+		return unread;
+	}
+	
+	public void setUnread(Integer unread) {
+		this.unread = unread;
 	}
 	
 }

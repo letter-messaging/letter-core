@@ -6,8 +6,10 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 
+import javax.transaction.Transactional;
 import java.util.Set;
 
+@Transactional
 public interface MessageRepository extends CrudRepository<Message, Long> {
 	
 	Message getTop1ByConversationIdOrderBySentDesc(Long conversationId);
@@ -23,5 +25,10 @@ public interface MessageRepository extends CrudRepository<Message, Long> {
 			"set m.read = true " +
 			"where m.senderId <> :exceptUserId and m.conversationId = :conversationId")
 	void readAllExcept(@Param("exceptUserId") Long exceptUserId, @Param("conversationId") Long conversationId);
+	
+	@Query("select count(m) " +
+			"from Message m " +
+			"where m.conversationId = :conversationId and m.senderId <> :exceptUserId and m.read = false")
+	Integer getUnreadCount(@Param("exceptUserId") Long exceptUserId, @Param("conversationId") Long conversationId);
 	
 }

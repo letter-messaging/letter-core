@@ -101,10 +101,18 @@
 					</div>
 					<div class="text">{{preview.lastMessage.message.text}}</div>
 				</div>
-				<div class="delete"><i class="fas fa-times"></i></div>
-				<div class="unread" ng-show="preview.lastMessage.read === false"><i class="fas fa-circle"></i></div>
+				<!--<div class="delete"><i class="fas fa-times"></i></div>-->
+				<div class="unread-wrapper">
+					<div class="unread" ng-show="preview.unread !== 0">
+						{{preview.unread}}
+					</div>
+					<div class="unread-mine" ng-show="preview.unread === 0 && preview.lastMessage.mine">
+						<i class="fas fa-circle"></i>
+					</div>
+				</div>
 				<div class="sent">{{preview.lastMessage.message.sent}}</div>
 			</div>
+
 			<div ng-repeat="user in searchUsers" class="user-preview" ng-click="createConversation(user)"
 			     ng-show="isUserSearch">
 				<img class="avatar" src="img/default-avatar.png">

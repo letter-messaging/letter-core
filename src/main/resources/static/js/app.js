@@ -199,8 +199,10 @@ app.controller('MainController', ($document, $scope, $http) => {
 			response.data.sort((a, b) => moment(a.lastMessage.message.sent).isAfter(b.lastMessage.message.sent) ? -1 : 1);
 
 			for (let preview of response.data) {
-				if (preview.lastMessage)
+				if (preview.lastMessage) {
 					preview.lastMessage.message.sent = moment(preview.lastMessage.message.sent).format("H:mm");
+					preview.lastMessage.mine = preview.lastMessage.sender.user.login === $scope.ME.user.login;
+				}
 			}
 			$scope.previews = response.data;
 		});
@@ -238,6 +240,8 @@ app.controller('MainController', ($document, $scope, $http) => {
 			}
 
 			$scope.currentConversationWith = preview.with;
+
+			$scope.updatePreviews();
 		});
 	};
 

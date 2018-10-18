@@ -72,4 +72,8 @@ public class MessageService {
 		messageRepository.readAllExcept(user.getId(), conversation.getId());
 	}
 	
+	public Integer unreadCount(User user, Conversation conversation) {
+		return messageRepository.getUnreadCount(user.getId(), conversation.getId());
+	}
+	
 }

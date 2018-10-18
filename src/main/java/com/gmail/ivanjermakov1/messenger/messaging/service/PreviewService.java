@@ -52,6 +52,7 @@ public class PreviewService {
 				.findFirst()
 				.orElse(user);
 		previewDTO.setWith(new UserDTO(with, userMainInfoService.getById(with.getId())));
+		previewDTO.setUnread(messageService.unreadCount(user, conversation));
 		
 		return previewDTO;
 	}

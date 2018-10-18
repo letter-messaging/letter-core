@@ -55,7 +55,7 @@
 	color: white;
 }
 
-.selected .unread i {
+.selected .unread-wrapper i {
 	color: white;
 }
 
@@ -141,18 +141,33 @@
 	font-size: 14px;
 }
 
-.preview .unread {
-	display: grid;
+.preview .unread-wrapper {
+	display: flex;
+	align-items: center;
+	justify-content: center;
 
 	grid-column: 3;
 	grid-row: 1/4;
-
-	text-align: center;
-	color: #666666;
 }
 
-.unread i {
-	font-size: 10px;
+.preview .unread-wrapper .unread {
+	color: white;
+	font-size: 12px;
+	font-weight: bold;
+
+	text-align: center;
+
+	padding: 0 6px;
+
+	background: #666666;
+	border-radius: 10px;
+}
+
+.unread-wrapper .unread-mine i {
+	font-size: 12px;
+	color: #666666;
+
+	background: transparent;
 }
 
 .preview .sent {
