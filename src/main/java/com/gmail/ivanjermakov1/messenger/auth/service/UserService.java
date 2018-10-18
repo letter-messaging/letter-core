@@ -9,8 +9,10 @@ import com.gmail.ivanjermakov1.messenger.auth.security.TokenGenerator;
 import com.gmail.ivanjermakov1.messenger.exception.AuthenticationException;
 import com.gmail.ivanjermakov1.messenger.exception.NoSuchEntityException;
 import com.gmail.ivanjermakov1.messenger.exception.RegistrationException;
+import com.gmail.ivanjermakov1.messenger.messaging.dto.UserDTO;
 import com.gmail.ivanjermakov1.messenger.messaging.entity.UserMainInfo;
 import com.gmail.ivanjermakov1.messenger.messaging.repository.UserMainInfoRepository;
+import com.gmail.ivanjermakov1.messenger.messaging.service.UserMainInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,14 +25,14 @@ public class UserService {
 	
 	private final UserRepository userRepository;
 	private final TokenRepository tokenRepository;
-	private final UserMainInfoRepository userMainInfoRepository;
+	private final UserMainInfoService userMainInfoService;
 	
 	
 	@Autowired
-	public UserService(UserRepository userRepository, TokenRepository tokenRepository, UserMainInfoRepository userMainInfoRepository) {
+	public UserService(UserRepository userRepository, TokenRepository tokenRepository, UserMainInfoService userMainInfoService) {
 		this.userRepository = userRepository;
 		this.tokenRepository = tokenRepository;
-		this.userMainInfoRepository = userMainInfoRepository;
+		this.userMainInfoService = userMainInfoService;
 	}
 	
 	public String authenticate(String login, String password) throws AuthenticationException {
@@ -54,7 +56,7 @@ public class UserService {
 		
 		User user = new User(null, login, Hasher.getHash(password));
 		userRepository.save(user);
-		userMainInfoRepository.save(new UserMainInfo(user.getId(), firstName, lastName));
+		userMainInfoService.save(new UserMainInfo(user.getId(), firstName, lastName));
 	}
 	
 	public User getUser(Long id) throws NoSuchEntityException {
@@ -68,6 +70,10 @@ public class UserService {
 	
 	public Long getUserId(String token) throws NoSuchEntityException {
 		return Optional.ofNullable(userRepository.getId(token)).orElseThrow(() -> new NoSuchEntityException("no such user"));
+	}
+	
+	public UserDTO full(User user) {
+		return new UserDTO(user, userMainInfoService.getById(user.getId()));
 	}
 	
 	public User auth(String token) throws AuthenticationException {

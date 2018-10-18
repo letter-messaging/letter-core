@@ -9,6 +9,7 @@ import com.gmail.ivanjermakov1.messenger.messaging.entity.Conversation;
 import com.gmail.ivanjermakov1.messenger.messaging.entity.Message;
 import com.gmail.ivanjermakov1.messenger.messaging.entity.UserMainInfo;
 import com.gmail.ivanjermakov1.messenger.messaging.service.MessageService;
+import com.gmail.ivanjermakov1.messenger.messaging.service.MessagingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,12 +24,14 @@ public class MessageController {
 	
 	private final UserService userService;
 	private final MessageService messageService;
+	private final MessagingService messagingService;
 	
 	
 	@Autowired
-	public MessageController(UserService userService, MessageService messageService) {
+	public MessageController(UserService userService, MessageService messageService, MessagingService messagingService) {
 		this.userService = userService;
 		this.messageService = messageService;
+		this.messagingService = messagingService;
 	}
 	
 	@GetMapping("init")
@@ -47,6 +50,7 @@ public class MessageController {
 	                            @RequestParam("offset") Integer offset,
 	                            @RequestParam("amount") Integer amount) throws AuthenticationException {
 		User user = userService.auth(token);
+		messagingService.processConversationRead(user, conversationId);
 		return messageService.get(user.getId(), conversationId, offset, amount);
 	}
 	

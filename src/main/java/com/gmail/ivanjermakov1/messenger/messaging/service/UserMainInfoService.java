@@ -19,7 +19,11 @@ public class UserMainInfoService {
 	}
 	
 	public UserMainInfo getById(Long userId) {
-		return userMainInfoRepository.findById(userId).get();
+		return userMainInfoRepository.findById(userId).orElse(null);
+	}
+	
+	public void save(UserMainInfo userMainInfo) {
+		userMainInfoRepository.save(userMainInfo);
 	}
 	
 }

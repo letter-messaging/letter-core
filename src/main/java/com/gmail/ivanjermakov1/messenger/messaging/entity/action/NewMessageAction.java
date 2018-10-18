@@ -4,15 +4,15 @@ import com.gmail.ivanjermakov1.messenger.messaging.dto.MessageDTO;
 
 import static com.gmail.ivanjermakov1.messenger.messaging.entity.action.Action.Type.NEW_MESSAGE;
 
-public class NewMessage extends Action {
+public class NewMessageAction extends Action {
 	
 	private MessageDTO message;
 	
-	public NewMessage() {
+	public NewMessageAction() {
 		setType(NEW_MESSAGE);
 	}
 	
-	public NewMessage(MessageDTO message) {
+	public NewMessageAction(MessageDTO message) {
 		this();
 		this.message = message;
 	}

@@ -109,7 +109,8 @@ app.controller('MainController', ($document, $scope, $http) => {
 					$scope.isAuth = false;
 
 					$scope.listen = true;
-					$scope.get();
+					$scope.getNewMessages();
+					$scope.getConversationRead();
 
 					$scope.isLoaded = true;
 				},
@@ -147,7 +148,8 @@ app.controller('MainController', ($document, $scope, $http) => {
 			$scope.updatePreviews();
 
 			$scope.listen = true;
-			$scope.get();
+			$scope.getNewMessages();
+			$scope.getConversationRead();
 
 			$scope.isAuth = false;
 		});
@@ -344,6 +346,7 @@ app.controller('MainController', ($document, $scope, $http) => {
 				"token": $scope.token
 			}
 		}).then((response) => {
+			let messageSent = response.data;
 			$scope.messages = $scope.messages.filter(m => m !== message);
 			$scope.updatePreviews();
 		});
@@ -355,17 +358,17 @@ app.controller('MainController', ($document, $scope, $http) => {
 		}
 	};
 
-	$scope.get = () => {
+	$scope.getNewMessages = () => {
 		if ($scope.listen) {
 			$http({
-				url: "/messaging/get",
+				url: "/messaging/get/m",
 				method: "GET",
 				params: {
 					"token": $scope.token
 				}
 			}).then(
 				(response) => {
-					$scope.get();
+					$scope.getNewMessages();
 
 					let action = response.data;
 					console.log(action);
@@ -388,7 +391,40 @@ app.controller('MainController', ($document, $scope, $http) => {
 					$scope.updatePreviews();
 				},
 				(error) => {
-					$scope.get();
+					$scope.getNewMessages();
+				});
+		}
+	};
+
+	$scope.getConversationRead = () => {
+		if ($scope.listen) {
+			$http({
+				url: "/messaging/get/r",
+				method: "GET",
+				params: {
+					"token": $scope.token
+				}
+			}).then(
+				(response) => {
+					$scope.getConversationRead();
+
+					let action = response.data;
+					console.log(action);
+
+					if (action.type === "CONVERSATION_READ") {
+						if ($scope.currentConversationId === action.conversation.id) {
+							for (let message of $scope.messages) {
+								message.message.read = true;
+							}
+						}
+					}
+
+					// TODO: investigate
+					$scope.updatePreviews();
+					$scope.updatePreviews();
+				},
+				(error) => {
+					$scope.getConversationRead();
 				});
 		}
 	};

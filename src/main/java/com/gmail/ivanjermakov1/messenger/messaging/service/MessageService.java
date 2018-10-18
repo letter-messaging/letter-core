@@ -60,11 +60,16 @@ public class MessageService {
 		try {
 			User user = userService.getUser(message.getSenderId());
 			messageDTO.setSender(new UserDTO(user, userMainInfoService.getById(user.getId())));
+			userService.full(user);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		
 		return messageDTO;
+	}
+	
+	public void read(User user, Conversation conversation) {
+		messageRepository.readAllExcept(user.getId(), conversation.getId());
 	}
 	
 }

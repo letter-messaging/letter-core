@@ -1,11 +1,12 @@
 package com.gmail.ivanjermakov1.messenger.messaging.service;
 
 import com.gmail.ivanjermakov1.messenger.auth.entity.User;
+import com.gmail.ivanjermakov1.messenger.auth.service.UserService;
 import com.gmail.ivanjermakov1.messenger.messaging.dto.MessageDTO;
 import com.gmail.ivanjermakov1.messenger.messaging.entity.Conversation;
 import com.gmail.ivanjermakov1.messenger.messaging.entity.Message;
-import com.gmail.ivanjermakov1.messenger.messaging.entity.action.Action;
-import com.gmail.ivanjermakov1.messenger.messaging.entity.action.NewMessage;
+import com.gmail.ivanjermakov1.messenger.messaging.entity.action.ConversationReadAction;
+import com.gmail.ivanjermakov1.messenger.messaging.entity.action.NewMessageAction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -13,7 +14,6 @@ import org.springframework.web.context.request.async.DeferredResult;
 
 import javax.transaction.Transactional;
 import java.time.Instant;
-import java.util.AbstractMap;
 import java.util.Map;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -24,28 +24,31 @@ public class MessagingService {
 	
 	private final MessageService messageService;
 	private final ConversationService conversationService;
+	private final UserService userService;
 	
-	private final Queue<Map.Entry<User, DeferredResult<Action>>> requests = new ConcurrentLinkedQueue<>();
+	private final Queue<Map.Entry<User, DeferredResult<NewMessageAction>>> newMessageRequests = new ConcurrentLinkedQueue<>();
+	private final Queue<Map.Entry<User, DeferredResult<ConversationReadAction>>> conversationReadRequests = new ConcurrentLinkedQueue<>();
 	
 	@Autowired
-	public MessagingService(MessageService messageService, ConversationService conversationService) {
+	public MessagingService(MessageService messageService, ConversationService conversationService, UserService userService) {
 		this.messageService = messageService;
 		this.conversationService = conversationService;
+		this.userService = userService;
 	}
 	
-	public void addRequest(User user, DeferredResult<Action> result) {
-		requests.add(new AbstractMap.SimpleEntry<>(user, result));
+	public Queue<Map.Entry<User, DeferredResult<NewMessageAction>>> getNewMessageRequests() {
+		return newMessageRequests;
 	}
 	
-	public void removeRequest(DeferredResult<Action> result) {
-		requests.removeIf(e -> e.getValue() == result);
+	public Queue<Map.Entry<User, DeferredResult<ConversationReadAction>>> getConversationReadRequests() {
+		return conversationReadRequests;
 	}
 	
 	@Scheduled(fixedDelay = 60000)
 	public void clearTimeoutRequests() {
-		requests.stream()
+		newMessageRequests.stream()
 				.filter(e -> e.getValue().isSetOrExpired())
-				.forEach(requests::remove);
+				.forEach(newMessageRequests::remove);
 	}
 	
 	/**
@@ -54,7 +57,7 @@ public class MessagingService {
 	 * @param user    sender
 	 * @param message required fields: message.text, message.conversationId
 	 */
-	public void process(User user, Message message) {
+	public MessageDTO processNewMessage(User user, Message message) {
 		message.setSenderId(user.getId());
 		message.setSent(Instant.now());
 		messageService.save(message);
@@ -62,12 +65,29 @@ public class MessagingService {
 		Conversation conversation = conversationService.getById(message.getConversationId());
 		MessageDTO messageDTO = messageService.getFullMessage(message);
 		
-		requests.stream()
-				.filter(e -> conversation.getUsers().stream()
-						.anyMatch(i -> i.getId().equals(e.getKey().getId())))
+		newMessageRequests.stream()
+				.filter(requestEntry -> conversation.getUsers().stream()
+						.anyMatch(i -> i.getId().equals(requestEntry.getKey().getId())))
 				.forEach(e -> {
-					e.getValue().setResult(new NewMessage(messageDTO));
-					removeRequest(e.getValue());
+					e.getValue().setResult(new NewMessageAction(messageDTO));
+					newMessageRequests.removeIf(entry -> entry.getValue() == e.getValue());
+				});
+		
+		return messageService.getFullMessage(message);
+	}
+	
+	public void processConversationRead(User user, Long conversationId) {
+		Conversation conversation = conversationService.getById(conversationId);
+		
+		messageService.read(user, conversation);
+		
+		conversationReadRequests.stream()
+				.filter(requestEntry -> conversation.getUsers().stream()
+						.anyMatch(i -> i.getId().equals(requestEntry.getKey().getId())))
+				.filter(requestEntry -> !requestEntry.getKey().getId().equals(user.getId()))
+				.forEach(e -> {
+					e.getValue().setResult(new ConversationReadAction(conversation, userService.full(user)));
+					conversationReadRequests.removeIf(entry -> entry.getValue() == e.getValue());
 				});
 	}
 	
