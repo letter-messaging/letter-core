@@ -11,7 +11,6 @@ import com.gmail.ivanjermakov1.messenger.exception.NoSuchEntityException;
 import com.gmail.ivanjermakov1.messenger.exception.RegistrationException;
 import com.gmail.ivanjermakov1.messenger.messaging.dto.UserDTO;
 import com.gmail.ivanjermakov1.messenger.messaging.entity.UserMainInfo;
-import com.gmail.ivanjermakov1.messenger.messaging.repository.UserMainInfoRepository;
 import com.gmail.ivanjermakov1.messenger.messaging.service.UserMainInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
