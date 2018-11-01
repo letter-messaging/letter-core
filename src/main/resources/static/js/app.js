@@ -239,6 +239,8 @@ app.controller('MainController', ($document, $scope, $http) => {
 				$scope.state = "in";
 			}
 
+			scrollToBottom(document.getElementsByClassName("message-wrapper")[0]);
+
 			$scope.currentConversationWith = preview.with;
 
 			$scope.updatePreviews();
