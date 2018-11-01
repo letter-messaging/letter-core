@@ -1,7 +1,10 @@
 package com.gmail.ivanjermakov1.messenger.messaging.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.time.Instant;
+import java.util.List;
 
 @Entity
 @Table(name = "message")
@@ -29,16 +32,25 @@ public class Message {
 	@Column(name = "sender_id")
 	private Long senderId;
 	
+	@JsonIgnore
+	@ManyToMany
+	@JoinTable(
+			name = "forwarded_message",
+			joinColumns = @JoinColumn(name = "parent_message_id"),
+			inverseJoinColumns = @JoinColumn(name = "forwarded_message_id")
+	)
+	private List<Message> forwarded;
+	
 	public Message() {
 	}
 	
-	public Message(Long id, Long conversationId, Instant sent, String text, Boolean read, Long senderId) {
-		this.id = id;
+	public Message(Long conversationId, Instant sent, String text, Boolean read, Long senderId, List<Message> forwarded) {
 		this.conversationId = conversationId;
 		this.sent = sent;
 		this.text = text;
 		this.read = read;
 		this.senderId = senderId;
+		this.forwarded = forwarded;
 	}
 	
 	public Long getId() {
@@ -87,6 +99,14 @@ public class Message {
 	
 	public void setSenderId(Long senderId) {
 		this.senderId = senderId;
+	}
+	
+	public List<Message> getForwarded() {
+		return forwarded;
+	}
+	
+	public void setForwarded(List<Message> forwarded) {
+		this.forwarded = forwarded;
 	}
 	
 }

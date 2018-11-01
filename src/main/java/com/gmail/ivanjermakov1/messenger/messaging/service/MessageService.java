@@ -65,6 +65,10 @@ public class MessageService {
 			e.printStackTrace();
 		}
 		
+		messageDTO.setForwarded(message.getForwarded().stream()
+				.map(this::getFullMessage)
+				.collect(Collectors.toList()));
+		
 		return messageDTO;
 	}
 	
