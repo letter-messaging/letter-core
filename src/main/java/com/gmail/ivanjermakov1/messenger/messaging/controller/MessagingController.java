@@ -63,5 +63,4 @@ public class MessagingController {
 		return messagingService.processNewMessage(user, message);
 	}
 	
-	
 }
