@@ -50,6 +50,8 @@ app.controller('MainController', ($document, $scope, $http) => {
 	$scope.previews = [];
 	$scope.messages = [];
 
+	$scope.selectedMessages = [];
+
 	$scope.searchConversations = [];
 	$scope.searchUsers = [];
 
@@ -352,7 +354,6 @@ app.controller('MainController', ($document, $scope, $http) => {
 				"token": $scope.token
 			}
 		}).then((response) => {
-			let messageSent = response.data;
 			$scope.messages = $scope.messages.filter(m => m !== message);
 			$scope.updatePreviews();
 		});
@@ -362,6 +363,30 @@ app.controller('MainController', ($document, $scope, $http) => {
 		if (e.which === 13 && !e.ctrlKey) {
 			$scope.sendMessage();
 		}
+	};
+
+	$scope.selectMessage = (message) => {
+		if (message.selected === undefined) {
+			message.selected = false;
+			$scope.selectMessage(message);
+			return;
+		}
+
+		if (message.selected === false) {
+			message.selected = true;
+			$scope.selectedMessages.push(message);
+		} else {
+			message.selected = false;
+			$scope.selectedMessages.splice($scope.selectedMessages.indexOf(message), 1);
+		}
+	};
+
+	$scope.clearSelectedMessages = () => {
+		for (let m of $scope.selectedMessages) {
+			m.selected = false;
+		}
+
+		$scope.selectedMessages = [];
 	};
 
 	$scope.getNewMessages = () => {
@@ -470,7 +495,6 @@ app.controller('MainController', ($document, $scope, $http) => {
 		}).then(
 			(response) => {
 				let newMessages = response.data;
-				console.log(newMessages);
 
 				for (let message of newMessages) {
 					message.message.sent = moment(message.message.sent).format("H:mm");

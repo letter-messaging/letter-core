@@ -130,31 +130,35 @@
 			Be the first. Messages will be displayed here.
 		</div>
 		<div class="message-wrapper" ng-show="state === 'in'" scrolly="loadMore()">
-			<div ng-repeat="message in messages" class="message {{message.message.id}}"
-			     ng-class="{'message-mine' : message.mine === true}">
-				<img class="avatar" src="img/default-avatar.png">
-				<div class="message-content">
-					<div class="from">{{message.sender.userMainInfo.firstName}}</div>
-					<div class="text">{{message.message.text}}</div>
-					<div class="info">
-						<div class="sent">{{message.message.sent}}</div>
-						<div class="status" ng-show="message.mine">
-							<div class="sending" ng-show="message.status === 'sending'">
-								<i class="far fa-clock"></i>
-							</div>
-							<div class="received"
-							     ng-show="message.status === 'received' && message.message.read === false">
-								<i class="fas fa-check"></i>
-							</div>
-							<div class="read" ng-show="message.status === 'received' && message.message.read">
-								<i class="fas fa-eye"></i>
+			<div class="message {{message.message.id}}" ng-repeat="message in messages"
+			     ng-class="{'message-mine' : message.mine === true, 'selected' : message.selected === true}"
+			     ng-click="selectMessage(message)">
+				<div class="message-container">
+					<img class="avatar" src="img/default-avatar.png">
+					<div class="message-content">
+						<div class="from">{{message.sender.userMainInfo.firstName}}</div>
+						<div class="text">{{message.message.text}}</div>
+						<div class="info">
+							<div class="sent">{{message.message.sent}}</div>
+							<div class="status" ng-show="message.mine">
+								<div class="sending" ng-show="message.status === 'sending'">
+									<i class="far fa-clock"></i>
+								</div>
+								<div class="received"
+								     ng-show="message.status === 'received' && message.message.read === false">
+									<i class="fas fa-check"></i>
+								</div>
+								<div class="read" ng-show="message.status === 'received' && message.message.read">
+									<i class="fas fa-eye"></i>
+								</div>
 							</div>
 						</div>
 					</div>
 				</div>
 			</div>
 		</div>
-		<div class="send-message-wrapper" ng-show="state === 'in' || state === 'empty'">
+		<div class="send-message-wrapper"
+		     ng-show="(state === 'in' || state === 'empty') && selectedMessages.length === 0">
 			<div class="attachment">
 				<i class="fas fa-paperclip"></i>
 			</div>
@@ -167,12 +171,22 @@
 				<i class="fas fa-angle-right"></i>
 			</div>
 		</div>
+		<div class="selected-messages-menu" ng-show="selectedMessages.length !== 0">
+			<div class="button"><i class="fas fa-trash"></i></div>
+			<div class="button"><i class="fas fa-reply"></i></div>
+			<div class="button"><i class="fas fa-arrow-right"></i></div>
+			<div class="button" ng-show="selectedMessages.length === 1"><i class="fas fa-pen"></i></div>
+			<div class="right">
+				<div class="text-button" ng-click="clearSelectedMessages()">Cancel</div>
+			</div>
+		</div>
 	</div>
 
 </div>
 
 <script type="text/javascript" src="js/app.js"></script>
 <script type="text/javascript" src="js/textarea.js"></script>
+<script type="text/javascript" src="js/dom-util.js"></script>
 
 </body>
 </html>

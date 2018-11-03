@@ -1,17 +1,30 @@
 .message {
 	display: flex;
+	align-self: center;
 	flex-shrink: 0;
 
-	max-width: 800px;
+	border-radius: 4px;
+
+	width: 100%;
 	min-height: 10px;
+}
+
+.message-container {
+	display: flex;
+
+	max-width: 800px;
 
 	padding: 5px;
 	margin: 2px;
 }
 
+.message-wrapper .selected {
+	width: 100%;
+	background: rgba(0, 0, 0, 0.05);
+}
+
 .message-mine {
 	flex-direction: row-reverse;
-	align-self: flex-end;
 }
 
 .message-mine .message-content {

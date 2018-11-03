@@ -62,9 +62,8 @@
 }
 
 .send-message-wrapper {
-	flex-shrink: 0;
-
 	display: flex;
+	flex-shrink: 0;
 	align-items: center;
 
 	min-height: 50px;
@@ -90,4 +89,59 @@
 
 	border: 1px solid silver;
 	border-radius: 4px;
+}
+
+.selected-messages-menu {
+	display: flex;
+	flex-shrink: 0;
+	align-items: center;
+
+	height: 50px;
+
+	padding: 4px;
+
+	background: white;
+
+	border-top: 2px solid #e6e6e6;
+	border-radius: 2px;
+}
+
+.selected-messages-menu .button {
+	min-width: 0;
+
+	padding: 4px;
+
+	text-align: center;
+
+	cursor: pointer;
+
+	color: white;
+
+	border-radius: 5px;
+}
+
+.selected-messages-menu .button .i {
+	font-size: 20px;
+}
+
+.selected-messages-menu .button .i:hover {
+	color: #6490d8;
+}
+
+.selected-messages-menu .text-button {
+	margin: 4px 8px;
+	padding: 4px;
+
+	cursor: pointer;
+}
+
+.selected-messages-menu .text-button:hover {
+	color: #6490d8;
+}
+
+.selected-messages-menu .right {
+	margin-left: auto;
+
+	display: flex;
+	align-items: center;
 }

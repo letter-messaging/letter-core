@@ -33,33 +33,33 @@
 	border-bottom: 1px solid #f3f3f3;
 }
 
-.selected {
+.preview-wrapper .selected {
 	background-color: #666666 !important;
 
 	color: white;
 }
 
-.selected .info {
+.preview-wrapper .selected .info {
 	color: white;
 }
 
-.selected .from {
+.preview-wrapper .selected .from {
 	color: white !important;
 }
 
-.selected .text {
+.preview-wrapper .selected .text {
 	color: white;
 }
 
-.selected .delete i {
+.preview-wrapper .selected .delete i {
 	color: white;
 }
 
-.selected .unread-wrapper i {
+.preview-wrapper .selected .unread-wrapper i {
 	color: white;
 }
 
-.selected .sent {
+.preview-wrapper .selected .sent {
 	color: white;
 }
 
