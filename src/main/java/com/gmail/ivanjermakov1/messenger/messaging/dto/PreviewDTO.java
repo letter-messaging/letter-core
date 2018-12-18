@@ -1,5 +1,6 @@
 package com.gmail.ivanjermakov1.messenger.messaging.dto;
 
+import com.gmail.ivanjermakov1.messenger.auth.dto.UserDTO;
 import com.gmail.ivanjermakov1.messenger.messaging.entity.Conversation;
 
 public class PreviewDTO {

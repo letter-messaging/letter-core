@@ -161,8 +161,8 @@ app.controller('MainController', ($document, $scope, $http) => {
 		if ($scope.credentials.password === $scope.credentials.confirmPassword) {
 			$http({
 				url: "/register",
-				method: "GET",
-				params: {
+				method: "POST",
+				data: {
 					"firstName": $scope.credentials.firstName,
 					"lastName": $scope.credentials.lastName,
 					"login": $scope.credentials.login,

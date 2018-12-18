@@ -1,5 +1,7 @@
 package com.gmail.ivanjermakov1.messenger.auth.service;
 
+import com.gmail.ivanjermakov1.messenger.auth.dto.RegisterUserDTO;
+import com.gmail.ivanjermakov1.messenger.auth.dto.UserDTO;
 import com.gmail.ivanjermakov1.messenger.auth.entity.Token;
 import com.gmail.ivanjermakov1.messenger.auth.entity.User;
 import com.gmail.ivanjermakov1.messenger.auth.repository.TokenRepository;
@@ -9,7 +11,6 @@ import com.gmail.ivanjermakov1.messenger.auth.security.TokenGenerator;
 import com.gmail.ivanjermakov1.messenger.exception.AuthenticationException;
 import com.gmail.ivanjermakov1.messenger.exception.NoSuchEntityException;
 import com.gmail.ivanjermakov1.messenger.exception.RegistrationException;
-import com.gmail.ivanjermakov1.messenger.messaging.dto.UserDTO;
 import com.gmail.ivanjermakov1.messenger.messaging.entity.UserMainInfo;
 import com.gmail.ivanjermakov1.messenger.messaging.service.UserMainInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +26,6 @@ public class UserService {
 	private final UserRepository userRepository;
 	private final TokenRepository tokenRepository;
 	private final UserMainInfoService userMainInfoService;
-	
 	
 	@Autowired
 	public UserService(UserRepository userRepository, TokenRepository tokenRepository, UserMainInfoService userMainInfoService) {
@@ -51,12 +51,14 @@ public class UserService {
 	}
 	
 	//	TODO: credentials and password validation
-	public void register(String firstName, String lastName, String login, String password) throws RegistrationException {
-		if (userRepository.findByLogin(login) != null) throw new RegistrationException("user already exits.");
+	public void register(RegisterUserDTO registerUserDTO) throws RegistrationException {
+		registerUserDTO.validate();
+		if (userRepository.findByLogin(registerUserDTO.getLogin()) != null)
+			throw new RegistrationException("user already exists.");
 		
-		User user = new User(null, login, Hasher.getHash(password));
+		User user = new User(null, registerUserDTO.getLogin(), Hasher.getHash(registerUserDTO.getPassword()));
 		userRepository.save(user);
-		userMainInfoService.save(new UserMainInfo(user.getId(), firstName, lastName));
+		userMainInfoService.save(new UserMainInfo(user.getId(), registerUserDTO.getFirstName(), registerUserDTO.getLastName()));
 	}
 	
 	public User getUser(Long id) throws NoSuchEntityException {

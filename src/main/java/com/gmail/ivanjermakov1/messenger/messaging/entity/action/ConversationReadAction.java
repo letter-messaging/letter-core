@@ -1,6 +1,6 @@
 package com.gmail.ivanjermakov1.messenger.messaging.entity.action;
 
-import com.gmail.ivanjermakov1.messenger.messaging.dto.UserDTO;
+import com.gmail.ivanjermakov1.messenger.auth.dto.UserDTO;
 import com.gmail.ivanjermakov1.messenger.messaging.entity.Conversation;
 
 import static com.gmail.ivanjermakov1.messenger.messaging.entity.action.Action.Type.CONVERSATION_READ;
