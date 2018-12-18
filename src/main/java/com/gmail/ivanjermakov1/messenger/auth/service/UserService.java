@@ -50,6 +50,7 @@ public class UserService {
 		return token.getToken();
 	}
 	
+	//	TODO: credentials and password validation
 	public void register(String firstName, String lastName, String login, String password) throws RegistrationException {
 		if (userRepository.findByLogin(login) != null) throw new RegistrationException("user already exits.");
 		
