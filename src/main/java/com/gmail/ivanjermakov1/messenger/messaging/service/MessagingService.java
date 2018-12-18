@@ -44,11 +44,21 @@ public class MessagingService {
 		return conversationReadRequests;
 	}
 	
+	/**
+	 * Clear out timeout requests from all of the request queues
+	 */
 	@Scheduled(fixedDelay = 60000)
 	public void clearTimeoutRequests() {
 		newMessageRequests.stream()
 				.filter(e -> e.getValue().isSetOrExpired())
 				.forEach(newMessageRequests::remove);
+		conversationReadRequests.stream()
+				.filter(e -> e.getValue().isSetOrExpired())
+				.forEach(conversationReadRequests::remove);
+
+//		TODO: deal with generics
+//		removeTimeoutRequests(newMessageRequests);
+//		removeTimeoutRequests(conversationReadRequests);
 	}
 	
 	/**
@@ -89,6 +99,12 @@ public class MessagingService {
 					e.getValue().setResult(new ConversationReadAction(conversation, userService.full(user)));
 					conversationReadRequests.removeIf(entry -> entry.getValue() == e.getValue());
 				});
+	}
+	
+	private void removeTimeoutRequests(Queue<Map.Entry<User, DeferredResult<?>>> queue) {
+		queue.stream()
+				.filter(e -> e.getValue().isSetOrExpired())
+				.forEach(queue::remove);
 	}
 	
 }
