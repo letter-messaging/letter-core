@@ -21,6 +21,10 @@ public class Request<T extends Action> {
 		return user;
 	}
 	
+	public DeferredResult<T> getDeferredResult() {
+		return deferredResult;
+	}
+	
 	public boolean isTimeout() {
 		return deferredResult.isSetOrExpired();
 	}

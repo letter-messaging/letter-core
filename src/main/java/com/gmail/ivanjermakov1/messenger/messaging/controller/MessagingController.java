@@ -8,12 +8,11 @@ import com.gmail.ivanjermakov1.messenger.messaging.dto.MessageDTO;
 import com.gmail.ivanjermakov1.messenger.messaging.entity.Message;
 import com.gmail.ivanjermakov1.messenger.messaging.entity.action.ConversationReadAction;
 import com.gmail.ivanjermakov1.messenger.messaging.entity.action.NewMessageAction;
+import com.gmail.ivanjermakov1.messenger.messaging.entity.action.Request;
 import com.gmail.ivanjermakov1.messenger.messaging.service.MessagingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.async.DeferredResult;
-
-import java.util.AbstractMap;
 
 @RestController
 @RequestMapping("messaging")
@@ -34,8 +33,8 @@ public class MessagingController {
 		User user = userService.auth(token);
 		
 		DeferredResult<NewMessageAction> request = new DeferredResult<>();
-		request.onTimeout(() -> messagingService.getNewMessageRequests().removeIf(r -> r.getValue().equals(request)));
-		messagingService.getNewMessageRequests().add(new AbstractMap.SimpleEntry<>(user, request));
+		request.onTimeout(() -> messagingService.getNewMessageRequests().removeIf(r -> r.getDeferredResult().equals(request)));
+		messagingService.getNewMessageRequests().add(new Request<>(user, request));
 		
 		return request;
 	}
@@ -46,8 +45,8 @@ public class MessagingController {
 		User user = userService.auth(token);
 		
 		DeferredResult<ConversationReadAction> request = new DeferredResult<>();
-		request.onTimeout(() -> messagingService.getConversationReadRequests().removeIf(r -> r.getValue().equals(request)));
-		messagingService.getConversationReadRequests().add(new AbstractMap.SimpleEntry<>(user, request));
+		request.onTimeout(() -> messagingService.getConversationReadRequests().removeIf(r -> r.getDeferredResult().equals(request)));
+		messagingService.getConversationReadRequests().add(new Request<>(user, request));
 		
 		return request;
 	}
