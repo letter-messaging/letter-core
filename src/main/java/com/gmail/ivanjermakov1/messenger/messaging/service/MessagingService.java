@@ -2,11 +2,11 @@ package com.gmail.ivanjermakov1.messenger.messaging.service;
 
 import com.gmail.ivanjermakov1.messenger.auth.entity.User;
 import com.gmail.ivanjermakov1.messenger.auth.service.UserService;
+import com.gmail.ivanjermakov1.messenger.messaging.dto.MessageDTO;
 import com.gmail.ivanjermakov1.messenger.messaging.dto.action.Action;
 import com.gmail.ivanjermakov1.messenger.messaging.dto.action.ConversationReadAction;
 import com.gmail.ivanjermakov1.messenger.messaging.dto.action.NewMessageAction;
 import com.gmail.ivanjermakov1.messenger.messaging.dto.action.Request;
-import com.gmail.ivanjermakov1.messenger.messaging.dto.MessageDTO;
 import com.gmail.ivanjermakov1.messenger.messaging.entity.Conversation;
 import com.gmail.ivanjermakov1.messenger.messaging.entity.Message;
 import org.springframework.beans.factory.annotation.Autowired;

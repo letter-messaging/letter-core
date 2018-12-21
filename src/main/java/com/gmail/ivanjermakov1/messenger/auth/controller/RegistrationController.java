@@ -4,7 +4,10 @@ import com.gmail.ivanjermakov1.messenger.auth.dto.RegisterUserDTO;
 import com.gmail.ivanjermakov1.messenger.auth.service.UserService;
 import com.gmail.ivanjermakov1.messenger.exception.RegistrationException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("register")
