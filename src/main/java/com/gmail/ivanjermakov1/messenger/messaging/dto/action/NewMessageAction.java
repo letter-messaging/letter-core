@@ -1,15 +1,13 @@
-package com.gmail.ivanjermakov1.messenger.messaging.entity.action;
+package com.gmail.ivanjermakov1.messenger.messaging.dto.action;
 
 import com.gmail.ivanjermakov1.messenger.messaging.dto.MessageDTO;
-
-import static com.gmail.ivanjermakov1.messenger.messaging.entity.action.Action.Type.NEW_MESSAGE;
 
 public class NewMessageAction extends Action {
 	
 	private MessageDTO message;
 	
 	public NewMessageAction() {
-		setType(NEW_MESSAGE);
+		setType(Type.NEW_MESSAGE);
 	}
 	
 	public NewMessageAction(MessageDTO message) {

@@ -1,4 +1,4 @@
-package com.gmail.ivanjermakov1.messenger.messaging.entity.action;
+package com.gmail.ivanjermakov1.messenger.messaging.dto.action;
 
 public abstract class Action {
 	

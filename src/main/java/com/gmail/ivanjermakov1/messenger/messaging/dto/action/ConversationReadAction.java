@@ -1,9 +1,9 @@
-package com.gmail.ivanjermakov1.messenger.messaging.entity.action;
+package com.gmail.ivanjermakov1.messenger.messaging.dto.action;
 
 import com.gmail.ivanjermakov1.messenger.auth.dto.UserDTO;
 import com.gmail.ivanjermakov1.messenger.messaging.entity.Conversation;
 
-import static com.gmail.ivanjermakov1.messenger.messaging.entity.action.Action.Type.CONVERSATION_READ;
+import static com.gmail.ivanjermakov1.messenger.messaging.dto.action.Action.Type.CONVERSATION_READ;
 
 public class ConversationReadAction extends Action {
 	
