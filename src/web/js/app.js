@@ -1,5 +1,6 @@
 'use strict';
 
+const API_URL = "http://localhost:8080/api/v0";
 const MESSAGES_PER_PAGE = 20;
 
 let app = angular.module("app", []);
@@ -96,7 +97,7 @@ app.controller('MainController', ($document, $scope, $http) => {
 			let token = localStorage.getItem("token");
 
 			$http({
-				url: "/auth/validate",
+				url: API_URL + "/auth/validate",
 				method: "GET",
 				params: {
 					"token": token
@@ -124,7 +125,7 @@ app.controller('MainController', ($document, $scope, $http) => {
 		}
 
 		$http({
-			url: "/message/init/full",
+			url: API_URL + "/message/init/full",
 			method: "GET"
 		}).then((response) => {
 			$scope.FULL_MESSAGE = response.data;
@@ -133,7 +134,7 @@ app.controller('MainController', ($document, $scope, $http) => {
 
 	$scope.login = () => {
 		$http({
-			url: "/auth",
+			url: API_URL + "/auth",
 			method: "GET",
 			params: {
 				"login": $scope.credentials.login,
@@ -160,7 +161,7 @@ app.controller('MainController', ($document, $scope, $http) => {
 	$scope.register = () => {
 		if ($scope.credentials.password === $scope.credentials.confirmPassword) {
 			$http({
-				url: "/register",
+				url: API_URL + "/register",
 				method: "POST",
 				data: {
 					"firstName": $scope.credentials.firstName,
@@ -176,7 +177,7 @@ app.controller('MainController', ($document, $scope, $http) => {
 
 	$scope.initialize = () => {
 		$http({
-			url: "/auth/validate",
+			url: API_URL + "/auth/validate",
 			method: "GET",
 			params: {
 				"token": $scope.token
@@ -190,7 +191,7 @@ app.controller('MainController', ($document, $scope, $http) => {
 
 	$scope.updatePreviews = () => {
 		$http({
-			url: "/preview/all",
+			url: API_URL + "/preview/all",
 			method: "GET",
 			params: {
 				"token": $scope.token
@@ -216,7 +217,7 @@ app.controller('MainController', ($document, $scope, $http) => {
 		$scope.isLeftView = false;
 
 		$http({
-			url: "/message/get",
+			url: API_URL + "/message/get",
 			method: "GET",
 			params: {
 				"token": $scope.token,
@@ -269,7 +270,7 @@ app.controller('MainController', ($document, $scope, $http) => {
 		if ($scope.searchText[0] === '@') {
 			$scope.isUserSearch = true;
 			$http({
-				url: "/search/users",
+				url: API_URL + "/search/users",
 				method: "GET",
 				params: {
 					"token": $scope.token,
@@ -281,7 +282,7 @@ app.controller('MainController', ($document, $scope, $http) => {
 		} else {
 			$scope.isUserSearch = false;
 			$http({
-				url: "/search/conversations",
+				url: API_URL + "/search/conversations",
 				method: "GET",
 				params: {
 					"token": $scope.token,
@@ -299,7 +300,7 @@ app.controller('MainController', ($document, $scope, $http) => {
 
 	$scope.createConversation = (user) => {
 		$http({
-			url: "/conversation/create",
+			url: API_URL + "/conversation/create",
 			method: "GET",
 			params: {
 				"token": $scope.token,
@@ -315,7 +316,7 @@ app.controller('MainController', ($document, $scope, $http) => {
 			$scope.updatePreviews();
 
 			$http({
-				url: "/preview/get",
+				url: API_URL + "/preview/get",
 				method: "GET",
 				params: {
 					"token": $scope.token,
@@ -347,7 +348,7 @@ app.controller('MainController', ($document, $scope, $http) => {
 		if (preview != null) preview.lastMessage = message;
 
 		$http({
-			url: "/messaging/send",
+			url: API_URL + "/messaging/send",
 			method: "POST",
 			data: message.message,
 			params: {
@@ -392,7 +393,7 @@ app.controller('MainController', ($document, $scope, $http) => {
 	$scope.getNewMessages = () => {
 		if ($scope.listen) {
 			$http({
-				url: "/messaging/get/m",
+				url: API_URL + "/messaging/get/m",
 				method: "GET",
 				params: {
 					"token": $scope.token
@@ -430,7 +431,7 @@ app.controller('MainController', ($document, $scope, $http) => {
 	$scope.getConversationRead = () => {
 		if ($scope.listen) {
 			$http({
-				url: "/messaging/get/r",
+				url: API_URL + "/messaging/get/r",
 				method: "GET",
 				params: {
 					"token": $scope.token
@@ -484,7 +485,7 @@ app.controller('MainController', ($document, $scope, $http) => {
 
 	$scope.loadMore = () => {
 		$http({
-			url: "/message/get",
+			url: API_URL + "/message/get",
 			method: "GET",
 			params: {
 				"token": $scope.token,

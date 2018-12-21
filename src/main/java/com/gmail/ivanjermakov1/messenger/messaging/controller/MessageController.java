@@ -35,11 +35,6 @@ public class MessageController {
 		this.messagingService = messagingService;
 	}
 	
-	@GetMapping("init")
-	public Message init() {
-		return new Message();
-	}
-	
 	@GetMapping("init/full")
 	public MessageDTO initFull() {
 		return new MessageDTO(new Message(), new UserDTO(new User(), new UserMainInfo()), new Conversation(), Collections.emptyList());
