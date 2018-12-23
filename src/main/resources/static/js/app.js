@@ -1,6 +1,6 @@
 'use strict';
 
-const API_URL = "http://localhost:8080/api/v0";
+const API_URL = "";
 const MESSAGES_PER_PAGE = 20;
 
 let app = angular.module("app", []);
