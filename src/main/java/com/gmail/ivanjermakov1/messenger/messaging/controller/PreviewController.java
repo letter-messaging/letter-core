@@ -44,7 +44,7 @@ public class PreviewController {
 	
 	@GetMapping("get")
 	public PreviewDTO get(@RequestParam("token") String token,
-	                      @RequestParam("conversationId") Long conversationId) throws AuthenticationException {
+	                      @RequestParam("conversationId") Long conversationId) throws AuthenticationException, NoSuchEntityException {
 		User user = userService.auth(token);
 		return previewService.getPreview(user, conversationService.getById(conversationId));
 	}

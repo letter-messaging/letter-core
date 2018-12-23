@@ -4,6 +4,7 @@ import com.gmail.ivanjermakov1.messenger.auth.entity.User;
 import com.gmail.ivanjermakov1.messenger.auth.service.UserService;
 import com.gmail.ivanjermakov1.messenger.exception.AuthenticationException;
 import com.gmail.ivanjermakov1.messenger.exception.InvalidMessageException;
+import com.gmail.ivanjermakov1.messenger.exception.NoSuchEntityException;
 import com.gmail.ivanjermakov1.messenger.messaging.dto.MessageDTO;
 import com.gmail.ivanjermakov1.messenger.messaging.dto.action.ConversationReadAction;
 import com.gmail.ivanjermakov1.messenger.messaging.dto.action.NewMessageAction;
@@ -53,7 +54,7 @@ public class MessagingController {
 	
 	@RequestMapping("send")
 	@PostMapping
-	public MessageDTO sendMessage(@RequestParam("token") String token, @RequestBody Message message) throws AuthenticationException, InvalidMessageException {
+	public MessageDTO sendMessage(@RequestParam("token") String token, @RequestBody Message message) throws AuthenticationException, InvalidMessageException, NoSuchEntityException {
 		if (message.getText() == null || message.getConversationId() == null)
 			throw new InvalidMessageException("invalid message");
 		

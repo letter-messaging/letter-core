@@ -13,6 +13,8 @@ import com.gmail.ivanjermakov1.messenger.exception.NoSuchEntityException;
 import com.gmail.ivanjermakov1.messenger.exception.RegistrationException;
 import com.gmail.ivanjermakov1.messenger.messaging.entity.UserMainInfo;
 import com.gmail.ivanjermakov1.messenger.messaging.service.UserMainInfoService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,6 +25,7 @@ import java.util.Optional;
 @Transactional
 public class UserService {
 	
+	private final static Logger LOG = LoggerFactory.getLogger(UserService.class);
 	private final UserRepository userRepository;
 	private final TokenRepository tokenRepository;
 	private final UserMainInfoService userMainInfoService;
@@ -35,6 +38,7 @@ public class UserService {
 	}
 	
 	public String authenticate(String login, String password) throws AuthenticationException {
+		LOG.debug("authenticate user: @" + login);
 		User user = userRepository.findByLogin(login);
 		
 		if (user == null || !Hasher.check(password, user.getHash()))
@@ -53,6 +57,9 @@ public class UserService {
 	//	TODO: credentials and password validation
 	public void register(RegisterUserDTO registerUserDTO) throws RegistrationException {
 		registerUserDTO.validate();
+		
+		LOG.debug("register user: @" + registerUserDTO.getLogin());
+		
 		if (userRepository.findByLogin(registerUserDTO.getLogin()) != null)
 			throw new RegistrationException("user already exists.");
 		
@@ -80,6 +87,8 @@ public class UserService {
 	
 	public User auth(String token) throws AuthenticationException {
 		try {
+			LOG.debug("authenticate user with token: " + token);
+			
 			return getUser(getUserId(token));
 		} catch (NoSuchEntityException e) {
 			throw new AuthenticationException("invalid token");

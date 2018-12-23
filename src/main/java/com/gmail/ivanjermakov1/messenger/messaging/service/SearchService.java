@@ -19,7 +19,6 @@ public class SearchService {
 	private final UserRepository userRepository;
 	private final UserMainInfoService userMainInfoService;
 	
-	
 	@Autowired
 	public SearchService(PreviewService previewService, UserMainInfoRepository userMainInfoRepository, UserRepository userRepository, UserMainInfoService userMainInfoService) {
 		this.previewService = previewService;
@@ -27,6 +26,7 @@ public class SearchService {
 		this.userMainInfoService = userMainInfoService;
 	}
 	
+	//	TODO: use non strict search engine
 	public List<PreviewDTO> searchConversations(User user, String search) {
 		return previewService.all(user)
 				.stream()

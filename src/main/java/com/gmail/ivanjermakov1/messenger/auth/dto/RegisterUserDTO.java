@@ -53,6 +53,9 @@ public class RegisterUserDTO {
 	}
 	
 	public void validate() throws RegistrationException {
+		if (firstName == null || lastName == null || login == null || password == null)
+			throw new RegistrationException("fields cannot be blank.");
+		
 		firstName = firstName.trim();
 		lastName = lastName.trim();
 		login = login.trim();

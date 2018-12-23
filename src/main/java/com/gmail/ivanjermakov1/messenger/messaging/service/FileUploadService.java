@@ -1,5 +1,8 @@
 package com.gmail.ivanjermakov1.messenger.messaging.service;
 
+import com.gmail.ivanjermakov1.messenger.auth.service.UserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -9,6 +12,8 @@ import java.io.IOException;
 
 @Service
 public class FileUploadService {
+	
+	private final static Logger LOG = LoggerFactory.getLogger(UserService.class);
 	
 	@Value("${fileupload.path}")
 	private String uploadPlaceholder;
@@ -25,6 +30,7 @@ public class FileUploadService {
 	}
 	
 	public String upload(MultipartFile multipartFile) throws IOException {
+		LOG.info("uploading file \'" + multipartFile.getName() + "\'; size: " + multipartFile.getSize() / 1_000_000 + "MB");
 		
 		String realPath = uploadPlaceholder;
 		new File(realPath).mkdirs();

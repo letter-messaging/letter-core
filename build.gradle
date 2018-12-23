@@ -26,6 +26,7 @@ dependencies {
     compile "org.springframework.boot:spring-boot-starter-mail:$springVersion"
     compile "org.postgresql:postgresql:42.2.4"
     compile "commons-codec:commons-codec:1.9"
+    compile "dom4j:dom4j:1.6.1"
 
     testCompile "org.springframework.boot:spring-boot-starter-test:$springVersion"
     testCompile "com.h2database:h2:1.4.197"

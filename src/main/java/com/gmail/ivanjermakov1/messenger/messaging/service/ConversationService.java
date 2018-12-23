@@ -1,8 +1,12 @@
 package com.gmail.ivanjermakov1.messenger.messaging.service;
 
 import com.gmail.ivanjermakov1.messenger.auth.entity.User;
+import com.gmail.ivanjermakov1.messenger.auth.service.UserService;
+import com.gmail.ivanjermakov1.messenger.exception.NoSuchEntityException;
 import com.gmail.ivanjermakov1.messenger.messaging.entity.Conversation;
 import com.gmail.ivanjermakov1.messenger.messaging.repository.ConversationRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +18,7 @@ import java.util.List;
 @Transactional
 public class ConversationService {
 	
+	private final static Logger LOG = LoggerFactory.getLogger(UserService.class);
 	private final ConversationRepository conversationRepository;
 	
 	@Autowired
@@ -21,8 +26,10 @@ public class ConversationService {
 		this.conversationRepository = conversationRepository;
 	}
 	
-	public Conversation create(User user, User with) {
-		if (user.getId().equals(with.getId())) return createSelf(user);
+	public Conversation create(User user, User with) throws NoSuchEntityException {
+		LOG.debug("create conversation between: @" + user.getLogin() + "and @" + with.getLogin());
+		
+		if (user.getId().equals(with.getId())) return create(user);
 		
 		Conversation existingConversation = conversationWith(user, with);
 		if (existingConversation != null) return existingConversation;
@@ -37,22 +44,22 @@ public class ConversationService {
 		return conversation;
 	}
 	
-	public Conversation getById(Long conversationId) {
-		return conversationRepository.findById(conversationId).get();
+	public Conversation getById(Long conversationId) throws NoSuchEntityException {
+		return conversationRepository.findById(conversationId).orElseThrow(() -> new NoSuchEntityException("no such conversation"));
 	}
 	
 	public List<Conversation> getConversations(User user) {
 		return conversationRepository.getConversations(user.getId());
 	}
 	
-	private Conversation conversationWith(User user1, User user2) {
+	private Conversation conversationWith(User user1, User user2) throws NoSuchEntityException {
 		return conversationRepository.getConversations(user1.getId()).stream()
 				.filter(c -> c.getUsers().stream().anyMatch(u -> u.getId().equals(user2.getId())) &&
 						c.getUsers().size() == 2)
-				.findFirst().orElse(null);
+				.findFirst().orElseThrow(() -> new NoSuchEntityException("no such conversation"));
 	}
 	
-	private Conversation createSelf(User user) {
+	private Conversation create(User user) {
 		Conversation self = conversationRepository.getConversations(user.getId())
 				.stream()
 				.filter(c -> c.getUsers().size() == 1)
