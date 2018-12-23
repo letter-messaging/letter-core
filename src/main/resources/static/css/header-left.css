@@ -4,7 +4,7 @@
 
 	padding: 10px;
 
-	background: #666666;
+	background: var(--dark);
 
 	border-radius: 2px 0 0 2px;
 }
@@ -26,7 +26,7 @@
 }
 
 .logo i:hover {
-	color: #6490d8;
+	color: var(--special);
 }
 
 .logo-name {

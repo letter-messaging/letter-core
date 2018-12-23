@@ -1,3 +1,11 @@
+:root {
+	--dark: #393e46;
+	--grey: #5a626f;
+	--bright: #eeeeee;
+	--light: #f8f8f8;
+	--special: rgba(0, 199, 207, 0.92);
+}
+
 * {
 	font-family: 'Krub', sans-serif;
 	font-size: 24px;
@@ -16,7 +24,7 @@ body {
 
 	height: 100vh;
 
-	background-color: #f4f4f4;
+	background-color: var(--light);
 }
 
 .content {

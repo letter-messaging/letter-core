@@ -6,7 +6,7 @@
 
 	max-height: calc(100vh - 52px);
 
-	background: #e6e6e6;
+	background: var(--bright);
 }
 
 .conversation i {
@@ -16,11 +16,7 @@
 
 	cursor: pointer;
 
-	color: #666666;
-}
-
-.conversation i:hover {
-	color: #6490d8;
+	color: var(--dark);
 }
 
 #no-conversation {
@@ -30,10 +26,10 @@
 	justify-content: center;
 	align-items: center;
 
-	background: white;
+	/*background: var(--bright);*/
 	border-radius: 2px;
 
-	color: #aaaaaa;
+	color: var(--grey);
 }
 
 #no-messages {
@@ -41,12 +37,11 @@
 	justify-content: center;
 	align-items: center;
 
-	background: white;
 	border-radius: 2px;
 
 	height: 100%;
 
-	color: #aaaaaa;
+	color: var(--grey);
 }
 
 .message-wrapper {
@@ -72,8 +67,12 @@
 
 	background: white;
 
-	border-top: 2px solid #e6e6e6;
+	border-top: 2px solid var(--bright);
 	border-radius: 2px;
+}
+
+.send-message-wrapper i:hover {
+	color: var(--special);
 }
 
 #send-message-text {
@@ -87,7 +86,7 @@
 	max-height: 120px;
 	overflow-y: scroll;
 
-	border: 1px solid silver;
+	border: 1px solid var(--bright);
 	border-radius: 4px;
 }
 
@@ -102,7 +101,7 @@
 
 	background: white;
 
-	border-top: 2px solid #e6e6e6;
+	border-top: 2px solid var(--bright);
 	border-radius: 2px;
 }
 
@@ -120,12 +119,8 @@
 	border-radius: 5px;
 }
 
-.selected-messages-menu .button .i {
-	font-size: 20px;
-}
-
-.selected-messages-menu .button .i:hover {
-	color: #6490d8;
+.selected-messages-menu .button i:hover {
+	color: var(--special);
 }
 
 .selected-messages-menu .text-button {
@@ -136,7 +131,7 @@
 }
 
 .selected-messages-menu .text-button:hover {
-	color: #6490d8;
+	color: var(--special);
 }
 
 .selected-messages-menu .right {

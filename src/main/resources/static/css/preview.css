@@ -4,7 +4,7 @@
 
 	max-height: calc(100vh - 52px);
 
-	border-right: 2px solid #e6e6e6;
+	border-right: 2px solid var(--bright);
 }
 
 .preview-wrapper {
@@ -34,7 +34,7 @@
 }
 
 .preview-wrapper .selected {
-	background-color: #666666 !important;
+	background-color: var(--dark) !important;
 
 	color: white;
 }
@@ -107,7 +107,7 @@
 
 	font-size: 16px;
 
-	color: #666666;
+	color: var(--dark);
 
 	white-space: nowrap;
 }
@@ -129,7 +129,7 @@
 
 	height: 100%;
 
-	color: #666666;
+	color: var(--dark);
 }
 
 .delete i {
@@ -159,13 +159,13 @@
 
 	padding: 0 6px;
 
-	background: #666666;
+	background: var(--dark);
 	border-radius: 10px;
 }
 
 .unread-wrapper .unread-mine i {
 	font-size: 12px;
-	color: #666666;
+	color: var(--dark);
 
 	background: transparent;
 }
@@ -196,7 +196,7 @@
 }
 
 .user-preview:hover {
-	background: #fafafa;
+	background: var(--bright);
 	cursor: pointer;
 }
 
@@ -227,7 +227,7 @@
 	grid-row: 2;
 
 	font-size: 16px;
-	color: #666666;
+	color: var(--dark);
 
 	min-width: 100px;
 	max-width: 400px;

@@ -4,7 +4,7 @@
 
 	padding: 10px;
 
-	background: #666666;
+	background: var(--dark);
 
 	border-radius: 0 2px 2px 0;
 
@@ -36,7 +36,7 @@
 }
 
 .header-right .right .search i:hover {
-	color: #6490d8;
+	color: var(--special);
 }
 
 .header-right .right i {
@@ -64,7 +64,7 @@
 }
 
 .header-right .menu i:hover {
-	color: #6490d8;
+	color: var(--special);
 }
 
 .header-right .logout {
@@ -84,5 +84,5 @@
 }
 
 .header-right .logout i:hover {
-	color: #6490d8;
+	color: var(--special);
 }

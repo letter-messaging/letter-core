@@ -28,36 +28,22 @@
 }
 
 .message-mine .message-content {
-	background: #666666;
-}
+	background: var(--grey);
 
-.message-mine .from {
-	color: white;
-}
-
-.message-mine .text {
-	color: white;
-}
-
-.message-mine .sent {
-	color: white;
-}
-
-.message-mine .status {
-	color: white;
+	border-radius: 10px 10px 0 10px;
 }
 
 .message-content {
 	display: grid;
 
-	grid-template-columns: auto;
+	grid-template-columns: auto auto;
 	grid-template-rows: auto auto auto;
 
-	padding: 5px 15px;
+	padding: 0 10px;
 
-	background: white;
+	background: var(--grey);
 
-	border-radius: 10px;
+	border-radius: 10px 10px 10px 0;
 }
 
 .message .avatar {
@@ -68,6 +54,8 @@
 }
 
 .message .from {
+	color: white;
+
 	font-size: 16px;
 	font-weight: bold;
 
@@ -76,6 +64,8 @@
 
 .message .text {
 	grid-row: 2;
+
+	color: white;
 
 	/*preserving line brakes*/
 	white-space: pre-wrap;
@@ -96,10 +86,14 @@
 }
 
 .conversation .info .sent {
+	color: white;
+
 	font-size: 12px;
 }
 
 .conversation .info .status {
+	color: var(--special) !important;
+
 	display: grid;
 }
 
@@ -110,8 +104,6 @@
 .conversation .status i {
 	font-size: 14px;
 	padding: 4px;
-}
 
-.message-mine .status i {
-	color: white;
+	color: var(--special);
 }

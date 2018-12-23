@@ -48,7 +48,7 @@
 .auth input {
 	width: 300px;
 
-	border: 1px solid silver;
+	border: 1px solid var(--grey);
 	margin: 5px;
 
 	border-radius: 4px;
@@ -57,7 +57,7 @@
 .auth input[type = submit] {
 	cursor: pointer;
 
-	background: #666666;
+	background: var(--dark);
 	color: white;
 	padding: 5px;
 }
@@ -73,5 +73,5 @@
 	cursor: pointer;
 
 	font-size: 18px;
-	color: black;
+	color: var(--dark);
 }
