@@ -30,7 +30,7 @@ public class MessagingController {
 	
 	@RequestMapping("get/m")
 	@GetMapping
-	public DeferredResult<NewMessageAction> getMessage(@RequestParam("token") String token) throws AuthenticationException {
+	public DeferredResult<NewMessageAction> getMessage(@RequestHeader("Auth-Token") String token) throws AuthenticationException {
 		User user = userService.auth(token);
 		
 		DeferredResult<NewMessageAction> request = new DeferredResult<>();
@@ -42,7 +42,7 @@ public class MessagingController {
 	
 	@RequestMapping("get/r")
 	@GetMapping
-	public DeferredResult<ConversationReadAction> getRead(@RequestParam("token") String token) throws AuthenticationException {
+	public DeferredResult<ConversationReadAction> getRead(@RequestHeader("Auth-Token") String token) throws AuthenticationException {
 		User user = userService.auth(token);
 		
 		DeferredResult<ConversationReadAction> request = new DeferredResult<>();
@@ -54,7 +54,7 @@ public class MessagingController {
 	
 	@RequestMapping("send")
 	@PostMapping
-	public MessageDTO sendMessage(@RequestParam("token") String token, @RequestBody Message message) throws AuthenticationException, InvalidMessageException, NoSuchEntityException {
+	public MessageDTO sendMessage(@RequestHeader("Auth-Token") String token, @RequestBody Message message) throws AuthenticationException, InvalidMessageException, NoSuchEntityException {
 		if (message.getText() == null || message.getConversationId() == null)
 			throw new InvalidMessageException("invalid message");
 		

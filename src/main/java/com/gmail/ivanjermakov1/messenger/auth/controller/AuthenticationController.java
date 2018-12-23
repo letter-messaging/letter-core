@@ -7,10 +7,7 @@ import com.gmail.ivanjermakov1.messenger.exception.AuthenticationException;
 import com.gmail.ivanjermakov1.messenger.exception.NoSuchEntityException;
 import com.gmail.ivanjermakov1.messenger.messaging.service.UserMainInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("auth")
@@ -32,7 +29,7 @@ public class AuthenticationController {
 	}
 	
 	@GetMapping("validate")
-	public UserDTO validate(@RequestParam("token") String token) throws NoSuchEntityException {
+	public UserDTO validate(@RequestHeader("Auth-Token") String token) throws NoSuchEntityException {
 		User user = userService.getUser(userService.getUserId(token));
 		return new UserDTO(user, userMainInfoService.getById(user.getId()));
 	}

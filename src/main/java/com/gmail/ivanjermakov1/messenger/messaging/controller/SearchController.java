@@ -7,10 +7,7 @@ import com.gmail.ivanjermakov1.messenger.exception.AuthenticationException;
 import com.gmail.ivanjermakov1.messenger.messaging.dto.PreviewDTO;
 import com.gmail.ivanjermakov1.messenger.messaging.service.SearchService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -28,14 +25,14 @@ public class SearchController {
 	}
 	
 	@GetMapping("conversations")
-	public List<PreviewDTO> searchConversations(@RequestParam("token") String token,
+	public List<PreviewDTO> searchConversations(@RequestHeader("Auth-Token") String token,
 	                                            @RequestParam("search") String search) throws AuthenticationException {
 		User user = userService.auth(token);
 		return searchService.searchConversations(user, search);
 	}
 	
 	@GetMapping("users")
-	public List<UserDTO> searchUsers(@RequestParam("token") String token,
+	public List<UserDTO> searchUsers(@RequestHeader("Auth-Token") String token,
 	                                 @RequestParam("search") String search) throws AuthenticationException {
 		userService.auth(token);
 		return searchService.searchUsers(search);

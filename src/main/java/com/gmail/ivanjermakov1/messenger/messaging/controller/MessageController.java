@@ -12,10 +12,7 @@ import com.gmail.ivanjermakov1.messenger.messaging.entity.UserMainInfo;
 import com.gmail.ivanjermakov1.messenger.messaging.service.MessageService;
 import com.gmail.ivanjermakov1.messenger.messaging.service.MessagingService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Collections;
 import java.util.List;
@@ -27,7 +24,6 @@ public class MessageController {
 	private final UserService userService;
 	private final MessageService messageService;
 	private final MessagingService messagingService;
-	
 	
 	@Autowired
 	public MessageController(UserService userService, MessageService messageService, MessagingService messagingService) {
@@ -42,7 +38,7 @@ public class MessageController {
 	}
 	
 	@GetMapping("get")
-	public List<MessageDTO> get(@RequestParam("token") String token,
+	public List<MessageDTO> get(@RequestHeader("Auth-Token") String token,
 	                            @RequestParam("conversationId") Long conversationId,
 	                            @RequestParam("offset") Integer offset,
 	                            @RequestParam("amount") Integer amount) throws AuthenticationException, NoSuchEntityException {

@@ -2,6 +2,7 @@
 
 const API_URL = "";
 const MESSAGES_PER_PAGE = 20;
+const LOCAL_STORAGE_TOKEN_NAME = "Auth-Token";
 
 let app = angular.module("app", []);
 
@@ -69,9 +70,12 @@ app.controller('MainController', ($document, $scope, $http) => {
 
 	$scope.searchText = null;
 
-	// out - outside certain conversation
-	// in - in certain conversation
-	// empty - in empty conversation
+	/**
+	 * out - outside certain conversation
+	 * in - in certain conversation
+	 * empty - in empty conversation
+	 * @type {string}
+	 */
 	$scope.state = "out";
 
 	$scope.messageText = null;
@@ -92,21 +96,21 @@ app.controller('MainController', ($document, $scope, $http) => {
 
 	// init
 	(() => {
-		// autologin
-		if (localStorage.getItem("token")) {
-			let token = localStorage.getItem("token");
+		// auto login
+		if (localStorage.getItem(LOCAL_STORAGE_TOKEN_NAME)) {
+			const unverifiedToken = localStorage.getItem(LOCAL_STORAGE_TOKEN_NAME);
 
 			$http({
 				url: API_URL + "/auth/validate",
 				method: "GET",
-				params: {
-					"token": token
-				},
+				headers: {
+					"Auth-Token": unverifiedToken
+				}
 			}).then(
 				(response) => {
 					$scope.credentials.login = response.data.login;
 
-					$scope.token = token;
+					$scope.token = unverifiedToken;
 					$scope.initialize();
 					$scope.updatePreviews();
 					$scope.isAuth = false;
@@ -146,7 +150,7 @@ app.controller('MainController', ($document, $scope, $http) => {
 			$scope.credentials.password = null;
 
 			$scope.token = response.data;
-			localStorage.setItem("token", $scope.token);
+			localStorage.setItem(LOCAL_STORAGE_TOKEN_NAME, $scope.token);
 			$scope.initialize();
 			$scope.updatePreviews();
 
@@ -179,8 +183,8 @@ app.controller('MainController', ($document, $scope, $http) => {
 		$http({
 			url: API_URL + "/auth/validate",
 			method: "GET",
-			params: {
-				"token": $scope.token
+			headers: {
+				"Auth-Token": $scope.token
 			}
 		}).then((response) => {
 			$scope.ME = response.data;
@@ -193,8 +197,8 @@ app.controller('MainController', ($document, $scope, $http) => {
 		$http({
 			url: API_URL + "/preview/all",
 			method: "GET",
-			params: {
-				"token": $scope.token
+			headers: {
+				"Auth-Token": $scope.token
 			}
 		}).then((response) => {
 			response.data = response.data.filter((p) => p.lastMessage != null);
@@ -219,8 +223,10 @@ app.controller('MainController', ($document, $scope, $http) => {
 		$http({
 			url: API_URL + "/message/get",
 			method: "GET",
+			headers: {
+				"Auth-Token": $scope.token
+			},
 			params: {
-				"token": $scope.token,
 				"conversationId": preview.conversation.id,
 				"offset": 0,
 				"amount": MESSAGES_PER_PAGE
@@ -272,8 +278,10 @@ app.controller('MainController', ($document, $scope, $http) => {
 			$http({
 				url: API_URL + "/search/users",
 				method: "GET",
+				headers: {
+					"Auth-Token": $scope.token
+				},
 				params: {
-					"token": $scope.token,
 					"search": $scope.searchText
 				}
 			}).then((response) => {
@@ -284,8 +292,10 @@ app.controller('MainController', ($document, $scope, $http) => {
 			$http({
 				url: API_URL + "/search/conversations",
 				method: "GET",
+				headers: {
+					"Auth-Token": $scope.token
+				},
 				params: {
-					"token": $scope.token,
 					"search": $scope.searchText
 				}
 			}).then((response) => {
@@ -302,8 +312,10 @@ app.controller('MainController', ($document, $scope, $http) => {
 		$http({
 			url: API_URL + "/conversation/create",
 			method: "GET",
+			headers: {
+				"Auth-Token": $scope.token
+			},
 			params: {
-				"token": $scope.token,
 				"with": user.user.login
 			}
 		}).then((response) => {
@@ -318,8 +330,10 @@ app.controller('MainController', ($document, $scope, $http) => {
 			$http({
 				url: API_URL + "/preview/get",
 				method: "GET",
+				headers: {
+					"Auth-Token": $scope.token
+				},
 				params: {
-					"token": $scope.token,
 					"conversationId": conversation.id
 				}
 			}).then((response) => {
@@ -351,8 +365,8 @@ app.controller('MainController', ($document, $scope, $http) => {
 			url: API_URL + "/messaging/send",
 			method: "POST",
 			data: message.message,
-			params: {
-				"token": $scope.token
+			headers: {
+				"Auth-Token": $scope.token
 			}
 		}).then((response) => {
 			$scope.messages = $scope.messages.filter(m => m !== message);
@@ -395,15 +409,14 @@ app.controller('MainController', ($document, $scope, $http) => {
 			$http({
 				url: API_URL + "/messaging/get/m",
 				method: "GET",
-				params: {
-					"token": $scope.token
+				headers: {
+					"Auth-Token": $scope.token
 				}
 			}).then(
 				(response) => {
 					$scope.getNewMessages();
 
 					let action = response.data;
-					console.log(action);
 
 					if (action.type === "NEW_MESSAGE") {
 						let messageReceived = action.message;
@@ -433,8 +446,8 @@ app.controller('MainController', ($document, $scope, $http) => {
 			$http({
 				url: API_URL + "/messaging/get/r",
 				method: "GET",
-				params: {
-					"token": $scope.token
+				headers: {
+					"Auth-Token": $scope.token
 				}
 			}).then(
 				(response) => {
@@ -462,7 +475,7 @@ app.controller('MainController', ($document, $scope, $http) => {
 	};
 
 	$scope.logout = () => {
-		localStorage.removeItem("token");
+		localStorage.removeItem(LOCAL_STORAGE_TOKEN_NAME);
 
 		$scope.previews = [];
 		$scope.messages = [];
@@ -487,8 +500,10 @@ app.controller('MainController', ($document, $scope, $http) => {
 		$http({
 			url: API_URL + "/message/get",
 			method: "GET",
+			headers: {
+				"Auth-Token": $scope.token
+			},
 			params: {
-				"token": $scope.token,
 				"conversationId": $scope.currentConversationId,
 				"offset": $scope.messages.length,
 				"amount": MESSAGES_PER_PAGE

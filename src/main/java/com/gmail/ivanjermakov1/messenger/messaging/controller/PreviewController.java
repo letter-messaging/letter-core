@@ -8,10 +8,7 @@ import com.gmail.ivanjermakov1.messenger.messaging.dto.PreviewDTO;
 import com.gmail.ivanjermakov1.messenger.messaging.service.ConversationService;
 import com.gmail.ivanjermakov1.messenger.messaging.service.PreviewService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -23,7 +20,6 @@ public class PreviewController {
 	private final PreviewService previewService;
 	private final ConversationService conversationService;
 	
-	
 	@Autowired
 	public PreviewController(PreviewService previewService, UserService userService, ConversationService conversationService) {
 		this.previewService = previewService;
@@ -32,7 +28,7 @@ public class PreviewController {
 	}
 	
 	@GetMapping("all")
-	public List<PreviewDTO> all(@RequestParam("token") String token) throws AuthenticationException {
+	public List<PreviewDTO> all(@RequestHeader("Auth-Token") String token) throws AuthenticationException {
 		try {
 			User user = userService.getUser(userService.getUserId(token));
 			
@@ -43,7 +39,7 @@ public class PreviewController {
 	}
 	
 	@GetMapping("get")
-	public PreviewDTO get(@RequestParam("token") String token,
+	public PreviewDTO get(@RequestHeader("Auth-Token") String token,
 	                      @RequestParam("conversationId") Long conversationId) throws AuthenticationException, NoSuchEntityException {
 		User user = userService.auth(token);
 		return previewService.getPreview(user, conversationService.getById(conversationId));
