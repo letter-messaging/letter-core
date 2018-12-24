@@ -17,6 +17,7 @@
 	<link rel="stylesheet" type="text/css" href="css/preview.css">
 	<link rel="stylesheet" type="text/css" href="css/conversation.css">
 	<link rel="stylesheet" type="text/css" href="css/message.css">
+	<link rel="stylesheet" type="text/css" href="css/select-message.css">
 	<link rel="stylesheet" type="text/css" href="css/angular.css">
 
 	<link rel="stylesheet" type="text/css" href="css/responsive.css">
@@ -160,7 +161,12 @@
 		<div class="send-message-wrapper"
 		     ng-show="(state === 'in' || state === 'empty') && selectedMessages.length === 0">
 			<div class="attachment">
-				<i class="fas fa-paperclip"></i>
+				<i class="fas fa-paperclip" show-att></i>
+			</div>
+			<div class="attachments-menu" show-att ng-show="showAttachmentsMenu === true">
+				<div class="button"><i class="fas fa-camera"></i></div>
+				<div class="button"><i class="fas fa-video"></i></div>
+				<div class="button"><i class="fas fa-file"></i></div>
 			</div>
 			<textarea autofocus id="send-message-text" ng-model="messageText" onkeydown="resize(this)" rows="1"
 			          ng-keyup="enterMessage($event)" placeholder="Write a message..."></textarea>

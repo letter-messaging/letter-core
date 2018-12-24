@@ -35,7 +35,34 @@ app.directive('scrolly', function () {
 	};
 });
 
-app.controller('MainController', ($document, $scope, $http) => {
+app.directive('showAtt', function () {
+	return {
+		restrict: 'A',
+		link: (scope, element, attrs) => {
+			element.on('mouseover', () => {
+				scope.$apply(() => {
+					scope.showAttachmentsMenu = true;
+					scope.cancelAttachmentsMenu();
+				})
+			});
+			element.on('mouseout', () => {
+				scope.closeAttachmentsMenu();
+			});
+		}
+	};
+});
+
+app.controller('MainController', ($document, $scope, $http, $timeout) => {
+
+	$document.bind('keydown', (e) => {
+		if (e.keyCode === 27) {
+			$scope.state = "out";
+			$scope.currentConversationId = null;
+			$scope.isLeftView = true;
+
+			$scope.$apply();
+		}
+	});
 
 	$scope.ME = null;
 	$scope.FULL_MESSAGE = null;
@@ -84,15 +111,8 @@ app.controller('MainController', ($document, $scope, $http) => {
 
 	$scope.isLeftView = true;
 
-	$document.bind('keydown', (e) => {
-		if (e.keyCode === 27) {
-			$scope.state = "out";
-			$scope.currentConversationId = null;
-			$scope.isLeftView = true;
-
-			$scope.$apply();
-		}
-	});
+	$scope.showAttachmentsMenu = false;
+	$scope.showAttachmentsMenuTimeout = null;
 
 	// init
 	(() => {
@@ -522,5 +542,15 @@ app.controller('MainController', ($document, $scope, $http) => {
 				}
 			});
 	};
+
+	$scope.closeAttachmentsMenu = () => {
+		$scope.showAttachmentsMenuTimeout = $timeout(() => {
+			$scope.showAttachmentsMenu = false;
+		}, 1000);
+	};
+
+	$scope.cancelAttachmentsMenu = () => {
+		$timeout.cancel($scope.showAttachmentsMenuTimeout);
+	}
 
 });
