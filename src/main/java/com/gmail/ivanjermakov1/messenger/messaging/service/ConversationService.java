@@ -26,22 +26,23 @@ public class ConversationService {
 		this.conversationRepository = conversationRepository;
 	}
 	
-	public Conversation create(User user, User with) throws NoSuchEntityException {
-		LOG.debug("create conversation between: @" + user.getLogin() + "and @" + with.getLogin());
+	public Conversation create(User user, User with) {
+		LOG.debug("create conversation between: @" + user.getLogin() + " and @" + with.getLogin());
 		
 		if (user.getId().equals(with.getId())) return create(user);
 		
-		Conversation existingConversation = conversationWith(user, with);
-		if (existingConversation != null) return existingConversation;
-		
-		Conversation conversation = new Conversation(null);
-		conversation.setUsers(new ArrayList<>());
-		conversation.getUsers().add(user);
-		conversation.getUsers().add(with);
-		
-		conversationRepository.save(conversation);
-		
-		return conversation;
+		try {
+			return conversationWith(user, with);
+		} catch (NoSuchEntityException e) {
+			Conversation conversation = new Conversation(null);
+			conversation.setUsers(new ArrayList<>());
+			conversation.getUsers().add(user);
+			conversation.getUsers().add(with);
+			
+			conversationRepository.save(conversation);
+			
+			return conversation;
+		}
 	}
 	
 	public Conversation getById(Long conversationId) throws NoSuchEntityException {

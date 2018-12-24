@@ -54,7 +54,6 @@ public class UserService {
 		return token.getToken();
 	}
 	
-	//	TODO: credentials and password validation
 	public void register(RegisterUserDTO registerUserDTO) throws RegistrationException {
 		registerUserDTO.validate();
 		

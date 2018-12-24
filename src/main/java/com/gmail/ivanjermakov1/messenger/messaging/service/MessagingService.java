@@ -73,6 +73,8 @@ public class MessagingService {
 	 * @param message required fields: message.text, message.conversationId
 	 */
 	public MessageDTO processNewMessage(User user, Message message) throws NoSuchEntityException {
+		LOG.debug("process new message from @" + user.getLogin() + "to conversation @" + message.getConversationId() + "; text: " + message.getText());
+		
 		message.setSenderId(user.getId());
 		message.setSent(Instant.now());
 		messageService.save(message);
