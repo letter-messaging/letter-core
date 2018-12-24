@@ -1,43 +1,43 @@
 :root {
-    --dark: #393e46;
-    --grey: #63676e;
-    --bright: #eeeeee;
-    --light: #f8f8f8;
-    --special: rgb(47, 183, 237);
+	--dark: #393e46;
+	--grey: #63676e;
+	--bright: #eeeeee;
+	--light: #f8f8f8;
+	--special: rgb(47, 183, 237);
 }
 
 * {
-    font-family: 'Krub', sans-serif;
-    font-size: 24px;
+	font-family: 'Krub', sans-serif;
+	font-size: 24px;
 }
 
 /*ios*/
 input {
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    appearance: none;
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	appearance: none;
 }
 
 body {
-    padding: 0;
-    margin: 0;
+	padding: 0;
+	margin: 0;
 
-    height: 100vh;
+	height: 100vh;
 
-    background-color: var(--light);
+	background-color: var(--light);
 }
 
 .content {
-    display: grid;
-    grid-template-columns: 2fr 5fr;
-    grid-template-rows: 50px auto;
+	display: grid;
+	grid-template-columns: 2fr 5fr;
+	grid-template-rows: 50px auto;
 
-    height: 100vh;
-    max-width: 1280px;
+	height: 100vh;
+	max-width: 1280px;
 
-    margin: 0 auto;
+	margin: 0 auto;
 
-    background: white;
+	background: white;
 
-    overflow-y: hidden;
+	overflow-y: hidden;
 }

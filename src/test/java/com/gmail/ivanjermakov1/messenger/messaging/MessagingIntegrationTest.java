@@ -1,4 +1,4 @@
-package com.gmail.ivanjermakov1.messenger.auth;
+package com.gmail.ivanjermakov1.messenger.messaging;
 
 import com.gmail.ivanjermakov1.messenger.auth.dto.RegisterUserDTO;
 import com.gmail.ivanjermakov1.messenger.auth.dto.UserDTO;
