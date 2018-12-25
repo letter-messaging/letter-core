@@ -29,5 +29,4 @@ dependencies {
     compile "dom4j:dom4j:1.6.1"
 
     testCompile "org.springframework.boot:spring-boot-starter-test:$springVersion"
-    testCompile "com.h2database:h2:1.4.197"
 }
