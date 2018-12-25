@@ -12,6 +12,8 @@ import java.util.Set;
 @Transactional
 public interface MessageRepository extends CrudRepository<Message, Long> {
 	
+	Message getById(Long messageId);
+	
 	Message getTop1ByConversationIdOrderBySentDesc(Long conversationId);
 	
 	@Query(value = "select * from Message m where m.conversation_id = :conversationId " +

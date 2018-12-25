@@ -45,7 +45,7 @@ public class ConversationService {
 		}
 	}
 	
-	public Conversation getById(Long conversationId) throws NoSuchEntityException {
+	public Conversation get(Long conversationId) throws NoSuchEntityException {
 		return conversationRepository.findById(conversationId).orElseThrow(() -> new NoSuchEntityException("no such conversation"));
 	}
 	

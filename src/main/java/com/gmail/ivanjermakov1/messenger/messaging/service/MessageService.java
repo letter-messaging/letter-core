@@ -45,7 +45,7 @@ public class MessageService {
 	}
 	
 	public List<MessageDTO> get(Long userId, Long conversationId, Integer offset, Integer limit) throws AuthenticationException, NoSuchEntityException {
-		if (conversationService.getById(conversationId).getUsers().stream().noneMatch(u -> u.getId().equals(userId)))
+		if (conversationService.get(conversationId).getUsers().stream().noneMatch(u -> u.getId().equals(userId)))
 			throw new AuthenticationException("invalid conversation id");
 		
 		Set<Message> messagesIds = messageRepository.get(conversationId, offset, limit);
@@ -95,6 +95,10 @@ public class MessageService {
 				.map(MessageDTO::getMessage)
 				.filter(m -> m.getSenderId().equals(user.getId()))
 				.forEach(messageRepository::delete);
+	}
+	
+	public Message get(Long messageId) {
+		return messageRepository.getById(messageId);
 	}
 	
 }

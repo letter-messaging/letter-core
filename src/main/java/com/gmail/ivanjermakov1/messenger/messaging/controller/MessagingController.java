@@ -7,6 +7,7 @@ import com.gmail.ivanjermakov1.messenger.exception.InvalidMessageException;
 import com.gmail.ivanjermakov1.messenger.exception.NoSuchEntityException;
 import com.gmail.ivanjermakov1.messenger.messaging.dto.MessageDTO;
 import com.gmail.ivanjermakov1.messenger.messaging.dto.action.ConversationReadAction;
+import com.gmail.ivanjermakov1.messenger.messaging.dto.action.MessageEditAction;
 import com.gmail.ivanjermakov1.messenger.messaging.dto.action.NewMessageAction;
 import com.gmail.ivanjermakov1.messenger.messaging.dto.action.Request;
 import com.gmail.ivanjermakov1.messenger.messaging.entity.Message;
@@ -52,6 +53,18 @@ public class MessagingController {
 		return request;
 	}
 	
+	@RequestMapping("get/e")
+	@GetMapping
+	public DeferredResult<MessageEditAction> getEdit(@RequestHeader("Auth-Token") String token) throws AuthenticationException {
+		User user = userService.auth(token);
+		
+		DeferredResult<MessageEditAction> request = new DeferredResult<>();
+		request.onTimeout(() -> messagingService.getMessageEditRequests().removeIf(r -> r.getDeferredResult().equals(request)));
+		messagingService.getMessageEditRequests().add(new Request<>(user, request));
+		
+		return request;
+	}
+	
 	@RequestMapping("send")
 	@PostMapping
 	public MessageDTO sendMessage(@RequestHeader("Auth-Token") String token, @RequestBody Message message) throws AuthenticationException, InvalidMessageException, NoSuchEntityException {
@@ -61,6 +74,16 @@ public class MessagingController {
 		User user = userService.auth(token);
 		messagingService.processConversationRead(user, message.getConversationId());
 		return messagingService.processNewMessage(user, message);
+	}
+	
+	@RequestMapping("edit")
+	@PostMapping
+	public void editMessage(@RequestHeader("Auth-Token") String token, @RequestBody Message message) throws AuthenticationException, InvalidMessageException, NoSuchEntityException {
+		if (message.getText() == null || message.getConversationId() == null)
+			throw new InvalidMessageException("invalid message");
+		
+		User user = userService.auth(token);
+		messagingService.processMessageEdit(user, message);
 	}
 	
 }

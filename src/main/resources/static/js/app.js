@@ -114,6 +114,8 @@ app.controller('MainController', ($document, $scope, $http, $timeout) => {
 	$scope.listen = false;
 
 	$scope.isLeftView = true;
+	$scope.isEditMessageView = false;
+	$scope.editingMessage = null;
 
 	$scope.showAttachmentsMenu = false;
 	$scope.showAttachmentsMenuTimeout = null;
@@ -141,6 +143,7 @@ app.controller('MainController', ($document, $scope, $http, $timeout) => {
 
 					$scope.listen = true;
 					$scope.getNewMessages();
+					$scope.getMessageEdits();
 					$scope.getConversationRead();
 
 					$scope.isLoaded = true;
@@ -362,6 +365,11 @@ app.controller('MainController', ($document, $scope, $http, $timeout) => {
 	};
 
 	$scope.sendMessage = () => {
+		if ($scope.isEditMessageView) {
+			$scope.editMessage();
+			return;
+		}
+
 		if ($scope.messageText.replace(/\s/g, '').length === 0) return;
 
 		let messageText = $scope.messageText;
@@ -390,6 +398,24 @@ app.controller('MainController', ($document, $scope, $http, $timeout) => {
 		}).then((response) => {
 			$scope.messages = $scope.messages.filter(m => m !== message);
 			$scope.updatePreviews();
+		});
+	};
+
+	$scope.editMessage = () => {
+		$scope.editingMessage.message.text = $scope.messageText;
+		$http({
+			url: API_URL + "/messaging/edit",
+			method: "POST",
+			data: $scope.editingMessage.message,
+			headers: {
+				"Auth-Token": $scope.token
+			}
+		}).then((response) => {
+			$scope.updatePreviews();
+			$scope.openConversation($scope.currentPreview);
+			$scope.selectedMessages = [];
+			$scope.isEditMessageView = false;
+			$scope.messageText = '';
 		});
 	};
 
@@ -444,6 +470,15 @@ app.controller('MainController', ($document, $scope, $http, $timeout) => {
 			});
 	};
 
+	$scope.editSelectedMessage = () => {
+		$scope.editingMessage = $scope.selectedMessages[0];
+
+		$scope.selectedMessages = [];
+		$scope.isEditMessageView = true;
+
+		$scope.messageText = $scope.editingMessage.message.text;
+	};
+
 	$scope.getNewMessages = () => {
 		if ($scope.listen) {
 			$http({
@@ -457,6 +492,7 @@ app.controller('MainController', ($document, $scope, $http, $timeout) => {
 					$scope.getNewMessages();
 
 					let action = response.data;
+					console.log(action);
 
 					if (action.type === "NEW_MESSAGE") {
 						let messageReceived = action.message;
@@ -475,6 +511,40 @@ app.controller('MainController', ($document, $scope, $http, $timeout) => {
 				},
 				(error) => {
 					$scope.getNewMessages();
+				});
+		}
+	};
+
+	$scope.getMessageEdits = () => {
+		if ($scope.listen) {
+			$http({
+				url: API_URL + "/messaging/get/e",
+				method: "GET",
+				headers: {
+					"Auth-Token": $scope.token
+				}
+			}).then(
+				(response) => {
+					$scope.getMessageEdits();
+
+					let action = response.data;
+					console.log(action);
+
+					if (action.type === "MESSAGE_EDIT") {
+						let messageReceived = action.message;
+
+						if ($scope.state === 'in' &&
+							$scope.currentConversationId === messageReceived.conversation.id) {
+							$scope.messages.find(m => m.message.id === messageReceived.message.id).message.text = messageReceived.message.text;
+						}
+					}
+
+					// TODO: investigate
+					$scope.updatePreviews();
+					$scope.updatePreviews();
+				},
+				(error) => {
+					$scope.getMessageEdits();
 				});
 		}
 	};

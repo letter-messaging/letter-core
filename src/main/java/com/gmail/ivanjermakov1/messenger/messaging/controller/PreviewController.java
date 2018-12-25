@@ -42,7 +42,7 @@ public class PreviewController {
 	public PreviewDTO get(@RequestHeader("Auth-Token") String token,
 	                      @RequestParam("conversationId") Long conversationId) throws AuthenticationException, NoSuchEntityException {
 		User user = userService.auth(token);
-		return previewService.getPreview(user, conversationService.getById(conversationId));
+		return previewService.getPreview(user, conversationService.get(conversationId));
 	}
 	
 }

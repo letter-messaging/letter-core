@@ -4,10 +4,7 @@ import com.gmail.ivanjermakov1.messenger.auth.entity.User;
 import com.gmail.ivanjermakov1.messenger.auth.service.UserService;
 import com.gmail.ivanjermakov1.messenger.exception.NoSuchEntityException;
 import com.gmail.ivanjermakov1.messenger.messaging.dto.MessageDTO;
-import com.gmail.ivanjermakov1.messenger.messaging.dto.action.Action;
-import com.gmail.ivanjermakov1.messenger.messaging.dto.action.ConversationReadAction;
-import com.gmail.ivanjermakov1.messenger.messaging.dto.action.NewMessageAction;
-import com.gmail.ivanjermakov1.messenger.messaging.dto.action.Request;
+import com.gmail.ivanjermakov1.messenger.messaging.dto.action.*;
 import com.gmail.ivanjermakov1.messenger.messaging.entity.Conversation;
 import com.gmail.ivanjermakov1.messenger.messaging.entity.Message;
 import com.gmail.ivanjermakov1.messenger.util.Logs;
@@ -34,6 +31,7 @@ public class MessagingService {
 	private final UserService userService;
 	
 	private final Queue<Request<NewMessageAction>> newMessageRequests = new ConcurrentLinkedQueue<>();
+	private final Queue<Request<MessageEditAction>> messageEditRequests = new ConcurrentLinkedQueue<>();
 	private final Queue<Request<ConversationReadAction>> conversationReadRequests = new ConcurrentLinkedQueue<>();
 	
 	@Autowired
@@ -47,6 +45,10 @@ public class MessagingService {
 		return newMessageRequests;
 	}
 	
+	public Queue<Request<MessageEditAction>> getMessageEditRequests() {
+		return messageEditRequests;
+	}
+	
 	public Queue<Request<ConversationReadAction>> getConversationReadRequests() {
 		return conversationReadRequests;
 	}
@@ -56,14 +58,14 @@ public class MessagingService {
 	 */
 	@Scheduled(fixedRate = 60000)
 	public void clearTimeoutRequests() {
-		String before = Logs.collectionSizeList(newMessageRequests, conversationReadRequests);
+		String before = Logs.collectionSizeList(newMessageRequests, messageEditRequests, conversationReadRequests);
 		
 		clearTimeoutRequests(newMessageRequests);
 		clearTimeoutRequests(conversationReadRequests);
+		clearTimeoutRequests(messageEditRequests);
 		
-		LOG.info("requests are cleared. \n\t" +
-				"before: " + before + "\n\t" +
-				"after: " + Logs.collectionSizeList(newMessageRequests, conversationReadRequests));
+		LOG.debug("requests are cleared. before: " + before + "; after: " +
+				Logs.collectionSizeList(newMessageRequests, messageEditRequests, conversationReadRequests));
 	}
 	
 	/**
@@ -79,7 +81,7 @@ public class MessagingService {
 		message.setSent(Instant.now());
 		messageService.save(message);
 		
-		Conversation conversation = conversationService.getById(message.getConversationId());
+		Conversation conversation = conversationService.get(message.getConversationId());
 		MessageDTO messageDTO = messageService.getFullMessage(message);
 		
 		newMessageRequests.stream()
@@ -94,8 +96,27 @@ public class MessagingService {
 		return messageService.getFullMessage(message);
 	}
 	
+	public void processMessageEdit(User user, Message message) throws NoSuchEntityException {
+		LOG.debug("process message edit from @" + user.getLogin() + "to conversation @" + message.getConversationId() + "; text: " + message.getText());
+		
+		Message original = messageService.get(message.getId());
+		original.setText(message.getText());
+		messageService.save(original);
+		
+		Conversation conversation = conversationService.get(message.getConversationId());
+		
+		messageEditRequests.stream()
+				.filter(request -> conversation.getUsers()
+						.stream()
+						.anyMatch(i -> i.getId().equals(request.getUser().getId())))
+				.forEach(request -> {
+					request.set(new MessageEditAction(messageService.getFullMessage(original)));
+					messageEditRequests.removeIf(r -> r.equals(request));
+				});
+	}
+	
 	public void processConversationRead(User user, Long conversationId) throws NoSuchEntityException {
-		Conversation conversation = conversationService.getById(conversationId);
+		Conversation conversation = conversationService.get(conversationId);
 		
 		messageService.read(user, conversation);
 		
