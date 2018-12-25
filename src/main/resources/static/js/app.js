@@ -64,12 +64,34 @@ app.controller('MainController', ($document, $scope, $http, $timeout) => {
 		}
 	});
 
+	/**
+	 * Current date format used in all view dates
+	 * @type {string}
+	 */
 	$scope.dateFormat = 'H:mm';
 
+	/**
+	 * UserDTO representing current client
+	 * @type {null}
+	 */
 	$scope.ME = null;
+
+	/**
+	 * Template used for proper field insertion on message sending
+	 * @type {null}
+	 */
 	$scope.FULL_MESSAGE = null;
 
+	/**
+	 * Current user token. Used in all authorized queries and stored in a local storage
+	 * @type {null}
+	 */
 	$scope.token = null;
+
+	/**
+	 * Represent user credentials. AKA RegisterUserDTO
+	 * @type {{firstName: null, lastName: null, password: null, confirmPassword: null, login: null}}
+	 */
 	$scope.credentials = {
 		"login": null,
 		"password": null,
@@ -78,22 +100,54 @@ app.controller('MainController', ($document, $scope, $http, $timeout) => {
 		"lastName": null
 	};
 
+	/**
+	 * Previews array of current window
+	 * @type {Array}
+	 */
 	$scope.previews = [];
+
+	/**
+	 * Messages array within current conversation. May change on conversation change
+	 * @type {Array}
+	 */
 	$scope.messages = [];
 
 	$scope.currentPreview = null;
 
 	$scope.selectedMessages = [];
 
+	/**
+	 * Array of conversations displayed during the search
+	 * @type {Array}
+	 */
 	$scope.searchConversations = [];
+
+	/**
+	 * Array of users displayed during the search
+	 * @type {Array}
+	 */
 	$scope.searchUsers = [];
 
 	$scope.currentConversationId = null;
-	$scope.currentConversationWith = null;
 
+	/**
+	 * Became 'true' after init function completes
+	 * @type {boolean}
+	 */
 	$scope.isLoaded = false;
 
+	/**
+	 * Display auth view if true
+	 * @type {boolean}
+	 */
 	$scope.isAuth = true;
+
+	/**
+	 * Trigger between views.
+	 * 'true' - login view
+	 * 'false' - register view
+	 * @type {boolean}
+	 */
 	$scope.isLogin = true;
 
 	$scope.isSearch = false;
@@ -102,22 +156,51 @@ app.controller('MainController', ($document, $scope, $http, $timeout) => {
 	$scope.searchText = null;
 
 	/**
-	 * out - outside certain conversation
-	 * in - in certain conversation
-	 * empty - in empty conversation
+	 * Demonstrate the state of current window.
+	 * 'out' - outside certain conversation
+	 * 'in' - in certain conversation
+	 * 'empty' - in empty conversation
 	 * @type {string}
 	 */
 	$scope.state = "out";
 
+	/**
+	 * Model used to enter message text content
+	 * @type {null}
+	 */
 	$scope.messageText = null;
 
+	/**
+	 * Allow long-polling http requests when true, deny otherwise
+	 * @type {boolean}
+	 */
 	$scope.listen = false;
 
+	/**
+	 * Trigger views on mobile responsive version
+	 * 'true' - left view
+	 * 'false' - right view
+	 * @type {boolean}
+	 */
 	$scope.isLeftView = true;
 	$scope.isEditMessageView = false;
+
+	/**
+	 * Store currently editing message if such is present
+	 * @type {null}
+	 */
 	$scope.editingMessage = null;
 
+	/**
+	 * Used in displaying attachments menu
+	 * @type {boolean}
+	 */
 	$scope.showAttachmentsMenu = false;
+
+	/**
+	 * Used in displaying attachments menu
+	 * @type {null}
+	 */
 	$scope.showAttachmentsMenuTimeout = null;
 
 	// init
@@ -275,9 +358,6 @@ app.controller('MainController', ($document, $scope, $http, $timeout) => {
 			}
 
 			scrollToBottom(document.getElementsByClassName("message-wrapper")[0]);
-
-			$scope.currentConversationWith = preview.with;
-
 			$scope.updatePreviews();
 		});
 	};
