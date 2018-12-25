@@ -47,4 +47,10 @@ public class MessageController {
 		return messageService.get(user.getId(), conversationId, offset, amount);
 	}
 	
+	@PostMapping("delete")
+	public void delete(@RequestHeader("Auth-Token") String token, @RequestBody List<MessageDTO> deleteMessages) throws AuthenticationException {
+		User user = userService.auth(token);
+		messageService.delete(user, deleteMessages);
+	}
+	
 }

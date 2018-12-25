@@ -84,4 +84,17 @@ public class MessageService {
 		return messageRepository.getUnreadCount(user.getId(), conversation.getId());
 	}
 	
+	/**
+	 * Allowed to delete only user-self messages
+	 *
+	 * @param user           messages owner
+	 * @param deleteMessages messages which going to be removed
+	 */
+	public void delete(User user, List<MessageDTO> deleteMessages) {
+		deleteMessages.stream()
+				.map(MessageDTO::getMessage)
+				.filter(m -> m.getSenderId().equals(user.getId()))
+				.forEach(messageRepository::delete);
+	}
+	
 }

@@ -23,7 +23,7 @@
 	<link rel="stylesheet" type="text/css" href="css/responsive.css">
 
 	<!--FONTS-->
-	<link href="https://fonts.googleapis.com/css?family=Krub" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css?family=IBM+Plex+Sans" rel="stylesheet">
 
 	<!--ICONS-->
 	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css"
@@ -32,7 +32,7 @@
 	<!--LIBS-->
 	<script language="JavaScript" src="lib/angular.js"></script>
 	<script language="JavaScript" src="lib/jquery-3.3.1.min.js"></script>
-	<script type="text/javascript" src="lib/moment.js"></script>
+	<script language="JavaScript" src="lib/moment.js"></script>
 </head>
 
 <body ng-controller="MainController" ng-cloak>
@@ -44,7 +44,7 @@
 				<div class="heading">Log in</div>
 				<input autofocus type="text" placeholder="Login" ng-model="credentials.login">
 				<input type="password" placeholder="Password" ng-model="credentials.password">
-				<div class="register-hint">Haven't join yet? <a ng-click="isLogin = false">Register</a>.</div>
+				<div class="register-hint">Haven't join yet?<a ng-click="isLogin = false"> Register</a>.</div>
 				<input type="submit" value="Login">
 			</form>
 		</div>
@@ -111,7 +111,7 @@
 						<i class="fas fa-circle"></i>
 					</div>
 				</div>
-				<div class="sent">{{preview.lastMessage.message.sent}}</div>
+				<div class="sent">{{preview.lastMessage.message.sent | date:dateFormat}}</div>
 			</div>
 
 			<div ng-repeat="user in searchUsers" class="user-preview" ng-click="createConversation(user)"
@@ -140,7 +140,7 @@
 						<!--<div class="from">{{message.sender.userMainInfo.firstName}}</div>-->
 						<div class="text">{{message.message.text}}</div>
 						<div class="info">
-							<div class="sent">{{message.message.sent}}</div>
+							<div class="sent">{{message.message.sent | date:dateFormat}}</div>
 							<div class="status" ng-show="message.mine">
 								<div class="sending" ng-show="message.status === 'sending'">
 									<i class="far fa-clock"></i>
@@ -178,7 +178,7 @@
 			</div>
 		</div>
 		<div class="selected-messages-menu" ng-show="selectedMessages.length !== 0">
-			<div class="button"><i class="fas fa-trash"></i></div>
+			<div class="button" ng-click="deleteSelectedMessages()"><i class="fas fa-trash"></i></div>
 			<div class="button"><i class="fas fa-reply"></i></div>
 			<div class="button"><i class="fas fa-arrow-right"></i></div>
 			<div class="button" ng-show="selectedMessages.length === 1"><i class="fas fa-pen"></i></div>

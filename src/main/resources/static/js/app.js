@@ -64,6 +64,8 @@ app.controller('MainController', ($document, $scope, $http, $timeout) => {
 		}
 	});
 
+	$scope.dateFormat = 'H:mm';
+
 	$scope.ME = null;
 	$scope.FULL_MESSAGE = null;
 
@@ -78,6 +80,8 @@ app.controller('MainController', ($document, $scope, $http, $timeout) => {
 
 	$scope.previews = [];
 	$scope.messages = [];
+
+	$scope.currentPreview = null;
 
 	$scope.selectedMessages = [];
 
@@ -227,7 +231,6 @@ app.controller('MainController', ($document, $scope, $http, $timeout) => {
 
 			for (let preview of response.data) {
 				if (preview.lastMessage) {
-					preview.lastMessage.message.sent = moment(preview.lastMessage.message.sent).format("H:mm");
 					preview.lastMessage.mine = preview.lastMessage.sender.user.login === $scope.ME.user.login;
 				}
 			}
@@ -236,6 +239,8 @@ app.controller('MainController', ($document, $scope, $http, $timeout) => {
 	};
 
 	$scope.openConversation = (preview) => {
+		$scope.currentPreview = preview;
+
 		$scope.searchText = "";
 		$scope.isSearch = false;
 		$scope.isLeftView = false;
@@ -255,8 +260,6 @@ app.controller('MainController', ($document, $scope, $http, $timeout) => {
 			$scope.currentConversationId = preview.conversation.id;
 
 			for (let message of response.data) {
-				message.message.sent = moment(message.message.sent).format("H:mm");
-
 				message.mine = $scope.ME.user.login === message.sender.user.login;
 				message.status = "received";
 			}
@@ -319,10 +322,6 @@ app.controller('MainController', ($document, $scope, $http, $timeout) => {
 					"search": $scope.searchText
 				}
 			}).then((response) => {
-				for (let preview of response.data) {
-					if (preview.lastMessage)
-						preview.lastMessage.message.sent = moment(preview.lastMessage.message.sent).format("H:mm");
-				}
 				$scope.searchConversations = response.data;
 			});
 		}
@@ -424,6 +423,27 @@ app.controller('MainController', ($document, $scope, $http, $timeout) => {
 		$scope.selectedMessages = [];
 	};
 
+	$scope.deleteSelectedMessages = () => {
+		$http({
+			url: API_URL + "/message/delete",
+			method: "POST",
+			headers: {
+				"Auth-Token": $scope.token
+			},
+			data: $scope.selectedMessages
+		}).then(
+			(response) => {
+				$scope.updatePreviews();
+				$scope.openConversation($scope.currentPreview);
+				$scope.selectedMessages = [];
+			},
+			(error) => {
+				$scope.updatePreviews();
+				$scope.openConversation($scope.currentPreview);
+				$scope.selectedMessages = [];
+			});
+	};
+
 	$scope.getNewMessages = () => {
 		if ($scope.listen) {
 			$http({
@@ -440,8 +460,6 @@ app.controller('MainController', ($document, $scope, $http, $timeout) => {
 
 					if (action.type === "NEW_MESSAGE") {
 						let messageReceived = action.message;
-
-						messageReceived.message.sent = moment(messageReceived.message.sent).format("H:mm");
 						messageReceived.mine = $scope.ME.user.login === messageReceived.sender.user.login;
 						messageReceived.status = "received";
 
@@ -533,7 +551,6 @@ app.controller('MainController', ($document, $scope, $http, $timeout) => {
 				let newMessages = response.data;
 
 				for (let message of newMessages) {
-					message.message.sent = moment(message.message.sent).format("H:mm");
 
 					message.mine = $scope.ME.user.login === message.sender.user.login;
 					message.status = "received";
