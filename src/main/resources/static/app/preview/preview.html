@@ -1,0 +1,19 @@
+<img class="avatar" src="img/default-avatar.png">
+<div class="info">{{$ctrl.preview.with.userMainInfo.firstName}} {{$ctrl.preview.with.userMainInfo.lastName}}</div>
+<div class="message-preview">
+	<div class="from" ng-show="$ctrl.preview.lastMessage">
+		{{$ctrl.preview.lastMessage.sender.user.login === credentials.login ? 'You' :
+		$ctrl.preview.lastMessage.sender.userMainInfo.firstName}}:
+	</div>
+	<div class="text">{{$ctrl.preview.lastMessage.message.text}}</div>
+</div>
+<!--<div class="delete"><i class="fas fa-times"></i></div>-->
+<div class="unread-wrapper">
+	<div class="unread" ng-show="$ctrl.preview.unread !== 0">
+		{{$ctrl.preview.unread}}
+	</div>
+	<div class="unread-mine" ng-show="!$ctrl.preview.lastMessage.message.read && $ctrl.preview.lastMessage.mine">
+		<i class="fas fa-circle"></i>
+	</div>
+</div>
+<div class="sent">{{$ctrl.preview.lastMessage.message.sent | date:$ctrl.dateFormat}}</div>

@@ -1,0 +1,26 @@
+<div class="message-container">
+	<img class="avatar" src="img/default-avatar.png" ng-show="!$ctrl.isForwarded">
+	<div class="message-content">
+		<div class="from" ng-show="$ctrl.isForwarded">{{$ctrl.message.sender.userMainInfo.firstName}}</div>
+		<div class="text">{{$ctrl.message.message.text}}</div>
+		<div class="info">
+			<div class="sent">{{$ctrl.message.message.sent | date:$ctrl.dateFormat}}</div>
+			<div class="status" ng-show="$ctrl.message.mine">
+				<div class="sending" ng-show="$ctrl.message.status === 'sending'">
+					<i class="far fa-clock"></i>
+				</div>
+				<div class="received"
+				     ng-show="$ctrl.message.status === 'received' && $ctrl.message.message.read === false">
+					<i class="fas fa-check"></i>
+				</div>
+				<div class="read" ng-show="$ctrl.message.status === 'received' && $ctrl.message.message.read">
+					<i class="fas fa-eye"></i>
+				</div>
+			</div>
+		</div>
+		<div class="forwarded-wrapper" ng-show="$ctrl.message.forwarded.length !== 0">
+			<message class="forwarded" ng-repeat="message in $ctrl.message.forwarded | orderBy:'message.sent'"
+			         message="message" date-format="$ctrl.dateFormat" is-forwarded="true"></message>
+		</div>
+	</div>
+</div>

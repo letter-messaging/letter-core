@@ -36,9 +36,6 @@
 .message-content {
 	display: grid;
 
-	grid-template-columns: auto auto;
-	grid-template-rows: auto auto auto;
-
 	padding: 0 10px;
 
 	background: var(--grey);
@@ -77,7 +74,7 @@
 	justify-content: flex-end;
 
 	grid-column: 2;
-	grid-row: 3;
+	grid-row: 4;
 }
 
 .conversation .message-mine .info {
