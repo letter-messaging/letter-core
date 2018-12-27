@@ -229,13 +229,12 @@ app.controller('MainController', ($document, $scope, $http, $timeout, $window) =
 					$scope.initialize();
 					$scope.updatePreviews();
 					$scope.isAuth = false;
+					$scope.isLoaded = true;
 
 					$scope.listen = true;
 					$scope.getNewMessages();
 					$scope.getMessageEdits();
 					$scope.getConversationRead();
-
-					$scope.isLoaded = true;
 				},
 				(error) => {
 					$scope.isLoaded = true;
