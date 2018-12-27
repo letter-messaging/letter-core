@@ -34,7 +34,7 @@
 }
 
 .preview-wrapper .selected {
-	background-color: var(--dark) !important;
+	background-color: var(--grey) !important;
 
 	color: white;
 }

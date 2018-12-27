@@ -52,7 +52,7 @@ app.directive('showAtt', function () {
 	};
 });
 
-app.controller('MainController', ($document, $scope, $http, $timeout) => {
+app.controller('MainController', ($document, $scope, $http, $timeout, $window) => {
 
 	$document.bind('keydown', (e) => {
 		if (e.keyCode === 27) {
@@ -203,9 +203,15 @@ app.controller('MainController', ($document, $scope, $http, $timeout) => {
 	 */
 	$scope.showAttachmentsMenuTimeout = null;
 
-	// init
-	(() => {
-		// auto login
+	$scope.notification = new Audio("/sound/newmsg.mp3");
+
+	/**
+	 * Used in title to display count of new messages received when tab is in background
+	 * @type {number}
+	 */
+	$scope.newMessageCount = 0;
+
+	$scope.autoLogin = () => {
 		if (localStorage.getItem(LOCAL_STORAGE_TOKEN_NAME)) {
 			const unverifiedToken = localStorage.getItem(LOCAL_STORAGE_TOKEN_NAME);
 
@@ -237,6 +243,13 @@ app.controller('MainController', ($document, $scope, $http, $timeout) => {
 		} else {
 			$scope.isLoaded = true;
 		}
+	};
+
+	/**
+	 * Called when script is loaded. Initialize whole variables and complete auto login
+	 */
+	(() => {
+		$scope.autoLogin();
 
 		$http({
 			url: API_URL + "/message/init/full",
@@ -245,6 +258,11 @@ app.controller('MainController', ($document, $scope, $http, $timeout) => {
 			$scope.FULL_MESSAGE = response.data;
 		});
 	})();
+
+	$window.onfocus = () => {
+		$scope.newMessageCount = 0;
+		$scope.$apply();
+	};
 
 	$scope.login = () => {
 		$http({
@@ -578,6 +596,16 @@ app.controller('MainController', ($document, $scope, $http, $timeout) => {
 						let messageReceived = action.message;
 						messageReceived.mine = $scope.ME.user.login === messageReceived.sender.user.login;
 						messageReceived.status = "received";
+
+						if (!messageReceived.mine) {
+							console.log($scope.notification);
+							$scope.notification.play();
+
+							console.log(document.visibilityState);
+							if (document.visibilityState === 'hidden') {
+								$scope.newMessageCount++;
+							}
+						}
 
 						if ($scope.state === 'in' &&
 							$scope.currentConversationId === messageReceived.conversation.id) {

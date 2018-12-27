@@ -1,11 +1,13 @@
 <!DOCTYPE html>
-<html lang="en" ng-app="app">
+<html lang="en" ng-app="app" ng-controller="MainController" ng-cloak>
 
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 
-	<title>Messenger.</title>
+	<!--refactor no ng-bind to prevent showing {{}} during page load-->
+	<title>Messenger.{{newMessageCount === 0 ? '' : (' - ' + newMessageCount + ' new message' +
+		(newMessageCount === 1 ? '' : 's'))}}</title>
 
 	<!--STYLES-->
 	<link rel="stylesheet" type="text/css" href="css/auth.css">
@@ -36,7 +38,7 @@
 	<script language="JavaScript" src="lib/moment.js"></script>
 </head>
 
-<body ng-controller="MainController" ng-cloak>
+<body>
 
 <div class="auth-wrapper" ng-show="isAuth && isLoaded">
 	<div class="auth">
