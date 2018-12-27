@@ -20,7 +20,6 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
-@Transactional
 public class MessageService {
 	
 	private final MessageRepository messageRepository;
@@ -36,6 +35,7 @@ public class MessageService {
 		this.conversationService = conversationService;
 	}
 	
+	@Transactional
 	public void save(Message message) {
 		messageRepository.save(message);
 	}
@@ -76,6 +76,7 @@ public class MessageService {
 		return messageDTO;
 	}
 	
+	@Transactional
 	public void read(User user, Conversation conversation) {
 		messageRepository.readAllExcept(user.getId(), conversation.getId());
 	}
@@ -90,6 +91,7 @@ public class MessageService {
 	 * @param user           messages owner
 	 * @param deleteMessages messages which going to be removed
 	 */
+	@Transactional
 	public void delete(User user, List<MessageDTO> deleteMessages) {
 		deleteMessages.stream()
 				.map(MessageDTO::getMessage)

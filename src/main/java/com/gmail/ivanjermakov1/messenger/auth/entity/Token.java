@@ -7,10 +7,12 @@ import javax.persistence.*;
 public class Token {
 	
 	@Id
-	@JoinColumn(name = "id",
-			foreignKey = @ForeignKey(name = "token_user_id_fk")
-	)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+	
+	@OneToOne
+	@JoinColumn(name = "user_id")
+	private User user;
 	
 	@Column(name = "token")
 	private String token;
@@ -18,8 +20,8 @@ public class Token {
 	public Token() {
 	}
 	
-	public Token(Long id, String token) {
-		this.id = id;
+	public Token(User user, String token) {
+		this.user = user;
 		this.token = token;
 	}
 	
@@ -29,6 +31,14 @@ public class Token {
 	
 	public void setId(Long id) {
 		this.id = id;
+	}
+	
+	public User getUser() {
+		return user;
+	}
+	
+	public void setUser(User user) {
+		this.user = user;
 	}
 	
 	public String getToken() {

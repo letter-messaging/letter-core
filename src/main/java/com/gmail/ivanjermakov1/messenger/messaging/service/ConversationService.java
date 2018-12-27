@@ -14,7 +14,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-@Transactional
 public class ConversationService {
 	
 	private final static Logger LOG = LoggerFactory.getLogger(ConversationService.class);
@@ -25,6 +24,7 @@ public class ConversationService {
 		this.conversationRepository = conversationRepository;
 	}
 	
+	@Transactional
 	public Conversation create(User user, User with) {
 		LOG.debug("create conversation between: @" + user.getLogin() + " and @" + with.getLogin());
 		

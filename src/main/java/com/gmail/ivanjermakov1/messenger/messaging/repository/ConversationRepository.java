@@ -4,11 +4,11 @@ import com.gmail.ivanjermakov1.messenger.messaging.entity.Conversation;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 
-import javax.transaction.Transactional;
 import java.util.List;
 
-@Transactional
+@Repository
 public interface ConversationRepository extends CrudRepository<Conversation, Long> {
 	
 	@Query("select c from Conversation c join c.users u where u.id = :id")

@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 
 @Service
-@Transactional
 public class UserMainInfoService {
 	
 	private final UserMainInfoRepository userMainInfoRepository;
@@ -22,6 +21,7 @@ public class UserMainInfoService {
 		return userMainInfoRepository.findById(userId).orElse(null);
 	}
 	
+	@Transactional
 	public void save(UserMainInfo userMainInfo) {
 		userMainInfoRepository.save(userMainInfo);
 	}

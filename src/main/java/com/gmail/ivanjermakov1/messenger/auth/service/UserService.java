@@ -22,7 +22,6 @@ import javax.transaction.Transactional;
 import java.util.Optional;
 
 @Service
-@Transactional
 public class UserService {
 	
 	private final static Logger LOG = LoggerFactory.getLogger(UserService.class);
@@ -47,7 +46,7 @@ public class UserService {
 		Token token = tokenRepository.findById(user.getId())
 				.orElse(null);
 		if (token == null) {
-			token = new Token(user.getId(), TokenGenerator.generate());
+			token = new Token(user, TokenGenerator.generate());
 			tokenRepository.save(token);
 		}
 		
@@ -64,6 +63,7 @@ public class UserService {
 		}
 	}
 	
+	@Transactional
 	public void register(RegisterUserDTO registerUserDTO) throws RegistrationException {
 		registerUserDTO.validate();
 		
@@ -87,7 +87,7 @@ public class UserService {
 	}
 	
 	public User getUserByToken(String token) throws NoSuchEntityException {
-		return Optional.ofNullable(userRepository.get(token)).orElseThrow(() -> new NoSuchEntityException("no such user"));
+		return tokenRepository.findByToken(token).orElseThrow(() -> new NoSuchEntityException("no such user")).getUser();
 	}
 	
 	public UserDTO full(User user) {
