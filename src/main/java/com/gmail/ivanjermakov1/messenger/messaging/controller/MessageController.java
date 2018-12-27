@@ -42,14 +42,14 @@ public class MessageController {
 	                            @RequestParam("conversationId") Long conversationId,
 	                            @RequestParam("offset") Integer offset,
 	                            @RequestParam("amount") Integer amount) throws AuthenticationException, NoSuchEntityException {
-		User user = userService.auth(token);
+		User user = userService.authenticate(token);
 		messagingService.processConversationRead(user, conversationId);
 		return messageService.get(user.getId(), conversationId, offset, amount);
 	}
 	
 	@PostMapping("delete")
 	public void delete(@RequestHeader("Auth-Token") String token, @RequestBody List<MessageDTO> deleteMessages) throws AuthenticationException {
-		User user = userService.auth(token);
+		User user = userService.authenticate(token);
 		messageService.delete(user, deleteMessages);
 	}
 	

@@ -45,11 +45,11 @@ public class MessagingIntegrationTest {
 	public void shouldSendAndReceiveMessage() throws RegistrationException, AuthenticationException, NoSuchEntityException, InvalidMessageException {
 		userService.register(new RegisterUserDTO("Jack", "Johnson", "jackj", "password1"));
 		String user1Token = userService.authenticate("jackj", "password1");
-		UserDTO user1 = userService.full(userService.auth(user1Token));
+		UserDTO user1 = userService.full(userService.authenticate(user1Token));
 		
 		userService.register(new RegisterUserDTO("Ron", "Richardson", "ronr", "password1"));
 		String user2Token = userService.authenticate("ronr", "password1");
-		UserDTO user2 = userService.full(userService.auth(user2Token));
+		UserDTO user2 = userService.full(userService.authenticate(user2Token));
 		
 		Assert.assertNotNull(user1);
 		Assert.assertNotNull(user2);

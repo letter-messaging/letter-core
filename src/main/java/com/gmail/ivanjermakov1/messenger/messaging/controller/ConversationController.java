@@ -24,7 +24,7 @@ public class ConversationController {
 	
 	@GetMapping("create")
 	public Conversation create(@RequestHeader("Auth-Token") String token, @RequestParam("with") String withLogin) throws AuthenticationException {
-		User user = userService.auth(token);
+		User user = userService.authenticate(token);
 		try {
 			return conversationService.create(user, userService.getUser(withLogin));
 		} catch (NoSuchEntityException e) {

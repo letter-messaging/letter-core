@@ -6,10 +6,12 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.transaction.Transactional;
 import java.io.File;
 import java.io.IOException;
 
 @Service
+@Transactional
 public class FileUploadService {
 	
 	private final static Logger LOG = LoggerFactory.getLogger(FileUploadService.class);

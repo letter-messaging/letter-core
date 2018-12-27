@@ -54,6 +54,16 @@ public class UserService {
 		return token.getToken();
 	}
 	
+	public User authenticate(String token) throws AuthenticationException {
+		try {
+			LOG.debug("authenticate user with token: " + token);
+			
+			return getUser(getUserId(token));
+		} catch (NoSuchEntityException e) {
+			throw new AuthenticationException("invalid token");
+		}
+	}
+	
 	public void register(RegisterUserDTO registerUserDTO) throws RegistrationException {
 		registerUserDTO.validate();
 		
@@ -82,16 +92,6 @@ public class UserService {
 	
 	public UserDTO full(User user) {
 		return new UserDTO(user, userMainInfoService.getById(user.getId()));
-	}
-	
-	public User auth(String token) throws AuthenticationException {
-		try {
-			LOG.debug("authenticate user with token: " + token);
-			
-			return getUser(getUserId(token));
-		} catch (NoSuchEntityException e) {
-			throw new AuthenticationException("invalid token");
-		}
 	}
 	
 }

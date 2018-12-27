@@ -27,14 +27,14 @@ public class SearchController {
 	@GetMapping("conversations")
 	public List<PreviewDTO> searchConversations(@RequestHeader("Auth-Token") String token,
 	                                            @RequestParam("search") String search) throws AuthenticationException {
-		User user = userService.auth(token);
+		User user = userService.authenticate(token);
 		return searchService.searchConversations(user, search);
 	}
 	
 	@GetMapping("users")
 	public List<UserDTO> searchUsers(@RequestHeader("Auth-Token") String token,
 	                                 @RequestParam("search") String search) throws AuthenticationException {
-		userService.auth(token);
+		userService.authenticate(token);
 		return searchService.searchUsers(search);
 	}
 	

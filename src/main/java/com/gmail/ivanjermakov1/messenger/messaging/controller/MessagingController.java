@@ -32,7 +32,7 @@ public class MessagingController {
 	@RequestMapping("get/m")
 	@GetMapping
 	public DeferredResult<NewMessageAction> getMessage(@RequestHeader("Auth-Token") String token) throws AuthenticationException {
-		User user = userService.auth(token);
+		User user = userService.authenticate(token);
 		
 		DeferredResult<NewMessageAction> request = new DeferredResult<>();
 		request.onTimeout(() -> messagingService.getNewMessageRequests().removeIf(r -> r.getDeferredResult().equals(request)));
@@ -44,7 +44,7 @@ public class MessagingController {
 	@RequestMapping("get/r")
 	@GetMapping
 	public DeferredResult<ConversationReadAction> getRead(@RequestHeader("Auth-Token") String token) throws AuthenticationException {
-		User user = userService.auth(token);
+		User user = userService.authenticate(token);
 		
 		DeferredResult<ConversationReadAction> request = new DeferredResult<>();
 		request.onTimeout(() -> messagingService.getConversationReadRequests().removeIf(r -> r.getDeferredResult().equals(request)));
@@ -56,7 +56,7 @@ public class MessagingController {
 	@RequestMapping("get/e")
 	@GetMapping
 	public DeferredResult<MessageEditAction> getEdit(@RequestHeader("Auth-Token") String token) throws AuthenticationException {
-		User user = userService.auth(token);
+		User user = userService.authenticate(token);
 		
 		DeferredResult<MessageEditAction> request = new DeferredResult<>();
 		request.onTimeout(() -> messagingService.getMessageEditRequests().removeIf(r -> r.getDeferredResult().equals(request)));
@@ -71,7 +71,7 @@ public class MessagingController {
 		if (message.getText() == null || message.getConversationId() == null)
 			throw new InvalidMessageException("invalid message");
 		
-		User user = userService.auth(token);
+		User user = userService.authenticate(token);
 		messagingService.processConversationRead(user, message.getConversationId());
 		return messagingService.processNewMessage(user, message);
 	}
@@ -82,7 +82,7 @@ public class MessagingController {
 		if (message.getText() == null || message.getConversationId() == null)
 			throw new InvalidMessageException("invalid message");
 		
-		User user = userService.auth(token);
+		User user = userService.authenticate(token);
 		messagingService.processMessageEdit(user, message);
 	}
 	
