@@ -43,13 +43,11 @@ public class Hasher {
 			throw new IllegalStateException(
 					"The stored password have the form 'salt$hash'");
 		}
-		String hashOfInput = null;
 		try {
-			hashOfInput = hash(password, Base64.decodeBase64(saltAndPass[0]));
+			return hash(password, Base64.decodeBase64(saltAndPass[0])).equals(saltAndPass[1]);
 		} catch (Exception e) {
-			e.printStackTrace();
+			return false;
 		}
-		return hashOfInput.equals(saltAndPass[1]);
 	}
 	
 	// using PBKDF2 from Sun, an alternative is https://github.com/wg/scrypt
