@@ -16,10 +16,10 @@ public interface UserRepository extends CrudRepository<User, Long> {
 	
 	User findByLogin(String login);
 	
-	@Query("select u.id\n" +
+	@Query("select u\n" +
 			"from User u, Token t\n" +
 			"where u.id = t.id and t.token = :token")
-	Long getId(@Param("token") String token);
+	User get(@Param("token") String token);
 	
 	Optional<User> findById(Long id);
 	

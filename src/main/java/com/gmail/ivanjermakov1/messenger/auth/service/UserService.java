@@ -58,7 +58,7 @@ public class UserService {
 		try {
 			LOG.debug("authenticate user with token: " + token);
 			
-			return getUser(getUserId(token));
+			return getUserByToken(token);
 		} catch (NoSuchEntityException e) {
 			throw new AuthenticationException("invalid token");
 		}
@@ -86,8 +86,8 @@ public class UserService {
 				.orElseThrow(() -> new NoSuchEntityException("no such user"));
 	}
 	
-	public Long getUserId(String token) throws NoSuchEntityException {
-		return Optional.ofNullable(userRepository.getId(token)).orElseThrow(() -> new NoSuchEntityException("no such user"));
+	public User getUserByToken(String token) throws NoSuchEntityException {
+		return Optional.ofNullable(userRepository.get(token)).orElseThrow(() -> new NoSuchEntityException("no such user"));
 	}
 	
 	public UserDTO full(User user) {
