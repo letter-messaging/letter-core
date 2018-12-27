@@ -227,14 +227,7 @@ app.controller('MainController', ($document, $scope, $http, $timeout, $window) =
 
 					$scope.token = unverifiedToken;
 					$scope.initialize();
-					$scope.updatePreviews();
 					$scope.isAuth = false;
-					$scope.isLoaded = true;
-
-					$scope.listen = true;
-					$scope.getNewMessages();
-					$scope.getMessageEdits();
-					$scope.getConversationRead();
 				},
 				(error) => {
 					$scope.isLoaded = true;
@@ -279,12 +272,6 @@ app.controller('MainController', ($document, $scope, $http, $timeout, $window) =
 			$scope.token = response.data;
 			localStorage.setItem(LOCAL_STORAGE_TOKEN_NAME, $scope.token);
 			$scope.initialize();
-			$scope.updatePreviews();
-
-			$scope.listen = true;
-			$scope.getNewMessages();
-			$scope.getConversationRead();
-
 			$scope.isAuth = false;
 		});
 	};
@@ -318,6 +305,13 @@ app.controller('MainController', ($document, $scope, $http, $timeout, $window) =
 		});
 
 		$scope.updatePreviews();
+
+		$scope.listen = true;
+		$scope.getNewMessages();
+		$scope.getMessageEdits();
+		$scope.getConversationRead();
+
+		$scope.isLoaded = true;
 	};
 
 	$scope.updatePreviews = () => {
