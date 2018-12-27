@@ -1,7 +1,6 @@
 package com.gmail.ivanjermakov1.messenger.messaging.service;
 
 import com.gmail.ivanjermakov1.messenger.auth.entity.User;
-import com.gmail.ivanjermakov1.messenger.auth.service.UserService;
 import com.gmail.ivanjermakov1.messenger.exception.NoSuchEntityException;
 import com.gmail.ivanjermakov1.messenger.messaging.entity.Conversation;
 import com.gmail.ivanjermakov1.messenger.messaging.repository.ConversationRepository;
@@ -18,7 +17,7 @@ import java.util.List;
 @Transactional
 public class ConversationService {
 	
-	private final static Logger LOG = LoggerFactory.getLogger(UserService.class);
+	private final static Logger LOG = LoggerFactory.getLogger(ConversationService.class);
 	private final ConversationRepository conversationRepository;
 	
 	@Autowired

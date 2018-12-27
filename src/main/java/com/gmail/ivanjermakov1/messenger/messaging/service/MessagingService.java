@@ -24,7 +24,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 @Transactional
 public class MessagingService {
 	
-	private final static Logger LOG = LoggerFactory.getLogger(UserService.class);
+	private final static Logger LOG = LoggerFactory.getLogger(MessagingService.class);
 	
 	private final MessageService messageService;
 	private final ConversationService conversationService;
@@ -75,7 +75,7 @@ public class MessagingService {
 	 * @param message required fields: message.text, message.conversationId
 	 */
 	public MessageDTO processNewMessage(User user, Message message) throws NoSuchEntityException {
-		LOG.debug("process new message from @" + user.getLogin() + "to conversation @" + message.getConversationId() + "; text: " + message.getText());
+		LOG.debug("process new message from @" + user.getLogin() + " to conversation @" + message.getConversationId() + "; text: " + message.getText());
 		
 		message.setSenderId(user.getId());
 		message.setSent(Instant.now());

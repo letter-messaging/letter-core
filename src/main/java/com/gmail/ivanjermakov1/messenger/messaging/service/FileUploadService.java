@@ -1,6 +1,5 @@
 package com.gmail.ivanjermakov1.messenger.messaging.service;
 
-import com.gmail.ivanjermakov1.messenger.auth.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -13,7 +12,7 @@ import java.io.IOException;
 @Service
 public class FileUploadService {
 	
-	private final static Logger LOG = LoggerFactory.getLogger(UserService.class);
+	private final static Logger LOG = LoggerFactory.getLogger(FileUploadService.class);
 	
 	@Value("${fileupload.path}")
 	private String uploadPlaceholder;
