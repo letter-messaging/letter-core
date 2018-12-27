@@ -22,6 +22,7 @@ import javax.transaction.Transactional;
 import java.util.Optional;
 
 @Service
+@Transactional
 public class UserService {
 	
 	private final static Logger LOG = LoggerFactory.getLogger(UserService.class);
@@ -63,7 +64,6 @@ public class UserService {
 		}
 	}
 	
-	@Transactional
 	public void register(RegisterUserDTO registerUserDTO) throws RegistrationException {
 		registerUserDTO.validate();
 		
