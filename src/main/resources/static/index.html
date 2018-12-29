@@ -5,9 +5,10 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 
-	<!--refactor no ng-bind to prevent showing {{}} during page load-->
-	<title>Messenger.{{newMessageCount === 0 ? '' : (' - ' + newMessageCount + ' new message' +
-		(newMessageCount === 1 ? '' : 's'))}}</title>
+	<title ng-show="!isLoaded">Messenger.</title>
+	<title ng-show="isLoaded">Messenger.
+		{{newMessageCount === 0 ? '' : (' - ' + newMessageCount + ' new message' + (newMessageCount === 1 ? '' : 's'))}}
+	</title>
 
 	<!--STYLES-->
 	<link rel="stylesheet" type="text/css" href="css/auth.css">
@@ -97,7 +98,6 @@
 			         preview="preview" date-format="dateFormat"
 			         ng-class="preview.conversation.id === currentConversationId ? 'selected' : ''"
 			         ng-click="openConversation(preview)" ng-show="!isUserSearch"></preview>
-
 			<div ng-repeat="user in searchUsers" class="user-preview" ng-click="createConversation(user)"
 			     ng-show="isUserSearch">
 				<img class="avatar" src="img/default-avatar.png">
