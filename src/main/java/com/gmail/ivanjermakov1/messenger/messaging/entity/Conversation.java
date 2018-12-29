@@ -1,5 +1,6 @@
 package com.gmail.ivanjermakov1.messenger.messaging.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.gmail.ivanjermakov1.messenger.auth.entity.User;
 
 import javax.persistence.*;
@@ -14,6 +15,7 @@ public class Conversation {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
+	@JsonIgnore
 	@ManyToMany
 	@JoinTable(
 			name = "user_conversation",

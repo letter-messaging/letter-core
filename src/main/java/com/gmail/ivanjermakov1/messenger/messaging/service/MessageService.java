@@ -36,8 +36,8 @@ public class MessageService {
 		this.conversationService = conversationService;
 	}
 	
-	public void save(Message message) {
-		messageRepository.save(message);
+	public Message save(Message message) {
+		return messageRepository.save(message);
 	}
 	
 	public Message getLastMessage(Long conversationId) {
@@ -68,8 +68,9 @@ public class MessageService {
 			e.printStackTrace();
 		}
 		
-		messageDTO.setForwarded(Optional.ofNullable(message.getForwarded())
-				.orElse(Collections.emptyList()).stream()
+		messageDTO.setForwarded(Optional.ofNullable(messageRepository.getById(message.getId()).getForwarded())
+				.orElse(Collections.emptyList())
+				.stream()
 				.map(this::getFullMessage)
 				.collect(Collectors.toList()));
 		
@@ -94,7 +95,22 @@ public class MessageService {
 		deleteMessages.stream()
 				.map(MessageDTO::getMessage)
 				.filter(m -> m.getSenderId().equals(user.getId()))
-				.forEach(messageRepository::delete);
+				.forEach(this::delete);
+	}
+	
+	public void deleteForwarded(Message message) {
+		messageRepository.deleteForwarded(message.getId());
+	}
+	
+	/**
+	 * Delete messages different way then just <code>.delete()</code>. Firstly deleting current message from all over
+	 * forwarded messages, then deletes itself
+	 *
+	 * @param message message that will be deleted
+	 */
+	private void delete(Message message) {
+		messageRepository.deleteFromForwarded(message.getId());
+		messageRepository.delete(message);
 	}
 	
 	public Message get(Long messageId) {

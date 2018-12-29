@@ -1,0 +1,32 @@
+.attachment-wrapper {
+	display: flex;
+	flex-direction: column;
+	flex-shrink: 0;
+
+	background: white;
+	border-top: 2px solid var(--bright);
+}
+
+.attachment {
+	height: 50px;
+	border: 1px solid var(--light);
+}
+
+.attachment .splitter {
+	border: 2px solid var(--grey);
+	border-radius: 2px;
+
+	background: var(--grey);
+	margin-left: 50px;
+	margin-right: 5px;
+}
+
+.attachment i {
+	font-size: 18px;
+
+	margin-right: 90px;
+}
+
+.attachment i:hover {
+	color: var(--special);
+}

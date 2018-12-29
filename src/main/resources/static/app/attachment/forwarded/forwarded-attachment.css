@@ -1,0 +1,14 @@
+.forwarded-attachment {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+}
+
+.forwarded-attachment .splitter {
+	height: 40px;
+}
+
+.forwarded-attachment-wrapper {
+	display: flex;
+	align-items: center;
+}

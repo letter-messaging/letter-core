@@ -83,6 +83,10 @@ public class MessagingController {
 			throw new InvalidMessageException("invalid message");
 		
 		User user = userService.authenticate(token);
+		
+		if (!message.getSenderId().equals(user.getId()))
+			throw new AuthenticationException("user can edit only own messages");
+		
 		messagingService.processMessageEdit(user, message);
 	}
 	

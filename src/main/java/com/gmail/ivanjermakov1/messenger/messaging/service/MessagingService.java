@@ -79,7 +79,7 @@ public class MessagingService {
 		
 		message.setSenderId(user.getId());
 		message.setSent(Instant.now());
-		messageService.save(message);
+		message = messageService.save(message);
 		
 		Conversation conversation = conversationService.get(message.getConversationId());
 		MessageDTO messageDTO = messageService.getFullMessage(message);
@@ -101,16 +101,19 @@ public class MessagingService {
 		
 		Message original = messageService.get(message.getId());
 		original.setText(message.getText());
-		messageService.save(original);
+		if (message.getForwarded() != null && message.getForwarded().isEmpty()) messageService.deleteForwarded(original);
+		original = messageService.save(original);
 		
 		Conversation conversation = conversationService.get(message.getConversationId());
 		
+		Message finalOriginal = original;
 		messageEditRequests.stream()
 				.filter(request -> conversation.getUsers()
 						.stream()
 						.anyMatch(i -> i.getId().equals(request.getUser().getId())))
 				.forEach(request -> {
-					request.set(new MessageEditAction(messageService.getFullMessage(original)));
+					MessageEditAction messageEditAction = new MessageEditAction(messageService.getFullMessage(finalOriginal));
+					request.set(messageEditAction);
 					messageEditRequests.removeIf(r -> r.equals(request));
 				});
 	}

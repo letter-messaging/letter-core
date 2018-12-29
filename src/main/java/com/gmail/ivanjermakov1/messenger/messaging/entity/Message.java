@@ -1,6 +1,6 @@
 package com.gmail.ivanjermakov1.messenger.messaging.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.persistence.*;
 import java.time.Instant;
@@ -32,7 +32,7 @@ public class Message {
 	@Column(name = "sender_id")
 	private Long senderId;
 	
-	@JsonIgnore
+	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
 	@ManyToMany
 	@JoinTable(
 			name = "forwarded_message",

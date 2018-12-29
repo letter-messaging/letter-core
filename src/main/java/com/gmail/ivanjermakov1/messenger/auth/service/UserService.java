@@ -47,8 +47,7 @@ public class UserService {
 		Token token = tokenRepository.findById(user.getId())
 				.orElse(null);
 		if (token == null) {
-			token = new Token(user, TokenGenerator.generate());
-			tokenRepository.save(token);
+			token = tokenRepository.save(new Token(user, TokenGenerator.generate()));
 		}
 		
 		return token.getToken();
@@ -56,8 +55,6 @@ public class UserService {
 	
 	public User authenticate(String token) throws AuthenticationException {
 		try {
-			LOG.debug("authenticate user with token: " + token);
-			
 			return getUserByToken(token);
 		} catch (NoSuchEntityException e) {
 			throw new AuthenticationException("invalid token");
@@ -73,7 +70,7 @@ public class UserService {
 			throw new RegistrationException("user already exists.");
 		
 		User user = new User(null, registerUserDTO.getLogin(), Hasher.getHash(registerUserDTO.getPassword()));
-		userRepository.save(user);
+		user = userRepository.save(user);
 		userMainInfoService.save(new UserMainInfo(user.getId(), registerUserDTO.getFirstName(), registerUserDTO.getLastName()));
 	}
 	

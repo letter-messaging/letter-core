@@ -38,9 +38,7 @@ public class ConversationService {
 			conversation.getUsers().add(user);
 			conversation.getUsers().add(with);
 			
-			conversationRepository.save(conversation);
-			
-			return conversation;
+			return conversationRepository.save(conversation);
 		}
 	}
 	
@@ -71,9 +69,7 @@ public class ConversationService {
 		self.setUsers(new ArrayList<>());
 		self.getUsers().add(user);
 		
-		conversationRepository.save(self);
-		
-		return self;
+		return conversationRepository.save(self);
 	}
 	
 }

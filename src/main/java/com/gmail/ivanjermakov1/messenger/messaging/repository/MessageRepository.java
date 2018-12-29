@@ -33,4 +33,12 @@ public interface MessageRepository extends CrudRepository<Message, Long> {
 			"where m.conversationId = :conversationId and m.senderId <> :exceptUserId and m.read = false")
 	Integer getUnreadCount(@Param("exceptUserId") Long exceptUserId, @Param("conversationId") Long conversationId);
 	
+	@Modifying
+	@Query(value = "delete from forwarded_message where forwarded_message_id = :id", nativeQuery = true)
+	void deleteFromForwarded(@Param("id") Long id);
+	
+	@Modifying
+	@Query(value = "delete from forwarded_message where parent_message_id = :id", nativeQuery = true)
+	void deleteForwarded(@Param("id") Long id);
+	
 }

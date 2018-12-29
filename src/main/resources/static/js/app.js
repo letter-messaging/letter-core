@@ -56,9 +56,17 @@ app.controller('MainController', ($document, $scope, $http, $timeout, $window) =
 
 	$document.bind('keydown', (e) => {
 		if (e.keyCode === 27) {
-			$scope.state = "out";
-			$scope.currentConversationId = null;
-			$scope.isLeftView = true;
+			if ($scope.editingMessage != null) {
+				$scope.clearSelectedMessages();
+				$scope.editingMessage = null;
+				$scope.isEditMessageView = false;
+			} else {
+				$scope.state = "out";
+				$scope.currentPreview = null;
+				$scope.isLeftView = true;
+
+				$scope.searchText = '';
+			}
 
 			$scope.$apply();
 		}
@@ -470,6 +478,7 @@ app.controller('MainController', ($document, $scope, $http, $timeout, $window) =
 		message.conversation.id = $scope.currentConversationId;
 		message.message.conversationId = $scope.currentConversationId;
 		message.message.text = messageText;
+		if ($scope.editingMessage) message.message.forwarded = $scope.editingMessage.forwarded.map(m => m.message);
 		message.sender = $scope.ME;
 		message.mine = true;
 		message.status = "sending";
@@ -488,6 +497,7 @@ app.controller('MainController', ($document, $scope, $http, $timeout, $window) =
 			}
 		}).then((response) => {
 			$scope.messages = $scope.messages.filter(m => m !== message);
+			$scope.editingMessage = null;
 			$scope.updatePreviews();
 		});
 	};
@@ -504,9 +514,11 @@ app.controller('MainController', ($document, $scope, $http, $timeout, $window) =
 		}).then((response) => {
 			$scope.updatePreviews();
 			$scope.openConversation($scope.currentPreview);
-			$scope.selectedMessages = [];
+
+			$scope.clearSelectedMessages();
 			$scope.isEditMessageView = false;
 			$scope.messageText = '';
+			$scope.editingMessage = null;
 		});
 	};
 
@@ -552,22 +564,34 @@ app.controller('MainController', ($document, $scope, $http, $timeout, $window) =
 			(response) => {
 				$scope.updatePreviews();
 				$scope.openConversation($scope.currentPreview);
-				$scope.selectedMessages = [];
+				$scope.clearSelectedMessages();
 			},
 			(error) => {
 				$scope.updatePreviews();
 				$scope.openConversation($scope.currentPreview);
-				$scope.selectedMessages = [];
+				$scope.clearSelectedMessages();
 			});
 	};
 
 	$scope.editSelectedMessage = () => {
 		$scope.editingMessage = $scope.selectedMessages[0];
 
-		$scope.selectedMessages = [];
+		$scope.clearSelectedMessages();
 		$scope.isEditMessageView = true;
 
 		$scope.messageText = $scope.editingMessage.message.text;
+	};
+
+	$scope.replySelectedMessage = () => {
+		$scope.editingMessage = $scope.FULL_MESSAGE;
+		$scope.editingMessage.forwarded = $scope.selectedMessages;
+		$scope.clearSelectedMessages();
+	};
+
+	$scope.cancelEditing = () => {
+		$scope.editingMessage = null;
+		$scope.clearSelectedMessages();
+		$scope.isEditMessageView = false;
 	};
 
 	$scope.getNewMessages = () => {
@@ -739,6 +763,11 @@ app.controller('MainController', ($document, $scope, $http, $timeout, $window) =
 
 	$scope.cancelAttachmentsMenu = () => {
 		$timeout.cancel($scope.showAttachmentsMenuTimeout);
-	}
+	};
+
+	$scope.removeForwardedAttachment = () => {
+		$scope.editingMessage.forwarded = [];
+		$scope.editingMessage.message.forwarded = [];
+	};
 
 });

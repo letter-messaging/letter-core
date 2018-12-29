@@ -68,7 +68,6 @@
 	background: white;
 
 	border-top: 2px solid var(--bright);
-	border-radius: 2px;
 }
 
 .send-message-wrapper i:hover {
@@ -91,5 +90,5 @@
 }
 
 #send-message-text:focus {
-	border: 1px solid var(--grey);
+	border: 1px solid silver;
 }

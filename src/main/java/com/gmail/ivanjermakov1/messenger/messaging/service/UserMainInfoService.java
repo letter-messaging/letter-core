@@ -22,8 +22,8 @@ public class UserMainInfoService {
 		return userMainInfoRepository.findById(userId).orElse(null);
 	}
 	
-	public void save(UserMainInfo userMainInfo) {
-		userMainInfoRepository.save(userMainInfo);
+	public UserMainInfo save(UserMainInfo userMainInfo) {
+		return userMainInfoRepository.save(userMainInfo);
 	}
 	
 }
