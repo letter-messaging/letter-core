@@ -110,7 +110,9 @@
 
 	<div class="conversation">
 		<div id="no-conversation" ng-show="state === 'out'">
-			Select conversation to start messaging.
+			{{!isSelectForwardTo ?
+			'Select conversation to start messaging.' :
+			'Select conversation to forward messages to.'}}
 		</div>
 		<div id="no-messages" ng-show="state === 'empty'">
 			Be the first. Messages will be displayed here.
@@ -150,7 +152,7 @@
 		<div class="selected-messages-menu" ng-show="selectedMessages.length !== 0">
 			<div class="button" ng-click="deleteSelectedMessages()"><i class="fas fa-trash"></i></div>
 			<div class="button" ng-click="replySelectedMessage()"><i class="fas fa-reply"></i></div>
-			<div class="button"><i class="fas fa-arrow-right"></i></div>
+			<div class="button" ng-click="forwardSelectedMessages()"><i class="fas fa-arrow-right"></i></div>
 			<div class="button" ng-show="selectedMessages.length === 1 && selectedMessages[0].mine"
 			     ng-click="editSelectedMessage()"><i class="fas fa-pen"></i></div>
 			<div class="right">

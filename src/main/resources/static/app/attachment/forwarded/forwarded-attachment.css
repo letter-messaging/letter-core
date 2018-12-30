@@ -12,3 +12,7 @@
 	display: flex;
 	align-items: center;
 }
+
+.message-mine .forwarded-wrapper .message-container {
+	flex-direction: row;
+}

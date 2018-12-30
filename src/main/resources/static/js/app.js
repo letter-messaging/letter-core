@@ -58,14 +58,9 @@ app.controller('MainController', ($document, $scope, $http, $timeout, $window) =
 		if (e.keyCode === 27) {
 			if ($scope.editingMessage != null) {
 				$scope.clearSelectedMessages();
-				$scope.editingMessage = null;
-				$scope.isEditMessageView = false;
+				$scope.cancelEditing();
 			} else {
-				$scope.state = "out";
-				$scope.currentPreview = null;
-				$scope.isLeftView = true;
-
-				$scope.searchText = '';
+				$scope.closeConversation();
 			}
 
 			$scope.$apply();
@@ -219,6 +214,15 @@ app.controller('MainController', ($document, $scope, $http, $timeout, $window) =
 	 */
 	$scope.newMessageCount = 0;
 
+	$scope.isReplying = false;
+
+	/**
+	 * Boolean flag describing situation of choosing preview for the next messages forwarding
+	 *
+	 * @type {boolean}
+	 */
+	$scope.isSelectForwardTo = false;
+
 	$scope.autoLogin = () => {
 		if (localStorage.getItem(LOCAL_STORAGE_TOKEN_NAME)) {
 			const unverifiedToken = localStorage.getItem(LOCAL_STORAGE_TOKEN_NAME);
@@ -344,6 +348,11 @@ app.controller('MainController', ($document, $scope, $http, $timeout, $window) =
 	};
 
 	$scope.openConversation = (preview) => {
+		if ($scope.isReplying) {
+			$scope.cancelEditing();
+			$scope.isReplying = false;
+		}
+
 		$scope.currentPreview = preview;
 
 		$scope.searchText = "";
@@ -379,6 +388,14 @@ app.controller('MainController', ($document, $scope, $http, $timeout, $window) =
 			scrollToBottom(document.getElementsByClassName("message-wrapper")[0]);
 			$scope.updatePreviews();
 		});
+	};
+
+	$scope.closeConversation = () => {
+		$scope.state = "out";
+		$scope.currentPreview = null;
+		$scope.isLeftView = true;
+
+		$scope.searchText = '';
 	};
 
 	$scope.conversationsOrSearch = () => {
@@ -583,15 +600,26 @@ app.controller('MainController', ($document, $scope, $http, $timeout, $window) =
 	};
 
 	$scope.replySelectedMessage = () => {
+		$scope.isReplying = true;
 		$scope.editingMessage = $scope.FULL_MESSAGE;
 		$scope.editingMessage.forwarded = $scope.selectedMessages;
 		$scope.clearSelectedMessages();
+	};
+
+	$scope.forwardSelectedMessages = () => {
+		$scope.editingMessage = $scope.FULL_MESSAGE;
+		$scope.editingMessage.forwarded = $scope.selectedMessages;
+		$scope.clearSelectedMessages();
+
+		$scope.isSelectForwardTo = true;
+		$scope.closeConversation();
 	};
 
 	$scope.cancelEditing = () => {
 		$scope.editingMessage = null;
 		$scope.clearSelectedMessages();
 		$scope.isEditMessageView = false;
+		$scope.isReplying = false;
 	};
 
 	$scope.getNewMessages = () => {
