@@ -101,7 +101,8 @@ public class MessagingService {
 		
 		Message original = messageService.get(message.getId());
 		original.setText(message.getText());
-		if (message.getForwarded() != null && message.getForwarded().isEmpty()) messageService.deleteForwarded(original);
+		if (message.getForwarded() != null && message.getForwarded().isEmpty())
+			messageService.deleteForwarded(original);
 		original = messageService.save(original);
 		
 		Conversation conversation = conversationService.get(message.getConversationId());
