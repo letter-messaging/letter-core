@@ -68,8 +68,7 @@ public class MessagingController {
 	@RequestMapping("send")
 	@PostMapping
 	public MessageDTO sendMessage(@RequestHeader("Auth-Token") String token, @RequestBody Message message) throws AuthenticationException, InvalidMessageException, NoSuchEntityException {
-		if (message.getText() == null || message.getConversationId() == null)
-			throw new InvalidMessageException("invalid message");
+		if (message.validate()) throw new InvalidMessageException("invalid message");
 		
 		User user = userService.authenticate(token);
 		messagingService.processConversationRead(user, message.getConversationId());

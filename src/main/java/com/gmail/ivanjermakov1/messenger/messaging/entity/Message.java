@@ -109,4 +109,9 @@ public class Message {
 		this.forwarded = forwarded;
 	}
 	
+	public boolean validate() {
+		if (conversationId == null) return false;
+		return (forwarded != null && !forwarded.isEmpty()) && text != null && !text.isEmpty();
+	}
+	
 }

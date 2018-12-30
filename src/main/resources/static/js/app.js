@@ -486,8 +486,6 @@ app.controller('MainController', ($document, $scope, $http, $timeout, $window) =
 			return;
 		}
 
-		if ($scope.messageText.replace(/\s/g, '').length === 0) return;
-
 		let messageText = $scope.messageText;
 		$scope.messageText = "";
 
@@ -499,6 +497,8 @@ app.controller('MainController', ($document, $scope, $http, $timeout, $window) =
 		message.sender = $scope.ME;
 		message.mine = true;
 		message.status = "sending";
+
+		if ((message.message.forwarded === null || message.message.forwarded.length === 0) && $scope.messageText.replace(/\s/g, '').length === 0) return;
 
 		$scope.messages.unshift(message);
 
