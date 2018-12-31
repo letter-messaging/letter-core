@@ -1,0 +1,6 @@
+{
+  "/api/v0": {
+    "port": 8080,
+    "secure": false
+  }
+}
