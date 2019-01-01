@@ -71,19 +71,19 @@ public class MessagingController {
 		if (message.validate()) throw new InvalidMessageException("invalid message");
 		
 		User user = userService.authenticate(token);
-		messagingService.processConversationRead(user, message.getConversationId());
+		messagingService.processConversationRead(user, message.getConversation().getId());
 		return messagingService.processNewMessage(user, message);
 	}
 	
 	@RequestMapping("edit")
 	@PostMapping
 	public void editMessage(@RequestHeader("Auth-Token") String token, @RequestBody Message message) throws AuthenticationException, InvalidMessageException, NoSuchEntityException {
-		if (message.getText() == null || message.getConversationId() == null)
+		if (message.getText() == null || message.getConversation().getId() == null)
 			throw new InvalidMessageException("invalid message");
 		
 		User user = userService.authenticate(token);
 		
-		if (!message.getSenderId().equals(user.getId()))
+		if (!message.getSender().getId().equals(user.getId()))
 			throw new AuthenticationException("user can edit only own messages");
 		
 		messagingService.processMessageEdit(user, message);

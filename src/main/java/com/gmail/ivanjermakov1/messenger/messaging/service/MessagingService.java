@@ -75,13 +75,13 @@ public class MessagingService {
 	 * @param message required fields: message.text, message.conversationId
 	 */
 	public MessageDTO processNewMessage(User user, Message message) throws NoSuchEntityException {
-		LOG.debug("process new message from @" + user.getLogin() + " to conversation @" + message.getConversationId() + "; text: " + message.getText());
+		LOG.debug("process new message from @" + user.getLogin() + " to conversation @" + message.getConversation().getId() + "; text: " + message.getText());
 		
-		message.setSenderId(user.getId());
+		message.setSender(user);
 		message.setSent(Instant.now());
 		message = messageService.save(message);
 		
-		Conversation conversation = conversationService.get(message.getConversationId());
+		Conversation conversation = conversationService.get(message.getConversation().getId());
 		MessageDTO messageDTO = messageService.getFullMessage(message);
 		
 		newMessageRequests.stream()
@@ -97,7 +97,7 @@ public class MessagingService {
 	}
 	
 	public void processMessageEdit(User user, Message message) throws NoSuchEntityException {
-		LOG.debug("process message edit from @" + user.getLogin() + "to conversation @" + message.getConversationId() + "; text: " + message.getText());
+		LOG.debug("process message edit from @" + user.getLogin() + "to conversation @" + message.getConversation().getId() + "; text: " + message.getText());
 		
 		Message original = messageService.get(message.getId());
 		original.setText(message.getText());
@@ -105,7 +105,7 @@ public class MessagingService {
 			messageService.deleteForwarded(original);
 		original = messageService.save(original);
 		
-		Conversation conversation = conversationService.get(message.getConversationId());
+		Conversation conversation = conversationService.get(message.getConversation().getId());
 		
 		Message finalOriginal = original;
 		messageEditRequests.stream()

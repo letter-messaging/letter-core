@@ -59,11 +59,11 @@ public class MessagingIntegrationTest {
 		Assert.assertNotNull(conversation);
 		
 		Message message = new Message(
-				conversation.getId(),
+				conversation,
 				Instant.now(),
 				"Hello!",
 				false,
-				user1.getUser().getId(),
+				user1.getUser(),
 				Collections.emptyList()
 		);
 		

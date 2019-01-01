@@ -58,10 +58,10 @@ public class MessageService {
 	public MessageDTO getFullMessage(Message message) {
 		MessageDTO messageDTO = new MessageDTO();
 		messageDTO.setMessage(message);
-		messageDTO.setConversation(new Conversation(message.getConversationId()));
+		messageDTO.setConversation(new Conversation(message.getConversation().getId()));
 		
 		try {
-			User user = userService.getUser(message.getSenderId());
+			User user = userService.getUser(message.getSender().getId());
 			messageDTO.setSender(new UserDTO(user, userMainInfoService.getById(user.getId())));
 			userService.full(user);
 		} catch (Exception e) {
@@ -94,7 +94,7 @@ public class MessageService {
 	public void delete(User user, List<MessageDTO> deleteMessages) {
 		deleteMessages.stream()
 				.map(MessageDTO::getMessage)
-				.filter(m -> m.getSenderId().equals(user.getId()))
+				.filter(m -> m.getSender().getId().equals(user.getId()))
 				.forEach(this::delete);
 	}
 	

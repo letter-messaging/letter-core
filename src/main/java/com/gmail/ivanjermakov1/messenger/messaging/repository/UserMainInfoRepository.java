@@ -11,7 +11,7 @@ import java.util.Optional;
 @Repository
 public interface UserMainInfoRepository extends CrudRepository<UserMainInfo, Long> {
 	
-	@Query("select i from UserMainInfo i where i.id = :userId")
+	@Query("select i from UserMainInfo i where i.user.id = :userId")
 	Optional<UserMainInfo> findById(@Param("userId") Long userId);
 	
 }
