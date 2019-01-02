@@ -25,12 +25,12 @@ public interface MessageRepository extends CrudRepository<Message, Long> {
 	@Modifying
 	@Query("update Message m " +
 			"set m.read = true " +
-			"where m.senderId <> :exceptUserId and m.conversationId = :conversationId")
+			"where m.sender.id <> :exceptUserId and m.conversation.id = :conversationId")
 	void readAllExcept(@Param("exceptUserId") Long exceptUserId, @Param("conversationId") Long conversationId);
 	
 	@Query("select count(m) " +
 			"from Message m " +
-			"where m.conversationId = :conversationId and m.senderId <> :exceptUserId and m.read = false")
+			"where m.conversation.id = :conversationId and m.sender.id <> :exceptUserId and m.read = false")
 	Integer getUnreadCount(@Param("exceptUserId") Long exceptUserId, @Param("conversationId") Long conversationId);
 	
 	@Modifying

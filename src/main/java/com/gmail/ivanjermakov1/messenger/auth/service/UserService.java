@@ -71,7 +71,6 @@ public class UserService {
 		
 		User user = new User(null, registerUserDTO.getLogin(), Hasher.getHash(registerUserDTO.getPassword()));
 		user = userRepository.save(user);
-		System.out.println("USERID: " + user.getId());
 		userMainInfoService.save(new UserMainInfo(user, registerUserDTO.getFirstName(), registerUserDTO.getLastName()));
 	}
 	

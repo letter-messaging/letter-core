@@ -61,14 +61,14 @@ public class MessageService {
 		messageDTO.setText(message.getText());
 		
 		try {
-			Conversation conversation = conversationService.get(message.getConversationId());
+			Conversation conversation = conversationService.get(message.getConversation().getId());
 			messageDTO.setConversation(conversationService.get(conversation));
 		} catch (NoSuchEntityException e) {
 			e.printStackTrace();
 		}
 		
 		try {
-			User user = userService.getUser(message.getSenderId());
+			User user = userService.getUser(message.getSender().getId());
 			messageDTO.setSender(userService.full(user));
 			userService.full(user);
 		} catch (Exception e) {
@@ -101,7 +101,7 @@ public class MessageService {
 	public void delete(User user, List<MessageDTO> deleteMessages) {
 		deleteMessages.stream()
 				.map(dto -> messageRepository.getById(dto.getId()))
-				.filter(m -> m.getSenderId().equals(user.getId()))
+				.filter(m -> m.getSender().getId().equals(user.getId()))
 				.forEach(this::delete);
 	}
 	

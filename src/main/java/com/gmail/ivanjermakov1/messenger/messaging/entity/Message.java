@@ -1,6 +1,7 @@
 package com.gmail.ivanjermakov1.messenger.messaging.entity;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.gmail.ivanjermakov1.messenger.auth.entity.User;
 
 import javax.persistence.*;
 import java.time.Instant;
@@ -15,10 +16,9 @@ public class Message {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	@JoinColumn(name = "conversation_id",
-			foreignKey = @ForeignKey(name = "token_user_id_fk")
-	)
-	private Long conversationId;
+	@OneToOne
+	@JoinColumn(name = "conversation_id")
+	private Conversation conversation;
 	
 	@Column(name = "sent")
 	private Instant sent;
@@ -29,8 +29,9 @@ public class Message {
 	@Column(name = "read")
 	private Boolean read = false;
 	
-	@Column(name = "sender_id")
-	private Long senderId;
+	@OneToOne
+	@JoinColumn(name = "sender_id")
+	private User sender;
 	
 	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
 	@ManyToMany
@@ -44,12 +45,12 @@ public class Message {
 	public Message() {
 	}
 	
-	public Message(Long conversationId, Instant sent, String text, Boolean read, Long senderId, List<Message> forwarded) {
-		this.conversationId = conversationId;
+	public Message(Conversation conversation, Instant sent, String text, Boolean read, User sender, List<Message> forwarded) {
+		this.conversation = conversation;
 		this.sent = sent;
 		this.text = text;
 		this.read = read;
-		this.senderId = senderId;
+		this.sender = sender;
 		this.forwarded = forwarded;
 	}
 	
@@ -61,12 +62,12 @@ public class Message {
 		this.id = id;
 	}
 	
-	public Long getConversationId() {
-		return conversationId;
+	public Conversation getConversation() {
+		return conversation;
 	}
 	
-	public void setConversationId(Long conversationId) {
-		this.conversationId = conversationId;
+	public void setConversation(Conversation conversation) {
+		this.conversation = conversation;
 	}
 	
 	public Instant getSent() {
@@ -93,12 +94,12 @@ public class Message {
 		this.read = read;
 	}
 	
-	public Long getSenderId() {
-		return senderId;
+	public User getSender() {
+		return sender;
 	}
 	
-	public void setSenderId(Long senderId) {
-		this.senderId = senderId;
+	public void setSender(User sender) {
+		this.sender = sender;
 	}
 	
 	public List<Message> getForwarded() {
@@ -110,7 +111,7 @@ public class Message {
 	}
 	
 	public boolean validate() {
-		if (conversationId == null) return false;
+		if (conversation == null || conversation.getId() == null) return false;
 		return (forwarded != null && !forwarded.isEmpty()) && text != null && !text.isEmpty();
 	}
 	
