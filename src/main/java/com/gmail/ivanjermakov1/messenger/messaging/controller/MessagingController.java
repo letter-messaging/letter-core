@@ -78,13 +78,13 @@ public class MessagingController {
 	
 	@RequestMapping("edit")
 	@PostMapping
-	public void editMessage(@RequestHeader("Auth-Token") String token, @RequestBody EditMessageDTO editMessageDTO) throws AuthenticationException, InvalidMessageException, NoSuchEntityException {
+	public MessageDTO editMessage(@RequestHeader("Auth-Token") String token, @RequestBody EditMessageDTO editMessageDTO) throws AuthenticationException, InvalidMessageException, NoSuchEntityException {
 		User user = userService.authenticate(token);
 		
 		if (editMessageDTO.getText() == null)
 			throw new InvalidMessageException("invalid message");
 		
-		messagingService.processMessageEdit(user, editMessageDTO);
+		return messagingService.processMessageEdit(user, editMessageDTO);
 	}
 	
 }

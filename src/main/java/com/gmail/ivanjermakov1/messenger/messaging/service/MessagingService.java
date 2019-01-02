@@ -113,10 +113,10 @@ public class MessagingService {
 					newMessageRequests.removeIf(r -> r.equals(request));
 				});
 		
-		return messageService.getFullMessage(message);
+		return messageDTO;
 	}
 	
-	public void processMessageEdit(User user, EditMessageDTO editMessageDTO) throws NoSuchEntityException, AuthenticationException {
+	public MessageDTO processMessageEdit(User user, EditMessageDTO editMessageDTO) throws NoSuchEntityException, AuthenticationException {
 		LOG.debug("process message edit @" + editMessageDTO.getId() + "; text: " + editMessageDTO.getText());
 		
 		Message original = messageService.get(editMessageDTO.getId());
@@ -131,16 +131,19 @@ public class MessagingService {
 		
 		Conversation conversation = conversationService.get(original.getConversation().getId());
 		
-		Message finalOriginal = original;
+		MessageDTO messageDTO = messageService.getFullMessage(original);
+		
 		messageEditRequests.stream()
 				.filter(request -> conversation.getUsers()
 						.stream()
 						.anyMatch(i -> i.getId().equals(request.getUser().getId())))
 				.forEach(request -> {
-					MessageEditAction messageEditAction = new MessageEditAction(messageService.getFullMessage(finalOriginal));
+					MessageEditAction messageEditAction = new MessageEditAction(messageDTO);
 					request.set(messageEditAction);
 					messageEditRequests.removeIf(r -> r.equals(request));
 				});
+		
+		return messageDTO;
 	}
 	
 	public void processConversationRead(User user, Long conversationId) throws NoSuchEntityException {
