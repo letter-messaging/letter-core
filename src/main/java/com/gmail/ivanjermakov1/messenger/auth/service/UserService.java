@@ -88,7 +88,8 @@ public class UserService {
 	}
 	
 	public UserDTO full(User user) {
-		return new UserDTO(user, userMainInfoService.getById(user.getId()));
+		UserMainInfo userMainInfo = userMainInfoService.getById(user.getId());
+		return new UserDTO(user.getId(), user.getLogin(), userMainInfo.getFirstName(), userMainInfo.getLastName());
 	}
 	
 }

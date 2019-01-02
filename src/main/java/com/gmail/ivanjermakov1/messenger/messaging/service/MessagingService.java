@@ -83,11 +83,14 @@ public class MessagingService {
 		LOG.debug("process new message from @" + user.getLogin() + " to conversation @" + newMessageDTO.getConversationId() +
 				"; text: " + newMessageDTO.getText());
 		
+		Conversation conversation = conversationService.get(newMessageDTO.getConversationId());
+		
 		Message message = new Message(
-				newMessageDTO.getConversationId(),
+				conversation,
 				Instant.now(),
 				newMessageDTO.getText(),
-				false, user.getId(),
+				false,
+				user,
 				newMessageDTO.getForwarded()
 						.stream()
 						.map(dto -> messageService.get(dto.getId()))
@@ -95,11 +98,10 @@ public class MessagingService {
 		);
 		if (message.validate()) throw new InvalidMessageException("invalid message");
 		
-		message.setSenderId(user.getId());
+		message.setSender(user);
 		message.setSent(Instant.now());
 		message = messageService.save(message);
 		
-		Conversation conversation = conversationService.get(message.getConversationId());
 		MessageDTO messageDTO = messageService.getFullMessage(message);
 		
 		newMessageRequests.stream()
@@ -119,7 +121,7 @@ public class MessagingService {
 		
 		Message original = messageService.get(editMessageDTO.getId());
 		
-		if (original == null || !original.getSenderId().equals(user.getId()))
+		if (original == null || !original.getSender().getId().equals(user.getId()))
 			throw new AuthenticationException("user can edit only own messages");
 		
 		original.setText(editMessageDTO.getText());
@@ -127,7 +129,7 @@ public class MessagingService {
 			messageService.deleteForwarded(original);
 		original = messageService.save(original);
 		
-		Conversation conversation = conversationService.get(original.getConversationId());
+		Conversation conversation = conversationService.get(original.getConversation().getId());
 		
 		Message finalOriginal = original;
 		messageEditRequests.stream()
