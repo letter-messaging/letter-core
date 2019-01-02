@@ -10,9 +10,10 @@ import com.gmail.ivanjermakov1.messenger.exception.NoSuchEntityException;
 import com.gmail.ivanjermakov1.messenger.exception.RegistrationException;
 import com.gmail.ivanjermakov1.messenger.messaging.controller.ConversationController;
 import com.gmail.ivanjermakov1.messenger.messaging.controller.MessagingController;
+import com.gmail.ivanjermakov1.messenger.messaging.dto.ConversationDTO;
+import com.gmail.ivanjermakov1.messenger.messaging.dto.NewMessageDTO;
 import com.gmail.ivanjermakov1.messenger.messaging.dto.action.NewMessageAction;
-import com.gmail.ivanjermakov1.messenger.messaging.entity.Conversation;
-import com.gmail.ivanjermakov1.messenger.messaging.entity.Message;
+import com.gmail.ivanjermakov1.messenger.messaging.service.MessageService;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -23,7 +24,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.web.context.request.async.DeferredResult;
 
 import javax.transaction.Transactional;
-import java.time.Instant;
 import java.util.Collections;
 
 @RunWith(SpringRunner.class)
@@ -54,16 +54,12 @@ public class MessagingIntegrationTest {
 		Assert.assertNotNull(user1);
 		Assert.assertNotNull(user2);
 		
-		Conversation conversation = conversationController.create(user1Token, user2.getUser().getLogin());
+		ConversationDTO conversationDTO = conversationController.create(user1Token, userService.getUser(user2.getId()).getLogin());
 		
-		Assert.assertNotNull(conversation);
-		
-		Message message = new Message(
-				conversation.getId(),
-				Instant.now(),
+		NewMessageDTO message = new NewMessageDTO(
+				user1.getId(),
+				conversationDTO.getId(),
 				"Hello!",
-				false,
-				user1.getUser().getId(),
 				Collections.emptyList()
 		);
 		
@@ -71,8 +67,6 @@ public class MessagingIntegrationTest {
 		deferredResult.onCompletion(() -> {
 			NewMessageAction action = (NewMessageAction) deferredResult.getResult();
 			Assert.assertNotNull(action);
-			
-			Assert.assertEquals(action.getMessage().getMessage(), message);
 		});
 		
 		messagingController.sendMessage(user1Token, message);

@@ -1,7 +1,7 @@
 package com.gmail.ivanjermakov1.messenger.messaging.service;
 
-import com.gmail.ivanjermakov1.messenger.auth.dto.UserDTO;
 import com.gmail.ivanjermakov1.messenger.auth.entity.User;
+import com.gmail.ivanjermakov1.messenger.auth.service.UserService;
 import com.gmail.ivanjermakov1.messenger.messaging.dto.PreviewDTO;
 import com.gmail.ivanjermakov1.messenger.messaging.entity.Conversation;
 import com.gmail.ivanjermakov1.messenger.messaging.entity.Message;
@@ -18,14 +18,14 @@ import java.util.stream.Collectors;
 public class PreviewService {
 	
 	private final ConversationService conversationService;
-	private final UserMainInfoService userMainInfoService;
 	private final MessageService messageService;
+	private final UserService userService;
 	
 	@Autowired
-	public PreviewService(ConversationService conversationService, UserMainInfoService userMainInfoService, MessageService messageService) {
+	public PreviewService(ConversationService conversationService, UserMainInfoService userMainInfoService, MessageService messageService, UserService userService) {
 		this.conversationService = conversationService;
-		this.userMainInfoService = userMainInfoService;
 		this.messageService = messageService;
+		this.userService = userService;
 	}
 	
 	public List<PreviewDTO> all(User user) {
@@ -42,7 +42,7 @@ public class PreviewService {
 	public PreviewDTO getPreview(User user, Conversation conversation) {
 		PreviewDTO previewDTO = new PreviewDTO();
 		
-		previewDTO.setConversation(conversation);
+		previewDTO.setConversation(conversationService.get(conversation));
 		Message lastMessage = messageService.getLastMessage(conversation.getId());
 		if (lastMessage != null) previewDTO.setLastMessage(messageService.getFullMessage(lastMessage));
 		
@@ -51,7 +51,7 @@ public class PreviewService {
 				.filter(u -> !u.getId().equals(user.getId()))
 				.findFirst()
 				.orElse(user);
-		previewDTO.setWith(new UserDTO(with, userMainInfoService.getById(with.getId())));
+		previewDTO.setWith(userService.full(with));
 		previewDTO.setUnread(messageService.unreadCount(user, conversation));
 		
 		return previewDTO;

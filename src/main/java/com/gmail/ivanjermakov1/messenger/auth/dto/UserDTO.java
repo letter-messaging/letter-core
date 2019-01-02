@@ -1,35 +1,52 @@
 package com.gmail.ivanjermakov1.messenger.auth.dto;
 
-import com.gmail.ivanjermakov1.messenger.auth.entity.User;
-import com.gmail.ivanjermakov1.messenger.messaging.entity.UserMainInfo;
-
 public class UserDTO {
 	
-	private User user;
-	private UserMainInfo userMainInfo;
+	private Long id;
+	private String login;
+	private String firstName;
+	private String lastName;
 	
 	public UserDTO() {
 	}
 	
-	public UserDTO(User user, UserMainInfo userMainInfo) {
-		this.user = user;
-		this.userMainInfo = userMainInfo;
+	public UserDTO(Long id, String login, String firstName, String lastName) {
+		this.id = id;
+		this.login = login;
+		this.firstName = firstName;
+		this.lastName = lastName;
 	}
 	
-	public User getUser() {
-		return user;
+	public Long getId() {
+		return id;
 	}
 	
-	public void setUser(User user) {
-		this.user = user;
+	public void setId(Long id) {
+		this.id = id;
 	}
 	
-	public UserMainInfo getUserMainInfo() {
-		return userMainInfo;
+	public String getLogin() {
+		return login;
 	}
 	
-	public void setUserMainInfo(UserMainInfo userMainInfo) {
-		this.userMainInfo = userMainInfo;
+	public void setLogin(String login) {
+		this.login = login;
+	}
+	
+	public String getFirstName() {
+		return firstName;
+	}
+	
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
+	
+	public String getLastName() {
+		return lastName;
+	}
+	
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
 	}
 	
 }

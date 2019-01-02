@@ -1,5 +1,7 @@
 package com.gmail.ivanjermakov1.messenger.messaging.entity;
 
+import com.gmail.ivanjermakov1.messenger.auth.entity.User;
+
 import javax.persistence.*;
 
 @Entity
@@ -7,10 +9,12 @@ import javax.persistence.*;
 public class UserMainInfo {
 	
 	@Id
-	@JoinColumn(name = "id",
-			foreignKey = @ForeignKey(name = "user_main_into_user_id_fk")
-	)
+	@Column(name = "id")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+	
+	@JoinColumn(name = "user_id")
+	private User user;
 	
 	@Column(name = "first_name")
 	private String firstName;
@@ -21,8 +25,8 @@ public class UserMainInfo {
 	public UserMainInfo() {
 	}
 	
-	public UserMainInfo(Long id, String firstName, String lastName) {
-		this.id = id;
+	public UserMainInfo(User user, String firstName, String lastName) {
+		this.user = user;
 		this.firstName = firstName;
 		this.lastName = lastName;
 	}
@@ -33,6 +37,14 @@ public class UserMainInfo {
 	
 	public void setId(Long id) {
 		this.id = id;
+	}
+	
+	public User getUser() {
+		return user;
+	}
+	
+	public void setUser(User user) {
+		this.user = user;
 	}
 	
 	public String getFirstName() {

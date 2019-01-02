@@ -71,7 +71,8 @@ public class UserService {
 		
 		User user = new User(null, registerUserDTO.getLogin(), Hasher.getHash(registerUserDTO.getPassword()));
 		user = userRepository.save(user);
-		userMainInfoService.save(new UserMainInfo(user.getId(), registerUserDTO.getFirstName(), registerUserDTO.getLastName()));
+		System.out.println("USERID: " + user.getId());
+		userMainInfoService.save(new UserMainInfo(user, registerUserDTO.getFirstName(), registerUserDTO.getLastName()));
 	}
 	
 	public User getUser(Long id) throws NoSuchEntityException {
@@ -88,7 +89,8 @@ public class UserService {
 	}
 	
 	public UserDTO full(User user) {
-		return new UserDTO(user, userMainInfoService.getById(user.getId()));
+		UserMainInfo userMainInfo = userMainInfoService.getById(user.getId());
+		return new UserDTO(user.getId(), user.getLogin(), userMainInfo.getFirstName(), userMainInfo.getLastName());
 	}
 	
 }
