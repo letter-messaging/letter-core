@@ -1,1 +1,28 @@
-/* You can add global styles to this file, and also import other style files */
+:root {
+  --dark: #393e46;
+  --grey: #63676e;
+  --bright: #eeeeee;
+  --light: #f8f8f8;
+  --special: rgb(47, 183, 237);
+}
+
+* {
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 20px;
+}
+
+/*ios*/
+input {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+
+body {
+  padding: 0;
+  margin: 0;
+
+  height: 100vh;
+
+  background-color: var(--light);
+}
