@@ -1,34 +1,53 @@
 package com.gmail.ivanjermakov1.messenger.messaging.dto;
 
 import com.gmail.ivanjermakov1.messenger.auth.dto.UserDTO;
-import com.gmail.ivanjermakov1.messenger.messaging.entity.Conversation;
-import com.gmail.ivanjermakov1.messenger.messaging.entity.Message;
 
+import java.time.Instant;
 import java.util.List;
 
 public class MessageDTO {
 	
-	private Message message;
+	private Long id;
+	private Instant sent;
+	private String text;
 	private UserDTO sender;
-	private Conversation conversation;
+	private ConversationDTO conversation;
 	private List<MessageDTO> forwarded;
 	
 	public MessageDTO() {
 	}
 	
-	public MessageDTO(Message message, UserDTO sender, Conversation conversation, List<MessageDTO> forwarded) {
-		this.message = message;
+	public MessageDTO(Long id, Instant sent, String text, UserDTO sender, ConversationDTO conversation, List<MessageDTO> forwarded) {
+		this.id = id;
+		this.sent = sent;
+		this.text = text;
 		this.sender = sender;
 		this.conversation = conversation;
 		this.forwarded = forwarded;
 	}
 	
-	public Message getMessage() {
-		return message;
+	public Long getId() {
+		return id;
 	}
 	
-	public void setMessage(Message message) {
-		this.message = message;
+	public void setId(Long id) {
+		this.id = id;
+	}
+	
+	public Instant getSent() {
+		return sent;
+	}
+	
+	public void setSent(Instant sent) {
+		this.sent = sent;
+	}
+	
+	public String getText() {
+		return text;
+	}
+	
+	public void setText(String text) {
+		this.text = text;
 	}
 	
 	public UserDTO getSender() {
@@ -39,11 +58,11 @@ public class MessageDTO {
 		this.sender = sender;
 	}
 	
-	public Conversation getConversation() {
+	public ConversationDTO getConversation() {
 		return conversation;
 	}
 	
-	public void setConversation(Conversation conversation) {
+	public void setConversation(ConversationDTO conversation) {
 		this.conversation = conversation;
 	}
 	

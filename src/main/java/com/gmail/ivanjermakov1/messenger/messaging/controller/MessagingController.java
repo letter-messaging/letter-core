@@ -5,12 +5,14 @@ import com.gmail.ivanjermakov1.messenger.auth.service.UserService;
 import com.gmail.ivanjermakov1.messenger.exception.AuthenticationException;
 import com.gmail.ivanjermakov1.messenger.exception.InvalidMessageException;
 import com.gmail.ivanjermakov1.messenger.exception.NoSuchEntityException;
+import com.gmail.ivanjermakov1.messenger.messaging.dto.EditMessageDTO;
 import com.gmail.ivanjermakov1.messenger.messaging.dto.MessageDTO;
+import com.gmail.ivanjermakov1.messenger.messaging.dto.NewMessageDTO;
 import com.gmail.ivanjermakov1.messenger.messaging.dto.action.ConversationReadAction;
 import com.gmail.ivanjermakov1.messenger.messaging.dto.action.MessageEditAction;
 import com.gmail.ivanjermakov1.messenger.messaging.dto.action.NewMessageAction;
 import com.gmail.ivanjermakov1.messenger.messaging.dto.action.Request;
-import com.gmail.ivanjermakov1.messenger.messaging.entity.Message;
+import com.gmail.ivanjermakov1.messenger.messaging.service.MessageService;
 import com.gmail.ivanjermakov1.messenger.messaging.service.MessagingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -24,7 +26,7 @@ public class MessagingController {
 	private final UserService userService;
 	
 	@Autowired
-	public MessagingController(MessagingService messagingService, UserService userService) {
+	public MessagingController(MessagingService messagingService, UserService userService, MessageService messageService) {
 		this.messagingService = messagingService;
 		this.userService = userService;
 	}
@@ -67,26 +69,22 @@ public class MessagingController {
 	
 	@RequestMapping("send")
 	@PostMapping
-	public MessageDTO sendMessage(@RequestHeader("Auth-Token") String token, @RequestBody Message message) throws AuthenticationException, InvalidMessageException, NoSuchEntityException {
-		if (message.validate()) throw new InvalidMessageException("invalid message");
-		
+	public MessageDTO sendMessage(@RequestHeader("Auth-Token") String token, @RequestBody NewMessageDTO newMessageDTO) throws AuthenticationException, InvalidMessageException, NoSuchEntityException {
 		User user = userService.authenticate(token);
-		messagingService.processConversationRead(user, message.getConversation().getId());
-		return messagingService.processNewMessage(user, message);
+		
+		messagingService.processConversationRead(user, newMessageDTO.getConversationId());
+		return messagingService.processNewMessage(user, newMessageDTO);
 	}
 	
 	@RequestMapping("edit")
 	@PostMapping
-	public void editMessage(@RequestHeader("Auth-Token") String token, @RequestBody Message message) throws AuthenticationException, InvalidMessageException, NoSuchEntityException {
-		if (message.getText() == null || message.getConversation().getId() == null)
-			throw new InvalidMessageException("invalid message");
-		
+	public void editMessage(@RequestHeader("Auth-Token") String token, @RequestBody EditMessageDTO editMessageDTO) throws AuthenticationException, InvalidMessageException, NoSuchEntityException {
 		User user = userService.authenticate(token);
 		
-		if (!message.getSender().getId().equals(user.getId()))
-			throw new AuthenticationException("user can edit only own messages");
+		if (editMessageDTO.getText() == null)
+			throw new InvalidMessageException("invalid message");
 		
-		messagingService.processMessageEdit(user, message);
+		messagingService.processMessageEdit(user, editMessageDTO);
 	}
 	
 }

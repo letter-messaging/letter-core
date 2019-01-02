@@ -1,6 +1,5 @@
 package com.gmail.ivanjermakov1.messenger.messaging.service;
 
-import com.gmail.ivanjermakov1.messenger.auth.dto.UserDTO;
 import com.gmail.ivanjermakov1.messenger.auth.entity.User;
 import com.gmail.ivanjermakov1.messenger.auth.service.UserService;
 import com.gmail.ivanjermakov1.messenger.exception.AuthenticationException;
@@ -57,12 +56,20 @@ public class MessageService {
 	
 	public MessageDTO getFullMessage(Message message) {
 		MessageDTO messageDTO = new MessageDTO();
-		messageDTO.setMessage(message);
-		messageDTO.setConversation(new Conversation(message.getConversation().getId()));
+		messageDTO.setId(message.getId());
+		messageDTO.setSent(message.getSent());
+		messageDTO.setText(message.getText());
 		
 		try {
-			User user = userService.getUser(message.getSender().getId());
-			messageDTO.setSender(new UserDTO(user, userMainInfoService.getById(user.getId())));
+			Conversation conversation = conversationService.get(message.getConversationId());
+			messageDTO.setConversation(conversationService.get(conversation));
+		} catch (NoSuchEntityException e) {
+			e.printStackTrace();
+		}
+		
+		try {
+			User user = userService.getUser(message.getSenderId());
+			messageDTO.setSender(userService.full(user));
 			userService.full(user);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -93,8 +100,8 @@ public class MessageService {
 	 */
 	public void delete(User user, List<MessageDTO> deleteMessages) {
 		deleteMessages.stream()
-				.map(MessageDTO::getMessage)
-				.filter(m -> m.getSender().getId().equals(user.getId()))
+				.map(dto -> messageRepository.getById(dto.getId()))
+				.filter(m -> m.getSenderId().equals(user.getId()))
 				.forEach(this::delete);
 	}
 	

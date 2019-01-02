@@ -30,7 +30,7 @@ public class AuthenticationController {
 	@GetMapping("validate")
 	public UserDTO validate(@RequestHeader("Auth-Token") String token) throws NoSuchEntityException {
 		User user = userService.getUserByToken(token);
-		return new UserDTO(user, userMainInfoService.getById(user.getId()));
+		return userService.full(user);
 	}
 	
 }

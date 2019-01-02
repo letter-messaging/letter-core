@@ -1,7 +1,9 @@
 package com.gmail.ivanjermakov1.messenger.messaging.service;
 
 import com.gmail.ivanjermakov1.messenger.auth.entity.User;
+import com.gmail.ivanjermakov1.messenger.auth.service.UserService;
 import com.gmail.ivanjermakov1.messenger.exception.NoSuchEntityException;
+import com.gmail.ivanjermakov1.messenger.messaging.dto.ConversationDTO;
 import com.gmail.ivanjermakov1.messenger.messaging.entity.Conversation;
 import com.gmail.ivanjermakov1.messenger.messaging.repository.ConversationRepository;
 import org.slf4j.Logger;
@@ -12,6 +14,7 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -19,10 +22,12 @@ public class ConversationService {
 	
 	private final static Logger LOG = LoggerFactory.getLogger(ConversationService.class);
 	private final ConversationRepository conversationRepository;
+	private final UserService userService;
 	
 	@Autowired
-	public ConversationService(ConversationRepository conversationRepository) {
+	public ConversationService(ConversationRepository conversationRepository, UserService userService) {
 		this.conversationRepository = conversationRepository;
+		this.userService = userService;
 	}
 	
 	public Conversation create(User user, User with) {
@@ -48,6 +53,15 @@ public class ConversationService {
 	
 	public List<Conversation> getConversations(User user) {
 		return conversationRepository.getConversations(user.getId());
+	}
+	
+	public ConversationDTO get(Conversation conversation) {
+		return new ConversationDTO(
+				conversation.getId(), conversation.getUsers()
+				.stream()
+				.map(userService::full)
+				.collect(Collectors.toList())
+		);
 	}
 	
 	private Conversation conversationWith(User user1, User user2) throws NoSuchEntityException {
