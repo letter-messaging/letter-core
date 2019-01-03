@@ -52,8 +52,7 @@ public class SearchTest {
 	
 	@Test(expected = InvalidSearchFormatException.class)
 	public void shouldThrowInvalidSearchFormatException_WithInvalidSearch() throws RegistrationException, AuthenticationException, InvalidSearchFormatException {
-		String user1Token = registerUser("John", "Lens", "johnls");
-		User user1 = userService.authenticate(user1Token);
+		registerUser("John", "Lens", "johnls");
 		
 		searchService.searchUsers("John");
 	}
