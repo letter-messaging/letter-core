@@ -4,6 +4,7 @@ import com.gmail.ivanjermakov1.messenger.auth.dto.UserDTO;
 import com.gmail.ivanjermakov1.messenger.auth.entity.User;
 import com.gmail.ivanjermakov1.messenger.auth.repository.UserRepository;
 import com.gmail.ivanjermakov1.messenger.auth.service.UserService;
+import com.gmail.ivanjermakov1.messenger.exception.InvalidSearchFormatException;
 import com.gmail.ivanjermakov1.messenger.messaging.dto.PreviewDTO;
 import com.gmail.ivanjermakov1.messenger.messaging.repository.UserMainInfoRepository;
 import com.gmail.ivanjermakov1.messenger.util.Strings;
@@ -40,7 +41,10 @@ public class SearchService {
 				.collect(Collectors.toList());
 	}
 	
-	public List<UserDTO> searchUsers(String search) {
+	// TODO: make amount of responses configurable
+	public List<UserDTO> searchUsers(String search) throws InvalidSearchFormatException {
+		if (search.charAt(0) != '@') throw new InvalidSearchFormatException("user search must starts with \'@\'");
+		
 		return userRepository.searchUsersAmount(search, 20)
 				.stream()
 				.map(userService::full)

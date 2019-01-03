@@ -4,6 +4,7 @@ import com.gmail.ivanjermakov1.messenger.auth.dto.UserDTO;
 import com.gmail.ivanjermakov1.messenger.auth.entity.User;
 import com.gmail.ivanjermakov1.messenger.auth.service.UserService;
 import com.gmail.ivanjermakov1.messenger.exception.AuthenticationException;
+import com.gmail.ivanjermakov1.messenger.exception.InvalidSearchFormatException;
 import com.gmail.ivanjermakov1.messenger.messaging.dto.PreviewDTO;
 import com.gmail.ivanjermakov1.messenger.messaging.service.SearchService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +34,7 @@ public class SearchController {
 	
 	@GetMapping("users")
 	public List<UserDTO> searchUsers(@RequestHeader("Auth-Token") String token,
-	                                 @RequestParam("search") String search) throws AuthenticationException {
+	                                 @RequestParam("search") String search) throws AuthenticationException, InvalidSearchFormatException {
 		userService.authenticate(token);
 		return searchService.searchUsers(search);
 	}
