@@ -1,12 +1,12 @@
 import {TestBed} from '@angular/core/testing';
 
-import {MessagingService} from './messaging.service';
+import {PreviewService} from './preview.service';
 
-describe('MessagingService', () => {
+describe('PreviewService', () => {
   beforeEach(() => TestBed.configureTestingModule({}));
 
   it('should be created', () => {
-    const service: MessagingService = TestBed.get(MessagingService);
+    const service: PreviewService = TestBed.get(PreviewService);
     expect(service).toBeTruthy();
   });
 });

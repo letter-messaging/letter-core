@@ -15,7 +15,7 @@ export class ConversationService {
   create(token: string, withLogin: string): Observable<Conversation> {
     return this.http.get<Conversation>(API_URL + '/conversation/create', {
       headers: {'Auth-Token': token},
-      params: {withLogin: withLogin}
+      params: {'withLogin': withLogin}
     });
   }
 

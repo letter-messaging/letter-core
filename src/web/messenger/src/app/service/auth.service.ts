@@ -14,7 +14,7 @@ export class AuthService {
 
   authenticate(login: string, password: string): Observable<string> {
     return this.http.get<string>(API_URL + '/auth/login', {
-      params: {login: login, password: password}
+      params: {'login': login, 'password': password}
     });
   }
 

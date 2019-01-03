@@ -14,11 +14,11 @@ export class MessageService {
 
   get(token: string, conversationId: number, offset: number, amount: number): Observable<Array<Message>> {
     return this.http.get<Array<Message>>(API_URL + '/message/get', {
-      headers: {token: token},
+      headers: {'Auth-Token': token},
       params: {
-        conversationId: conversationId.toString(),
-        offset: offset.toString(),
-        amount: amount.toString()
+        'conversationId': conversationId.toString(),
+        'offset': offset.toString(),
+        'amount': amount.toString()
       }
     });
   }

@@ -19,30 +19,30 @@ export class MessagingService {
 
   getMessage(token: string): Observable<NewMessageAction> {
     return this.http.get<NewMessageAction>(API_URL + '/messaging/get/m', {
-      headers: {token: token},
+      headers: {'Auth-Token': token},
     });
   }
 
   getRead(token: string): Observable<ConversationReadAction> {
     return this.http.get<ConversationReadAction>(API_URL + '/messaging/get/r', {
-      headers: {token: token},
+      headers: {'Auth-Token': token},
     });
   }
 
   getEdit(token: string): Observable<MessageEditAction> {
     return this.http.get<MessageEditAction>(API_URL + '/messaging/get/e', {
-      headers: {token: token},
+      headers: {'Auth-Token': token},
     });
   }
 
   sendMessage(token: string, newMessage: NewMessage): Observable<Message> {
-    return this.http.post<Message>(API_URL + '/message/delete', newMessage, {
+    return this.http.post<Message>(API_URL + '/messaging/delete', newMessage, {
       headers: {'Auth-Token': token}
     });
   }
 
   editMessage(token: string, editMessage: EditMessage): Observable<Message> {
-    return this.http.post<Message>(API_URL + '/message/edit', editMessage, {
+    return this.http.post<Message>(API_URL + '/messaging/edit', editMessage, {
       headers: {'Auth-Token': token}
     });
   }

@@ -1,6 +1,6 @@
-import { TestBed } from '@angular/core/testing';
+import {TestBed} from '@angular/core/testing';
 
-import { ConversationService } from './conversation.service';
+import {ConversationService} from './conversation.service';
 
 describe('ConversationService', () => {
   beforeEach(() => TestBed.configureTestingModule({}));
