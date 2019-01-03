@@ -12,7 +12,6 @@ import com.gmail.ivanjermakov1.messenger.messaging.dto.action.ConversationReadAc
 import com.gmail.ivanjermakov1.messenger.messaging.dto.action.MessageEditAction;
 import com.gmail.ivanjermakov1.messenger.messaging.dto.action.NewMessageAction;
 import com.gmail.ivanjermakov1.messenger.messaging.dto.action.Request;
-import com.gmail.ivanjermakov1.messenger.messaging.service.MessageService;
 import com.gmail.ivanjermakov1.messenger.messaging.service.MessagingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -26,7 +25,7 @@ public class MessagingController {
 	private final UserService userService;
 	
 	@Autowired
-	public MessagingController(MessagingService messagingService, UserService userService, MessageService messageService) {
+	public MessagingController(MessagingService messagingService, UserService userService) {
 		this.messagingService = messagingService;
 		this.userService = userService;
 	}
