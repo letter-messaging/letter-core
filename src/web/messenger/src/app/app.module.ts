@@ -6,6 +6,8 @@ import {AppComponent} from './app.component';
 import {AuthComponent} from './component/auth/auth.component';
 import {RegisterComponent} from './component/register/register.component';
 import {MessagingComponent} from './component/messaging/messaging.component';
+import {FormsModule} from '@angular/forms';
+import {HttpClientModule} from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -16,7 +18,9 @@ import {MessagingComponent} from './component/messaging/messaging.component';
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    FormsModule,
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent]
