@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
-import {API_URL} from '../../../globals';
+import {API_URL, MESSAGES_AMOUNT} from '../../../globals';
 import {Message} from '../component/dto/Message';
 
 @Injectable({
@@ -12,7 +12,9 @@ export class MessageService {
   constructor(private http: HttpClient) {
   }
 
-  get(token: string, conversationId: number, offset: number, amount: number): Observable<Array<Message>> {
+  get(token: string, conversationId: number, offset: number, amount?: number): Observable<Array<Message>> {
+    amount = amount ? amount : MESSAGES_AMOUNT;
+
     return this.http.get<Array<Message>>(API_URL + '/message/get', {
       headers: {'Auth-Token': token},
       params: {

@@ -23,6 +23,7 @@ export class AppComponent {
     if (token !== null) {
       this.authService.validate(token).subscribe(
         user => {
+          this.messengerService.setToken(token);
           this.messengerService.setMe(user);
           this.router.navigate(['/im']);
         },
