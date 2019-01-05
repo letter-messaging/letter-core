@@ -2,7 +2,7 @@ import {Component} from '@angular/core';
 import {CookieService} from './service/cookie.service';
 import {AuthService} from './service/auth.service';
 import {MessengerService} from './service/messenger.service';
-import {Router} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -14,7 +14,8 @@ export class AppComponent {
   constructor(private cookieService: CookieService,
               private authService: AuthService,
               private messengerService: MessengerService,
-              private router: Router) {
+              private router: Router,
+              private route: ActivatedRoute) {
     this.autoLogin();
   }
 
@@ -25,7 +26,14 @@ export class AppComponent {
         user => {
           this.messengerService.setToken(token);
           this.messengerService.setMe(user);
-          this.router.navigate(['/im']);
+
+          this.route.queryParams.subscribe(params => {
+            if (params['id']) {
+              this.router.navigate(['/im'], {queryParams: {id: params['id']}});
+            } else {
+              this.router.navigate(['/im']);
+            }
+          });
         },
         error => {
           this.router.navigate(['/auth']);

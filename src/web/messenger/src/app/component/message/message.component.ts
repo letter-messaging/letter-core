@@ -1,13 +1,15 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {Message} from '../dto/Message';
-import {MessengerService} from '../../service/messenger.service';
 import {User} from '../dto/User';
 
 
 @Component({
   selector: 'app-message',
   templateUrl: './message.component.html',
-  styleUrls: ['./message.component.scss']
+  styleUrls: [
+    './message.component.scss',
+    './message.component.forwarded.scss'
+  ]
 })
 export class MessageComponent implements OnInit {
 
@@ -17,13 +19,16 @@ export class MessageComponent implements OnInit {
   @Input()
   isForwarded: boolean;
 
+  @Input()
   me: User;
 
-  constructor(private messengerService: MessengerService) {
+  mine: boolean;
+
+  constructor() {
   }
 
   ngOnInit() {
-    this.messengerService.oMe.subscribe(me => this.me = me);
+    this.mine = this.message.sender.id === this.me.id;
   }
 
 }

@@ -336,7 +336,7 @@ app.controller('MainController', ($document, $scope, $http, $timeout, $window) =
 		}).then((response) => {
 			response.data = response.data.filter((p) => p.lastMessage != null);
 
-			response.data.sort((a, b) => moment(a.lastMessage.message.sent).isAfter(b.lastMessage.message.sent) ? -1 : 1);
+			// response.data.sort((a, b) => moment(a.lastMessage.message.sent).isAfter(b.lastMessage.message.sent) ? -1 : 1);
 
 			for (let preview of response.data) {
 				if (preview.lastMessage) {

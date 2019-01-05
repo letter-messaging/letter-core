@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {Subject} from 'rxjs';
+import {BehaviorSubject} from 'rxjs';
 import {User} from '../component/dto/User';
 
 @Injectable({
@@ -7,10 +7,10 @@ import {User} from '../component/dto/User';
 })
 export class MessengerService {
 
-  private me = new Subject<User>();
+  private me = new BehaviorSubject<User>(null);
   oMe = this.me.asObservable();
 
-  private token = new Subject<string>();
+  private token = new BehaviorSubject<string>('');
   oToken = this.token.asObservable();
 
   constructor() {

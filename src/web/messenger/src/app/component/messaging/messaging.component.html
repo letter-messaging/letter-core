@@ -1,100 +1,103 @@
-<header class="header-left">
-  <div class="logo" routerLink="/im"><i class="fas fa-comment"></i></div>
-  <div class="logo-name">Messenger.</div>
-</header>
+<div class="content">
+  <header class="header-left">
+    <div class="logo" routerLink="/im"><i class="fas fa-comment"></i></div>
+    <div class="logo-name">Messenger.</div>
+  </header>
 
-<header class="header-right">
-  <!--<div class="menu" ng-click="changeMobileView()"><i class="fas fa-bars"></i></div>-->
-  <div class="conversation-name" *ngIf="currentPreview">{{currentPreview.with.firstName}}
-    {{currentPreview.with.lastName}}
-  </div>
-  <div class="status" *ngIf="currentPreview">online</div>
-  <div class="right">
-    <div class="search"><i class="fas fa-search"></i></div>
-    <!--<div class="logout" ng-click="logout()"><i class="fas fa-sign-out-alt"></i></div>-->
-  </div>
-</header>
+  <header class="header-right">
+    <!--<div class="menu" ng-click="changeMobileView()"><i class="fas fa-bars"></i></div>-->
+    <div class="conversation-name" *ngIf="currentPreview">{{currentPreview.with.firstName}}
+      {{currentPreview.with.lastName}}
+    </div>
+    <div class="status" *ngIf="currentPreview">online</div>
+    <div class="right">
+      <div class="search"><i class="fas fa-search"></i></div>
+      <!--<div class="logout" ng-click="logout()"><i class="fas fa-sign-out-alt"></i></div>-->
+    </div>
+  </header>
 
-<div class="content-left">
-  <div class="search">
-    <div class="icon"><i class="fas fa-search"></i></div>
-    <input id="search-conversations" type="text" placeholder="Search" [(ngModel)]="searchText"
-           (ngModelChange)="searchForConversations()" name="search-conversations">
+  <div class="content-left">
+    <div class="search">
+      <div class="icon"><i class="fas fa-search"></i></div>
+      <input id="search-conversations" type="text" placeholder="Search" [(ngModel)]="searchText"
+             (ngModelChange)="searchForConversations()" name="search-conversations">
+    </div>
+    <div class="preview-wrapper">
+      <app-preview *ngFor="let preview of previews"
+                   [preview]="preview"
+                   [selected]="currentPreview && preview.conversation.id == currentPreview.conversation.id"
+                   (click)="openConversation(preview.conversation.id)">
+        <!--ng-show="!isUserSearch">-->
+      </app-preview>
+      <!--<div ngfor="user in searchUsers" class="user-preview" ng-click="createConversation(user)"-->
+      <!--ng-show="isUserSearch">-->
+      <!--<img class="avatar" src="assets/img/default-avatar.png">-->
+      <!--<div class="info">{{user.userMainInfo.firstName}} {{user.userMainInfo.lastName}}</div>-->
+      <!--<div class="login">@{{user.user.login}}</div>-->
+      <!--</div>-->
+    </div>
   </div>
-  <div class="preview-wrapper">
-    <app-preview class="preview" *ngFor="let preview of previews"
-                 [preview]="preview">
-      <!--ng-class="preview.conversation.id === currentPreview.conversation.id ? 'selected' : ''"-->
-      (click)="openConversation(preview.conversation.id)"
-      <!--ng-show="!isUserSearch">-->
-    </app-preview>
-    <!--<div ngfor="user in searchUsers" class="user-preview" ng-click="createConversation(user)"-->
-    <!--ng-show="isUserSearch">-->
-    <!--<img class="avatar" src="img/default-avatar.png">-->
-    <!--<div class="info">{{user.userMainInfo.firstName}} {{user.userMainInfo.lastName}}</div>-->
-    <!--<div class="login">@{{user.user.login}}</div>-->
-    <!--</div>-->
-  </div>
-</div>
 
-<div class="conversation">
-  <div id="no-conversation" *ngIf="!currentPreview">
-    {{!isSelectForwardTo ?
-    'Select conversation to start messaging.' :
-    'Select conversation to forward messages to.'}}
-  </div>
-  <div id="no-messages" *ngIf="currentPreview && messages.length === 0">
-    Be the first. Messages will be displayed here.
-  </div>
-  <div class="message-wrapper" *ngIf="currentPreview">
-    <!--scrolly="loadMore()">-->
-    <app-message class="message"
-             *ngFor="let message of messages"
-             [message]="message"
-             [isForwarded]="false">
-             <!--ng-class="{'message-mine' : message.mine === true, 'selected' : message.selected === true}"-->
-             <!--ng-click="selectMessage(message)">-->
-    </app-message>
-  </div>
-  <div class="attachment-wrapper">
-    <!--<forwarded-attachment-->
-    <!--ng-show="editingMessage &&-->
-    <!--editingMessage.forwarded.length !== 0" forwarded="editingMessage.forwarded">-->
-    <!--</forwarded-attachment>-->
-  </div>
-  <div class="send-message-wrapper"
-       *ngIf="currentPreview && selectedMessages.length === 0">
-    <i class="fas fa-paperclip" *ngIf="!editingMessage">
-      <!--show-att-->
-    </i>
-    <i class="fas fa-ban" *ngIf="editingMessage" (click)="cancelEditing()"></i>
-    <!--<div class="attachments-menu" *ngIf="showAttachmentsMenu === true">-->
-    <!--<div class="button"><i class="fas fa-camera"></i></div>-->
-    <!--<div class="button"><i class="fas fa-video"></i></div>-->
-    <!--<div class="button"><i class="fas fa-file"></i></div>-->
-    <!--</div>-->
-    <textarea autofocus
-              id="send-message-text"
-              [(ngModel)]="messageText"
-              rows="1"
-              placeholder="Write a message...">
+  <div class="conversation">
+    <div id="no-conversation" *ngIf="!currentPreview">
+      {{!isSelectForwardTo ?
+      'Select conversation to start messaging.' :
+      'Select conversation to forward messages to.'}}
+    </div>
+    <div id="no-messages" *ngIf="currentPreview && messages.length === 0">
+      Be the first. Messages will be displayed here.
+    </div>
+    <div class="message-wrapper" *ngIf="currentPreview">
+      <!--scrolly="loadMore()">-->
+      <app-message
+        *ngFor="let message of messages"
+        [message]="message"
+        [isForwarded]="false"
+        [me]="me">
+        <!--ng-class="{'message-mine' : message.mine === true, 'selected' : message.selected === true}"-->
+        <!--ng-click="selectMessage(message)">-->
+      </app-message>
+    </div>
+    <div class="attachment-wrapper">
+      <!--<forwarded-attachment-->
+      <!--ng-show="editingMessage &&-->
+      <!--editingMessage.forwarded.length !== 0" forwarded="editingMessage.forwarded">-->
+      <!--</forwarded-attachment>-->
+    </div>
+    <div class="send-message-wrapper"
+         *ngIf="currentPreview && selectedMessages.length === 0">
+      <i class="fas fa-paperclip" *ngIf="!editingMessage">
+        <!--show-att-->
+      </i>
+      <i class="fas fa-ban" *ngIf="editingMessage" (click)="cancelEditing()"></i>
+      <!--<div class="attachments-menu" *ngIf="showAttachmentsMenu === true">-->
+      <!--<div class="button"><i class="fas fa-camera"></i></div>-->
+      <!--<div class="button"><i class="fas fa-video"></i></div>-->
+      <!--<div class="button"><i class="fas fa-file"></i></div>-->
+      <!--</div>-->
+      <textarea autofocus
+                id="send-message-text"
+                [(ngModel)]="messageText"
+                rows="1"
+                placeholder="Write a message...">
     </textarea>
-    <div class="emoji">
-      <i class="fas fa-smile"></i>
+      <div class="emoji">
+        <i class="fas fa-smile"></i>
+      </div>
+      <div (click)="sendMessage()" class="send-message">
+        <i *ngIf="!isEditMessageView" class="fas fa-angle-right"></i>
+        <i *ngIf="isEditMessageView" class="fas fa-angle-up"></i>
+      </div>
     </div>
-    <div (click)="sendMessage()" class="send-message">
-      <i *ngIf="!isEditMessageView" class="fas fa-angle-right"></i>
-      <i *ngIf="isEditMessageView" class="fas fa-angle-up"></i>
-    </div>
-  </div>
-  <!--<div class="selected-messages-menu" ng-show="selectedMessages.length !== 0">-->
+    <!--<div class="selected-messages-menu" ng-show="selectedMessages.length !== 0">-->
     <!--<div class="button" ng-click="deleteSelectedMessages()"><i class="fas fa-trash"></i></div>-->
     <!--<div class="button" ng-click="replySelectedMessage()"><i class="fas fa-reply"></i></div>-->
     <!--<div class="button" ng-click="forwardSelectedMessages()"><i class="fas fa-arrow-right"></i></div>-->
     <!--<div class="button" ng-show="selectedMessages.length === 1 && selectedMessages[0].mine"-->
-         <!--ng-click="editSelectedMessage()"><i class="fas fa-pen"></i></div>-->
+    <!--ng-click="editSelectedMessage()"><i class="fas fa-pen"></i></div>-->
     <!--<div class="right">-->
-      <!--<div class="text-button" ng-click="clearSelectedMessages()">Cancel</div>-->
+    <!--<div class="text-button" ng-click="clearSelectedMessages()">Cancel</div>-->
     <!--</div>-->
-  <!--</div>-->
+    <!--</div>-->
+  </div>
 </div>

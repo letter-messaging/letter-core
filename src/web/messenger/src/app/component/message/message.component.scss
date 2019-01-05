@@ -2,6 +2,7 @@
   display: flex;
   align-self: center;
   flex-shrink: 0;
+  flex-direction: row;
 
   border-radius: 4px;
 
@@ -32,6 +33,7 @@
     /*preserving line brakes*/
     white-space: pre-wrap;
   }
+
 }
 
 .message-container {
@@ -48,6 +50,50 @@
   background: rgba(0, 0, 0, 0.05);
 }
 
+.message-content {
+  display: grid;
+
+  padding: 0 10px;
+
+  background: var(--grey);
+
+  border-radius: 10px 10px 10px 0;
+}
+
+.info {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+
+  grid-column: 2;
+  grid-row: 4;
+
+  .sent {
+    color: white;
+
+    font-size: 12px;
+  }
+
+  .status {
+    color: var(--special) !important;
+
+    display: grid;
+
+    div {
+      display: grid;
+    }
+
+    i {
+      font-size: 14px;
+      padding: 4px;
+
+      color: var(--special);
+    }
+
+  }
+
+}
+
 .message-mine {
   flex-direction: row-reverse;
 
@@ -60,58 +106,10 @@
 
     border-radius: 10px 10px 0 10px;
   }
-}
-
-.message-content {
-  display: grid;
-
-  padding: 0 10px;
-
-  background: var(--grey);
-
-  border-radius: 10px 10px 10px 0;
-}
-
-.conversation {
-  .info {
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-
-    grid-column: 2;
-    grid-row: 4;
-  }
-
-  .message-mine {
-    .info {
-      grid-column: 1;
-      justify-content: flex-start;
-    }
-  }
 
   .info {
-    .sent {
-      color: white;
-
-      font-size: 12px;
-    }
-
-    .status {
-      color: var(--special) !important;
-
-      display: grid;
-
-      div {
-        display: grid;
-      }
-
-      i {
-        font-size: 14px;
-        padding: 4px;
-
-        color: var(--special);
-      }
-    }
+    grid-column: 1;
+    justify-content: flex-start;
   }
 
 }

@@ -1,19 +1,21 @@
-<img class="avatar" src="./../../../../img/default-avatar.png" alt="">
-<div class="info">{{preview.with.firstName}} {{preview.with.lastName}}</div>
-<div class="message-preview">
-  <div class="from" *ngIf="preview.lastMessage">
-    <!--{{preview.lastMessage.sender.login === me.login ? 'You' :-->
-    <!--preview.lastMessage.sender.firstName}}:-->
+<div class="preview" [ngClass]="selected ? 'selected' : ''">
+  <img class="avatar" src="assets/img/default-avatar.png" alt="">
+  <div class="info">{{preview.with.firstName}} {{preview.with.lastName}}</div>
+  <div class="message-preview">
+    <div class="from">
+      <!--{{preview.lastMessage.sender.login === me.login ? 'You' :-->
+      <!--preview.lastMessage.sender.firstName}}:-->
+    </div>
+    <div class="text">{{preview.lastMessage.text ? preview.lastMessage.text : 'forwarded messages'}}</div>
   </div>
-  <div class="text">{{preview.lastMessage.text}}</div>
-</div>
-<!--<div class="delete"><i class="fas fa-times"></i></div>-->
-<div class="unread-wrapper">
-  <div class="unread" *ngIf="preview.unread !== 0">
-    {{preview.unread}}
-  </div>
-  <!--<div class="unread-mine" *ngIf="!preview.lastMessage.read && preview.lastMessage.sender.login === me.login">-->
+  <!--<div class="delete"><i class="fas fa-times"></i></div>-->
+  <div class="unread-wrapper">
+    <div class="unread" *ngIf="preview.unread !== 0">
+      {{preview.unread}}
+    </div>
+    <!--<div class="unread-mine" *ngIf="!preview.lastMessage.read && preview.lastMessage.sender.login === me.login">-->
     <!--<i class="fas fa-circle"></i>-->
-  <!--</div>-->
+    <!--</div>-->
+  </div>
+  <div class="sent">{{preview.lastMessage.sent | date:'HH:mm'}}</div>
 </div>
-<div class="sent">{{preview.lastMessage.sent | date:'HH:mm'}}</div>
