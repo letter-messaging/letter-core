@@ -20,21 +20,27 @@
     <div class="search">
       <div class="icon"><i class="fas fa-search"></i></div>
       <input id="search-conversations" type="text" placeholder="Search" [(ngModel)]="searchText"
-             (ngModelChange)="searchForConversations()" name="search-conversations">
+             (ngModelChange)="searchForConversationsOrUsers($event)" name="search-conversations">
     </div>
     <div class="preview-wrapper">
-      <app-preview *ngFor="let preview of previews"
-                   [preview]="preview"
-                   [selected]="currentPreview && preview.conversation.id == currentPreview.conversation.id"
-                   (click)="openConversation(preview.conversation.id)">
-        <!--ng-show="!isUserSearch">-->
-      </app-preview>
-      <!--<div ngfor="user in searchUsers" class="user-preview" ng-click="createConversation(user)"-->
-      <!--ng-show="isUserSearch">-->
-      <!--<img class="avatar" src="assets/img/default-avatar.png">-->
-      <!--<div class="info">{{user.userMainInfo.firstName}} {{user.userMainInfo.lastName}}</div>-->
-      <!--<div class="login">@{{user.user.login}}</div>-->
-      <!--</div>-->
+      <ng-container *ngIf="searchText.trim()[0] !== '@'">
+        <app-preview
+          *ngFor="let preview of previewsOrSearchPreviews()"
+          [preview]="preview"
+          [selected]="currentPreview && preview.conversation.id == currentPreview.conversation.id"
+          (click)="openConversation(preview.conversation.id)">
+        </app-preview>
+      </ng-container>
+      <ng-container *ngIf="searchText && searchText.trim()[0] === '@'">
+        <div class="user-preview"
+             *ngFor="let user of searchUsers"
+             (click)="createConversation(user)">
+          <img class="avatar" src="assets/img/default-avatar.png" alt="">
+          <div class="info">{{user.firstName}} {{user.lastName}}</div>
+          <div class="login">@{{user.login}}</div>
+          <!--TODO: if nothing found-->
+        </div>
+      </ng-container>
     </div>
   </div>
 

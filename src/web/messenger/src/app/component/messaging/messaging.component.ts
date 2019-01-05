@@ -6,6 +6,7 @@ import {MessengerService} from '../../service/messenger.service';
 import {MessageService} from '../../service/message.service';
 import {Message} from '../dto/Message';
 import {User} from '../dto/User';
+import {SearchService} from '../../service/search.service';
 
 @Component({
   selector: 'app-messaging',
@@ -32,7 +33,10 @@ export class MessagingComponent implements OnInit {
   currentPreview: Preview;
 
   messageText: string;
-  searchText: string;
+
+  searchText: string = '';
+  searchUsers: Array<User> = [];
+  searchPreviews: Array<Preview> = [];
 
   isSelectForwardTo = false;
 
@@ -46,7 +50,8 @@ export class MessagingComponent implements OnInit {
               private router: Router,
               private previewService: PreviewService,
               private messengerService: MessengerService,
-              private messageService: MessageService) {
+              private messageService: MessageService,
+              private searchService: SearchService) {
   }
 
   ngOnInit() {
@@ -67,8 +72,9 @@ export class MessagingComponent implements OnInit {
           this.routeConversationId = params['id'];
           if (this.routeConversationId) {
             this.messageService.get(this.token, this.routeConversationId, 0).subscribe(messages => {
+              this.searchText = '';
+
               this.currentPreview = this.previews.find(p => p.conversation.id == this.routeConversationId);
-              console.log(this.previews);
               this.messages = messages;
             });
           }
@@ -77,12 +83,31 @@ export class MessagingComponent implements OnInit {
     });
   }
 
+  // TODO: add debounce support
+  previewsOrSearchPreviews(): Array<Preview> {
+    if (this.searchText === '') {
+      return this.previews;
+    } else {
+      return this.searchPreviews;
+    }
+  }
+
   openConversation(conversationId: number) {
     this.router.navigate(['/im'], {queryParams: {id: conversationId}});
   }
 
-  searchForConversations() {
+  searchForConversationsOrUsers() {
+    if (this.searchText === '') {
+      return;
+    }
 
+    if (this.searchText[0] === '@') {
+      this.searchService.searchUsers(this.token, this.searchText)
+        .subscribe(users => this.searchUsers = users);
+    } else {
+      this.searchService.searchConversations(this.token, this.searchText)
+        .subscribe(conversations => this.searchPreviews = conversations);
+    }
   }
 
   sendMessage() {
@@ -90,4 +115,8 @@ export class MessagingComponent implements OnInit {
 
   cancelEditing() {
   }
+
+  createConversation(user: User) {
+  }
+
 }
