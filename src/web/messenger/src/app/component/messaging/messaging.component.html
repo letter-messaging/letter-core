@@ -1,18 +1,18 @@
-<div class="content">
+<div class="content" [ngClass]="isLeftView === true ? 'mobile-left' : 'mobile-right'">
   <header class="header-left">
     <div class="logo" routerLink="/im"><i class="fas fa-comment"></i></div>
     <div class="logo-name">Messenger.</div>
   </header>
 
   <header class="header-right">
-    <!--<div class="menu" ng-click="changeMobileView()"><i class="fas fa-bars"></i></div>-->
+    <div class="menu" (click)="closeConversation()"><i class="fas fa-bars"></i></div>
     <div class="conversation-name" *ngIf="currentPreview">{{currentPreview.with.firstName}}
       {{currentPreview.with.lastName}}
     </div>
     <div class="status" *ngIf="currentPreview">online</div>
     <div class="right">
       <div class="search"><i class="fas fa-search"></i></div>
-      <!--<div class="logout" ng-click="logout()"><i class="fas fa-sign-out-alt"></i></div>-->
+      <div class="logout" (click)="logout()"><i class="fas fa-sign-out-alt"></i></div>
     </div>
   </header>
 

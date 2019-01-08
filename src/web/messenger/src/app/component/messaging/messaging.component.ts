@@ -7,6 +7,8 @@ import {MessageService} from '../../service/message.service';
 import {Message} from '../dto/Message';
 import {User} from '../dto/User';
 import {SearchService} from '../../service/search.service';
+import {AuthService} from '../../service/auth.service';
+import {CookieService} from '../../service/cookie.service';
 
 @Component({
   selector: 'app-messaging',
@@ -34,7 +36,7 @@ export class MessagingComponent implements OnInit {
 
   messageText: string;
 
-  searchText: string = '';
+  searchText = '';
   searchUsers: Array<User> = [];
   searchPreviews: Array<Preview> = [];
 
@@ -46,12 +48,16 @@ export class MessagingComponent implements OnInit {
 
   editingMessage: Message;
 
+  isLeftView = true;
+
   constructor(private route: ActivatedRoute,
               private router: Router,
               private previewService: PreviewService,
               private messengerService: MessengerService,
               private messageService: MessageService,
-              private searchService: SearchService) {
+              private authService: AuthService,
+              private searchService: SearchService,
+              private cookieService: CookieService) {
   }
 
   ngOnInit() {
@@ -71,12 +77,17 @@ export class MessagingComponent implements OnInit {
 
           this.routeConversationId = params['id'];
           if (this.routeConversationId) {
+            this.isLeftView = false;
             this.messageService.get(this.token, this.routeConversationId, 0).subscribe(messages => {
               this.searchText = '';
 
               this.currentPreview = this.previews.find(p => p.conversation.id == this.routeConversationId);
               this.messages = messages;
             });
+          } else {
+            this.isLeftView = true;
+            this.currentPreview = null;
+            this.messages = [];
           }
         });
       });
@@ -94,6 +105,10 @@ export class MessagingComponent implements OnInit {
 
   openConversation(conversationId: number) {
     this.router.navigate(['/im'], {queryParams: {id: conversationId}});
+  }
+
+  closeConversation() {
+    this.router.navigate(['/im']);
   }
 
   searchForConversationsOrUsers() {
@@ -119,4 +134,11 @@ export class MessagingComponent implements OnInit {
   createConversation(user: User) {
   }
 
+  changeMobileView() {
+  }
+
+  logout() {
+    this.cookieService.deleteToken();
+    this.router.navigate(['/auth']);
+  }
 }

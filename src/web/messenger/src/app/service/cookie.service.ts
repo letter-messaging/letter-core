@@ -18,4 +18,8 @@ export class CookieService {
     localStorage.setItem(this.LOCAL_STORAGE_TOKEN_NAME, token);
   }
 
+  deleteToken() {
+    localStorage.removeItem(this.LOCAL_STORAGE_TOKEN_NAME);
+  }
+
 }

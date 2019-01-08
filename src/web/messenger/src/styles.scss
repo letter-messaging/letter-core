@@ -42,3 +42,58 @@ body {
   overflow-x: hidden;
   overflow-y: hidden;
 }
+
+//responsive
+@media screen and (max-width: 700px) {
+
+  .header-left {
+    display: none !important;
+  }
+
+  .header-right .menu {
+    display: none;
+  }
+
+  .mobile-left {
+    .content-left {
+      grid-column: 1/3;
+      grid-row: 2;
+    }
+
+    .header-right {
+      grid-column: 1/3;
+      grid-row: 1;
+    }
+
+    .conversation {
+      display: none !important;
+    }
+
+    #no-conversation {
+      display: none !important;
+    }
+
+  }
+
+  .mobile-right {
+    .content-left {
+      display: none;
+    }
+
+    .header-right {
+      grid-column: 1/3;
+      grid-row: 1;
+    }
+
+    .conversation {
+      grid-column: 1/3;
+      grid-row: 2;
+    }
+
+    .header-right .menu {
+      display: grid !important;
+    }
+
+  }
+
+}
