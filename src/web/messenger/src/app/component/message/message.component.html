@@ -7,14 +7,14 @@
       <div class="info">
         <div class="sent">{{message.sent | date: 'HH:mm'}}</div>
         <div class="status" *ngIf="message.sender.login === me.login">
-          <div class="sending" *ngIf="message.status === 'sending'">
+          <div class="sending" *ngIf="!message.id">
             <i class="far fa-clock"></i>
           </div>
           <div class="received"
-               *ngIf="message.status === 'received' && message.read === false">
+               *ngIf="message.id && message.read === false">
             <i class="fas fa-check"></i>
           </div>
-          <div class="read" *ngIf="message.status === 'received' && message.read">
+          <div class="read" *ngIf="message.id && message.read">
             <i class="fas fa-eye"></i>
           </div>
         </div>

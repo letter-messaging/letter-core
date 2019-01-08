@@ -13,6 +13,7 @@ public class MessageDTO {
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	private LocalDateTime sent;
 	private String text;
+	private Boolean read;
 	private UserDTO sender;
 	private ConversationDTO conversation;
 	private List<MessageDTO> forwarded;
@@ -20,10 +21,11 @@ public class MessageDTO {
 	public MessageDTO() {
 	}
 	
-	public MessageDTO(Long id, LocalDateTime sent, String text, UserDTO sender, ConversationDTO conversation, List<MessageDTO> forwarded) {
+	public MessageDTO(Long id, LocalDateTime sent, String text, Boolean read, UserDTO sender, ConversationDTO conversation, List<MessageDTO> forwarded) {
 		this.id = id;
 		this.sent = sent;
 		this.text = text;
+		this.read = read;
 		this.sender = sender;
 		this.conversation = conversation;
 		this.forwarded = forwarded;
@@ -51,6 +53,14 @@ public class MessageDTO {
 	
 	public void setText(String text) {
 		this.text = text;
+	}
+	
+	public Boolean getRead() {
+		return read;
+	}
+	
+	public void setRead(Boolean read) {
+		this.read = read;
 	}
 	
 	public UserDTO getSender() {

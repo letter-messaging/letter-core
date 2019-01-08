@@ -24,14 +24,12 @@ public class MessageService {
 	
 	private final MessageRepository messageRepository;
 	private final UserService userService;
-	private final UserMainInfoService userMainInfoService;
 	private final ConversationService conversationService;
 	
 	@Autowired
 	public MessageService(MessageRepository messageRepository, UserService userService, UserMainInfoService userMainInfoService, ConversationService conversationService) {
 		this.messageRepository = messageRepository;
 		this.userService = userService;
-		this.userMainInfoService = userMainInfoService;
 		this.conversationService = conversationService;
 	}
 	
@@ -58,6 +56,7 @@ public class MessageService {
 		MessageDTO messageDTO = new MessageDTO();
 		messageDTO.setId(message.getId());
 		messageDTO.setSent(message.getSent());
+		messageDTO.setRead(message.getRead());
 		messageDTO.setText(message.getText());
 		
 		try {

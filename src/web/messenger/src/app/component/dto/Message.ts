@@ -3,8 +3,9 @@ import {Conversation} from './Conversation';
 
 export class Message {
   id: number;
-  sent: string;
+  sent: Date;
   text: string;
+  read: boolean;
   sender: User;
   conversation: Conversation;
   forwarded: Array<Message>;

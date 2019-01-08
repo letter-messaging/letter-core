@@ -32,6 +32,9 @@ public class PreviewService {
 		return allConversations(user)
 				.stream()
 				.map(c -> getPreview(user, c))
+				.filter(p -> p.getLastMessage() != null)
+				.sorted((p1, p2) -> p2.getLastMessage().getSent()
+						.compareTo(p1.getLastMessage().getSent()))
 				.collect(Collectors.toList());
 	}
 	

@@ -56,7 +56,7 @@
     <div class="message-wrapper" *ngIf="currentPreview">
       <!--TODO: load more feature-->
       <app-message
-        *ngFor="let message of messages"
+        *ngFor="let message of messages | descSort: 'sent'"
         [message]="message"
         [isForwarded]="false"
         [me]="me">

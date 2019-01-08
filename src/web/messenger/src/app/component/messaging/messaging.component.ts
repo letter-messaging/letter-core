@@ -106,7 +106,7 @@ export class MessagingComponent implements OnInit {
 
   updatePreviews() {
     this.previewService.all(this.token).subscribe(previews => {
-      this.previews = previews.filter(p => p.lastMessage);
+      this.previews = previews;
     });
   }
 
@@ -148,6 +148,8 @@ export class MessagingComponent implements OnInit {
     message.text = this.messageText;
     message.forwarded = [];
 
+    this.messageText = '';
+
     const tempViewMessage = new Message();
     tempViewMessage.sender = this.me;
     tempViewMessage.forwarded = message.forwarded;
@@ -159,7 +161,6 @@ export class MessagingComponent implements OnInit {
       this.updatePreviews();
       this.messages = this.messages.filter(mes => mes.id);
       this.messages.unshift(m);
-      console.log(this.messages);
     });
   }
 

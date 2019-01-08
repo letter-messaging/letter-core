@@ -12,6 +12,7 @@ import {PreviewComponent} from './component/preview/preview.component';
 import {MessageComponent} from './component/message/message.component';
 import {AutosizeModule} from 'ngx-autosize';
 import {MessageSendDirective} from './component/messaging/MessageSendDirective';
+import {ArraySortPipeAsc, ArraySortPipeDesc} from './pipe/ArraySortPipe';
 
 @NgModule({
   declarations: [
@@ -21,7 +22,9 @@ import {MessageSendDirective} from './component/messaging/MessageSendDirective';
     MessagingComponent,
     PreviewComponent,
     MessageComponent,
-    MessageSendDirective
+    MessageSendDirective,
+    ArraySortPipeAsc,
+    ArraySortPipeDesc,
   ],
   imports: [
     BrowserModule,
