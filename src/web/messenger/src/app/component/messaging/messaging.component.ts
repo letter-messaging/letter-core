@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, HostListener, OnInit} from '@angular/core';
 import {Preview} from '../dto/Preview';
 import {ActivatedRoute, Router} from '@angular/router';
 import {PreviewService} from '../../service/preview.service';
@@ -60,6 +60,13 @@ export class MessagingComponent implements OnInit {
               private cookieService: CookieService) {
   }
 
+  @HostListener('document:keydown', ['$event'])
+  handleKeyboardEvent(event: KeyboardEvent) {
+    if (event.key === 'Escape') {
+      this.closeConversation();
+    }
+  }
+
   ngOnInit() {
     this.messengerService.oMe.subscribe(me => this.me = me);
 
@@ -104,11 +111,11 @@ export class MessagingComponent implements OnInit {
   }
 
   openConversation(conversationId: number) {
-    this.router.navigate(['/im'], {queryParams: {id: conversationId}});
+    this.router.navigate(['/im'], {queryParams: {id: conversationId}, replaceUrl: true});
   }
 
   closeConversation() {
-    this.router.navigate(['/im']);
+    this.router.navigate(['/im'], {replaceUrl: true});
   }
 
   searchForConversationsOrUsers() {
@@ -139,6 +146,6 @@ export class MessagingComponent implements OnInit {
 
   logout() {
     this.cookieService.deleteToken();
-    this.router.navigate(['/auth']);
+    this.router.navigate(['/auth'], {replaceUrl: true});
   }
 }

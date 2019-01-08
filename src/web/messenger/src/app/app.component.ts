@@ -29,18 +29,18 @@ export class AppComponent {
 
           this.route.queryParams.subscribe(params => {
             if (params['id']) {
-              this.router.navigate(['/im'], {queryParams: {id: params['id']}});
+              this.router.navigate(['/im'], {queryParams: {id: params['id']}, replaceUrl: true});
             } else {
-              this.router.navigate(['/im']);
+              this.router.navigate(['/im'], {replaceUrl: true});
             }
           });
         },
         error => {
-          this.router.navigate(['/auth']);
+          this.router.navigate(['/auth'], {replaceUrl: true});
         }
       );
     } else {
-      this.router.navigate(['/auth']);
+      this.router.navigate(['/auth'], {replaceUrl: true});
     }
   }
 }
