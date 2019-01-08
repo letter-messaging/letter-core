@@ -36,7 +36,7 @@ export class MessagingService {
   }
 
   sendMessage(token: string, newMessage: NewMessage): Observable<Message> {
-    return this.http.post<Message>(API_URL + '/messaging/delete', newMessage, {
+    return this.http.post<Message>(API_URL + '/messaging/send', newMessage, {
       headers: {'Auth-Token': token}
     });
   }

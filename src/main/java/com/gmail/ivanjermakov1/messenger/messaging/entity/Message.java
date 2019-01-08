@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.gmail.ivanjermakov1.messenger.auth.entity.User;
 
 import javax.persistence.*;
-import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -21,7 +21,7 @@ public class Message {
 	private Conversation conversation;
 	
 	@Column(name = "sent")
-	private Instant sent;
+	private LocalDateTime sent;
 	
 	@Column(name = "text")
 	private String text;
@@ -45,7 +45,7 @@ public class Message {
 	public Message() {
 	}
 	
-	public Message(Conversation conversation, Instant sent, String text, Boolean read, User sender, List<Message> forwarded) {
+	public Message(Conversation conversation, LocalDateTime sent, String text, Boolean read, User sender, List<Message> forwarded) {
 		this.conversation = conversation;
 		this.sent = sent;
 		this.text = text;
@@ -70,11 +70,11 @@ public class Message {
 		this.conversation = conversation;
 	}
 	
-	public Instant getSent() {
+	public LocalDateTime getSent() {
 		return sent;
 	}
 	
-	public void setSent(Instant sent) {
+	public void setSent(LocalDateTime sent) {
 		this.sent = sent;
 	}
 	

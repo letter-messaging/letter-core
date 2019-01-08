@@ -3,7 +3,7 @@ import {Conversation} from './Conversation';
 
 export class Message {
   id: number;
-  sent: Date;
+  sent: string;
   text: string;
   sender: User;
   conversation: Conversation;

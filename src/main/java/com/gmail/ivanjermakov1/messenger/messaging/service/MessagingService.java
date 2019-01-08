@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -87,7 +88,7 @@ public class MessagingService {
 		
 		Message message = new Message(
 				conversation,
-				Instant.now(),
+				LocalDateTime.now(),
 				newMessageDTO.getText(),
 				false,
 				user,
@@ -99,7 +100,7 @@ public class MessagingService {
 		if (message.validate()) throw new InvalidMessageException("invalid message");
 		
 		message.setSender(user);
-		message.setSent(Instant.now());
+		message.setSent(LocalDateTime.now());
 		message = messageService.save(message);
 		
 		MessageDTO messageDTO = messageService.getFullMessage(message);

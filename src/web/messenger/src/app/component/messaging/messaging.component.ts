@@ -9,6 +9,8 @@ import {User} from '../dto/User';
 import {SearchService} from '../../service/search.service';
 import {AuthService} from '../../service/auth.service';
 import {CookieService} from '../../service/cookie.service';
+import {MessagingService} from '../../service/messaging.service';
+import {NewMessage} from '../dto/NewMessage';
 
 @Component({
   selector: 'app-messaging',
@@ -57,7 +59,8 @@ export class MessagingComponent implements OnInit {
               private messageService: MessageService,
               private authService: AuthService,
               private searchService: SearchService,
-              private cookieService: CookieService) {
+              private cookieService: CookieService,
+              private messagingService: MessagingService) {
   }
 
   @HostListener('document:keydown', ['$event'])
@@ -101,6 +104,12 @@ export class MessagingComponent implements OnInit {
     });
   }
 
+  updatePreviews() {
+    this.previewService.all(this.token).subscribe(previews => {
+      this.previews = previews.filter(p => p.lastMessage);
+    });
+  }
+
   // TODO: add debounce support
   previewsOrSearchPreviews(): Array<Preview> {
     if (this.searchText === '') {
@@ -133,6 +142,25 @@ export class MessagingComponent implements OnInit {
   }
 
   sendMessage() {
+    const message = new NewMessage();
+    message.senderId = this.me.id;
+    message.conversationId = this.currentPreview.conversation.id;
+    message.text = this.messageText;
+    message.forwarded = [];
+
+    const tempViewMessage = new Message();
+    tempViewMessage.sender = this.me;
+    tempViewMessage.forwarded = message.forwarded;
+    tempViewMessage.text = message.text;
+
+    this.messages.unshift(tempViewMessage);
+
+    this.messagingService.sendMessage(this.token, message).subscribe(m => {
+      this.updatePreviews();
+      this.messages = this.messages.filter(mes => mes.id);
+      this.messages.unshift(m);
+      console.log(this.messages);
+    });
   }
 
   cancelEditing() {

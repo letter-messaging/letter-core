@@ -1,14 +1,16 @@
 package com.gmail.ivanjermakov1.messenger.messaging.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.gmail.ivanjermakov1.messenger.auth.dto.UserDTO;
 
-import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class MessageDTO {
 	
 	private Long id;
-	private Instant sent;
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+	private LocalDateTime sent;
 	private String text;
 	private UserDTO sender;
 	private ConversationDTO conversation;
@@ -17,7 +19,7 @@ public class MessageDTO {
 	public MessageDTO() {
 	}
 	
-	public MessageDTO(Long id, Instant sent, String text, UserDTO sender, ConversationDTO conversation, List<MessageDTO> forwarded) {
+	public MessageDTO(Long id, LocalDateTime sent, String text, UserDTO sender, ConversationDTO conversation, List<MessageDTO> forwarded) {
 		this.id = id;
 		this.sent = sent;
 		this.text = text;
@@ -34,11 +36,11 @@ public class MessageDTO {
 		this.id = id;
 	}
 	
-	public Instant getSent() {
+	public LocalDateTime getSent() {
 		return sent;
 	}
 	
-	public void setSent(Instant sent) {
+	public void setSent(LocalDateTime sent) {
 		this.sent = sent;
 	}
 	
