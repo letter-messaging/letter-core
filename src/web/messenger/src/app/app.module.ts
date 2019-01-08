@@ -8,8 +8,10 @@ import {RegisterComponent} from './component/register/register.component';
 import {MessagingComponent} from './component/messaging/messaging.component';
 import {FormsModule} from '@angular/forms';
 import {HttpClientModule} from '@angular/common/http';
-import { PreviewComponent } from './component/preview/preview.component';
-import { MessageComponent } from './component/message/message.component';
+import {PreviewComponent} from './component/preview/preview.component';
+import {MessageComponent} from './component/message/message.component';
+import {AutosizeModule} from 'ngx-autosize';
+import {MessageSendDirective} from './component/messaging/MessageSendDirective';
 
 @NgModule({
   declarations: [
@@ -18,13 +20,15 @@ import { MessageComponent } from './component/message/message.component';
     RegisterComponent,
     MessagingComponent,
     PreviewComponent,
-    MessageComponent
+    MessageComponent,
+    MessageSendDirective
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     FormsModule,
-    HttpClientModule
+    HttpClientModule,
+    AutosizeModule
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -34,7 +34,7 @@ export class MessagingComponent implements OnInit {
   routeConversationId: number;
   currentPreview: Preview;
 
-  messageText: string;
+  messageText = '';
 
   searchText = '';
   searchUsers: Array<User> = [];
@@ -148,4 +148,5 @@ export class MessagingComponent implements OnInit {
     this.cookieService.deleteToken();
     this.router.navigate(['/auth'], {replaceUrl: true});
   }
+
 }

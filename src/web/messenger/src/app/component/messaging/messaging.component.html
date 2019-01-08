@@ -54,14 +54,13 @@
       Be the first. Messages will be displayed here.
     </div>
     <div class="message-wrapper" *ngIf="currentPreview">
-      <!--scrolly="loadMore()">-->
+      <!--TODO: load more feature-->
       <app-message
         *ngFor="let message of messages"
         [message]="message"
         [isForwarded]="false"
         [me]="me">
-        <!--ng-class="{'message-mine' : message.mine === true, 'selected' : message.selected === true}"-->
-        <!--ng-click="selectMessage(message)">-->
+        <!--TODO: message selecting-->
       </app-message>
     </div>
     <div class="attachment-wrapper">
@@ -81,12 +80,10 @@
       <!--<div class="button"><i class="fas fa-video"></i></div>-->
       <!--<div class="button"><i class="fas fa-file"></i></div>-->
       <!--</div>-->
-      <textarea autofocus
-                id="send-message-text"
+      <textarea id="send-message-text" autofocus autosize rows="1" placeholder="Write a message..."
                 [(ngModel)]="messageText"
-                rows="1"
-                placeholder="Write a message...">
-    </textarea>
+                appMessageSend [minRows]="1" [maxRows]="10">
+      </textarea>
       <div class="emoji">
         <i class="fas fa-smile"></i>
       </div>
