@@ -9,6 +9,7 @@ import java.util.List;
 public class MessageDTO {
 	
 	private Long id;
+	
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	private LocalDateTime sent;
 	private String text;
