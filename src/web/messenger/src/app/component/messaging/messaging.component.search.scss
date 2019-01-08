@@ -76,9 +76,9 @@
     max-width: 400px;
   }
 
-  :hover {
-    background: var(--bright);
-    cursor: pointer;
-  }
+}
 
+.user-preview:hover {
+  background: var(--bright);
+  cursor: pointer;
 }
