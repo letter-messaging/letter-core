@@ -75,7 +75,8 @@ public class MessageService {
 			e.printStackTrace();
 		}
 		
-		messageDTO.setForwarded(Optional.ofNullable(messageRepository.getById(message.getId()).getForwarded())
+		messageDTO.setForwarded(Optional
+				.ofNullable(messageRepository.getById(message.getId()).getForwarded())
 				.orElse(Collections.emptyList())
 				.stream()
 				.map(this::getFullMessage)

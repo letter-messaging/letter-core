@@ -10,7 +10,11 @@ export class MessageSendDirective {
   @HostListener('document:keypress', ['$event'])
   handleKeydown(event) {
     if (event.code === 'Enter' && !event.shiftKey) {
-      this.messagingComponent.sendMessage();
+      if (this.messagingComponent.editingMessage) {
+        this.messagingComponent.editMessage();
+      } else {
+        this.messagingComponent.sendMessage();
+      }
       event.preventDefault();
     }
   }

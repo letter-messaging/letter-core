@@ -67,7 +67,24 @@ export class MessagingComponent implements OnInit {
   @HostListener('document:keydown', ['$event'])
   handleKeyboardEvent(event: KeyboardEvent) {
     if (event.key === 'Escape') {
-      this.closeConversation();
+      if (this.editingMessage) {
+        this.cancelEditing();
+        return;
+      }
+
+      if (this.searchText) {
+        this.searchText = '';
+        return;
+      }
+
+      if (this.selectedMessages) {
+        this.deselectMessages();
+        return;
+      }
+
+      if (this.currentPreview) {
+        this.closeConversation();
+      }
     }
   }
 
@@ -123,6 +140,12 @@ export class MessagingComponent implements OnInit {
     });
   }
 
+  updateMessages() {
+    this.messageService.get(this.token, this.routeConversationId, 0).subscribe(messages => {
+      this.messages = messages;
+    });
+  }
+
   // TODO: add debounce support
   previewsOrSearchPreviews(): Array<Preview> {
     if (this.searchText === '') {
@@ -142,7 +165,7 @@ export class MessagingComponent implements OnInit {
 
   createConversation(user: User) {
     this.conversationService.create(this.token, user.login).subscribe(conversation => {
-      this.router.navigate(['/im'], {queryParams: {id: conversation.id}, replaceUrl: true});
+      this.openConversation(conversation.id);
     });
   }
 
@@ -198,13 +221,46 @@ export class MessagingComponent implements OnInit {
     this.selectedMessages = [];
   }
 
+  deleteSelectedMessages() {
+    this.messageService.delete(this.token, this.selectedMessages).subscribe(
+      success => {
+        this.updatePreviews();
+        this.updateMessages();
+      },
+      error => {
+        this.updatePreviews();
+        this.updateMessages();
+      }
+    );
+    this.deselectMessages();
+  }
+
+  editSelectedMessage() {
+    this.editingMessage = this.selectedMessages[0];
+    this.messageText = this.editingMessage.text;
+    setTimeout(() => document.getElementById('send-message-text').focus(), 0);
+  }
+
+  editMessage() {
+    this.editingMessage.text = this.messageText;
+
+    this.messagingService.editMessage(this.token, this.editingMessage).subscribe(m => {
+      this.cancelEditing();
+    });
+  }
+
+  cancelEditing() {
+    this.deselectMessages();
+    this.editingMessage = null;
+    this.messageText = '';
+  }
+
   logout() {
     this.cookieService.deleteToken();
     this.router.navigate(['/auth'], {replaceUrl: true});
   }
 
   private startPolling() {
-    console.log('start polling!');
     this.getMessage();
     this.getRead();
     this.getEdit();
@@ -232,7 +288,6 @@ export class MessagingComponent implements OnInit {
   private getRead() {
     this.messagingService.getRead(this.token).subscribe(
       conversationReadAction => {
-        console.log(conversationReadAction);
         this.getRead();
         this.updatePreviews();
         if (conversationReadAction.reader.id === this.me.id) {
@@ -257,7 +312,11 @@ export class MessagingComponent implements OnInit {
 
         if (this.currentPreview && messageEditAction.message.conversation.id === this.currentPreview.conversation.id) {
           this.messages.filter(m => m.id !== messageEditAction.message.id);
-          this.messages.unshift(messageEditAction.message);
+          if (messageEditAction.message.sender.login !== this.me.login) {
+            const updatedMessage = this.messages.find(_m => _m.id === messageEditAction.message.id);
+            updatedMessage.text = messageEditAction.message.text;
+            updatedMessage.forwarded = messageEditAction.message.forwarded;
+          }
         }
       },
       error => {
@@ -265,5 +324,4 @@ export class MessagingComponent implements OnInit {
       }
     );
   }
-
 }

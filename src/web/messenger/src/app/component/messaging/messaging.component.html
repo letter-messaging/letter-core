@@ -66,11 +66,11 @@
       </app-forwarded-attachment>
     </div>
     <div class="send-message-wrapper"
-         *ngIf="currentPreview && selectedMessages.length === 0">
+         *ngIf="currentPreview && !(selectedMessages.length !== 0 && !editingMessage)">
       <i class="fas fa-paperclip" *ngIf="!editingMessage">
         <!--show-att-->
       </i>
-      <i class="fas fa-ban" *ngIf="editingMessage" (click)="editingMessage = null"></i>
+      <i class="fas fa-ban" *ngIf="editingMessage" (click)="cancelEditing()"></i>
       <!--<div class="attachments-menu" *ngIf="showAttachmentsMenu === true">-->
       <!--<div class="button"><i class="fas fa-camera"></i></div>-->
       <!--<div class="button"><i class="fas fa-video"></i></div>-->
@@ -83,19 +83,19 @@
       <div class="emoji">
         <i class="fas fa-smile"></i>
       </div>
-      <div (click)="sendMessage()" class="send-message">
-        <i *ngIf="!editingMessage" class="fas fa-angle-right"></i>
-        <i *ngIf="editingMessage" class="fas fa-angle-up"></i>
+      <div class="send-message">
+        <i *ngIf="!editingMessage" class="fas fa-angle-right" (click)="sendMessage()"></i>
+        <i *ngIf="editingMessage" class="fas fa-angle-up" (click)="editMessage()"></i>
       </div>
     </div>
-    <div class="selected-messages-menu" *ngIf="selectedMessages.length !== 0">
+    <div class="selected-messages-menu" *ngIf="selectedMessages.length !== 0 && !editingMessage">
       <div class="button" (click)="deleteSelectedMessages()"><i class="fas fa-trash"></i></div>
       <div class="button" (click)="replySelectedMessage()"><i class="fas fa-reply"></i></div>
       <div class="button" (click)="forwardSelectedMessages()"><i class="fas fa-arrow-right"></i></div>
-      <div class="button" *ngIf="selectedMessages.length === 1 && selectedMessages[0].mine"
+      <div class="button" *ngIf="selectedMessages.length === 1 && selectedMessages[0].sender.login === me.login"
            (click)="editSelectedMessage()"><i class="fas fa-pen"></i></div>
       <div class="right">
-        <div class="text-button" (click)="clearSelectedMessages()">Cancel</div>
+        <div class="text-button" (click)="deselectMessages()">Cancel</div>
       </div>
     </div>
   </div>

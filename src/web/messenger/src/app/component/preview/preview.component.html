@@ -1,4 +1,4 @@
-<div class="preview" [ngClass]="selected ? 'selected' : ''">
+<div class="preview" [ngClass]="selected ? 'selected' : ''" *ngIf="preview.lastMessage">
   <img class="avatar" src="assets/img/default-avatar.png" alt="">
   <div class="info">{{preview.with.firstName}} {{preview.with.lastName}}</div>
   <div class="message-preview">
@@ -10,7 +10,7 @@
   </div>
   <!--<div class="delete"><i class="fas fa-times"></i></div>-->
   <div class="unread-wrapper">
-    <div class="unread" *ngIf="preview.unread !== 0">
+    <div class="unread" *ngIf="preview.lastMessage.sender.login !== me.login && preview.unread !== 0">
       {{preview.unread}}
     </div>
     <div class="unread-mine" *ngIf="!preview.lastMessage.read && preview.lastMessage.sender.login === me.login">
