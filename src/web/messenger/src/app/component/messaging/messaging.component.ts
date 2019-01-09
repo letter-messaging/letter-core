@@ -29,6 +29,7 @@ import {ConversationService} from '../../service/conversation.service';
 export class MessagingComponent implements OnInit {
 
   private token: string;
+  private isPolling = false;
 
   me: User;
 
@@ -82,6 +83,12 @@ export class MessagingComponent implements OnInit {
         // initial page load issue
         if (this.token === '') {
           return;
+        }
+
+        // makes it execute only once per application load
+        if (!this.isPolling) {
+          this.isPolling = true;
+          this.startPolling();
         }
 
         this.previewService.all(this.token).subscribe(previews => {
@@ -181,12 +188,72 @@ export class MessagingComponent implements OnInit {
   cancelEditing() {
   }
 
-  changeMobileView() {
-  }
-
   logout() {
     this.cookieService.deleteToken();
     this.router.navigate(['/auth'], {replaceUrl: true});
+  }
+
+  private startPolling() {
+    console.log('start polling!');
+    this.getMessage();
+    this.getRead();
+    this.getEdit();
+  }
+
+  private getMessage() {
+    this.messagingService.getMessage(this.token).subscribe(
+      newMessageAction => {
+        this.getMessage();
+        this.updatePreviews();
+        if (newMessageAction.message.sender.id === this.me.id) {
+          return;
+        }
+
+        if (this.currentPreview && newMessageAction.message.conversation.id === this.currentPreview.conversation.id) {
+          this.messages.unshift(newMessageAction.message);
+        }
+      },
+      error => {
+        this.getMessage();
+      }
+    );
+  }
+
+  private getRead() {
+    this.messagingService.getRead(this.token).subscribe(
+      conversationReadAction => {
+        console.log(conversationReadAction);
+        this.getRead();
+        this.updatePreviews();
+        if (conversationReadAction.reader.id === this.me.id) {
+          return;
+        }
+
+        if (this.currentPreview && conversationReadAction.conversation.id === this.currentPreview.conversation.id) {
+          this.messages.forEach(m => m.read = true);
+        }
+      },
+      error => {
+        this.getRead();
+      }
+    );
+  }
+
+  private getEdit() {
+    this.messagingService.getEdit(this.token).subscribe(
+      messageEditAction => {
+        this.getEdit();
+        this.updatePreviews();
+
+        if (this.currentPreview && messageEditAction.message.conversation.id === this.currentPreview.conversation.id) {
+          this.messages.filter(m => m.id !== messageEditAction.message.id);
+          this.messages.unshift(messageEditAction.message);
+        }
+      },
+      error => {
+        this.getEdit();
+      }
+    );
   }
 
 }
