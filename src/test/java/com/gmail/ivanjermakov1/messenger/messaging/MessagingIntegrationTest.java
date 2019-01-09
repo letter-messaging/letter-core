@@ -1,6 +1,5 @@
 package com.gmail.ivanjermakov1.messenger.messaging;
 
-import com.gmail.ivanjermakov1.messenger.SpringBootConfig;
 import com.gmail.ivanjermakov1.messenger.auth.dto.RegisterUserDTO;
 import com.gmail.ivanjermakov1.messenger.auth.dto.UserDTO;
 import com.gmail.ivanjermakov1.messenger.auth.service.UserService;
@@ -13,22 +12,19 @@ import com.gmail.ivanjermakov1.messenger.messaging.controller.MessagingControlle
 import com.gmail.ivanjermakov1.messenger.messaging.dto.ConversationDTO;
 import com.gmail.ivanjermakov1.messenger.messaging.dto.NewMessageDTO;
 import com.gmail.ivanjermakov1.messenger.messaging.dto.action.NewMessageAction;
-import com.gmail.ivanjermakov1.messenger.messaging.service.MessageService;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.ConfigFileApplicationContextInitializer;
-import org.springframework.test.context.ContextConfiguration;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.web.context.request.async.DeferredResult;
 
 import javax.transaction.Transactional;
 import java.util.Collections;
 
+@SpringBootTest
 @RunWith(SpringRunner.class)
-@ContextConfiguration(classes = SpringBootConfig.class,
-		initializers = ConfigFileApplicationContextInitializer.class)
 @Transactional
 public class MessagingIntegrationTest {
 	
