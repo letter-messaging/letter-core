@@ -47,7 +47,8 @@ public class MessageService {
 		
 		Set<Message> messagesIds = messageRepository.get(conversationId, offset, limit);
 		
-		return messagesIds.stream()
+		return messagesIds
+				.stream()
 				.map(this::getFullMessage)
 				.collect(Collectors.toList());
 	}
@@ -98,7 +99,8 @@ public class MessageService {
 	 * @param deleteMessages messages which going to be removed
 	 */
 	public void delete(User user, List<MessageDTO> deleteMessages) {
-		deleteMessages.stream()
+		deleteMessages
+				.stream()
 				.map(dto -> messageRepository.getById(dto.getId()))
 				.filter(m -> m.getSender().getId().equals(user.getId()))
 				.forEach(this::delete);

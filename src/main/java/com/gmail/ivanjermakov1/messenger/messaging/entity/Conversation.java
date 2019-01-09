@@ -16,7 +16,7 @@ public class Conversation {
 	private Long id;
 	
 	@JsonIgnore
-	@ManyToMany
+	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(
 			name = "user_conversation",
 			joinColumns = @JoinColumn(name = "conversation_id"),

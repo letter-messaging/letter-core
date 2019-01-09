@@ -57,16 +57,20 @@ public class ConversationService {
 	
 	public ConversationDTO get(Conversation conversation) {
 		return new ConversationDTO(
-				conversation.getId(), conversation.getUsers()
-				.stream()
-				.map(userService::full)
-				.collect(Collectors.toList())
+				conversation.getId(),
+				conversation.getUsers()
+						.stream()
+						.map(userService::full)
+						.collect(Collectors.toList())
 		);
 	}
 	
 	private Conversation conversationWith(User user1, User user2) throws NoSuchEntityException {
-		return conversationRepository.getConversations(user1.getId()).stream()
-				.filter(c -> c.getUsers().stream().anyMatch(u -> u.getId().equals(user2.getId())) &&
+		return conversationRepository.getConversations(user1.getId())
+				.stream()
+				.filter(c -> c.getUsers()
+						.stream()
+						.anyMatch(u -> u.getId().equals(user2.getId())) &&
 						c.getUsers().size() == 2)
 				.findFirst().orElseThrow(() -> new NoSuchEntityException("no such conversation"));
 	}

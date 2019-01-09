@@ -8,20 +8,19 @@ import com.gmail.ivanjermakov1.messenger.exception.NoSuchEntityException;
 import com.gmail.ivanjermakov1.messenger.messaging.dto.EditMessageDTO;
 import com.gmail.ivanjermakov1.messenger.messaging.dto.MessageDTO;
 import com.gmail.ivanjermakov1.messenger.messaging.dto.NewMessageDTO;
-import com.gmail.ivanjermakov1.messenger.messaging.dto.action.*;
+import com.gmail.ivanjermakov1.messenger.messaging.dto.action.ConversationReadAction;
+import com.gmail.ivanjermakov1.messenger.messaging.dto.action.MessageEditAction;
+import com.gmail.ivanjermakov1.messenger.messaging.dto.action.NewMessageAction;
+import com.gmail.ivanjermakov1.messenger.messaging.dto.action.Request;
 import com.gmail.ivanjermakov1.messenger.messaging.entity.Conversation;
 import com.gmail.ivanjermakov1.messenger.messaging.entity.Message;
-import com.gmail.ivanjermakov1.messenger.util.Logs;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.time.Instant;
 import java.time.LocalDateTime;
-import java.util.Collection;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.stream.Collectors;
@@ -60,21 +59,6 @@ public class MessagingService {
 	}
 	
 	/**
-	 * Clear out timeout requests from all of the request queues
-	 */
-	@Scheduled(fixedRate = 60000)
-	public void clearTimeoutRequests() {
-		String before = Logs.collectionSizeList(newMessageRequests, messageEditRequests, conversationReadRequests);
-		
-		clearTimeoutRequests(newMessageRequests);
-		clearTimeoutRequests(conversationReadRequests);
-		clearTimeoutRequests(messageEditRequests);
-		
-		LOG.debug("requests are cleared. before: " + before + "; after: " +
-				Logs.collectionSizeList(newMessageRequests, messageEditRequests, conversationReadRequests));
-	}
-	
-	/**
 	 * Processes new message and close requests of /get listeners
 	 *
 	 * @param user          sender
@@ -105,7 +89,8 @@ public class MessagingService {
 		
 		MessageDTO messageDTO = messageService.getFullMessage(message);
 		
-		newMessageRequests.stream()
+		newMessageRequests
+				.stream()
 				.filter(request -> conversation.getUsers()
 						.stream()
 						.anyMatch(i -> i.getId().equals(request.getUser().getId())))
@@ -134,7 +119,8 @@ public class MessagingService {
 		
 		MessageDTO messageDTO = messageService.getFullMessage(original);
 		
-		messageEditRequests.stream()
+		messageEditRequests
+				.stream()
 				.filter(request -> conversation.getUsers()
 						.stream()
 						.anyMatch(i -> i.getId().equals(request.getUser().getId())))
@@ -152,21 +138,15 @@ public class MessagingService {
 		
 		messageService.read(user, conversation);
 		
-		conversationReadRequests.stream()
+		conversationReadRequests
+				.stream()
 				.filter(requestEntry -> conversation.getUsers()
 						.stream()
 						.anyMatch(i -> i.getId().equals(requestEntry.getUser().getId())))
-				.filter(requestEntry -> !requestEntry.getUser().getId().equals(user.getId()))
 				.forEach(e -> {
 					e.set(new ConversationReadAction(conversationService.get(conversation), userService.full(user)));
 					conversationReadRequests.removeIf(entry -> entry.equals(e));
 				});
-	}
-	
-	private void clearTimeoutRequests(Collection<? extends Request<? extends Action>> requests) {
-		requests.stream()
-				.filter(Request::isSetOrExpired)
-				.forEach(requests::remove);
 	}
 	
 }

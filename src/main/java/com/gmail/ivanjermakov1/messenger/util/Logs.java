@@ -9,7 +9,8 @@ public class Logs {
 	
 	public static String collectionSizeList(Collection... collections) {
 		List<Collection> c = Arrays.asList(collections);
-		return c.stream()
+		return c
+				.stream()
 				.map(collection -> String.valueOf(collection.size()))
 				.collect(Collectors.toList()).toString();
 	}
