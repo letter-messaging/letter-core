@@ -45,7 +45,7 @@
   margin: 2px;
 }
 
-.message-wrapper .selected {
+.selected {
   width: 100%;
   background: rgba(0, 0, 0, 0.05);
 }
@@ -56,6 +56,8 @@
   padding: 0 10px;
 
   background: var(--grey);
+
+  cursor: pointer;
 
   border-radius: 10px 10px 10px 0;
 }

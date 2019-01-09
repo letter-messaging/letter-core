@@ -13,6 +13,7 @@ import {MessageComponent} from './component/message/message.component';
 import {AutosizeModule} from 'ngx-autosize';
 import {MessageSendDirective} from './component/messaging/MessageSendDirective';
 import {ArraySortPipeAsc, ArraySortPipeDesc} from './pipe/ArraySortPipe';
+import {ForwardedAttachmentComponent} from './component/attachment/forwarded-attachment/forwarded-attachment.component';
 
 @NgModule({
   declarations: [
@@ -25,6 +26,7 @@ import {ArraySortPipeAsc, ArraySortPipeDesc} from './pipe/ArraySortPipe';
     MessageSendDirective,
     ArraySortPipeAsc,
     ArraySortPipeDesc,
+    ForwardedAttachmentComponent,
   ],
   imports: [
     BrowserModule,

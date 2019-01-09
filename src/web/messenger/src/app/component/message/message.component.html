@@ -1,4 +1,4 @@
-<div class="message" [ngClass]="mine === true ? 'message-mine' : ''">
+<div class="message" [ngClass]="{'message-mine': mine, 'selected': message.selected}">
   <div class="message-container">
     <img class="avatar" src="assets/img/default-avatar.png" *ngIf="!isForwarded" alt="">
     <div class="message-content">

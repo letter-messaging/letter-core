@@ -48,8 +48,6 @@ export class MessagingComponent implements OnInit {
 
   selectedMessages: Array<Message> = [];
 
-  isEditMessageView = false;
-
   editingMessage: Message;
 
   isLeftView = true;
@@ -185,7 +183,19 @@ export class MessagingComponent implements OnInit {
     });
   }
 
-  cancelEditing() {
+  selectMessage(message: Message) {
+    if (!message.selected) {
+      message.selected = true;
+      this.selectedMessages.push(message);
+    } else {
+      message.selected = false;
+      this.selectedMessages = this.selectedMessages.filter(m => m.id !== message.id);
+    }
+  }
+
+  deselectMessages() {
+    this.selectedMessages.forEach(m => m.selected = false);
+    this.selectedMessages = [];
   }
 
   logout() {

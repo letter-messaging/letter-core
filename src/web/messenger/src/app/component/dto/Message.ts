@@ -9,4 +9,5 @@ export class Message {
   sender: User;
   conversation: Conversation;
   forwarded: Array<Message>;
+  selected = false;
 }
