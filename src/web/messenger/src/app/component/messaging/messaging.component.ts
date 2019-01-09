@@ -11,6 +11,7 @@ import {AuthService} from '../../service/auth.service';
 import {CookieService} from '../../service/cookie.service';
 import {MessagingService} from '../../service/messaging.service';
 import {NewMessage} from '../dto/NewMessage';
+import {ConversationService} from '../../service/conversation.service';
 
 @Component({
   selector: 'app-messaging',
@@ -60,7 +61,8 @@ export class MessagingComponent implements OnInit {
               private authService: AuthService,
               private searchService: SearchService,
               private cookieService: CookieService,
-              private messagingService: MessagingService) {
+              private messagingService: MessagingService,
+              private conversationService: ConversationService) {
   }
 
   @HostListener('document:keydown', ['$event'])
@@ -91,7 +93,13 @@ export class MessagingComponent implements OnInit {
             this.messageService.get(this.token, this.routeConversationId, 0).subscribe(messages => {
               this.searchText = '';
 
-              this.currentPreview = this.previews.find(p => p.conversation.id == this.routeConversationId);
+              if (messages.length != 0) {
+                this.currentPreview = this.previews.find(p => p.conversation.id == this.routeConversationId);
+              } else {
+                this.previewService.get(this.token, this.routeConversationId).subscribe(preview => {
+                  this.currentPreview = preview;
+                });
+              }
               this.messages = messages;
             });
           } else {
@@ -125,6 +133,12 @@ export class MessagingComponent implements OnInit {
 
   closeConversation() {
     this.router.navigate(['/im'], {replaceUrl: true});
+  }
+
+  createConversation(user: User) {
+    this.conversationService.create(this.token, user.login).subscribe(conversation => {
+      this.router.navigate(['/im'], {queryParams: {id: conversation.id}, replaceUrl: true});
+    });
   }
 
   searchForConversationsOrUsers() {
@@ -165,9 +179,6 @@ export class MessagingComponent implements OnInit {
   }
 
   cancelEditing() {
-  }
-
-  createConversation(user: User) {
   }
 
   changeMobileView() {

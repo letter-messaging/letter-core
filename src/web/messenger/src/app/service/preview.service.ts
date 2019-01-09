@@ -18,8 +18,8 @@ export class PreviewService {
     });
   }
 
-  get(token: string, conversationId: number): Observable<Array<Preview>> {
-    return this.http.get<Array<Preview>>(API_URL + '/preview/get', {
+  get(token: string, conversationId: number): Observable<Preview> {
+    return this.http.get<Preview>(API_URL + '/preview/get', {
       headers: {'Auth-Token': token},
       params: {'conversationId': conversationId.toString()}
     });
