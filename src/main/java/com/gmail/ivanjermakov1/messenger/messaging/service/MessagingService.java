@@ -125,8 +125,7 @@ public class MessagingService {
 						.stream()
 						.anyMatch(i -> i.getId().equals(request.getUser().getId())))
 				.forEach(request -> {
-					MessageEditAction messageEditAction = new MessageEditAction(messageDTO);
-					request.set(messageEditAction);
+					request.set(new MessageEditAction(messageDTO));
 					messageEditRequests.removeIf(r -> r.equals(request));
 				});
 		
