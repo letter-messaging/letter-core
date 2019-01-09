@@ -9,7 +9,6 @@ export class MessageSendDirective {
 
   @HostListener('document:keypress', ['$event'])
   handleKeydown(event) {
-    console.log(event);
     if (event.code === 'Enter' && !event.shiftKey) {
       this.messagingComponent.sendMessage();
       event.preventDefault();
