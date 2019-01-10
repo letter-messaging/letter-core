@@ -81,10 +81,9 @@ public class MessagingService {
 						.map(dto -> messageService.get(dto.getId()))
 						.collect(Collectors.toList())
 		);
-		if (message.validate()) throw new InvalidMessageException("invalid message");
 		
-		message.setSender(user);
-		message.setSent(LocalDateTime.now());
+		if (!message.validate()) throw new InvalidMessageException("invalid message");
+		
 		message = messageService.save(message);
 		
 		MessageDTO messageDTO = messageService.getFullMessage(message);

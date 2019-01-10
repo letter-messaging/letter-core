@@ -111,8 +111,9 @@ public class Message {
 	}
 	
 	public boolean validate() {
+		if (sender == null || sender.getId() == null) return false;
 		if (conversation == null || conversation.getId() == null) return false;
-		return (forwarded != null && !forwarded.isEmpty()) && text != null && !text.isEmpty();
+		return forwarded == null || !forwarded.isEmpty() || !text.trim().isEmpty();
 	}
 	
 }
