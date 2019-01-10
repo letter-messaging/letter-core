@@ -14,6 +14,7 @@ import {AutosizeModule} from 'ngx-autosize';
 import {MessageSendDirective} from './component/messaging/MessageSendDirective';
 import {ArraySortPipeAsc, ArraySortPipeDesc} from './pipe/ArraySortPipe';
 import {ForwardedAttachmentComponent} from './component/attachment/forwarded-attachment/forwarded-attachment.component';
+import {ShowAttachmentsMenuDirective} from './component/messaging/ShowAttachmentsMenuDirective';
 
 @NgModule({
   declarations: [
@@ -24,6 +25,7 @@ import {ForwardedAttachmentComponent} from './component/attachment/forwarded-att
     PreviewComponent,
     MessageComponent,
     MessageSendDirective,
+    ShowAttachmentsMenuDirective,
     ArraySortPipeAsc,
     ArraySortPipeDesc,
     ForwardedAttachmentComponent,

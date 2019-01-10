@@ -56,6 +56,7 @@ export class MessagingComponent implements OnInit {
 
   isLeftView = true;
   isSelectForwardTo = false;
+  showAttachmentsMenu = false;
 
   constructor(private route: ActivatedRoute,
               private router: Router,

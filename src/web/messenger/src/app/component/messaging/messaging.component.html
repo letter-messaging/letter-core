@@ -41,6 +41,7 @@
           <!--TODO: if nothing found-->
         </div>
       </ng-container>
+      <div class="splitter"></div>
     </div>
   </div>
 
@@ -68,15 +69,17 @@
     </div>
     <div class="send-message-wrapper"
          *ngIf="currentPreview && !(selectedMessages.length !== 0 && !editingMessage)">
-      <i class="fas fa-paperclip" *ngIf="!editingMessage">
-        <!--show-att-->
-      </i>
       <i class="fas fa-ban" *ngIf="editingMessage" (click)="cancelEditing()"></i>
-      <!--<div class="attachments-menu" *ngIf="showAttachmentsMenu === true">-->
-      <!--<div class="button"><i class="fas fa-camera"></i></div>-->
-      <!--<div class="button"><i class="fas fa-video"></i></div>-->
-      <!--<div class="button"><i class="fas fa-file"></i></div>-->
-      <!--</div>-->
+      <div appShowAttachmentsMenu>
+        <i class="fas fa-paperclip" *ngIf="!editingMessage"></i>
+        <div class="attachments-menu" *ngIf="showAttachmentsMenu">
+          <div class="button"><i class="fas fa-camera"></i> Image</div>
+          <div class="splitter"></div>
+          <div class="button"><i class="fas fa-video"></i> Video</div>
+          <div class="splitter"></div>
+          <div class="button"><i class="fas fa-file"></i> Document</div>
+        </div>
+      </div>
       <textarea id="send-message-text" autofocus autosize rows="1" placeholder="Write a message..."
                 [(ngModel)]="messageText"
                 appMessageSend [minRows]="1" [maxRows]="10">
