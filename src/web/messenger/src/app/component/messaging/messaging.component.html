@@ -60,9 +60,9 @@
       </app-message>
     </div>
     <div class="attachment-wrapper">
-      <app-forwarded-attachment *ngIf="editingMessage && editingMessage.forwarded.length !== 0"
-                                [forwarded]="editingMessage.forwarded"
-                                (removeForwardedAttachmentEvent)="editingMessage.forwarded = null">
+      <app-forwarded-attachment *ngIf="currentMessageAttachments && currentMessageAttachments.forwarded.length !== 0"
+                                [forwarded]="currentMessageAttachments.forwarded"
+                                (removeForwardedAttachmentEvent)="currentMessageAttachments.forwarded = []">
       </app-forwarded-attachment>
     </div>
     <div class="send-message-wrapper"
@@ -90,7 +90,7 @@
     </div>
     <div class="selected-messages-menu" *ngIf="selectedMessages.length !== 0 && !editingMessage">
       <div class="button" (click)="deleteSelectedMessages()"><i class="fas fa-trash"></i></div>
-      <div class="button" (click)="replySelectedMessage()"><i class="fas fa-reply"></i></div>
+      <div class="button" (click)="attachSelectedMessagesAsForwardedAttachment()"><i class="fas fa-reply"></i></div>
       <div class="button" (click)="forwardSelectedMessages()"><i class="fas fa-arrow-right"></i></div>
       <div class="button" *ngIf="selectedMessages.length === 1 && selectedMessages[0].sender.login === me.login"
            (click)="editSelectedMessage()"><i class="fas fa-pen"></i></div>

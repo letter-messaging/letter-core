@@ -12,6 +12,7 @@ import {CookieService} from '../../service/cookie.service';
 import {MessagingService} from '../../service/messaging.service';
 import {NewMessage} from '../dto/NewMessage';
 import {ConversationService} from '../../service/conversation.service';
+import {MessageAttachments} from '../dto/MessageAttachments';
 
 @Component({
   selector: 'app-messaging',
@@ -29,7 +30,7 @@ import {ConversationService} from '../../service/conversation.service';
 export class MessagingComponent implements OnInit {
 
   private token: string;
-  private isPolling = false;
+  isPolling = false;
 
   me: User;
 
@@ -44,13 +45,13 @@ export class MessagingComponent implements OnInit {
   searchUsers: Array<User> = [];
   searchPreviews: Array<Preview> = [];
 
-  isSelectForwardTo = false;
-
   selectedMessages: Array<Message> = [];
 
   editingMessage: Message;
+  currentMessageAttachments: MessageAttachments = new MessageAttachments();
 
   isLeftView = true;
+  isSelectForwardTo = false;
 
   constructor(private route: ActivatedRoute,
               private router: Router,
@@ -188,9 +189,10 @@ export class MessagingComponent implements OnInit {
     message.senderId = this.me.id;
     message.conversationId = this.currentPreview.conversation.id;
     message.text = this.messageText;
-    message.forwarded = [];
+    message.forwarded = this.currentMessageAttachments.forwarded;
 
     this.messageText = '';
+    this.currentMessageAttachments = new MessageAttachments();
 
     const tempViewMessage = new Message();
     tempViewMessage.sender = this.me;
@@ -247,6 +249,17 @@ export class MessagingComponent implements OnInit {
     this.messagingService.editMessage(this.token, this.editingMessage).subscribe(m => {
       this.cancelEditing();
     });
+  }
+
+  attachSelectedMessagesAsForwardedAttachment() {
+    this.currentMessageAttachments.forwarded = this.selectedMessages;
+    this.deselectMessages();
+  }
+
+  forwardSelectedMessages() {
+    this.attachSelectedMessagesAsForwardedAttachment();
+    this.isSelectForwardTo = true;
+    this.closeConversation();
   }
 
   cancelEditing() {
