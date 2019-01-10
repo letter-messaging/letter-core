@@ -20,7 +20,7 @@
 
 }
 
-#no-conversation {
+.no-conversation {
   flex: 1;
 
   display: flex;
@@ -33,7 +33,7 @@
   color: var(--grey);
 }
 
-#no-messages {
+.no-messages {
   display: flex;
   justify-content: center;
   align-items: center;

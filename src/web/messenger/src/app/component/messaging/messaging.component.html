@@ -45,15 +45,16 @@
   </div>
 
   <div class="conversation">
-    <div id="no-conversation" *ngIf="!currentPreview">
-      {{!isSelectForwardTo ?
-      'Select conversation to start messaging.' :
-      'Select conversation to forward messages to.'}}
+    <div class="no-conversation" *ngIf="!currentPreview">
+      Select conversation to start messaging.
     </div>
-    <div id="no-messages" *ngIf="currentPreview && messages.length === 0">
+    <div class="no-conversation" *ngIf="currentPreview && isSelectForwardTo">
+      Select conversation to forward messages to.
+    </div>
+    <div class="no-messages" *ngIf="currentPreview && messages.length === 0 && !isSelectForwardTo">
       Be the first. Messages will be displayed here.
     </div>
-    <div class="message-wrapper" *ngIf="currentPreview">
+    <div class="message-wrapper" *ngIf="currentPreview && !isSelectForwardTo">
       <!--TODO: load more feature-->
       <app-message *ngFor="let message of messages | descSort: 'sent'" (click)="selectMessage(message)"
                    [message]="message" [isForwarded]="false" [me]="me">

@@ -73,12 +73,23 @@ export class MessagingComponent implements OnInit {
         return;
       }
 
-      if (this.searchText) {
+      if (!this.isSelectForwardTo && this.currentMessageAttachments.forwarded.length !== 0) {
+        this.currentMessageAttachments.forwarded = [];
+        return;
+      }
+
+      if (this.isSelectForwardTo) {
+        this.isSelectForwardTo = false;
+        this.currentMessageAttachments.forwarded = [];
+        return;
+      }
+
+      if (this.searchText !== '') {
         this.searchText = '';
         return;
       }
 
-      if (this.selectedMessages) {
+      if (this.selectedMessages.length !== 0) {
         this.deselectMessages();
         return;
       }
@@ -116,14 +127,15 @@ export class MessagingComponent implements OnInit {
             this.messageService.get(this.token, this.routeConversationId, 0).subscribe(messages => {
               this.searchText = '';
 
-              if (messages.length != 0) {
+              this.messages = messages;
+
+              if (messages.length !== 0) {
                 this.currentPreview = this.previews.find(p => p.conversation.id == this.routeConversationId);
               } else {
                 this.previewService.get(this.token, this.routeConversationId).subscribe(preview => {
                   this.currentPreview = preview;
                 });
               }
-              this.messages = messages;
             });
           } else {
             this.isLeftView = true;
@@ -158,6 +170,7 @@ export class MessagingComponent implements OnInit {
 
   openConversation(conversationId: number) {
     this.router.navigate(['/im'], {queryParams: {id: conversationId}, replaceUrl: true});
+    this.isSelectForwardTo = false;
   }
 
   closeConversation() {
@@ -190,6 +203,10 @@ export class MessagingComponent implements OnInit {
     message.conversationId = this.currentPreview.conversation.id;
     message.text = this.messageText;
     message.forwarded = this.currentMessageAttachments.forwarded;
+
+    if (message.forwarded.length === 0 && message.text.trim().length === 0) {
+      return;
+    }
 
     this.messageText = '';
     this.currentMessageAttachments = new MessageAttachments();
@@ -259,7 +276,6 @@ export class MessagingComponent implements OnInit {
   forwardSelectedMessages() {
     this.attachSelectedMessagesAsForwardedAttachment();
     this.isSelectForwardTo = true;
-    this.closeConversation();
   }
 
   cancelEditing() {
