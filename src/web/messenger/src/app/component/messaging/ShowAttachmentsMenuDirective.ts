@@ -14,14 +14,12 @@ export class ShowAttachmentsMenuDirective {
 
   @HostListener('mouseover', ['$event'])
   handleMouseover(event) {
-    console.log('in!');
     this.messagingComponent.showAttachmentsMenu = true;
     this.cancelClosing();
   }
 
   @HostListener('mouseout', ['$event'])
   handleMouseout(event) {
-    console.log('out!');
     this.close();
   }
 
