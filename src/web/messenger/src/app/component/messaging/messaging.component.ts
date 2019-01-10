@@ -14,6 +14,9 @@ import {NewMessage} from '../dto/NewMessage';
 import {ConversationService} from '../../service/conversation.service';
 import {MessageAttachments} from '../dto/MessageAttachments';
 import {SoundNotificationService} from '../../service/sound-notification.service';
+import {Title} from '@angular/platform-browser';
+import {BackgroundUnreadService} from '../../service/background-unread.service';
+import {APP_TITLE} from '../../../../globals';
 
 @Component({
   selector: 'app-messaging',
@@ -56,6 +59,7 @@ export class MessagingComponent implements OnInit {
 
   constructor(private route: ActivatedRoute,
               private router: Router,
+              private titleService: Title,
               private previewService: PreviewService,
               private messengerService: MessengerService,
               private messageService: MessageService,
@@ -64,7 +68,8 @@ export class MessagingComponent implements OnInit {
               private cookieService: CookieService,
               private messagingService: MessagingService,
               private conversationService: ConversationService,
-              private soundNotificationService: SoundNotificationService) {
+              private soundNotificationService: SoundNotificationService,
+              private backgroundUnreadService: BackgroundUnreadService) {
   }
 
   @HostListener('document:keydown', ['$event'])
@@ -100,6 +105,12 @@ export class MessagingComponent implements OnInit {
         this.closeConversation();
       }
     }
+  }
+
+  @HostListener('window:focus', ['$event'])
+  onFocus(event: any): void {
+    this.backgroundUnreadService.resetUnreadCount();
+    this.titleService.setTitle(APP_TITLE);
   }
 
   ngOnInit() {
@@ -307,6 +318,7 @@ export class MessagingComponent implements OnInit {
           return;
         }
 
+        this.incrementBackgroundUnread();
         this.soundNotificationService.notify();
         if (this.currentPreview && newMessageAction.message.conversation.id === this.currentPreview.conversation.id) {
           this.messages.unshift(newMessageAction.message);
@@ -316,6 +328,15 @@ export class MessagingComponent implements OnInit {
         this.getMessage();
       }
     );
+  }
+
+  incrementBackgroundUnread() {
+    if (document.visibilityState === 'hidden') {
+      this.backgroundUnreadService.incrementUnreadCount();
+      this.backgroundUnreadService.oUnreadCount.subscribe(c => {
+        this.titleService.setTitle(`${APP_TITLE} ${c} new message${c === 1 ? '' : 's'}`);
+      });
+    }
   }
 
   private getRead() {
@@ -357,4 +378,5 @@ export class MessagingComponent implements OnInit {
       }
     );
   }
+
 }
