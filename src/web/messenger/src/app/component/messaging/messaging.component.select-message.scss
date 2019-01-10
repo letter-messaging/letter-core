@@ -58,7 +58,6 @@
 
   display: flex;
 
-  align-items: center;
   flex-direction: column;
 
   background: white;
@@ -67,8 +66,38 @@
 
   padding: 2px;
 
-  .button i {
-    font-size: 24px;
+  .splitter {
+    align-self: center;
+
+    width: 80%;
+    height: 0;
+    border: 1px solid var(--bright);
+  }
+
+  .button {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+
+    padding: 4px 8px;
+    margin-right: 4px;
+
+    font-size: 18px;
+
+    cursor: pointer;
+
+    i {
+      padding: 4px;
+      font-size: 20px;
+    }
+  }
+
+  .button:hover {
+    color: var(--special);
+
+    i {
+      color: var(--special);
+    }
   }
 
 }

@@ -40,8 +40,8 @@
   height: 60px;
   padding: 5px;
 
-  border-top: 1px solid #f3f3f3;
-  border-bottom: 1px solid #f3f3f3;
+  border-top: 1px solid var(--bright);
+  border-bottom: 1px solid var(--bright);
 
   .avatar {
     grid-column: 1;
