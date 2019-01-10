@@ -13,6 +13,7 @@ import {MessagingService} from '../../service/messaging.service';
 import {NewMessage} from '../dto/NewMessage';
 import {ConversationService} from '../../service/conversation.service';
 import {MessageAttachments} from '../dto/MessageAttachments';
+import {SoundNotificationService} from '../../service/sound-notification.service';
 
 @Component({
   selector: 'app-messaging',
@@ -62,7 +63,8 @@ export class MessagingComponent implements OnInit {
               private searchService: SearchService,
               private cookieService: CookieService,
               private messagingService: MessagingService,
-              private conversationService: ConversationService) {
+              private conversationService: ConversationService,
+              private soundNotificationService: SoundNotificationService) {
   }
 
   @HostListener('document:keydown', ['$event'])
@@ -299,11 +301,13 @@ export class MessagingComponent implements OnInit {
     this.messagingService.getMessage(this.token).subscribe(
       newMessageAction => {
         this.getMessage();
+
         this.updatePreviews();
         if (newMessageAction.message.sender.id === this.me.id) {
           return;
         }
 
+        this.soundNotificationService.notify();
         if (this.currentPreview && newMessageAction.message.conversation.id === this.currentPreview.conversation.id) {
           this.messages.unshift(newMessageAction.message);
         }
