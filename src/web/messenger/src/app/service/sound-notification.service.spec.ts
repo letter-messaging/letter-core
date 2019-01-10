@@ -1,6 +1,6 @@
-import { TestBed } from '@angular/core/testing';
+import {TestBed} from '@angular/core/testing';
 
-import { SoundNotificationService } from './sound-notification.service';
+import {SoundNotificationService} from './sound-notification.service';
 
 describe('SoundNotificationService', () => {
   beforeEach(() => TestBed.configureTestingModule({}));

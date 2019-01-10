@@ -1,6 +1,6 @@
-import { TestBed } from '@angular/core/testing';
+import {TestBed} from '@angular/core/testing';
 
-import { BackgroundUnreadService } from './background-unread.service';
+import {BackgroundUnreadService} from './background-unread.service';
 
 describe('BackgroundUnreadService', () => {
   beforeEach(() => TestBed.configureTestingModule({}));
