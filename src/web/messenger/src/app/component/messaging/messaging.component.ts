@@ -293,6 +293,11 @@ export class MessagingComponent implements OnInit {
   forwardSelectedMessages() {
     this.attachSelectedMessagesAsForwardedAttachment();
     this.isSelectForwardTo = true;
+    this.isLeftView = true;
+  }
+
+  removeForwardedAttachment() {
+    this.currentMessageAttachments.forwarded = [];
   }
 
   cancelEditing() {

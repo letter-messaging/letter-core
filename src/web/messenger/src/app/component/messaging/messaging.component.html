@@ -5,7 +5,9 @@
   </header>
 
   <header class="header-right">
-    <div class="menu" (click)="closeConversation()"><i class="fas fa-bars"></i></div>
+    <div class="menu" (click)="closeConversation(); removeForwardedAttachment(); cancelEditing()">
+      <i class="fas fa-bars"></i>
+    </div>
     <div class="conversation-name" *ngIf="currentPreview">{{currentPreview.with.firstName}}
       {{currentPreview.with.lastName}}
     </div>
@@ -75,7 +77,7 @@
     <div class="attachment-wrapper">
       <app-forwarded-attachment *ngIf="currentMessageAttachments && currentMessageAttachments.forwarded.length !== 0"
                                 [forwarded]="currentMessageAttachments.forwarded"
-                                (removeForwardedAttachmentEvent)="currentMessageAttachments.forwarded = []">
+                                (removeForwardedAttachmentEvent)="removeForwardedAttachment()">
       </app-forwarded-attachment>
     </div>
     <div class="send-message-wrapper"
