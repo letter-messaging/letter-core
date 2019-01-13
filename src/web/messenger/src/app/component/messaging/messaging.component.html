@@ -25,6 +25,7 @@
              (ngModelChange)="searchForConversationsOrUsers($event)" name="search-conversations">
     </div>
     <div class="preview-wrapper">
+      <div class="splitter"></div>
       <ng-container *ngIf="searchText.trim()[0] !== '@'">
         <app-preview
           *ngFor="let preview of previewsOrSearchPreviews()"
@@ -43,8 +44,11 @@
           <div class="login">@{{user.login}}</div>
           <!--TODO: if nothing found-->
         </div>
+        <div class="not-found" *ngIf="searchUsers && searchUsers.length === 0">
+          <i class="far fa-frown"></i>
+          <div class="text">No matching users found</div>
+        </div>
       </ng-container>
-      <div class="splitter"></div>
     </div>
   </div>
 

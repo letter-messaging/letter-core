@@ -82,3 +82,23 @@
   background: var(--bright);
   cursor: pointer;
 }
+
+.not-found {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  i {
+    font-size: 48px;
+    margin: 16px;
+    color: var(--grey);
+  }
+
+  .text {
+    color: var(--grey);
+    font-size: 16px;
+    font-style: italic;
+  }
+
+}
