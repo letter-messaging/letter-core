@@ -84,6 +84,10 @@ public class MessagingService {
 		
 		if (!message.validate()) throw new InvalidMessageException("invalid message");
 		
+		if (conversation.getUsers().size() == 1) {
+			message.setRead(true);
+		}
+		
 		message = messageService.save(message);
 		
 		MessageDTO messageDTO = messageService.getFullMessage(message);
@@ -145,10 +149,6 @@ public class MessagingService {
 					e.set(new ConversationReadAction(conversationService.get(conversation), userService.full(user)));
 					conversationReadRequests.removeIf(entry -> entry.equals(e));
 				});
-	}
-	
-	public void appearOnline(User user) {
-	
 	}
 	
 }
