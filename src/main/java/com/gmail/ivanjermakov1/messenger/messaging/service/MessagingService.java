@@ -147,4 +147,8 @@ public class MessagingService {
 				});
 	}
 	
+	public void appearOnline(User user) {
+	
+	}
+	
 }

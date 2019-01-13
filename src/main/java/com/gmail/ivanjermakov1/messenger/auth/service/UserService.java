@@ -12,6 +12,8 @@ import com.gmail.ivanjermakov1.messenger.exception.AuthenticationException;
 import com.gmail.ivanjermakov1.messenger.exception.NoSuchEntityException;
 import com.gmail.ivanjermakov1.messenger.exception.RegistrationException;
 import com.gmail.ivanjermakov1.messenger.messaging.entity.UserMainInfo;
+import com.gmail.ivanjermakov1.messenger.messaging.entity.UserOnline;
+import com.gmail.ivanjermakov1.messenger.messaging.repository.UserOnlineRepository;
 import com.gmail.ivanjermakov1.messenger.messaging.service.UserMainInfoService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Service
@@ -26,15 +29,18 @@ import java.util.Optional;
 public class UserService {
 	
 	private final static Logger LOG = LoggerFactory.getLogger(UserService.class);
+	
 	private final UserRepository userRepository;
 	private final TokenRepository tokenRepository;
 	private final UserMainInfoService userMainInfoService;
+	private final UserOnlineRepository userOnlineRepository;
 	
 	@Autowired
-	public UserService(UserRepository userRepository, TokenRepository tokenRepository, UserMainInfoService userMainInfoService) {
+	public UserService(UserRepository userRepository, TokenRepository tokenRepository, UserMainInfoService userMainInfoService, UserOnlineRepository userOnlineRepository) {
 		this.userRepository = userRepository;
 		this.tokenRepository = tokenRepository;
 		this.userMainInfoService = userMainInfoService;
+		this.userOnlineRepository = userOnlineRepository;
 	}
 	
 	public String authenticate(String login, String password) throws AuthenticationException {
@@ -89,7 +95,19 @@ public class UserService {
 	
 	public UserDTO full(User user) {
 		UserMainInfo userMainInfo = userMainInfoService.getById(user.getId());
-		return new UserDTO(user.getId(), user.getLogin(), userMainInfo.getFirstName(), userMainInfo.getLastName());
+		UserOnline userOnline = userOnlineRepository.findFirstByUserIdOrderBySeenDesc(user.getId());
+		return new UserDTO(
+				user.getId(),
+				user.getLogin(),
+				userMainInfo.getFirstName(),
+				userMainInfo.getLastName(),
+				Optional.ofNullable(userOnline).orElse(new UserOnline()).getSeen()
+		);
+	}
+	
+	public void appearOnline(User user) {
+		LOG.debug("user @" + user.getLogin() + " is now online");
+		userOnlineRepository.save(new UserOnline(user, LocalDateTime.now()));
 	}
 	
 }

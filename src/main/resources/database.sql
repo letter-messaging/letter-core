@@ -112,3 +112,20 @@ alter table user_main_info
 create unique index user_main_info_2_id_uindex
   on user_main_info (id);
 
+create table user_online
+(
+  id      bigserial                not null
+    constraint user_online_pk
+      primary key,
+  user_id bigint                   not null
+    constraint user_online_user_id_fk
+      references "user",
+  seen    timestamp with time zone not null
+);
+
+alter table user_online
+  owner to postgres;
+
+create unique index user_online_id_uindex
+  on user_online (id);
+
