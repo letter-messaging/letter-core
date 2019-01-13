@@ -1,6 +1,9 @@
-<div class="preview" [ngClass]="selected ? 'selected' : ''" *ngIf="preview.lastMessage">
+<div class="preview" [ngClass]="{'selected': selected}" *ngIf="preview.lastMessage">
   <img class="avatar" src="assets/img/default-avatar.png" alt="">
-  <div class="info">{{preview.with.firstName}} {{preview.with.lastName}}</div>
+  <div class="info">
+    <div class="text">{{preview.with.firstName}} {{preview.with.lastName}}</div>
+    <i class="fas fa-circle" *ngIf="isOnline"></i>
+  </div>
   <div class="message-preview">
     <div class="from">
       {{preview.lastMessage.sender.login === me.login ? 'You' :

@@ -16,6 +16,9 @@ export class PreviewComponent implements OnInit {
   @Input()
   selected: boolean;
 
+  @Input()
+  isOnline: boolean;
+
   me: User;
 
   constructor(private messengerService: MessengerService) {

@@ -9,7 +9,9 @@
     <div class="conversation-name" *ngIf="currentPreview">{{currentPreview.with.firstName}}
       {{currentPreview.with.lastName}}
     </div>
-    <div class="status" *ngIf="currentPreview">online</div>
+    <div class="status" *ngIf="currentPreview">
+      {{lastSeenView(currentPreview.with.lastSeen)}}
+    </div>
     <div class="right">
       <div class="search"><i class="fas fa-search"></i></div>
       <div class="logout" (click)="logout()"><i class="fas fa-sign-out-alt"></i></div>
@@ -28,6 +30,7 @@
           *ngFor="let preview of previewsOrSearchPreviews()"
           [preview]="preview"
           [selected]="currentPreview && preview.conversation.id == currentPreview.conversation.id"
+          [isOnline]="isOnline(preview.with.lastSeen)"
           (click)="openConversation(preview.conversation.id)">
         </app-preview>
       </ng-container>

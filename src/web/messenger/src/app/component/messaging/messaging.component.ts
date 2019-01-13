@@ -1,3 +1,4 @@
+/* tslint:disable:member-ordering */
 import {Component, HostListener, OnInit} from '@angular/core';
 import {Preview} from '../dto/Preview';
 import {ActivatedRoute, Router} from '@angular/router';
@@ -16,7 +17,9 @@ import {MessageAttachments} from '../dto/MessageAttachments';
 import {SoundNotificationService} from '../../service/sound-notification.service';
 import {Title} from '@angular/platform-browser';
 import {BackgroundUnreadService} from '../../service/background-unread.service';
-import {APP_TITLE} from '../../../../globals';
+import {APP_TITLE, MINUTES_AS_ONLINE_LIMIT} from '../../../../globals';
+
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-messaging',
@@ -32,6 +35,21 @@ import {APP_TITLE} from '../../../../globals';
   ]
 })
 export class MessagingComponent implements OnInit {
+
+  constructor(private route: ActivatedRoute,
+              private router: Router,
+              private titleService: Title,
+              private previewService: PreviewService,
+              private messengerService: MessengerService,
+              private messageService: MessageService,
+              private authService: AuthService,
+              private searchService: SearchService,
+              private cookieService: CookieService,
+              private messagingService: MessagingService,
+              private conversationService: ConversationService,
+              private soundNotificationService: SoundNotificationService,
+              private backgroundUnreadService: BackgroundUnreadService) {
+  }
 
   private token: string;
   isPolling = false;
@@ -57,21 +75,6 @@ export class MessagingComponent implements OnInit {
   isLeftView = true;
   isSelectForwardTo = false;
   showAttachmentsMenu = false;
-
-  constructor(private route: ActivatedRoute,
-              private router: Router,
-              private titleService: Title,
-              private previewService: PreviewService,
-              private messengerService: MessengerService,
-              private messageService: MessageService,
-              private authService: AuthService,
-              private searchService: SearchService,
-              private cookieService: CookieService,
-              private messagingService: MessagingService,
-              private conversationService: ConversationService,
-              private soundNotificationService: SoundNotificationService,
-              private backgroundUnreadService: BackgroundUnreadService) {
-  }
 
   @HostListener('document:keydown', ['$event'])
   handleKeyboardEvent(event: KeyboardEvent) {
@@ -303,6 +306,45 @@ export class MessagingComponent implements OnInit {
     this.router.navigate(['/auth'], {replaceUrl: true});
   }
 
+  incrementBackgroundUnread() {
+    if (document.visibilityState === 'hidden') {
+      this.backgroundUnreadService.incrementUnreadCount();
+      this.backgroundUnreadService.oUnreadCount.subscribe(c => {
+        this.titleService.setTitle(`${APP_TITLE} ${c} new message${c === 1 ? '' : 's'}`);
+      });
+    }
+  }
+
+  lastSeenView(lastSeen: Date): string {
+    if (!lastSeen) {
+      return 'offline';
+    }
+
+    const now = moment();
+    const time = moment(lastSeen);
+
+    const minDiff = now.diff(time, 'minutes');
+    if (minDiff < MINUTES_AS_ONLINE_LIMIT) {
+      return 'online';
+    }
+    if (minDiff < 60) {
+      return 'seen ' + minDiff + ' minutes ago';
+    }
+    const hourDiff = now.diff(time, 'hours');
+    if (hourDiff < 24) {
+      return 'seen today at ' + time.format('hh:mm');
+    }
+    if (hourDiff < 48) {
+      return 'seen tomorrow at ' + time.format('hh:mm');
+    }
+
+    return time.format('[seen ] MM Do [ at ] hh:mm');
+  }
+
+  isOnline(time: Date): boolean {
+    return time && moment().diff(time, 'minutes') < MINUTES_AS_ONLINE_LIMIT;
+  }
+
   private startPolling() {
     this.getMessage();
     this.getRead();
@@ -329,15 +371,6 @@ export class MessagingComponent implements OnInit {
         this.getMessage();
       }
     );
-  }
-
-  incrementBackgroundUnread() {
-    if (document.visibilityState === 'hidden') {
-      this.backgroundUnreadService.incrementUnreadCount();
-      this.backgroundUnreadService.oUnreadCount.subscribe(c => {
-        this.titleService.setTitle(`${APP_TITLE} ${c} new message${c === 1 ? '' : 's'}`);
-      });
-    }
   }
 
   private getRead() {

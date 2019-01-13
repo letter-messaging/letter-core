@@ -23,15 +23,28 @@
   }
 
   .info {
-    grid-column: 2/3;
-    grid-row: 1;
 
-    font-size: 16px;
-    font-weight: bold;
+    display: flex;
+    align-items: center;
 
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    .text {
+      grid-column: 2/3;
+      grid-row: 1;
+
+      font-size: 16px;
+      font-weight: bold;
+
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    i {
+      color: var(--special);
+      font-size: 10px;
+      margin: 4px;
+    }
+
   }
 
   .message-preview {
