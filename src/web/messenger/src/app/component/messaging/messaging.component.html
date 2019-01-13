@@ -34,6 +34,10 @@
           [isOnline]="isOnline(preview.with.lastSeen)"
           (click)="openConversation(preview.conversation.id)">
         </app-preview>
+        <div class="not-found" *ngIf="searchText && searchPreviews && searchPreviews.length === 0">
+          <i class="far fa-frown"></i>
+          <div class="text">No matching conversations found.</div>
+        </div>
       </ng-container>
       <ng-container *ngIf="searchText && searchText.trim()[0] === '@'">
         <div class="user-preview"
@@ -46,7 +50,7 @@
         </div>
         <div class="not-found" *ngIf="searchUsers && searchUsers.length === 0">
           <i class="far fa-frown"></i>
-          <div class="text">No matching users found</div>
+          <div class="text">No matching users found.</div>
         </div>
       </ng-container>
     </div>
