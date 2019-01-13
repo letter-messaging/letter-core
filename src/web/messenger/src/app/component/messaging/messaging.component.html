@@ -60,16 +60,18 @@
 
   <div class="conversation">
     <div class="no-conversation" *ngIf="!currentPreview">
-      Select conversation to start messaging.
+      <i class="fas fa-comments"></i>
+      <div class="text">Select conversation to start messaging.</div>
     </div>
     <div class="no-conversation" *ngIf="currentPreview && isSelectForwardTo">
-      Select conversation to forward messages to.
+      <i class="fas fa-arrow-right"></i>
+      <div class="text">Select conversation to forward messages to.</div>
     </div>
     <div class="no-messages" *ngIf="currentPreview && messages.length === 0 && !isSelectForwardTo">
-      Be the first. Messages will be displayed here.
+      <i class="fas fa-comment"></i>
+      <div class="text">Be the first. Messages will be displayed here.</div>
     </div>
-    <div class="message-wrapper" *ngIf="currentPreview && !isSelectForwardTo">
-      <!--TODO: load more feature-->
+    <div class="message-wrapper" *ngIf="currentPreview && !isSelectForwardTo" appScrollTop (scrollTop)="loadMore()">
       <app-message *ngFor="let message of messages | descSort: 'sent'" (click)="selectMessage(message)"
                    [message]="message" [isForwarded]="false" [me]="me">
       </app-message>

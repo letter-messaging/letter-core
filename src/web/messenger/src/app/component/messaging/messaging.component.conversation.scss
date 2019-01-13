@@ -24,25 +24,44 @@
   flex: 1;
 
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
 
-  /*background: var(--bright);*/
-  border-radius: 2px;
+  .text {
+    font-style: italic;
+    color: var(--grey);
+  }
 
-  color: var(--grey);
+  i {
+    margin: 10px;
+
+    font-size: 80px;
+    color: var(--grey);
+  }
+
 }
 
 .no-messages {
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
 
-  border-radius: 2px;
-
   height: 100%;
 
-  color: var(--grey);
+  .text {
+    font-style: italic;
+    color: var(--grey);
+  }
+
+  i {
+    margin: 10px;
+
+    font-size: 80px;
+    color: var(--grey);
+  }
+
 }
 
 app-message {

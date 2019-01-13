@@ -15,6 +15,7 @@ import {MessageSendDirective} from './component/messaging/MessageSendDirective';
 import {ArraySortPipeAsc, ArraySortPipeDesc} from './pipe/ArraySortPipe';
 import {ForwardedAttachmentComponent} from './component/attachment/forwarded-attachment/forwarded-attachment.component';
 import {ShowAttachmentsMenuDirective} from './component/messaging/ShowAttachmentsMenuDirective';
+import {ScrollTopDirective} from './component/messaging/ScrollTopDirective';
 
 @NgModule({
   declarations: [
@@ -26,6 +27,7 @@ import {ShowAttachmentsMenuDirective} from './component/messaging/ShowAttachment
     MessageComponent,
     MessageSendDirective,
     ShowAttachmentsMenuDirective,
+    ScrollTopDirective,
     ArraySortPipeAsc,
     ArraySortPipeDesc,
     ForwardedAttachmentComponent,

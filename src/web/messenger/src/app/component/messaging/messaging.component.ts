@@ -17,7 +17,7 @@ import {MessageAttachments} from '../dto/MessageAttachments';
 import {SoundNotificationService} from '../../service/sound-notification.service';
 import {Title} from '@angular/platform-browser';
 import {BackgroundUnreadService} from '../../service/background-unread.service';
-import {APP_TITLE, MINUTES_AS_ONLINE_LIMIT} from '../../../../globals';
+import {APP_TITLE, MESSAGES_AMOUNT, MINUTES_AS_ONLINE_LIMIT} from '../../../../globals';
 
 import * as moment from 'moment';
 
@@ -350,6 +350,12 @@ export class MessagingComponent implements OnInit {
     return time && moment().diff(time, 'minutes') < MINUTES_AS_ONLINE_LIMIT;
   }
 
+  loadMore() {
+    this.messageService.get(this.token, this.currentPreview.conversation.id, this.messages.length).subscribe(messages => {
+      this.messages = this.messages.concat(messages);
+    });
+  }
+
   private startPolling() {
     this.getMessage();
     this.getRead();
@@ -417,5 +423,4 @@ export class MessagingComponent implements OnInit {
       }
     );
   }
-
 }
