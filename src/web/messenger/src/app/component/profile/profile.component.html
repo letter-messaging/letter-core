@@ -1,0 +1,66 @@
+<div class="profile-container">
+  <div class="header">
+    <div class="name">User info</div>
+    <div class="right">
+      <div class="button"><i class="fas fa-pen"></i></div>
+      <div class="button" (click)="close()"><i class="fas fa-times"></i></div>
+    </div>
+  </div>
+  <div class="main">
+    <div class="user-preview">
+      <img class="avatar" src="assets/img/default-avatar.png" alt="">
+      <div class="info">{{currentProfile.userInfo.firstName}} {{currentProfile.userInfo.lastName}}</div>
+      <div class="login">@{{currentProfile.user.login}}</div>
+    </div>
+  </div>
+  <div class="info">
+    <div class="record">
+      <i class="fas fa-circle"></i>
+      <div class="editable" contenteditable="false">{{lastSeenView(currentProfile.user.lastSeen)}}</div>
+    </div>
+    <div class="record" *ngIf="currentProfile.userInfo.gender !== null">
+      <i class="fas fa-user"></i>
+      <div class="editable" contenteditable="false">{{currentProfile.userInfo.gender ? 'Male' : 'Female'}}</div>
+    </div>
+    <div class="record" *ngIf="currentProfile.userInfo.birthDate !== null">
+      <i class="fas fa-birthday-cake"></i>
+      <div class="editable" contenteditable="false">{{currentProfile.userInfo.birthDate | date: 'mediumDate'}}</div>
+    </div>
+    <div class="record" *ngIf="currentProfile.userInfo.maritalStatus !== null">
+      <i class="fas fa-heart"></i>
+      <div class="editable" contenteditable="false">{{currentProfile.userInfo.maritalStatus}}</div>
+    </div>
+    <div class="record" *ngIf="currentProfile.userInfo.country !== null">
+      <i class="fas fa-globe-americas"></i>
+      <div class="editable" contenteditable="false">{{currentProfile.userInfo.country}}</div>
+    </div>
+    <div class="record" *ngIf="currentProfile.userInfo.city !== null">
+      <i class="fas fa-city"></i>
+      <div class="editable" contenteditable="false">{{currentProfile.userInfo.city}}</div>
+    </div>
+    <div class="record" *ngIf="currentProfile.userInfo.location !== null">
+      <i class="fas fa-location-arrow"></i>
+      <div class="editable" contenteditable="false">{{currentProfile.userInfo.location}}</div>
+    </div>
+    <div class="record" *ngIf="currentProfile.userInfo.phoneNumber !== null">
+      <i class="fas fa-mobile"></i>
+      <div class="editable" contenteditable="false">{{currentProfile.userInfo.phoneNumber}}</div>
+    </div>
+    <div class="record" *ngIf="currentProfile.userInfo.mail !== null">
+      <i class="fas fa-envelope"></i>
+      <div class="editable" contenteditable="false">{{currentProfile.userInfo.mail}}</div>
+    </div>
+    <div class="record" *ngIf="currentProfile.userInfo.placeOfEducation !== null">
+      <i class="fas fa-university"></i>
+      <div class="editable" contenteditable="false">{{currentProfile.userInfo.placeOfEducation}}</div>
+    </div>
+    <div class="record" *ngIf="currentProfile.userInfo.placeOfWork !== null">
+      <i class="fas fa-building"></i>
+      <div class="editable" contenteditable="false">{{currentProfile.userInfo.placeOfWork}}</div>
+    </div>
+    <div class="record" *ngIf="currentProfile.userInfo.about !== null">
+      <i class="fas fa-info"></i>
+      <div class="editable" contenteditable="false">{{currentProfile.userInfo.about}}</div>
+    </div>
+  </div>
+</div>

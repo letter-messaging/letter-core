@@ -28,11 +28,16 @@ export class AuthComponent implements OnInit {
   login() {
     this.authService.authenticate(this.credentials.login, this.credentials.password).subscribe(
       token => {
+        this.credentials.password = null;
+
         this.messengerService.setToken(token);
         this.cookieService.setToken(token);
         this.router.navigate(['/im'], {replaceUrl: true});
       },
-      error => console.error(error)
+      error => {
+        this.credentials.password = null;
+        return console.error(error);
+      }
     );
   }
 

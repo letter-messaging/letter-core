@@ -8,11 +8,13 @@
     <div class="menu" (click)="closeConversation(); removeForwardedAttachment(); cancelEditing()">
       <i class="fas fa-bars"></i>
     </div>
-    <div class="conversation-name" *ngIf="currentPreview">{{currentPreview.with.firstName}}
+    <div class="conversation-name" *ngIf="currentPreview"
+         (click)="openProfile(currentPreview.with)">
+      {{currentPreview.with.firstName}}
       {{currentPreview.with.lastName}}
     </div>
     <div class="status" *ngIf="currentPreview">
-      {{lastSeenView(currentPreview.with.lastSeen)}}
+      {{lastSeenView(currentPreview.with.lastSeen) | lowercase}}
     </div>
     <div class="right">
       <div class="search"><i class="fas fa-search"></i></div>
@@ -48,7 +50,6 @@
           <img class="avatar" src="assets/img/default-avatar.png" alt="">
           <div class="info">{{user.firstName}} {{user.lastName}}</div>
           <div class="login">@{{user.login}}</div>
-          <!--TODO: if nothing found-->
         </div>
         <div class="not-found" *ngIf="searchUsers && searchUsers.length === 0">
           <i class="far fa-frown"></i>
@@ -71,7 +72,7 @@
       <i class="fas fa-comment"></i>
       <div class="text">Be the first. Messages will be displayed here.</div>
     </div>
-    <div class="message-wrapper" *ngIf="currentPreview && !isSelectForwardTo" appScrollTop (scrollTop)="loadMore()">
+    <div class="message-wrapper" #messageWrapper *ngIf="currentPreview && !isSelectForwardTo" (appScrollTop)="loadMore()">
       <app-message *ngFor="let message of messages | descSort: 'sent'" (click)="selectMessage(message)"
                    [message]="message" [isForwarded]="false" [me]="me">
       </app-message>
@@ -118,4 +119,10 @@
       </div>
     </div>
   </div>
+</div>
+
+<div class="overlay" *ngIf="currentProfile.user">
+  <app-profile [currentProfile]="currentProfile" (closeProfile)="currentProfile.user = null"
+               (appOutsideClick)="currentProfile.user = null">
+  </app-profile>
 </div>

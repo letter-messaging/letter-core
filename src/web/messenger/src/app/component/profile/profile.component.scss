@@ -1,0 +1,119 @@
+.profile-container {
+  display: flex;
+  flex-direction: column;
+
+  max-width: 500px;
+  max-height: 100vh;
+
+  overflow-y: auto;
+  overflow-x: hidden;
+
+  background: white;
+
+  border-radius: 4px;
+
+  .header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    width: 100%;
+
+    .name {
+      padding-left: 16px;
+
+      font-size: 24px;
+      font-weight: bold;
+    }
+
+    .right {
+      display: flex;
+      align-items: center;
+      justify-content: end;
+
+      .button {
+        i {
+          font-size: 24px;
+          padding: 16px;
+        }
+
+      }
+
+      .button:hover {
+        color: var(--special);
+      }
+
+    }
+
+  }
+
+  .main {
+    .user-preview {
+      height: auto;
+      grid-template-columns: min-content min-content auto;
+      grid-template-rows: 1fr 1fr 1fr 1fr;
+      padding: 0 10px;
+
+      .avatar {
+        grid-row: 1/5;
+
+        width: 100px;
+        height: 100px;
+
+        margin: 10px;
+      }
+
+      .info {
+        margin-right: 10px;
+        grid-row: 2;
+
+        font-size: 20px;
+      }
+
+      .login {
+        grid-row: 3;
+        grid-column: 2/4;
+
+        font-size: 20px;
+      }
+
+    }
+
+  }
+
+  .info {
+    display: flex;
+    flex-direction: column;
+
+    padding: 5px;
+
+    .record {
+      display: grid;
+      grid-template-columns: 60px auto;
+      align-items: center;
+
+      i {
+        justify-self: center;
+        grid-column: 1;
+
+        font-size: 28px;
+        color: var(--grey);
+
+        margin: 14px;
+      }
+
+      .fa-circle {
+        font-size: 16px;
+      }
+
+      .editable {
+        grid-column: 2;
+
+        font-size: 20px;
+      }
+
+    }
+
+  }
+
+}

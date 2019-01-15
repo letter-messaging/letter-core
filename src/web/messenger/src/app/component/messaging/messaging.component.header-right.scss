@@ -17,9 +17,18 @@
     white-space: nowrap;
   }
 
+  .conversation-name:hover {
+    cursor: pointer;
+    color: var(--special);
+  }
+
   .status {
     font-size: 20px;
     font-style: italic;
+
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 
   .right {

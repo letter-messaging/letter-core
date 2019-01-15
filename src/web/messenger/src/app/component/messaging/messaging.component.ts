@@ -1,5 +1,4 @@
-/* tslint:disable:member-ordering */
-import {Component, HostListener, OnInit} from '@angular/core';
+import {Component, ElementRef, HostListener, OnInit, ViewChild} from '@angular/core';
 import {Preview} from '../dto/Preview';
 import {ActivatedRoute, Router} from '@angular/router';
 import {PreviewService} from '../../service/preview.service';
@@ -17,7 +16,10 @@ import {MessageAttachments} from '../dto/MessageAttachments';
 import {SoundNotificationService} from '../../service/sound-notification.service';
 import {Title} from '@angular/platform-browser';
 import {BackgroundUnreadService} from '../../service/background-unread.service';
-import {APP_TITLE, MESSAGES_AMOUNT, MINUTES_AS_ONLINE_LIMIT} from '../../../../globals';
+import {APP_TITLE, MINUTES_AS_ONLINE_LIMIT} from '../../../../globals';
+
+import {UserInfoService} from '../../service/user-info.service';
+import {DateService} from '../../service/date.service';
 
 import * as moment from 'moment';
 
@@ -48,6 +50,7 @@ export class MessagingComponent implements OnInit {
               private messagingService: MessagingService,
               private conversationService: ConversationService,
               private soundNotificationService: SoundNotificationService,
+              private userInfoService: UserInfoService,
               private backgroundUnreadService: BackgroundUnreadService) {
   }
 
@@ -72,9 +75,16 @@ export class MessagingComponent implements OnInit {
   editingMessage: Message;
   currentMessageAttachments: MessageAttachments = new MessageAttachments();
 
+  currentProfile = {
+    userInfo: null,
+    user: null
+  };
+
   isLeftView = true;
   isSelectForwardTo = false;
   showAttachmentsMenu = false;
+
+  @ViewChild('messageWrapper') messageWrapper: ElementRef;
 
   @HostListener('document:keydown', ['$event'])
   handleKeyboardEvent(event: KeyboardEvent) {
@@ -148,6 +158,7 @@ export class MessagingComponent implements OnInit {
 
               if (messages.length !== 0) {
                 this.currentPreview = this.previews.find(p => p.conversation.id == this.routeConversationId);
+                this.scrollToBottom();
               } else {
                 this.previewService.get(this.token, this.routeConversationId).subscribe(preview => {
                   this.currentPreview = preview;
@@ -321,29 +332,7 @@ export class MessagingComponent implements OnInit {
   }
 
   lastSeenView(lastSeen: Date): string {
-    if (!lastSeen) {
-      return 'offline';
-    }
-
-    const now = moment();
-    const time = moment(lastSeen);
-
-    const minDiff = now.diff(time, 'minutes');
-    if (minDiff < MINUTES_AS_ONLINE_LIMIT) {
-      return 'online';
-    }
-    if (minDiff < 60) {
-      return 'seen ' + minDiff + ' minutes ago';
-    }
-    const hourDiff = now.diff(time, 'hours');
-    if (hourDiff < 24) {
-      return 'seen today at ' + time.format('hh:mm');
-    }
-    if (hourDiff < 48) {
-      return 'seen tomorrow at ' + time.format('hh:mm');
-    }
-
-    return time.format('[seen ] MM Do [ at ] hh:mm');
+    return DateService.lastSeenView(lastSeen);
   }
 
   isOnline(time: Date): boolean {
@@ -353,6 +342,19 @@ export class MessagingComponent implements OnInit {
   loadMore() {
     this.messageService.get(this.token, this.currentPreview.conversation.id, this.messages.length).subscribe(messages => {
       this.messages = this.messages.concat(messages);
+    });
+  }
+
+  scrollToBottom() {
+    if (this.messageWrapper) {
+      this.messageWrapper.nativeElement.scrollTop = this.messageWrapper.nativeElement.scrollHeight;
+    }
+  }
+
+  openProfile(user: User) {
+    this.userInfoService.get(this.token, user.id).subscribe(userInfo => {
+      this.currentProfile.user = user;
+      this.currentProfile.userInfo = userInfo;
     });
   }
 
@@ -423,4 +425,5 @@ export class MessagingComponent implements OnInit {
       }
     );
   }
+
 }

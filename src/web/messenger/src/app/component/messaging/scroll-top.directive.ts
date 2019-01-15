@@ -3,7 +3,7 @@ import {Directive, EventEmitter, HostListener, Output} from '@angular/core';
 @Directive({selector: '[appScrollTop]'})
 export class ScrollTopDirective {
 
-  @Output() scrollTop = new EventEmitter();
+  @Output('appScrollTop') scrollTop = new EventEmitter();
 
   constructor() {
   }

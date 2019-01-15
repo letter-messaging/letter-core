@@ -60,3 +60,16 @@
   }
 
 }
+
+.overlay {
+  position: absolute;
+
+  display: grid;
+  align-items: center;
+  justify-content: center;
+
+  background: rgba(0, 0, 0, 0.5);
+  width: 100vw;
+  height: 100vh;
+  top: 0;
+}

@@ -14,8 +14,10 @@ import {AutosizeModule} from 'ngx-autosize';
 import {MessageSendDirective} from './component/messaging/MessageSendDirective';
 import {ArraySortPipeAsc, ArraySortPipeDesc} from './pipe/ArraySortPipe';
 import {ForwardedAttachmentComponent} from './component/attachment/forwarded-attachment/forwarded-attachment.component';
-import {ShowAttachmentsMenuDirective} from './component/messaging/ShowAttachmentsMenuDirective';
-import {ScrollTopDirective} from './component/messaging/ScrollTopDirective';
+import {ShowAttachmentsMenuDirective} from './component/messaging/show-attachments-menu.directive';
+import {ScrollTopDirective} from './component/messaging/scroll-top.directive';
+import { ProfileComponent } from './component/profile/profile.component';
+import {OutsideClickDirective} from './component/messaging/outside-click.directive';
 
 @NgModule({
   declarations: [
@@ -28,9 +30,11 @@ import {ScrollTopDirective} from './component/messaging/ScrollTopDirective';
     MessageSendDirective,
     ShowAttachmentsMenuDirective,
     ScrollTopDirective,
+    OutsideClickDirective,
     ArraySortPipeAsc,
     ArraySortPipeDesc,
     ForwardedAttachmentComponent,
+    ProfileComponent,
   ],
   imports: [
     BrowserModule,
