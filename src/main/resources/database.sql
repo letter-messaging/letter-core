@@ -1,6 +1,3 @@
-create database messenger
-  with owner postgres;
-
 create table conversation
 (
   id bigserial not null
@@ -94,23 +91,34 @@ create table token
 alter table token
   owner to postgres;
 
-create table user_main_info
+create table user_info
 (
-  id         bigserial not null
+  id                 bigserial not null
     constraint user_main_info_2_pk
       primary key,
-  user_id    bigint    not null
+  user_id            bigint    not null
     constraint user_main_info_2_user_id_fk
       references "user",
-  first_name varchar   not null,
-  last_name  varchar   not null
+  first_name         varchar   not null,
+  last_name          varchar   not null,
+  gender             boolean,
+  birth_date         date,
+  marital_status     varchar,
+  country            varchar,
+  city               varchar,
+  location           varchar,
+  phone_number       varchar,
+  mail               varchar,
+  place_of_education varchar,
+  place_of_work      varchar,
+  about              varchar
 );
 
-alter table user_main_info
+alter table user_info
   owner to postgres;
 
 create unique index user_main_info_2_id_uindex
-  on user_main_info (id);
+  on user_info (id);
 
 create table user_online
 (

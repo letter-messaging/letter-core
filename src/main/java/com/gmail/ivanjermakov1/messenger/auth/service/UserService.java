@@ -11,10 +11,10 @@ import com.gmail.ivanjermakov1.messenger.auth.security.TokenGenerator;
 import com.gmail.ivanjermakov1.messenger.exception.AuthenticationException;
 import com.gmail.ivanjermakov1.messenger.exception.NoSuchEntityException;
 import com.gmail.ivanjermakov1.messenger.exception.RegistrationException;
-import com.gmail.ivanjermakov1.messenger.messaging.entity.UserMainInfo;
+import com.gmail.ivanjermakov1.messenger.messaging.entity.UserInfo;
 import com.gmail.ivanjermakov1.messenger.messaging.entity.UserOnline;
 import com.gmail.ivanjermakov1.messenger.messaging.repository.UserOnlineRepository;
-import com.gmail.ivanjermakov1.messenger.messaging.service.UserMainInfoService;
+import com.gmail.ivanjermakov1.messenger.messaging.service.UserInfoService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,14 +32,14 @@ public class UserService {
 	
 	private final UserRepository userRepository;
 	private final TokenRepository tokenRepository;
-	private final UserMainInfoService userMainInfoService;
+	private final UserInfoService userInfoService;
 	private final UserOnlineRepository userOnlineRepository;
 	
 	@Autowired
-	public UserService(UserRepository userRepository, TokenRepository tokenRepository, UserMainInfoService userMainInfoService, UserOnlineRepository userOnlineRepository) {
+	public UserService(UserRepository userRepository, TokenRepository tokenRepository, UserInfoService userInfoService, UserOnlineRepository userOnlineRepository) {
 		this.userRepository = userRepository;
 		this.tokenRepository = tokenRepository;
-		this.userMainInfoService = userMainInfoService;
+		this.userInfoService = userInfoService;
 		this.userOnlineRepository = userOnlineRepository;
 	}
 	
@@ -77,7 +77,7 @@ public class UserService {
 		
 		User user = new User(null, registerUserDTO.getLogin(), Hasher.getHash(registerUserDTO.getPassword()));
 		user = userRepository.save(user);
-		userMainInfoService.save(new UserMainInfo(user, registerUserDTO.getFirstName(), registerUserDTO.getLastName()));
+		userInfoService.save(new UserInfo(user, registerUserDTO.getFirstName(), registerUserDTO.getLastName()));
 	}
 	
 	public User getUser(Long id) throws NoSuchEntityException {
@@ -94,13 +94,13 @@ public class UserService {
 	}
 	
 	public UserDTO full(User user) {
-		UserMainInfo userMainInfo = userMainInfoService.getById(user.getId());
+		UserInfo userInfo = userInfoService.getById(user.getId());
 		UserOnline userOnline = userOnlineRepository.findFirstByUserIdOrderBySeenDesc(user.getId());
 		return new UserDTO(
 				user.getId(),
 				user.getLogin(),
-				userMainInfo.getFirstName(),
-				userMainInfo.getLastName(),
+				userInfo.getFirstName(),
+				userInfo.getLastName(),
 				Optional.ofNullable(userOnline).orElse(new UserOnline()).getSeen()
 		);
 	}

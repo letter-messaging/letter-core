@@ -6,7 +6,7 @@ import com.gmail.ivanjermakov1.messenger.auth.repository.UserRepository;
 import com.gmail.ivanjermakov1.messenger.auth.service.UserService;
 import com.gmail.ivanjermakov1.messenger.exception.InvalidSearchFormatException;
 import com.gmail.ivanjermakov1.messenger.messaging.dto.PreviewDTO;
-import com.gmail.ivanjermakov1.messenger.messaging.repository.UserMainInfoRepository;
+import com.gmail.ivanjermakov1.messenger.messaging.repository.UserInfoRepository;
 import com.gmail.ivanjermakov1.messenger.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,7 +22,7 @@ public class SearchService {
 	private final UserService userService;
 	
 	@Autowired
-	public SearchService(PreviewService previewService, UserMainInfoRepository userMainInfoRepository, UserRepository userRepository, UserMainInfoService userMainInfoService, UserService userService) {
+	public SearchService(PreviewService previewService, UserInfoRepository userInfoRepository, UserRepository userRepository, UserInfoService userInfoService, UserService userService) {
 		this.previewService = previewService;
 		this.userRepository = userRepository;
 		this.userService = userService;

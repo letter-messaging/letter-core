@@ -22,7 +22,7 @@ public class PreviewService {
 	private final UserService userService;
 	
 	@Autowired
-	public PreviewService(ConversationService conversationService, UserMainInfoService userMainInfoService, MessageService messageService, UserService userService) {
+	public PreviewService(ConversationService conversationService, UserInfoService userInfoService, MessageService messageService, UserService userService) {
 		this.conversationService = conversationService;
 		this.messageService = messageService;
 		this.userService = userService;

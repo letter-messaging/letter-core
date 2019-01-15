@@ -27,7 +27,7 @@ public class MessageService {
 	private final ConversationService conversationService;
 	
 	@Autowired
-	public MessageService(MessageRepository messageRepository, UserService userService, UserMainInfoService userMainInfoService, ConversationService conversationService) {
+	public MessageService(MessageRepository messageRepository, UserService userService, UserInfoService userInfoService, ConversationService conversationService) {
 		this.messageRepository = messageRepository;
 		this.userService = userService;
 		this.conversationService = conversationService;
