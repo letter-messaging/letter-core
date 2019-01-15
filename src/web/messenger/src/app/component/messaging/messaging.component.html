@@ -72,7 +72,8 @@
       <i class="fas fa-comment"></i>
       <div class="text">Be the first. Messages will be displayed here.</div>
     </div>
-    <div class="message-wrapper" #messageWrapper *ngIf="currentPreview && !isSelectForwardTo" (appScrollTop)="loadMore()">
+    <div class="message-wrapper" #messageWrapper *ngIf="currentPreview && !isSelectForwardTo"
+         (appScrollTop)="loadMore()">
       <app-message *ngFor="let message of messages | descSort: 'sent'" (click)="selectMessage(message)"
                    [message]="message" [isForwarded]="false" [me]="me">
       </app-message>

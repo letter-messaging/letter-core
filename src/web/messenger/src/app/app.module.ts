@@ -16,7 +16,7 @@ import {ArraySortPipeAsc, ArraySortPipeDesc} from './pipe/ArraySortPipe';
 import {ForwardedAttachmentComponent} from './component/attachment/forwarded-attachment/forwarded-attachment.component';
 import {ShowAttachmentsMenuDirective} from './component/messaging/show-attachments-menu.directive';
 import {ScrollTopDirective} from './component/messaging/scroll-top.directive';
-import { ProfileComponent } from './component/profile/profile.component';
+import {ProfileComponent} from './component/profile/profile.component';
 import {OutsideClickDirective} from './component/messaging/outside-click.directive';
 
 @NgModule({
