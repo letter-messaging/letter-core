@@ -89,6 +89,11 @@ export class MessagingComponent implements OnInit {
   @HostListener('document:keydown', ['$event'])
   handleKeyboardEvent(event: KeyboardEvent) {
     if (event.key === 'Escape') {
+      if (this.currentProfile.user) {
+        this.currentProfile.user = null;
+        return;
+      }
+
       if (this.editingMessage) {
         this.cancelEditing();
         return;
@@ -355,6 +360,14 @@ export class MessagingComponent implements OnInit {
     this.userInfoService.get(this.token, user.id).subscribe(userInfo => {
       this.currentProfile.user = user;
       this.currentProfile.userInfo = userInfo;
+    });
+  }
+
+  editProfile(userInfo) {
+    console.log(userInfo);
+    this.userInfoService.edit(this.token, userInfo).subscribe(info => {
+      console.log(info);
+      this.currentProfile.userInfo = info;
     });
   }
 

@@ -2,7 +2,7 @@
   <div class="header">
     <div class="name">User info</div>
     <div class="right">
-      <div class="button"><i class="fas fa-pen"></i></div>
+      <div class="button" *ngIf="editView || editable" (click)="editView = true"><i class="fas fa-pen"></i></div>
       <div class="button" (click)="close()"><i class="fas fa-times"></i></div>
     </div>
   </div>
@@ -14,53 +14,71 @@
     </div>
   </div>
   <div class="info">
-    <div class="record">
-      <i class="fas fa-circle"></i>
-      <div class="editable" contenteditable="false">{{lastSeenView(currentProfile.user.lastSeen)}}</div>
-    </div>
-    <div class="record" *ngIf="currentProfile.userInfo.gender !== null">
-      <i class="fas fa-user"></i>
-      <div class="editable" contenteditable="false">{{currentProfile.userInfo.gender ? 'Male' : 'Female'}}</div>
-    </div>
-    <div class="record" *ngIf="currentProfile.userInfo.birthDate !== null">
-      <i class="fas fa-birthday-cake"></i>
-      <div class="editable" contenteditable="false">{{currentProfile.userInfo.birthDate | date: 'mediumDate'}}</div>
-    </div>
-    <div class="record" *ngIf="currentProfile.userInfo.maritalStatus !== null">
-      <i class="fas fa-heart"></i>
-      <div class="editable" contenteditable="false">{{currentProfile.userInfo.maritalStatus}}</div>
-    </div>
-    <div class="record" *ngIf="currentProfile.userInfo.country !== null">
-      <i class="fas fa-globe-americas"></i>
-      <div class="editable" contenteditable="false">{{currentProfile.userInfo.country}}</div>
-    </div>
-    <div class="record" *ngIf="currentProfile.userInfo.city !== null">
-      <i class="fas fa-city"></i>
-      <div class="editable" contenteditable="false">{{currentProfile.userInfo.city}}</div>
-    </div>
-    <div class="record" *ngIf="currentProfile.userInfo.location !== null">
-      <i class="fas fa-location-arrow"></i>
-      <div class="editable" contenteditable="false">{{currentProfile.userInfo.location}}</div>
-    </div>
-    <div class="record" *ngIf="currentProfile.userInfo.phoneNumber !== null">
-      <i class="fas fa-mobile"></i>
-      <div class="editable" contenteditable="false">{{currentProfile.userInfo.phoneNumber}}</div>
-    </div>
-    <div class="record" *ngIf="currentProfile.userInfo.mail !== null">
-      <i class="fas fa-envelope"></i>
-      <div class="editable" contenteditable="false">{{currentProfile.userInfo.mail}}</div>
-    </div>
-    <div class="record" *ngIf="currentProfile.userInfo.placeOfEducation !== null">
-      <i class="fas fa-university"></i>
-      <div class="editable" contenteditable="false">{{currentProfile.userInfo.placeOfEducation}}</div>
-    </div>
-    <div class="record" *ngIf="currentProfile.userInfo.placeOfWork !== null">
-      <i class="fas fa-building"></i>
-      <div class="editable" contenteditable="false">{{currentProfile.userInfo.placeOfWork}}</div>
-    </div>
-    <div class="record" *ngIf="currentProfile.userInfo.about !== null">
+    <div class="record" *ngIf="editView || currentProfile.userInfo.about !== null">
       <i class="fas fa-info"></i>
-      <div class="editable" contenteditable="false">{{currentProfile.userInfo.about}}</div>
+      <textarea type="text" class="editable" autosize rows="1" placeholder="About"
+                [disabled]="!editable || !editView" [(ngModel)]="currentProfile.userInfo.about"></textarea>
     </div>
+    <!--TODO: use select-->
+    <div class="record" *ngIf="editView || currentProfile.userInfo.gender !== null">
+      <i class="fas fa-user"></i>
+      <input type="text" class="editable" placeholder="Gender"
+             [disabled]="!editable || !editView"
+             [ngModel]="currentProfile.userInfo.gender ? 'Male' : 'Female'"
+             (ngModelChange)="currentProfile.userInfo.gender = $event">
+    </div>
+    <!--TODO: fix calendar-->
+    <div class="record" *ngIf="editView || currentProfile.userInfo.birthDate !== null">
+      <i class="fas fa-birthday-cake"></i>
+      <input type="date" class="editable" placeholder="Birth date" *ngIf="!editView"
+             [disabled]="!editable || !editView"
+             [ngModel]="currentProfile.userInfo.birthDate | date: 'mediumDate'"
+             (ngModelChange)="currentProfile.userInfo.birthDate = $event">
+    </div>
+    <!--TODO: use select-->
+    <div class="record" *ngIf="editView || currentProfile.userInfo.maritalStatus !== null">
+      <i class="fas fa-heart"></i>
+      <input type="text" class="editable" placeholder="Marital status"
+             [disabled]="!editable || !editView" [(ngModel)]="currentProfile.userInfo.maritalStatus">
+    </div>
+    <div class="record" *ngIf="editView || currentProfile.userInfo.country !== null">
+      <i class="fas fa-globe-americas"></i>
+      <input type="text" class="editable" placeholder="Country"
+             [disabled]="!editable || !editView" [(ngModel)]="currentProfile.userInfo.country">
+    </div>
+    <div class="record" *ngIf="editView || currentProfile.userInfo.city !== null">
+      <i class="fas fa-city"></i>
+      <input type="text" class="editable" placeholder="City"
+             [disabled]="!editable || !editView" [(ngModel)]="currentProfile.userInfo.city">
+    </div>
+    <div class="record" *ngIf="editView || currentProfile.userInfo.location !== null">
+      <i class="fas fa-location-arrow"></i>
+      <input type="text" class="editable" placeholder="Location"
+             [disabled]="!editable || !editView" [(ngModel)]="currentProfile.userInfo.location">
+    </div>
+    <div class="record" *ngIf="editView || currentProfile.userInfo.phoneNumber !== null">
+      <i class="fas fa-mobile"></i>
+      <input type="text" class="editable" placeholder="Phone number"
+             [disabled]="!editable || !editView" [(ngModel)]="currentProfile.userInfo.phoneNumber">
+    </div>
+    <div class="record" *ngIf="editView || currentProfile.userInfo.mail !== null">
+      <i class="fas fa-envelope"></i>
+      <input type="text" class="editable" placeholder="Mail"
+             [disabled]="!editable || !editView" [(ngModel)]="currentProfile.userInfo.mail">
+    </div>
+    <div class="record" *ngIf="editView || currentProfile.userInfo.placeOfEducation !== null">
+      <i class="fas fa-university"></i>
+      <input type="text" class="editable" placeholder="Place of education"
+             [disabled]="!editable || !editView" [(ngModel)]="currentProfile.userInfo.placeOfEducation">
+    </div>
+    <div class="record" *ngIf="editView || currentProfile.userInfo.placeOfWork !== null">
+      <i class="fas fa-building"></i>
+      <input type="text" class="editable" placeholder="Place of work"
+             [disabled]="!editable || !editView" [(ngModel)]="currentProfile.userInfo.placeOfWork">
+    </div>
+  </div>
+  <div class="edit-controls" *ngIf="editView">
+    <div class="button cancel" (click)="editView = false">Cancel</div>
+    <div class="button apply" (click)="edit()">Edit</div>
   </div>
 </div>

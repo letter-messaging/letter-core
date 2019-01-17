@@ -123,7 +123,7 @@
 </div>
 
 <div class="overlay" *ngIf="currentProfile.user">
-  <app-profile [currentProfile]="currentProfile" (closeProfile)="currentProfile.user = null"
-               (appOutsideClick)="currentProfile.user = null">
+  <app-profile [currentProfile]="currentProfile" [me]="me" (closeProfile)="currentProfile.user = null"
+               (appOutsideClick)="currentProfile.user = null" (editProfile)="editProfile($event)">
   </app-profile>
 </div>
