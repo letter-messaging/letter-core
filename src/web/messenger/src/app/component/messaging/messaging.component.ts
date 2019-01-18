@@ -134,7 +134,6 @@ export class MessagingComponent implements OnInit {
 
   ngOnInit() {
     this.messengerService.oMe.subscribe(me => {
-      console.log(me);
       return this.me = me;
     });
 
@@ -367,9 +366,7 @@ export class MessagingComponent implements OnInit {
   }
 
   editProfile(userInfo) {
-    console.log(userInfo);
     this.userInfoService.edit(this.token, userInfo).subscribe(info => {
-      console.log(info);
       this.currentProfile.userInfo = info;
     });
   }

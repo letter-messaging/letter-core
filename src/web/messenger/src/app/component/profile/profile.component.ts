@@ -2,6 +2,9 @@ import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {DateService} from '../../service/date.service';
 import {User} from '../dto/User';
 import {UserInfo} from '../dto/UserInfo';
+import {MaritalStatus} from '../dto/enum/MaritalStatus';
+
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-profile',
@@ -21,15 +24,38 @@ export class ProfileComponent implements OnInit {
 
   @Output() editProfile = new EventEmitter<UserInfo>();
 
+  maritalStatuses = Object.keys(MaritalStatus).filter(key => typeof MaritalStatus[key] === 'number');
+
   editable = false;
 
   editView = false;
+
+  date = {
+    days: Array.from({length: 31}, (x, i) => i + 1),
+    months: Array.from({length: 12}, (x, i) => i + 1),
+    years: Array.from({length: 100}, (x, i) => moment().year() - i),
+  };
+
+  selectedDate = {
+    day: null,
+    month: null,
+    year: null
+  };
 
   constructor() {
   }
 
   ngOnInit() {
     this.editable = this.me.login === this.currentProfile.user.login;
+    console.log(this.date);
+
+    if (this.currentProfile.userInfo.birthDate) {
+      const dme = this.dme(this.currentProfile.userInfo.birthDate);
+
+      this.selectedDate.year = dme[0];
+      this.selectedDate.month = dme[1];
+      this.selectedDate.day = dme[2];
+    }
   }
 
   lastSeenView(lastSeen: Date): string {
@@ -41,9 +67,35 @@ export class ProfileComponent implements OnInit {
   }
 
   edit() {
-    console.log(this.currentProfile.userInfo.city);
+    this.currentProfile.userInfo.maritalStatus = this.currentProfile.userInfo.maritalStatus !== 'null' ?
+      this.currentProfile.userInfo.maritalStatus : null;
+    if (this.selectedDate.day && this.selectedDate.month && this.selectedDate.year) {
+      this.currentProfile.userInfo.birthDate = moment([
+        parseInt(this.selectedDate.year, 10),
+        // TODO: investigate month number shifting
+        parseInt(this.monthNumber(this.selectedDate.month), 10) - 2,
+        parseInt(this.selectedDate.day, 10)
+      ]).format('YYYY-MM-DD');
+    } else {
+      this.currentProfile.userInfo.birthDate = null;
+    }
     this.editProfile.emit(this.currentProfile.userInfo);
     this.editView = false;
+  }
+
+  monthName(n: number) {
+    return moment().month(n - 1).format('MMMM');
+  }
+
+  monthNumber(monthName: string) {
+    return moment().month(monthName).format('M');
+  }
+
+  dme(date) {
+    const d = moment(date).toArray().slice(0, 3);
+    d[1] = d[1] + 1;
+    console.log(d);
+    return d;
   }
 
 }

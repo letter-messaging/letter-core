@@ -19,27 +19,46 @@
       <textarea type="text" class="editable" autosize rows="1" placeholder="About"
                 [disabled]="!editable || !editView" [(ngModel)]="currentProfile.userInfo.about"></textarea>
     </div>
-    <!--TODO: use select-->
     <div class="record" *ngIf="editView || currentProfile.userInfo.gender !== null">
       <i class="fas fa-user"></i>
-      <input type="text" class="editable" placeholder="Gender"
+      <input type="text" class="editable" placeholder="Gender" *ngIf="!editView"
              [disabled]="!editable || !editView"
              [ngModel]="currentProfile.userInfo.gender ? 'Male' : 'Female'"
              (ngModelChange)="currentProfile.userInfo.gender = $event">
+      <select class="gender-select" *ngIf="editView" [(ngModel)]="currentProfile.userInfo.gender">
+        <option [selected]="currentProfile.userInfo.gender === null" [value]="null">Gender</option>
+        <option [selected]="currentProfile.userInfo.gender === true" [value]="true">Male</option>
+        <option [selected]="currentProfile.userInfo.gender === false" [value]="false">Female</option>
+      </select>
     </div>
-    <!--TODO: fix calendar-->
     <div class="record" *ngIf="editView || currentProfile.userInfo.birthDate !== null">
       <i class="fas fa-birthday-cake"></i>
-      <input type="date" class="editable" placeholder="Birth date" *ngIf="!editView"
+      <input type="text" class="editable" placeholder="Birth date" *ngIf="!editView"
              [disabled]="!editable || !editView"
-             [ngModel]="currentProfile.userInfo.birthDate | date: 'mediumDate'"
-             (ngModelChange)="currentProfile.userInfo.birthDate = $event">
+             [ngModel]="currentProfile.userInfo.birthDate | date: 'mediumDate'">
+      <div class="edit-date" *ngIf="editView">
+        <select class="day-select" [(ngModel)]="selectedDate.day">
+          <option [selected]="currentProfile.userInfo.birthDate === null" [value]="null">Day</option>
+          <option *ngFor="let d of date.days">{{d}}</option>
+        </select>
+        <select class="month-select" [(ngModel)]="selectedDate.month">
+          <option [selected]="currentProfile.userInfo.birthDate === null" [value]="null">Month</option>
+          <option *ngFor="let m of date.months" [value]="m">{{monthName(m)}}</option>
+        </select>
+        <select class="year-select" [(ngModel)]="selectedDate.year">
+          <option [selected]="currentProfile.userInfo.birthDate === null" [value]="null">Year</option>
+          <option *ngFor="let y of date.years">{{y}}</option>
+        </select>
+      </div>
     </div>
-    <!--TODO: use select-->
     <div class="record" *ngIf="editView || currentProfile.userInfo.maritalStatus !== null">
       <i class="fas fa-heart"></i>
-      <input type="text" class="editable" placeholder="Marital status"
+      <input type="text" class="editable" placeholder="Marital status" *ngIf="!editView"
              [disabled]="!editable || !editView" [(ngModel)]="currentProfile.userInfo.maritalStatus">
+      <select class="marital-status-select" *ngIf="editView" [(ngModel)]="currentProfile.userInfo.maritalStatus">
+        <option [selected]="currentProfile.userInfo.maritalStatus === null" [value]="null">Marital status</option>
+        <option *ngFor="let o of maritalStatuses">{{o}}</option>
+      </select>
     </div>
     <div class="record" *ngIf="editView || currentProfile.userInfo.country !== null">
       <i class="fas fa-globe-americas"></i>
