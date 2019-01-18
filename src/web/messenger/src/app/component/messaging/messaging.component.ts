@@ -260,7 +260,10 @@ export class MessagingComponent implements OnInit {
     });
   }
 
-  selectMessage(message: Message) {
+  selectMessage(message: Message, event?) {
+    if (event.target.className === 'avatar') {
+      return;
+    }
     if (!message.selected) {
       message.selected = true;
       this.selectedMessages.push(message);

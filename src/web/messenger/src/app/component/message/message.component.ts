@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {Message} from '../dto/Message';
 import {User} from '../dto/User';
 
@@ -22,6 +22,9 @@ export class MessageComponent implements OnInit {
   @Input()
   me: User;
 
+  @Output()
+  openProfileEvent = new EventEmitter<User>();
+
   mine: boolean;
 
   constructor() {
@@ -29,6 +32,10 @@ export class MessageComponent implements OnInit {
 
   ngOnInit() {
     this.mine = this.message.sender.id === this.me.id;
+  }
+
+  openProfile(user: User) {
+    this.openProfileEvent.emit(user);
   }
 
 }

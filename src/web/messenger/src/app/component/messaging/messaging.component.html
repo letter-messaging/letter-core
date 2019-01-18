@@ -74,8 +74,10 @@
     </div>
     <div class="message-wrapper" #messageWrapper *ngIf="currentPreview && !isSelectForwardTo"
          (appScrollTop)="loadMore()">
-      <app-message *ngFor="let message of messages | descSort: 'sent'" (click)="selectMessage(message)"
-                   [message]="message" [isForwarded]="false" [me]="me">
+      <app-message *ngFor="let message of messages | descSort: 'sent'"
+                   (click)="selectMessage(message, $event)"
+                   [message]="message" [isForwarded]="false" [me]="me"
+                   (openProfileEvent)="openProfile($event)">
       </app-message>
     </div>
     <div class="attachment-wrapper">
