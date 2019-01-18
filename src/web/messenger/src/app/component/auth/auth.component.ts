@@ -32,7 +32,12 @@ export class AuthComponent implements OnInit {
 
         this.messengerService.setToken(token);
         this.cookieService.setToken(token);
-        this.router.navigate(['/im'], {replaceUrl: true});
+
+        this.authService.validate(token).subscribe(user => {
+          this.messengerService.setMe(user);
+          this.router.navigate(['/im'], {replaceUrl: true});
+        });
+
       },
       error => {
         this.credentials.password = null;

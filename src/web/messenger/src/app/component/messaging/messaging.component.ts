@@ -133,7 +133,10 @@ export class MessagingComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.messengerService.oMe.subscribe(me => this.me = me);
+    this.messengerService.oMe.subscribe(me => {
+      console.log(me);
+      return this.me = me;
+    });
 
     this.route.queryParams.subscribe(params => {
       this.messengerService.oToken.subscribe(token => {
