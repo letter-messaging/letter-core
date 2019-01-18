@@ -1,10 +1,10 @@
 package com.gmail.ivanjermakov1.messenger.messaging.controller;
 
-import com.gmail.ivanjermakov1.messenger.auth.dto.UserInfoDTO;
 import com.gmail.ivanjermakov1.messenger.auth.entity.User;
 import com.gmail.ivanjermakov1.messenger.auth.service.UserService;
 import com.gmail.ivanjermakov1.messenger.exception.AuthenticationException;
 import com.gmail.ivanjermakov1.messenger.exception.NoSuchEntityException;
+import com.gmail.ivanjermakov1.messenger.messaging.dto.UserInfoDTO;
 import com.gmail.ivanjermakov1.messenger.messaging.service.UserInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;

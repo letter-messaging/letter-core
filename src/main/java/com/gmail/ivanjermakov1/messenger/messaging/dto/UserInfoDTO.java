@@ -1,8 +1,7 @@
-package com.gmail.ivanjermakov1.messenger.auth.dto;
+package com.gmail.ivanjermakov1.messenger.messaging.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.gmail.ivanjermakov1.messenger.auth.entity.User;
-import com.gmail.ivanjermakov1.messenger.messaging.dto.MaritalStatus;
 import com.gmail.ivanjermakov1.messenger.messaging.entity.UserInfo;
 
 import java.time.LocalDate;
