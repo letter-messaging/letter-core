@@ -1,10 +1,10 @@
 <div class="content" [ngClass]="isLeftView === true ? 'mobile-left' : 'mobile-right'">
-  <header class="header-left">
+  <div class="header-left">
     <div class="logo" routerLink="/im"><i class="fas fa-comment"></i></div>
     <div class="logo-name">Messenger.</div>
-  </header>
+  </div>
 
-  <header class="header-right">
+  <div class="header-right">
     <div class="menu" (click)="closeConversation(); removeForwardedAttachment(); cancelEditing()">
       <i class="fas fa-bars"></i>
     </div>
@@ -18,9 +18,24 @@
     </div>
     <div class="right">
       <div class="search"><i class="fas fa-search"></i></div>
-      <div class="logout" (click)="logout()"><i class="fas fa-sign-out-alt"></i></div>
+      <div class="conversation-menu" *ngIf="currentPreview" (appOutsideClick)="conversationMenuView = false">
+        <div class="button" (click)="conversationMenuView = !conversationMenuView">
+          <i class="fas fa-ellipsis-v"></i>
+        </div>
+        <div class="context-menu" *ngIf="conversationMenuView">
+          <div class="button">Mute</div>
+          <div class="splitter"></div>
+          <div class="button">Photos</div>
+          <div class="button">Videos</div>
+          <div class="button">Attachments</div>
+          <div class="splitter"></div>
+          <div class="button danger" (click)="deleteConversation(currentPreview.conversation.id)">Delete conversation
+          </div>
+        </div>
+      </div>
+      <!--<div class="logout" (click)="logout()"><i class="fas fa-sign-out-alt"></i></div>-->
     </div>
-  </header>
+  </div>
 
   <div class="content-left">
     <div class="search">
@@ -126,6 +141,6 @@
 
 <div class="overlay" *ngIf="currentProfile.user">
   <app-profile [currentProfile]="currentProfile" [me]="me" (closeProfile)="currentProfile.user = null"
-               (editProfile)="editProfile($event)" (appOutsideClick)="currentProfile.user = null">
+               (editProfile)="editProfile($event)" (appOverlayClick)="currentProfile.user = null">
   </app-profile>
 </div>

@@ -33,7 +33,8 @@ import * as moment from 'moment';
     './messaging.component.search.scss',
     './messaging.component.select-message.scss',
     './messaging.component.content-left.scss',
-    './messaging.component.conversation.scss'
+    './messaging.component.conversation.scss',
+    './messaging.component.conversation-menu.scss'
   ]
 })
 export class MessagingComponent implements OnInit {
@@ -83,6 +84,8 @@ export class MessagingComponent implements OnInit {
   isLeftView = true;
   isSelectForwardTo = false;
   showAttachmentsMenu = false;
+
+  conversationMenuView = false;
 
   @ViewChild('messageWrapper') messageWrapper: ElementRef;
 
@@ -372,6 +375,10 @@ export class MessagingComponent implements OnInit {
     this.userInfoService.edit(this.token, userInfo).subscribe(info => {
       this.currentProfile.userInfo = info;
     });
+  }
+
+  deleteConversation(conversationId: number) {
+    // TODO: this
   }
 
   private startPolling() {

@@ -18,6 +18,7 @@ import {ShowAttachmentsMenuDirective} from './component/messaging/show-attachmen
 import {ScrollTopDirective} from './component/messaging/scroll-top.directive';
 import {ProfileComponent} from './component/profile/profile.component';
 import {OutsideClickDirective} from './component/messaging/outside-click.directive';
+import {OverlayClickDirective} from './component/messaging/overlay-click.directive';
 
 @NgModule({
   declarations: [
@@ -31,6 +32,7 @@ import {OutsideClickDirective} from './component/messaging/outside-click.directi
     ShowAttachmentsMenuDirective,
     ScrollTopDirective,
     OutsideClickDirective,
+    OverlayClickDirective,
     ArraySortPipeAsc,
     ArraySortPipeDesc,
     ForwardedAttachmentComponent,
