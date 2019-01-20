@@ -32,4 +32,11 @@ public class ConversationController {
 		}
 	}
 	
+	@GetMapping("delete")
+	public void delete(@RequestHeader("Auth-Token") String token, @RequestParam("id") Long conversationId) throws AuthenticationException, NoSuchEntityException {
+		User user = userService.authenticate(token);
+		
+		conversationService.delete(user, conversationId);
+	}
+	
 }

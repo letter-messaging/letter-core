@@ -1,5 +1,7 @@
 package com.gmail.ivanjermakov1.messenger.messaging.repository;
 
+import com.gmail.ivanjermakov1.messenger.auth.entity.User;
+import com.gmail.ivanjermakov1.messenger.messaging.entity.Conversation;
 import com.gmail.ivanjermakov1.messenger.messaging.entity.Message;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -13,6 +15,8 @@ import java.util.Set;
 public interface MessageRepository extends CrudRepository<Message, Long> {
 	
 	Message getById(Long messageId);
+	
+	Set<Message> getAllBySenderAndConversation(User sender, Conversation conversation);
 	
 	Message getTop1ByConversationIdOrderBySentDesc(Long conversationId);
 	

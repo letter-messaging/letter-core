@@ -2,6 +2,7 @@ package com.gmail.ivanjermakov1.messenger.messaging.service;
 
 import com.gmail.ivanjermakov1.messenger.auth.entity.User;
 import com.gmail.ivanjermakov1.messenger.auth.service.UserService;
+import com.gmail.ivanjermakov1.messenger.exception.AuthenticationException;
 import com.gmail.ivanjermakov1.messenger.exception.NoSuchEntityException;
 import com.gmail.ivanjermakov1.messenger.messaging.dto.ConversationDTO;
 import com.gmail.ivanjermakov1.messenger.messaging.entity.Conversation;
@@ -23,11 +24,17 @@ public class ConversationService {
 	private final static Logger LOG = LoggerFactory.getLogger(ConversationService.class);
 	private final ConversationRepository conversationRepository;
 	private final UserService userService;
+	private MessageService messageService;
 	
 	@Autowired
 	public ConversationService(ConversationRepository conversationRepository, UserService userService) {
 		this.conversationRepository = conversationRepository;
 		this.userService = userService;
+	}
+	
+	@Autowired
+	public void setMessageService(MessageService messageService) {
+		this.messageService = messageService;
 	}
 	
 	public Conversation create(User user, User with) {
@@ -45,6 +52,23 @@ public class ConversationService {
 			
 			return conversationRepository.save(conversation);
 		}
+	}
+	
+	/**
+	 * Deleting conversation means deleting all self-sent messages of interrogator within that conversation. It also
+	 * affects all source messages infected in forwarding and media within.
+	 *
+	 * @param user           deletion interrogator
+	 * @param conversationId id of conversation to delete
+	 * @throws NoSuchEntityException   when conversation with defined id is not exists
+	 * @throws AuthenticationException when interrogator has no permission to delete defined conversation
+	 */
+	public void delete(User user, Long conversationId) throws NoSuchEntityException, AuthenticationException {
+		Conversation conversation = get(conversationId);
+		if (conversation.getUsers().stream().noneMatch(u -> u.getId().equals(user.getId())))
+			throw new AuthenticationException("you can delete only conversations you are member within");
+		
+		messageService.deleteAll(user, conversation);
 	}
 	
 	public Conversation get(Long conversationId) throws NoSuchEntityException {

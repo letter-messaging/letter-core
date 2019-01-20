@@ -24,12 +24,16 @@ public class MessageService {
 	
 	private final MessageRepository messageRepository;
 	private final UserService userService;
-	private final ConversationService conversationService;
+	private ConversationService conversationService;
 	
 	@Autowired
-	public MessageService(MessageRepository messageRepository, UserService userService, UserInfoService userInfoService, ConversationService conversationService) {
+	public MessageService(MessageRepository messageRepository, UserService userService) {
 		this.messageRepository = messageRepository;
 		this.userService = userService;
+	}
+	
+	@Autowired
+	public void setConversationService(ConversationService conversationService) {
 		this.conversationService = conversationService;
 	}
 	
@@ -111,6 +115,16 @@ public class MessageService {
 		messageRepository.deleteForwarded(message.getId());
 	}
 	
+	public Message get(Long messageId) {
+		return messageRepository.getById(messageId);
+	}
+	
+	public void deleteAll(User user, Conversation conversation) {
+//		TODO: optimize
+		messageRepository.getAllBySenderAndConversation(user, conversation).stream().parallel().forEach(this::delete);
+//		TODO: hide conversation
+	}
+	
 	/**
 	 * Delete messages different way then just <code>.delete()</code>. Firstly deleting current message from all over
 	 * forwarded messages, then deletes itself
@@ -120,10 +134,6 @@ public class MessageService {
 	private void delete(Message message) {
 		messageRepository.deleteFromForwarded(message.getId());
 		messageRepository.delete(message);
-	}
-	
-	public Message get(Long messageId) {
-		return messageRepository.getById(messageId);
 	}
 	
 }
