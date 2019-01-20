@@ -47,7 +47,6 @@ export class ProfileComponent implements OnInit {
 
   ngOnInit() {
     this.editable = this.me.login === this.currentProfile.user.login;
-    console.log(this.date);
 
     if (this.currentProfile.userInfo.birthDate) {
       const dme = this.dme(this.currentProfile.userInfo.birthDate);
@@ -94,7 +93,6 @@ export class ProfileComponent implements OnInit {
   dme(date) {
     const d = moment(date).toArray().slice(0, 3);
     d[1] = d[1] + 1;
-    console.log(d);
     return d;
   }
 

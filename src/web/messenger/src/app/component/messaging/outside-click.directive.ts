@@ -12,7 +12,6 @@ export class OutsideClickDirective {
 
   @HostListener('document:click', ['$event.target']) onMouseEnter(targetElement) {
     if (targetElement.className === 'overlay') {
-      console.log('click outside!');
       this.clickOutside.emit(null);
     }
   }
