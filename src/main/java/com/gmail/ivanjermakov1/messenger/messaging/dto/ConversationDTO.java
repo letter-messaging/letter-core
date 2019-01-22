@@ -7,13 +7,15 @@ import java.util.List;
 public class ConversationDTO {
 	
 	private Long id;
+	private Boolean hidden;
 	private List<UserDTO> users;
 	
 	public ConversationDTO() {
 	}
 	
-	public ConversationDTO(Long id, List<UserDTO> users) {
+	public ConversationDTO(Long id, Boolean hidden, List<UserDTO> users) {
 		this.id = id;
+		this.hidden = hidden;
 		this.users = users;
 	}
 	
@@ -23,6 +25,14 @@ public class ConversationDTO {
 	
 	public void setId(Long id) {
 		this.id = id;
+	}
+	
+	public Boolean getHidden() {
+		return hidden;
+	}
+	
+	public void setHidden(Boolean hidden) {
+		this.hidden = hidden;
 	}
 	
 	public List<UserDTO> getUsers() {

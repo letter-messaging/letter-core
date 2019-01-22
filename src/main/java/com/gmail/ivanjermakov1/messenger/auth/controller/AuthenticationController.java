@@ -30,5 +30,7 @@ public class AuthenticationController {
 		userService.appearOnline(user);
 		return userService.full(user);
 	}
+
+//	TODO: logout
 	
 }

@@ -26,7 +26,7 @@ public class ConversationController {
 	public ConversationDTO create(@RequestHeader("Auth-Token") String token, @RequestParam("with") String withLogin) throws AuthenticationException {
 		User user = userService.authenticate(token);
 		try {
-			return conversationService.get(conversationService.create(user, userService.getUser(withLogin)));
+			return conversationService.get(user, conversationService.create(user, userService.getUser(withLogin)));
 		} catch (NoSuchEntityException e) {
 			throw new AuthenticationException();
 		}
@@ -36,7 +36,14 @@ public class ConversationController {
 	public void delete(@RequestHeader("Auth-Token") String token, @RequestParam("id") Long conversationId) throws AuthenticationException, NoSuchEntityException {
 		User user = userService.authenticate(token);
 		
-		conversationService.delete(user, conversationId);
+		conversationService.delete(user, conversationService.get(conversationId));
+	}
+	
+	@GetMapping("hide")
+	public void hide(@RequestHeader("Auth-Token") String token, @RequestParam("id") Long conversationId) throws AuthenticationException, NoSuchEntityException {
+		User user = userService.authenticate(token);
+		
+		conversationService.hide(user, conversationService.get(conversationId));
 	}
 	
 }

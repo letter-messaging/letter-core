@@ -58,7 +58,8 @@ create table user_conversation
       references "user",
   conversation_id bigint not null
     constraint user_conversation_conversation_id_fk
-      references conversation
+      references conversation,
+  hidden          boolean default false
 );
 
 alter table user_conversation

@@ -7,8 +7,8 @@ import com.gmail.ivanjermakov1.messenger.messaging.entity.Conversation;
 import com.gmail.ivanjermakov1.messenger.messaging.entity.Message;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -45,7 +45,7 @@ public class PreviewService {
 	public PreviewDTO getPreview(User user, Conversation conversation) {
 		PreviewDTO previewDTO = new PreviewDTO();
 		
-		previewDTO.setConversation(conversationService.get(conversation));
+		previewDTO.setConversation(conversationService.get(user, conversation));
 		Message lastMessage = messageService.getLastMessage(conversation.getId());
 		if (lastMessage != null) previewDTO.setLastMessage(messageService.getFullMessage(lastMessage));
 		

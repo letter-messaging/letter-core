@@ -7,8 +7,7 @@ import com.gmail.ivanjermakov1.messenger.messaging.entity.UserInfo;
 import com.gmail.ivanjermakov1.messenger.messaging.repository.UserInfoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import javax.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional

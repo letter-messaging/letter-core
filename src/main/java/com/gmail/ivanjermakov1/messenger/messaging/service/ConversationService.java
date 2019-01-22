@@ -11,8 +11,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -42,33 +42,33 @@ public class ConversationService {
 		
 		if (user.getId().equals(with.getId())) return create(user);
 		
+		Conversation conversation = new Conversation();
 		try {
-			return conversationWith(user, with);
+			conversation = conversationWith(user, with);
+			show(user, conversation);
 		} catch (NoSuchEntityException e) {
-			Conversation conversation = new Conversation(null);
 			conversation.setUsers(new ArrayList<>());
 			conversation.getUsers().add(user);
 			conversation.getUsers().add(with);
-			
-			return conversationRepository.save(conversation);
 		}
+		
+		return conversationRepository.save(conversation);
 	}
 	
 	/**
 	 * Deleting conversation means deleting all self-sent messages of interrogator within that conversation. It also
 	 * affects all source messages infected in forwarding and media within.
 	 *
-	 * @param user           deletion interrogator
-	 * @param conversationId id of conversation to delete
-	 * @throws NoSuchEntityException   when conversation with defined id is not exists
+	 * @param user         deletion interrogator
+	 * @param conversation conversation to delete
 	 * @throws AuthenticationException when interrogator has no permission to delete defined conversation
 	 */
-	public void delete(User user, Long conversationId) throws NoSuchEntityException, AuthenticationException {
-		Conversation conversation = get(conversationId);
+	public void delete(User user, Conversation conversation) throws AuthenticationException {
 		if (conversation.getUsers().stream().noneMatch(u -> u.getId().equals(user.getId())))
 			throw new AuthenticationException("you can delete only conversations you are member within");
 		
 		messageService.deleteAll(user, conversation);
+		hide(user, conversation);
 	}
 	
 	public Conversation get(Long conversationId) throws NoSuchEntityException {
@@ -79,14 +79,27 @@ public class ConversationService {
 		return conversationRepository.getConversations(user.getId());
 	}
 	
-	public ConversationDTO get(Conversation conversation) {
+	public ConversationDTO get(User user, Conversation conversation) {
 		return new ConversationDTO(
 				conversation.getId(),
+				isHidden(user, conversation),
 				conversation.getUsers()
 						.stream()
 						.map(userService::full)
 						.collect(Collectors.toList())
 		);
+	}
+	
+	public void hide(User user, Conversation conversation) {
+		conversationRepository.hide(user.getId(), conversation.getId());
+	}
+	
+	public void show(User user, Conversation conversation) {
+		conversationRepository.show(user.getId(), conversation.getId());
+	}
+	
+	public Boolean isHidden(User user, Conversation conversation) {
+		return conversationRepository.isHidden(user.getId(), conversation.getId());
 	}
 	
 	private Conversation conversationWith(User user1, User user2) throws NoSuchEntityException {
@@ -107,7 +120,7 @@ public class ConversationService {
 		
 		if (self != null) return self;
 		
-		self = new Conversation(null);
+		self = new Conversation();
 		self.setUsers(new ArrayList<>());
 		self.getUsers().add(user);
 		

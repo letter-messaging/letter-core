@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Set;
 
@@ -38,6 +39,7 @@ public interface MessageRepository extends CrudRepository<Message, Long> {
 	Integer getUnreadCount(@Param("exceptUserId") Long exceptUserId, @Param("conversationId") Long conversationId);
 	
 	@Modifying
+	@Transactional
 	@Query(value = "delete from forwarded_message where forwarded_message_id = :id", nativeQuery = true)
 	void deleteFromForwarded(@Param("id") Long id);
 	

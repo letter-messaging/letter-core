@@ -27,10 +27,6 @@ public class Conversation {
 	public Conversation() {
 	}
 	
-	public Conversation(Long id) {
-		this.id = id;
-	}
-	
 	public Long getId() {
 		return id;
 	}

@@ -10,8 +10,8 @@ import com.gmail.ivanjermakov1.messenger.messaging.entity.Message;
 import com.gmail.ivanjermakov1.messenger.messaging.repository.MessageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.transaction.Transactional;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -66,7 +66,7 @@ public class MessageService {
 		
 		try {
 			Conversation conversation = conversationService.get(message.getConversation().getId());
-			messageDTO.setConversation(conversationService.get(conversation));
+			messageDTO.setConversation(conversationService.get(message.getSender(), conversation));
 		} catch (NoSuchEntityException e) {
 			e.printStackTrace();
 		}
@@ -122,7 +122,6 @@ public class MessageService {
 	public void deleteAll(User user, Conversation conversation) {
 //		TODO: optimize
 		messageRepository.getAllBySenderAndConversation(user, conversation).stream().parallel().forEach(this::delete);
-//		TODO: hide conversation
 	}
 	
 	/**
@@ -131,7 +130,7 @@ public class MessageService {
 	 *
 	 * @param message message that will be deleted
 	 */
-	private void delete(Message message) {
+	public void delete(Message message) {
 		messageRepository.deleteFromForwarded(message.getId());
 		messageRepository.delete(message);
 	}
