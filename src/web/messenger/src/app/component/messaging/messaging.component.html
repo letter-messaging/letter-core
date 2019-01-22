@@ -29,6 +29,7 @@
           <div class="button">Videos</div>
           <div class="button">Attachments</div>
           <div class="splitter"></div>
+          <div class="button" (click)="hideConversation(currentPreview.conversation.id)">Hide conversation</div>
           <div class="button danger" (click)="deleteConversation(currentPreview.conversation.id)">Delete conversation
           </div>
         </div>

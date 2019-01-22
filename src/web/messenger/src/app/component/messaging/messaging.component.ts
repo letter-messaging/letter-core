@@ -135,6 +135,7 @@ export class MessagingComponent implements OnInit {
     this.titleService.setTitle(APP_TITLE);
   }
 
+  // TODO: refactor method
   ngOnInit() {
     this.messengerService.oMe.subscribe(me => {
       return this.me = me;
@@ -156,7 +157,7 @@ export class MessagingComponent implements OnInit {
         }
 
         this.previewService.all(this.token).subscribe(previews => {
-          this.previews = previews.filter(p => p.lastMessage);
+          this.previews = previews.filter(p => p.lastMessage && !p.conversation.hidden);
 
           this.routeConversationId = params['id'];
           if (this.routeConversationId) {
@@ -166,15 +167,11 @@ export class MessagingComponent implements OnInit {
 
               this.messages = messages;
 
-              if (messages.length !== 0) {
-                this.currentPreview = this.previews.find(p => p.conversation.id == this.routeConversationId);
+              this.previewService.get(this.token, this.routeConversationId).subscribe(preview => {
+                this.currentPreview = preview;
                 this.scrollToBottom();
-              } else {
-                this.previewService.get(this.token, this.routeConversationId).subscribe(preview => {
-                  this.currentPreview = preview;
-                });
-              }
-            });
+              });
+            }, error => this.closeConversation());
           } else {
             this.isLeftView = true;
             this.currentPreview = null;
@@ -378,7 +375,15 @@ export class MessagingComponent implements OnInit {
   }
 
   deleteConversation(conversationId: number) {
-    // TODO: this
+    this.conversationService.delete(this.token, conversationId).subscribe(success => {
+      this.closeConversation();
+    });
+  }
+
+  hideConversation(conversationId: number) {
+    this.conversationService.hide(this.token, conversationId).subscribe(success => {
+      this.closeConversation();
+    });
   }
 
   private startPolling() {
@@ -448,5 +453,4 @@ export class MessagingComponent implements OnInit {
       }
     );
   }
-
 }
