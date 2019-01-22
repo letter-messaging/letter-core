@@ -328,6 +328,7 @@ export class MessagingComponent implements OnInit {
   }
 
   logout() {
+    this.authService.logout(this.token);
     this.cookieService.deleteToken();
     this.router.navigate(['/auth'], {replaceUrl: true});
   }

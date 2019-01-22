@@ -24,4 +24,11 @@ export class AuthService {
       headers: {'Auth-Token': token}
     });
   }
+
+  logout(token: string) {
+    return this.http.get<User>(API_URL + '/auth/logout', {
+      headers: {'Auth-Token': token}
+    });
+  }
+
 }

@@ -2,7 +2,7 @@ import {Component} from '@angular/core';
 import {CookieService} from './service/cookie.service';
 import {AuthService} from './service/auth.service';
 import {MessengerService} from './service/messenger.service';
-import {ActivatedRoute, Router} from '@angular/router';
+import {ActivatedRoute, NavigationEnd, Router} from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -20,28 +20,40 @@ export class AppComponent {
   }
 
   private autoLogin() {
-    const token = this.cookieService.getToken();
-    if (token !== null) {
-      this.authService.validate(token).subscribe(
-        user => {
-          this.messengerService.setToken(token);
-          this.messengerService.setMe(user);
+    this.router.events.subscribe(
+      (event: any) => {
+        if (event instanceof NavigationEnd) {
+          if (this.router.url === '/auth') {
+            return;
+          }
 
-          this.route.queryParams.subscribe(params => {
-            if (params['id']) {
-              this.router.navigate(['/im'], {queryParams: {id: params['id']}, replaceUrl: true});
-            } else {
-              this.router.navigate(['/im'], {replaceUrl: true});
-            }
-          });
-        },
-        error => {
-          this.router.navigate(['/auth'], {replaceUrl: true});
+          const token = this.cookieService.getToken();
+          if (token !== null) {
+            this.authService.validate(token).subscribe(
+              user => {
+                this.messengerService.setToken(token);
+                this.messengerService.setMe(user);
+
+                this.route.queryParams.subscribe(params => {
+                  if (params['id']) {
+                    this.router.navigate(['/im'], {queryParams: {id: params['id']}, replaceUrl: true});
+                  } else {
+                    this.router.navigate(['/im'], {replaceUrl: true});
+                  }
+                });
+              },
+              error => {
+                this.router.navigate(['/auth'], {replaceUrl: true});
+              }
+            );
+          } else {
+            this.router.navigate(['/auth'], {replaceUrl: true});
+          }
+
         }
-      );
-    } else {
-      this.router.navigate(['/auth'], {replaceUrl: true});
-    }
+      }
+    );
+
   }
 
 }
