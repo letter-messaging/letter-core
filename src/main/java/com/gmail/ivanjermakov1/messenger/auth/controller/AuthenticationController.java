@@ -25,12 +25,27 @@ public class AuthenticationController {
 	}
 	
 	@GetMapping("validate")
-	public UserDTO validate(@RequestHeader("Auth-Token") String token) throws NoSuchEntityException {
-		User user = userService.getUserByToken(token);
-		userService.appearOnline(user);
-		return userService.full(user);
+	public UserDTO validate(@RequestHeader("Auth-Token") String token) throws AuthenticationException {
+		try {
+			User user = userService.getUserByToken(token);
+			userService.appearOnline(user);
+			return userService.full(user);
+		} catch (NoSuchEntityException e) {
+			throw new AuthenticationException("invalid token");
+		}
 	}
-
-//	TODO: logout
+	
+	/**
+	 * Logout current user from everywhere by removing all his tokens. To login user is forced to authenticate again.
+	 *
+	 * @param token token of user
+	 * @throws AuthenticationException when token is invalid
+	 */
+	@GetMapping("logout")
+	public void logout(@RequestHeader("Auth-Token") String token) throws AuthenticationException {
+		User user = userService.authenticate(token);
+		
+		userService.logout(user);
+	}
 	
 }
