@@ -110,4 +110,10 @@ public class UserService {
 		userOnlineRepository.save(new UserOnline(user, LocalDateTime.now()));
 	}
 	
+	public void logout(User user) {
+		LOG.debug("user @" + user.getLogin() + " is logout from everywhere");
+		
+		tokenRepository.deleteAllByUser(user);
+	}
+	
 }
