@@ -34,7 +34,22 @@
           </div>
         </div>
       </div>
-      <!--<div class="logout" (click)="logout()"><i class="fas fa-sign-out-alt"></i></div>-->
+      <div class="profile-menu" *ngIf="!currentPreview && me" (appOutsideClick)="profileMenuView = false">
+        <div class="button" (click)="profileMenuView = !profileMenuView">
+          <div class="text">{{me.firstName}}</div>
+          <img class="avatar" src="assets/img/default-avatar.png" alt="">
+          <!--TODO: animation-->
+          <i class="fas fa-caret-down" *ngIf="!profileMenuView"></i>
+          <i class="fas fa-caret-up" *ngIf="profileMenuView"></i>
+        </div>
+        <div class="context-menu" *ngIf="profileMenuView">
+          <div class="button" (click)="openProfile(me)">Preview profile</div>
+          <div class="splitter"></div>
+          <div class="button">Settings</div>
+          <div class="splitter"></div>
+          <div class="button" (click)="logout()">Logout</div>
+        </div>
+      </div>
     </div>
   </div>
 

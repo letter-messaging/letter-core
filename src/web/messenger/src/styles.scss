@@ -1,4 +1,5 @@
 :root {
+  --black: #313542;
   --dark: #393e46;
   --grey: #63676e;
   --bright: #eeeeee;
@@ -11,11 +12,8 @@
   font-size: 20px;
 }
 
-/*ios*/
-input {
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
+input:focus, select:focus, textarea:focus {
+  outline-color: var(--special);
 }
 
 body {

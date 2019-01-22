@@ -34,7 +34,8 @@ import * as moment from 'moment';
     './messaging.component.select-message.scss',
     './messaging.component.content-left.scss',
     './messaging.component.conversation.scss',
-    './messaging.component.conversation-menu.scss'
+    './messaging.component.conversation-menu.scss',
+    './messaging.component.profile-menu.scss'
   ]
 })
 export class MessagingComponent implements OnInit {
@@ -86,6 +87,7 @@ export class MessagingComponent implements OnInit {
   showAttachmentsMenu = false;
 
   conversationMenuView = false;
+  profileMenuView = false;
 
   @ViewChild('messageWrapper') messageWrapper: ElementRef;
 

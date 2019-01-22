@@ -13,18 +13,22 @@
   .conversation-name {
     font-weight: bold;
     margin: 0 10px;
+    padding: 11.5px;
 
     white-space: nowrap;
   }
 
   .conversation-name:hover {
     cursor: pointer;
-    color: var(--special);
+    background: var(--black);
   }
 
   .status {
     font-size: 20px;
     font-style: italic;
+
+    //fix cutoff
+    padding-right: 4px;
 
     overflow: hidden;
     text-overflow: ellipsis;

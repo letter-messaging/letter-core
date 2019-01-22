@@ -121,12 +121,12 @@
       }
 
       textarea {
-        width: 100%;
         resize: none;
       }
 
       .editable {
         border: 0 none;
+        border-radius: 4px;
 
         grid-column: 2;
 
@@ -138,6 +138,16 @@
       .editable:disabled {
         background: none;
         color: inherit;
+      }
+
+      .edit-date {
+        display: flex;
+        align-items: center;
+        justify-content: stretch;
+      }
+
+      .edit-date > select {
+        flex-grow: 1;
       }
 
     }
