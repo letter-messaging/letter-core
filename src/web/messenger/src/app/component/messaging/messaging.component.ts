@@ -333,7 +333,8 @@ export class MessagingComponent implements OnInit {
   }
 
   forceLogout() {
-    this.authService.logout(this.token);
+    this.authService.logout(this.token).subscribe(success => {
+    });
     this.logout();
   }
 
