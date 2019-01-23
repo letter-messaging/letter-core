@@ -32,13 +32,9 @@ public class PreviewController {
 	
 	@GetMapping("all")
 	public List<PreviewDTO> all(@RequestHeader("Auth-Token") String token) throws AuthenticationException {
-		try {
-			User user = userService.getUserByToken(token);
-			
-			return previewService.all(user);
-		} catch (NoSuchEntityException e) {
-			throw new AuthenticationException("invalid token");
-		}
+		User user = userService.authenticate(token);
+		
+		return previewService.all(user);
 	}
 	
 	@GetMapping("get")
