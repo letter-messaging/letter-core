@@ -4,7 +4,6 @@ import com.gmail.ivanjermakov1.messenger.auth.dto.UserDTO;
 import com.gmail.ivanjermakov1.messenger.auth.entity.User;
 import com.gmail.ivanjermakov1.messenger.auth.service.UserService;
 import com.gmail.ivanjermakov1.messenger.exception.AuthenticationException;
-import com.gmail.ivanjermakov1.messenger.exception.NoSuchEntityException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,13 +25,9 @@ public class AuthenticationController {
 	
 	@GetMapping("validate")
 	public UserDTO validate(@RequestHeader("Auth-Token") String token) throws AuthenticationException {
-		try {
-			User user = userService.getUserByToken(token);
-			userService.appearOnline(user);
-			return userService.full(user);
-		} catch (NoSuchEntityException e) {
-			throw new AuthenticationException("invalid token");
-		}
+		User user = userService.authenticate(token);
+		userService.appearOnline(user);
+		return userService.full(user);
 	}
 	
 	/**
