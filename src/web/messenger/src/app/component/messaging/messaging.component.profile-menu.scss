@@ -15,7 +15,10 @@
         width: 40px;
         height: 40px;
 
-        padding: 5px;
+        margin: 5px;
+
+        object-fit: cover;
+        border-radius: 20px;
       }
 
       i {

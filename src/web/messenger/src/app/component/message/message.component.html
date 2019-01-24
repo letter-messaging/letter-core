@@ -1,6 +1,6 @@
 <div class="message" [ngClass]="{'message-mine': mine, 'selected': message.selected}">
   <div class="message-container">
-    <img class="avatar" src="assets/img/default-avatar.png" alt=""
+    <img class="avatar" [src]="FILE_URL + message.sender.avatar" alt=""
          *ngIf="!isForwarded" (click)="openProfile(message.sender)">
     <div class="message-content">
       <div class="from">{{message.sender.firstName}}</div>

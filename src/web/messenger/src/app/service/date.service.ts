@@ -34,7 +34,7 @@ export class DateService {
       return 'Seen tomorrow at ' + time.format('hh:mm');
     }
 
-    return time.format('[Seen ] MM Do [ at ] hh:mm');
+    return time.format('[Seen ] MMM Do [ at ] hh:mm');
   }
 
 }

@@ -10,9 +10,16 @@
 
   color: white;
 
+  .avatar {
+    height: 40px;
+    width: 40px;
+
+    object-fit: cover;
+    border-radius: 20px;
+  }
+
   .conversation-name {
     font-weight: bold;
-    margin: 0 10px;
     padding: 11.5px;
 
     white-space: nowrap;
@@ -50,7 +57,7 @@
     i {
       color: white;
       font-size: 24px;
-      padding: 4px;
+      padding: 10px;
 
       cursor: pointer;
     }

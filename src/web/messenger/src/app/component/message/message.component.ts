@@ -1,6 +1,7 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {Message} from '../dto/Message';
 import {User} from '../dto/User';
+import {FILE_URL} from '../../../../globals';
 
 
 @Component({
@@ -12,6 +13,8 @@ import {User} from '../dto/User';
   ]
 })
 export class MessageComponent implements OnInit {
+
+  readonly FILE_URL = FILE_URL;
 
   @Input()
   message: Message;

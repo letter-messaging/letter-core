@@ -8,7 +8,7 @@
   </div>
   <div class="main">
     <div class="preview">
-      <img class="avatar" src="assets/img/default-avatar.png" alt="">
+      <img class="avatar" [src]="FILE_URL + currentProfile.user.avatar" alt="">
       <div class="info-container">
         <div class="info">{{currentProfile.userInfo.firstName}} {{currentProfile.userInfo.lastName}}</div>
         <div class="login">@{{currentProfile.user.login}}</div>

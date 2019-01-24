@@ -8,13 +8,14 @@
     <div class="menu" (click)="closeConversation(); removeForwardedAttachment(); cancelEditing()">
       <i class="fas fa-bars"></i>
     </div>
+    <img class="avatar" [src]="FILE_URL + currentPreview.with.avatar" alt="" *ngIf="currentPreview">
     <div class="conversation-name" *ngIf="currentPreview"
          (click)="openProfile(currentPreview.with)">
       {{currentPreview.with.firstName}}
       {{currentPreview.with.lastName}}
     </div>
     <div class="status" *ngIf="currentPreview">
-      {{lastSeenView(currentPreview.with.lastSeen) | lowercase}}
+      {{lastSeenView(currentPreview.with.lastSeen)}}
     </div>
     <div class="right">
       <div class="search"><i class="fas fa-search"></i></div>
@@ -37,8 +38,9 @@
       <div class="profile-menu" *ngIf="!currentPreview && me" (appOutsideClick)="profileMenuView = false">
         <div class="button" (click)="profileMenuView = !profileMenuView">
           <div class="text">{{me.firstName}}</div>
-          <img class="avatar" src="assets/img/default-avatar.png" alt="">
+          <img class="avatar" [src]="FILE_URL + me.avatar" alt="">
           <!--TODO: animation-->
+          <!--TODO: fix bug with clicking on i's-->
           <i class="fas fa-caret-down" *ngIf="!profileMenuView"></i>
           <i class="fas fa-caret-up" *ngIf="profileMenuView"></i>
         </div>
@@ -78,7 +80,7 @@
         <div class="user-preview"
              *ngFor="let user of searchUsers"
              (click)="createConversation(user)">
-          <img class="avatar" src="assets/img/default-avatar.png" alt="">
+          <img class="avatar" [src]="FILE_URL + user.avatar" alt="">
           <div class="info">{{user.firstName}} {{user.lastName}}</div>
           <div class="login">@{{user.login}}</div>
         </div>

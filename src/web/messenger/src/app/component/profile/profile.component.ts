@@ -5,6 +5,7 @@ import {UserInfo} from '../dto/UserInfo';
 import {MaritalStatus} from '../dto/enum/MaritalStatus';
 
 import * as moment from 'moment';
+import {FILE_URL} from '../../../../globals';
 
 @Component({
   selector: 'app-profile',
@@ -15,6 +16,8 @@ import * as moment from 'moment';
   ]
 })
 export class ProfileComponent implements OnInit {
+
+  readonly FILE_URL = FILE_URL;
 
   @Input() currentProfile;
 

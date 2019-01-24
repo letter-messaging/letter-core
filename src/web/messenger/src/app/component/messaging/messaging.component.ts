@@ -16,7 +16,7 @@ import {MessageAttachments} from '../dto/MessageAttachments';
 import {SoundNotificationService} from '../../service/sound-notification.service';
 import {Title} from '@angular/platform-browser';
 import {BackgroundUnreadService} from '../../service/background-unread.service';
-import {APP_TITLE, MINUTES_AS_ONLINE_LIMIT} from '../../../../globals';
+import {APP_TITLE, FILE_URL, MINUTES_AS_ONLINE_LIMIT} from '../../../../globals';
 
 import {UserInfoService} from '../../service/user-info.service';
 import {DateService} from '../../service/date.service';
@@ -40,23 +40,9 @@ import * as moment from 'moment';
 })
 export class MessagingComponent implements OnInit {
 
-  constructor(private route: ActivatedRoute,
-              private router: Router,
-              private titleService: Title,
-              private previewService: PreviewService,
-              private messengerService: MessengerService,
-              private messageService: MessageService,
-              private authService: AuthService,
-              private searchService: SearchService,
-              private cookieService: CookieService,
-              private messagingService: MessagingService,
-              private conversationService: ConversationService,
-              private soundNotificationService: SoundNotificationService,
-              private userInfoService: UserInfoService,
-              private backgroundUnreadService: BackgroundUnreadService) {
-  }
+  readonly FILE_URL = FILE_URL;
 
-  private token: string;
+  token: string;
   isPolling = false;
 
   me: User;
@@ -135,6 +121,22 @@ export class MessagingComponent implements OnInit {
   onFocus(event: any): void {
     this.backgroundUnreadService.resetUnreadCount();
     this.titleService.setTitle(APP_TITLE);
+  }
+
+  constructor(private route: ActivatedRoute,
+              private router: Router,
+              private titleService: Title,
+              private previewService: PreviewService,
+              private messengerService: MessengerService,
+              private messageService: MessageService,
+              private authService: AuthService,
+              private searchService: SearchService,
+              private cookieService: CookieService,
+              private messagingService: MessagingService,
+              private conversationService: ConversationService,
+              private soundNotificationService: SoundNotificationService,
+              private userInfoService: UserInfoService,
+              private backgroundUnreadService: BackgroundUnreadService) {
   }
 
   // TODO: refactor method
