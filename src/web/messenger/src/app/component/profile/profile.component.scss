@@ -61,14 +61,43 @@
       border-top: 1px solid var(--bright);
       border-bottom: 1px solid var(--bright);
 
-      .avatar {
+      .avatar-container {
+        position: relative;
+
         width: 100px;
         height: 100px;
 
         margin: 10px;
 
-        object-fit: cover;
-        border-radius: 50px;
+        .avatar {
+          width: 100px;
+          height: 100px;
+
+          object-fit: cover;
+          border-radius: 50px;
+        }
+
+        .upload-avatar {
+          position: absolute;
+
+          top: 0;
+          left: 0;
+          bottom: 0;
+          right: 0;
+
+          display: flex;
+          align-items: center;
+          justify-content: center;
+
+          background: rgba(0, 0, 0, 0.3);
+          border-radius: 50px;
+
+          font-size: 30px;
+          color: white;
+
+          cursor: pointer;
+        }
+
       }
 
       .info-container {

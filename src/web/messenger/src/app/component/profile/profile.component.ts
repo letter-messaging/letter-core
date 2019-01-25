@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
 import {DateService} from '../../service/date.service';
 import {User} from '../dto/User';
 import {UserInfo} from '../dto/UserInfo';
@@ -6,6 +6,8 @@ import {MaritalStatus} from '../dto/enum/MaritalStatus';
 
 import * as moment from 'moment';
 import {FILE_URL} from '../../../../globals';
+import {MessengerService} from '../../service/messenger.service';
+import {AvatarService} from '../../service/avatar.service';
 
 @Component({
   selector: 'app-profile',
@@ -27,6 +29,8 @@ export class ProfileComponent implements OnInit {
 
   @Output() editProfile = new EventEmitter<UserInfo>();
 
+  @ViewChild('fileInput') fileInput;
+
   maritalStatuses = Object.keys(MaritalStatus).filter(key => typeof MaritalStatus[key] === 'number');
 
   editable = false;
@@ -45,7 +49,8 @@ export class ProfileComponent implements OnInit {
     year: null
   };
 
-  constructor() {
+  constructor(private messengerService: MessengerService,
+              private avatarService: AvatarService) {
   }
 
   ngOnInit() {
@@ -97,6 +102,23 @@ export class ProfileComponent implements OnInit {
     const d = moment(date).toArray().slice(0, 3);
     d[1] = d[1] + 1;
     return d;
+  }
+
+  selectAvatar() {
+    this.fileInput.nativeElement.click();
+  }
+
+  uploadAvatar() {
+    if (this.fileInput.nativeElement.files.length !== 1) {
+      return;
+    }
+    const avatar = this.fileInput.nativeElement.files[0];
+
+    this.messengerService.oToken.subscribe(token => {
+      this.avatarService.upload(token, avatar).subscribe(avatarResponse => {
+        console.log(avatarResponse);
+      });
+    });
   }
 
 }

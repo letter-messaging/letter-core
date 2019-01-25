@@ -8,7 +8,11 @@
   </div>
   <div class="main">
     <div class="preview">
-      <img class="avatar" [src]="FILE_URL + currentProfile.user.avatar" alt="">
+      <div class="avatar-container">
+        <img class="avatar" [src]="FILE_URL + currentProfile.user.avatar" alt="">
+        <i class="upload-avatar fas fa-cloud-upload-alt" *ngIf="editView" (click)="selectAvatar()"></i>
+        <input #fileInput type="file" accept="image/*" style="display: none" (change)="uploadAvatar()">
+      </div>
       <div class="info-container">
         <div class="info">{{currentProfile.userInfo.firstName}} {{currentProfile.userInfo.lastName}}</div>
         <div class="login">@{{currentProfile.user.login}}</div>
@@ -57,7 +61,8 @@
       <i class="fas fa-heart"></i>
       <input type="text" class="editable" placeholder="Marital status" *ngIf="!editView"
              [disabled]="!editable || !editView" [(ngModel)]="currentProfile.userInfo.maritalStatus">
-      <select class="marital-status-select editable" *ngIf="editView" [(ngModel)]="currentProfile.userInfo.maritalStatus">
+      <select class="marital-status-select editable" *ngIf="editView"
+              [(ngModel)]="currentProfile.userInfo.maritalStatus">
         <option [selected]="currentProfile.userInfo.maritalStatus === null" [value]="null">Marital status</option>
         <option *ngFor="let o of maritalStatuses">{{o}}</option>
       </select>

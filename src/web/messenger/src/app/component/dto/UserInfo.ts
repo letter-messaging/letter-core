@@ -1,5 +1,6 @@
 import {User} from './User';
 import {MaritalStatus} from './enum/MaritalStatus';
+import {Avatar} from './Avatar';
 
 export class UserInfo {
 
@@ -17,5 +18,6 @@ export class UserInfo {
   placeOfEducation: string;
   placeOfWork: string;
   about: string;
+  avatars: Array<Avatar>;
 
 }
