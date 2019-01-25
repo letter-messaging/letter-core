@@ -21,6 +21,7 @@ public class FileUploadService {
 	@Value("${web.static.resources.path}")
 	private String webResources;
 	
+	//	TODO: prevent file overriding with the same filename
 	public String upload(MultipartFile multipartFile, FileType fileType) throws IOException {
 		LOG.info("uploading file \'" + multipartFile.getOriginalFilename() + "\'; size: " + multipartFile.getSize() / 1_000_000 + "MB");
 		
