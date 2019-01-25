@@ -151,8 +151,16 @@
 
       .edit-date > select {
         flex-grow: 1;
+
+        border: 0 none;
+        border-radius: 4px;
+        margin: 0 1px;
       }
 
+    }
+
+    select {
+      border: 1px solid var(--grey) !important;
     }
 
   }
