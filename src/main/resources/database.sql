@@ -140,14 +140,14 @@ create unique index user_online_id_uindex
 
 create table avatar
 (
-  id       bigserial          not null
+  id       bigserial not null
     constraint avatar_pk
       primary key,
-  user_id  bigint             not null
+  user_id  bigint    not null
     constraint avatar_user_id_fk
       references "user",
-  path     varchar            not null,
-  uploaded date default now() not null
+  path     varchar   not null,
+  uploaded date      not null
 );
 
 alter table avatar

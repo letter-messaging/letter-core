@@ -1,5 +1,6 @@
 package com.gmail.ivanjermakov1.messenger.messaging.service;
 
+import com.gmail.ivanjermakov1.messenger.messaging.enums.FileType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -20,16 +21,16 @@ public class FileUploadService {
 	@Value("${web.static.resources.path}")
 	private String webResources;
 	
-	public String upload(MultipartFile multipartFile) throws IOException {
-		LOG.info("uploading file \'" + multipartFile.getName() + "\'; size: " + multipartFile.getSize() / 1_000_000 + "MB");
+	public String upload(MultipartFile multipartFile, FileType fileType) throws IOException {
+		LOG.info("uploading file \'" + multipartFile.getOriginalFilename() + "\'; size: " + multipartFile.getSize() / 1_000_000 + "MB");
 		
 		String realPath = uploadPlaceholder;
-		new File(realPath).mkdirs();
+		new File(realPath + "/" + fileType.toString().toLowerCase()).mkdirs();
 		
-		File file = new File(realPath + "/" + multipartFile.getOriginalFilename());
+		File file = new File(realPath + "/" + fileType.toString().toLowerCase() + "/" + multipartFile.getOriginalFilename());
 		multipartFile.transferTo(file);
 		
-		return webResources + multipartFile.getOriginalFilename();
+		return fileType.toString().toLowerCase() + "/" + multipartFile.getOriginalFilename();
 	}
 	
 }
