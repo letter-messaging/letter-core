@@ -108,6 +108,7 @@ export class ProfileComponent implements OnInit {
     this.fileInput.nativeElement.click();
   }
 
+  // TODO: edit avatar together with everything else
   uploadAvatar() {
     if (this.fileInput.nativeElement.files.length !== 1) {
       return;
