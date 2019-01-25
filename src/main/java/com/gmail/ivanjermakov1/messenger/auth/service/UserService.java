@@ -35,18 +35,22 @@ public class UserService {
 	
 	private final UserRepository userRepository;
 	private final TokenRepository tokenRepository;
-	private final UserInfoService userInfoService;
 	private final UserOnlineRepository userOnlineRepository;
 	private final AvatarService avatarService;
+	private UserInfoService userInfoService;
 	
 	@Value("${default.avatar.path}")
 	private String defaultAvatarPath;
 	
 	@Autowired
-	public UserService(UserRepository userRepository, TokenRepository tokenRepository, UserInfoService userInfoService, UserOnlineRepository userOnlineRepository, AvatarService avatarService) {
+	public void setUserInfoService(UserInfoService userInfoService) {
+		this.userInfoService = userInfoService;
+	}
+	
+	@Autowired
+	public UserService(UserRepository userRepository, TokenRepository tokenRepository, UserOnlineRepository userOnlineRepository, AvatarService avatarService) {
 		this.userRepository = userRepository;
 		this.tokenRepository = tokenRepository;
-		this.userInfoService = userInfoService;
 		this.userOnlineRepository = userOnlineRepository;
 		this.avatarService = avatarService;
 	}

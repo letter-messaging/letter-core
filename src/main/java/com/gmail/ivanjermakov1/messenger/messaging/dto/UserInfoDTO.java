@@ -1,14 +1,14 @@
 package com.gmail.ivanjermakov1.messenger.messaging.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.gmail.ivanjermakov1.messenger.auth.entity.User;
-import com.gmail.ivanjermakov1.messenger.messaging.entity.UserInfo;
+import com.gmail.ivanjermakov1.messenger.auth.dto.UserDTO;
 
 import java.time.LocalDate;
+import java.util.List;
 
 public class UserInfoDTO {
 	
-	private User user;
+	private UserDTO user;
 	private String firstName;
 	private String lastName;
 	private Boolean gender;
@@ -23,11 +23,12 @@ public class UserInfoDTO {
 	private String placeOfEducation;
 	private String placeOfWork;
 	private String about;
+	private List<AvatarDTO> avatars;
 	
 	public UserInfoDTO() {
 	}
 	
-	public UserInfoDTO(User user, String firstName, String lastName, Boolean gender, LocalDate birthDate, MaritalStatus maritalStatus, String country, String city, String location, String phoneNumber, String mail, String placeOfEducation, String placeOfWork, String about) {
+	public UserInfoDTO(UserDTO user, String firstName, String lastName, Boolean gender, LocalDate birthDate, MaritalStatus maritalStatus, String country, String city, String location, String phoneNumber, String mail, String placeOfEducation, String placeOfWork, String about, List<AvatarDTO> avatars) {
 		this.user = user;
 		this.firstName = firstName;
 		this.lastName = lastName;
@@ -42,13 +43,14 @@ public class UserInfoDTO {
 		this.placeOfEducation = placeOfEducation;
 		this.placeOfWork = placeOfWork;
 		this.about = about;
+		this.avatars = avatars;
 	}
 	
-	public User getUser() {
+	public UserDTO getUser() {
 		return user;
 	}
 	
-	public void setUser(User user) {
+	public void setUser(UserDTO user) {
 		this.user = user;
 	}
 	
@@ -156,23 +158,12 @@ public class UserInfoDTO {
 		this.about = about;
 	}
 	
-	public static UserInfoDTO map(UserInfo userInfo) {
-		return new UserInfoDTO(
-				userInfo.getUser(),
-				userInfo.getFirstName(),
-				userInfo.getLastName(),
-				userInfo.getGender(),
-				userInfo.getBirthDate(),
-				userInfo.getMaritalStatus(),
-				userInfo.getCountry(),
-				userInfo.getCity(),
-				userInfo.getLocation(),
-				userInfo.getPhoneNumber(),
-				userInfo.getMail(),
-				userInfo.getPlaceOfEducation(),
-				userInfo.getPlaceOfWork(),
-				userInfo.getAbout()
-		);
+	public List<AvatarDTO> getAvatars() {
+		return avatars;
+	}
+	
+	public void setAvatars(List<AvatarDTO> avatars) {
+		this.avatars = avatars;
 	}
 	
 }
