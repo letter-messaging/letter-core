@@ -21,7 +21,7 @@ public class UserInfoService {
 	}
 	
 	public UserInfo getById(Long userId) {
-		return userInfoRepository.findById(userId).orElse(null);
+		return userInfoRepository.findByUserId(userId).orElse(null);
 	}
 	
 	public UserInfo save(UserInfo userInfo) {

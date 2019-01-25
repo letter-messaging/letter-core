@@ -11,13 +11,16 @@ import com.gmail.ivanjermakov1.messenger.auth.security.TokenGenerator;
 import com.gmail.ivanjermakov1.messenger.exception.AuthenticationException;
 import com.gmail.ivanjermakov1.messenger.exception.NoSuchEntityException;
 import com.gmail.ivanjermakov1.messenger.exception.RegistrationException;
+import com.gmail.ivanjermakov1.messenger.messaging.entity.Avatar;
 import com.gmail.ivanjermakov1.messenger.messaging.entity.UserInfo;
 import com.gmail.ivanjermakov1.messenger.messaging.entity.UserOnline;
 import com.gmail.ivanjermakov1.messenger.messaging.repository.UserOnlineRepository;
+import com.gmail.ivanjermakov1.messenger.messaging.service.AvatarService;
 import com.gmail.ivanjermakov1.messenger.messaging.service.UserInfoService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,13 +37,18 @@ public class UserService {
 	private final TokenRepository tokenRepository;
 	private final UserInfoService userInfoService;
 	private final UserOnlineRepository userOnlineRepository;
+	private final AvatarService avatarService;
+	
+	@Value("${default.avatar.path}")
+	private String defaultAvatarPath;
 	
 	@Autowired
-	public UserService(UserRepository userRepository, TokenRepository tokenRepository, UserInfoService userInfoService, UserOnlineRepository userOnlineRepository) {
+	public UserService(UserRepository userRepository, TokenRepository tokenRepository, UserInfoService userInfoService, UserOnlineRepository userOnlineRepository, AvatarService avatarService) {
 		this.userRepository = userRepository;
 		this.tokenRepository = tokenRepository;
 		this.userInfoService = userInfoService;
 		this.userOnlineRepository = userOnlineRepository;
+		this.avatarService = avatarService;
 	}
 	
 	public String authenticate(String login, String password) throws AuthenticationException {
@@ -101,7 +109,8 @@ public class UserService {
 				user.getLogin(),
 				userInfo.getFirstName(),
 				userInfo.getLastName(),
-				Optional.ofNullable(userOnline).orElse(new UserOnline()).getSeen()
+				avatarService.getCurrent(user).map(Avatar::getPath).orElse(defaultAvatarPath),
+				Optional.ofNullable(userOnline).map(UserOnline::getSeen).orElse(null)
 		);
 	}
 	

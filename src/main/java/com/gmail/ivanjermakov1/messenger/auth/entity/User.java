@@ -1,6 +1,7 @@
 package com.gmail.ivanjermakov1.messenger.auth.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.gmail.ivanjermakov1.messenger.messaging.entity.Avatar;
 
 import javax.persistence.*;
 

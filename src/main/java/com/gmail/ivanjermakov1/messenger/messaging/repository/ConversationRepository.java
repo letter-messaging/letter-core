@@ -15,7 +15,6 @@ public interface ConversationRepository extends CrudRepository<Conversation, Lon
 	@Query("select c from Conversation c join c.users u where u.id = :id")
 	List<Conversation> getConversations(@Param("id") Long userId);
 	
-	
 	@Modifying
 	@Query(value = "update user_conversation " +
 			"set hidden = true " +

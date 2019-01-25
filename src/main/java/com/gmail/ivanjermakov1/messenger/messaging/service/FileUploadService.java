@@ -20,14 +20,6 @@ public class FileUploadService {
 	@Value("${web.static.resources.path}")
 	private String webResources;
 	
-	public String getUploadPlaceholder() {
-		return uploadPlaceholder;
-	}
-	
-	public String getWebResources() {
-		return webResources;
-	}
-	
 	public String upload(MultipartFile multipartFile) throws IOException {
 		LOG.info("uploading file \'" + multipartFile.getName() + "\'; size: " + multipartFile.getSize() / 1_000_000 + "MB");
 		

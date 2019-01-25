@@ -10,6 +10,7 @@ public class UserDTO {
 	private String login;
 	private String firstName;
 	private String lastName;
+	private String avatar;
 	
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	private LocalDateTime lastSeen;
@@ -17,11 +18,12 @@ public class UserDTO {
 	public UserDTO() {
 	}
 	
-	public UserDTO(Long id, String login, String firstName, String lastName, LocalDateTime lastSeen) {
+	public UserDTO(Long id, String login, String firstName, String lastName, String avatar, LocalDateTime lastSeen) {
 		this.id = id;
 		this.login = login;
 		this.firstName = firstName;
 		this.lastName = lastName;
+		this.avatar = avatar;
 		this.lastSeen = lastSeen;
 	}
 	
@@ -63,6 +65,14 @@ public class UserDTO {
 	
 	public void setLastSeen(LocalDateTime lastSeen) {
 		this.lastSeen = lastSeen;
+	}
+	
+	public String getAvatar() {
+		return avatar;
+	}
+	
+	public void setAvatar(String avatar) {
+		this.avatar = avatar;
 	}
 	
 }
