@@ -13,13 +13,13 @@ export class PreviewService {
   }
 
   all(token: string): Observable<Array<Preview>> {
-    return this.http.get<Array<Preview>>(API_URL + '/preview/all', {
+    return this.http.get<Array<Preview>>(API_URL + 'preview/all', {
       headers: {'Auth-Token': token},
     });
   }
 
   get(token: string, conversationId: number): Observable<Preview> {
-    return this.http.get<Preview>(API_URL + '/preview/get', {
+    return this.http.get<Preview>(API_URL + 'preview/get', {
       headers: {'Auth-Token': token},
       params: {'conversationId': conversationId.toString()}
     });

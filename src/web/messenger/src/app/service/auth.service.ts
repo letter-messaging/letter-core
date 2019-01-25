@@ -13,20 +13,20 @@ export class AuthService {
   }
 
   authenticate(login: string, password: string): Observable<string> {
-    return this.http.get(API_URL + '/auth', {
+    return this.http.get(API_URL + 'auth', {
       params: {'login': login, 'password': password},
       responseType: 'text'
     });
   }
 
   validate(token: string): Observable<User> {
-    return this.http.get<User>(API_URL + '/auth/validate', {
+    return this.http.get<User>(API_URL + 'auth/validate', {
       headers: {'Auth-Token': token}
     });
   }
 
   logout(token: string) {
-    return this.http.get<User>(API_URL + '/auth/logout', {
+    return this.http.get<User>(API_URL + 'auth/logout', {
       headers: {'Auth-Token': token}
     });
   }

@@ -13,7 +13,7 @@ export class UserInfoService {
   }
 
   get(token: string, userId: number): Observable<UserInfo> {
-    return this.http.get<UserInfo>(API_URL + '/info', {
+    return this.http.get<UserInfo>(API_URL + 'info', {
       params: {
         userId: userId.toString()
       },
@@ -24,7 +24,7 @@ export class UserInfoService {
   }
 
   edit(token: string, userInfo: UserInfo): Observable<UserInfo> {
-    return this.http.post<UserInfo>(API_URL + '/info', userInfo, {
+    return this.http.post<UserInfo>(API_URL + 'info', userInfo, {
       headers: {
         'Auth-Token': token
       }

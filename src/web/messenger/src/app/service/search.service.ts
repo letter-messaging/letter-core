@@ -14,14 +14,14 @@ export class SearchService {
   }
 
   searchConversations(token: string, search: string): Observable<Array<Preview>> {
-    return this.http.get<Array<Preview>>(API_URL + '/search/conversations', {
+    return this.http.get<Array<Preview>>(API_URL + 'search/conversations', {
       headers: {'Auth-Token': token},
       params: {'search': search}
     });
   }
 
   searchUsers(token: string, search: string): Observable<Array<User>> {
-    return this.http.get<Array<User>>(API_URL + '/search/users', {
+    return this.http.get<Array<User>>(API_URL + 'search/users', {
       headers: {'Auth-Token': token},
       params: {'search': search}
     });

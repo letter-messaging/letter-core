@@ -12,7 +12,7 @@ export class RegisterService {
   }
 
   register(registerUser: RegisterUser) {
-    return this.http.post(API_URL + '/register', registerUser);
+    return this.http.post(API_URL + 'register', registerUser);
   }
 
 }

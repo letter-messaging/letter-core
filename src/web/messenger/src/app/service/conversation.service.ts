@@ -13,21 +13,21 @@ export class ConversationService {
   }
 
   create(token: string, withLogin: string): Observable<Conversation> {
-    return this.http.get<Conversation>(API_URL + '/conversation/create', {
+    return this.http.get<Conversation>(API_URL + 'conversation/create', {
       headers: {'Auth-Token': token},
       params: {'with': withLogin}
     });
   }
 
   delete(token: string, conversationId: number) {
-    return this.http.get(API_URL + '/conversation/delete', {
+    return this.http.get(API_URL + 'conversation/delete', {
       headers: {'Auth-Token': token},
       params: {'id': conversationId.toString()}
     });
   }
 
   hide(token: string, conversationId: number) {
-    return this.http.get(API_URL + '/conversation/hide', {
+    return this.http.get(API_URL + 'conversation/hide', {
       headers: {'Auth-Token': token},
       params: {'id': conversationId.toString()}
     });
