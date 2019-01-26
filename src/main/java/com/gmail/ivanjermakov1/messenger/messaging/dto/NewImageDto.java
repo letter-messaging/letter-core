@@ -1,13 +1,13 @@
 package com.gmail.ivanjermakov1.messenger.messaging.dto;
 
-public class NewImageDTO {
+public class NewImageDto {
 	
 	private String path;
 	
-	public NewImageDTO() {
+	public NewImageDto() {
 	}
 	
-	public NewImageDTO(String path) {
+	public NewImageDto(String path) {
 		this.path = path;
 	}
 	

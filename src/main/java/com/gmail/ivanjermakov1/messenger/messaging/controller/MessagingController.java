@@ -5,9 +5,9 @@ import com.gmail.ivanjermakov1.messenger.auth.service.UserService;
 import com.gmail.ivanjermakov1.messenger.exception.AuthenticationException;
 import com.gmail.ivanjermakov1.messenger.exception.InvalidMessageException;
 import com.gmail.ivanjermakov1.messenger.exception.NoSuchEntityException;
-import com.gmail.ivanjermakov1.messenger.messaging.dto.EditMessageDTO;
-import com.gmail.ivanjermakov1.messenger.messaging.dto.MessageDTO;
-import com.gmail.ivanjermakov1.messenger.messaging.dto.NewMessageDTO;
+import com.gmail.ivanjermakov1.messenger.messaging.dto.EditMessageDto;
+import com.gmail.ivanjermakov1.messenger.messaging.dto.MessageDto;
+import com.gmail.ivanjermakov1.messenger.messaging.dto.NewMessageDto;
 import com.gmail.ivanjermakov1.messenger.messaging.dto.action.ConversationReadAction;
 import com.gmail.ivanjermakov1.messenger.messaging.dto.action.MessageEditAction;
 import com.gmail.ivanjermakov1.messenger.messaging.dto.action.NewMessageAction;
@@ -68,21 +68,21 @@ public class MessagingController {
 	
 	@RequestMapping("send")
 	@PostMapping
-	public MessageDTO sendMessage(@RequestHeader("Auth-Token") String token, @RequestBody NewMessageDTO newMessageDTO) throws AuthenticationException, InvalidMessageException, NoSuchEntityException {
+	public MessageDto sendMessage(@RequestHeader("Auth-Token") String token, @RequestBody NewMessageDto newMessageDto) throws AuthenticationException, InvalidMessageException, NoSuchEntityException {
 		User user = userService.authenticate(token);
 		
-		return messagingService.processNewMessage(user, newMessageDTO);
+		return messagingService.processNewMessage(user, newMessageDto);
 	}
 	
 	@RequestMapping("edit")
 	@PostMapping
-	public MessageDTO editMessage(@RequestHeader("Auth-Token") String token, @RequestBody EditMessageDTO editMessageDTO) throws AuthenticationException, InvalidMessageException, NoSuchEntityException {
+	public MessageDto editMessage(@RequestHeader("Auth-Token") String token, @RequestBody EditMessageDto editMessageDto) throws AuthenticationException, InvalidMessageException, NoSuchEntityException {
 		User user = userService.authenticate(token);
 		
-		if (editMessageDTO.getText() == null)
+		if (editMessageDto.getText() == null)
 			throw new InvalidMessageException("invalid message");
 		
-		return messagingService.processMessageEdit(user, editMessageDTO);
+		return messagingService.processMessageEdit(user, editMessageDto);
 	}
 	
 }

@@ -4,7 +4,7 @@ import com.gmail.ivanjermakov1.messenger.auth.entity.User;
 import com.gmail.ivanjermakov1.messenger.auth.service.UserService;
 import com.gmail.ivanjermakov1.messenger.exception.AuthenticationException;
 import com.gmail.ivanjermakov1.messenger.exception.NoSuchEntityException;
-import com.gmail.ivanjermakov1.messenger.messaging.dto.PreviewDTO;
+import com.gmail.ivanjermakov1.messenger.messaging.dto.PreviewDto;
 import com.gmail.ivanjermakov1.messenger.messaging.service.ConversationService;
 import com.gmail.ivanjermakov1.messenger.messaging.service.MessagingService;
 import com.gmail.ivanjermakov1.messenger.messaging.service.PreviewService;
@@ -31,18 +31,18 @@ public class PreviewController {
 	}
 	
 	@GetMapping("all")
-	public List<PreviewDTO> all(@RequestHeader("Auth-Token") String token) throws AuthenticationException {
+	public List<PreviewDto> all(@RequestHeader("Auth-Token") String token) throws AuthenticationException {
 		User user = userService.authenticate(token);
 		
 		return previewService.all(user);
 	}
 	
 	@GetMapping("get")
-	public PreviewDTO get(@RequestHeader("Auth-Token") String token,
+	public PreviewDto get(@RequestHeader("Auth-Token") String token,
 	                      @RequestParam("conversationId") Long conversationId) throws AuthenticationException, NoSuchEntityException {
 		User user = userService.authenticate(token);
 		
-		PreviewDTO preview = previewService.getPreview(user, conversationService.get(conversationId));
+		PreviewDto preview = previewService.getPreview(user, conversationService.get(conversationId));
 		messagingService.processConversationRead(user, conversationId);
 		
 		return preview;

@@ -5,9 +5,9 @@ import com.gmail.ivanjermakov1.messenger.auth.service.UserService;
 import com.gmail.ivanjermakov1.messenger.exception.AuthenticationException;
 import com.gmail.ivanjermakov1.messenger.exception.InvalidMessageException;
 import com.gmail.ivanjermakov1.messenger.exception.NoSuchEntityException;
-import com.gmail.ivanjermakov1.messenger.messaging.dto.EditMessageDTO;
-import com.gmail.ivanjermakov1.messenger.messaging.dto.MessageDTO;
-import com.gmail.ivanjermakov1.messenger.messaging.dto.NewMessageDTO;
+import com.gmail.ivanjermakov1.messenger.messaging.dto.EditMessageDto;
+import com.gmail.ivanjermakov1.messenger.messaging.dto.MessageDto;
+import com.gmail.ivanjermakov1.messenger.messaging.dto.NewMessageDto;
 import com.gmail.ivanjermakov1.messenger.messaging.dto.action.ConversationReadAction;
 import com.gmail.ivanjermakov1.messenger.messaging.dto.action.MessageEditAction;
 import com.gmail.ivanjermakov1.messenger.messaging.dto.action.NewMessageAction;
@@ -64,25 +64,25 @@ public class MessagingService {
 	 * Processes new message and close requests of /get listeners
 	 *
 	 * @param user          sender
-	 * @param newMessageDTO new message
+	 * @param newMessageDto new message
 	 */
-	public MessageDTO processNewMessage(User user, NewMessageDTO newMessageDTO) throws NoSuchEntityException, InvalidMessageException {
-		LOG.debug("process new message from @" + user.getLogin() + " to conversation @" + newMessageDTO.getConversationId() +
-				"; text: " + newMessageDTO.getText());
+	public MessageDto processNewMessage(User user, NewMessageDto newMessageDto) throws NoSuchEntityException, InvalidMessageException {
+		LOG.debug("process new message from @" + user.getLogin() + " to conversation @" + newMessageDto.getConversationId() +
+				"; text: " + newMessageDto.getText());
 		
-		Conversation conversation = conversationService.get(newMessageDTO.getConversationId());
+		Conversation conversation = conversationService.get(newMessageDto.getConversationId());
 		
 		Message message = new Message(
 				conversation,
 				LocalDateTime.now(),
-				newMessageDTO.getText(),
+				newMessageDto.getText(),
 				false,
 				user,
-				newMessageDTO.getForwarded()
+				newMessageDto.getForwarded()
 						.stream()
 						.map(dto -> messageService.get(dto.getId()))
 						.collect(Collectors.toList()),
-				newMessageDTO.getImages()
+				newMessageDto.getImages()
 						.stream()
 						.map(i -> imageService.get(i.getPath()))
 						.collect(Collectors.toList())
@@ -94,7 +94,7 @@ public class MessagingService {
 		
 		message = messageService.save(message);
 		
-		MessageDTO messageDTO = messageService.getFullMessage(message);
+		MessageDto messageDto = messageService.getFullMessage(message);
 		
 		newMessageRequests
 				.stream()
@@ -102,28 +102,28 @@ public class MessagingService {
 						.stream()
 						.anyMatch(i -> i.getId().equals(request.getUser().getId())))
 				.forEach(request -> {
-					request.set(new NewMessageAction(messageDTO));
+					request.set(new NewMessageAction(messageDto));
 					newMessageRequests.removeIf(r -> r.equals(request));
 				});
 		
-		return messageDTO;
+		return messageDto;
 	}
 	
-	public MessageDTO processMessageEdit(User user, EditMessageDTO editMessageDTO) throws NoSuchEntityException, AuthenticationException {
-		LOG.debug("process message edit @" + editMessageDTO.getId() + "; text: " + editMessageDTO.getText());
+	public MessageDto processMessageEdit(User user, EditMessageDto editMessageDto) throws NoSuchEntityException, AuthenticationException {
+		LOG.debug("process message edit @" + editMessageDto.getId() + "; text: " + editMessageDto.getText());
 		
-		Message original = messageService.get(editMessageDTO.getId());
+		Message original = messageService.get(editMessageDto.getId());
 		
 		if (original == null || !original.getSender().getId().equals(user.getId()))
 			throw new AuthenticationException("user can edit only own messages");
 		
-		original.setText(editMessageDTO.getText());
-		if (editMessageDTO.getForwarded() != null && editMessageDTO.getForwarded().isEmpty())
+		original.setText(editMessageDto.getText());
+		if (editMessageDto.getForwarded() != null && editMessageDto.getForwarded().isEmpty())
 			messageService.deleteForwarded(original);
 		
 		original.getImages()
 				.stream()
-				.filter(i -> editMessageDTO.getImages()
+				.filter(i -> editMessageDto.getImages()
 						.stream()
 						.noneMatch(ei -> ei.getId().equals(i.getId())))
 				.forEach(imageService::delete);
@@ -131,7 +131,7 @@ public class MessagingService {
 		original = messageService.save(original);
 		
 		Conversation conversation = conversationService.get(original.getConversation().getId());
-		MessageDTO messageDTO = messageService.getFullMessage(original);
+		MessageDto messageDto = messageService.getFullMessage(original);
 		
 		messageEditRequests
 				.stream()
@@ -139,11 +139,11 @@ public class MessagingService {
 						.stream()
 						.anyMatch(i -> i.getId().equals(request.getUser().getId())))
 				.forEach(request -> {
-					request.set(new MessageEditAction(messageDTO));
+					request.set(new MessageEditAction(messageDto));
 					messageEditRequests.removeIf(r -> r.equals(request));
 				});
 		
-		return messageDTO;
+		return messageDto;
 	}
 	
 	public void processConversationRead(User user, Long conversationId) throws NoSuchEntityException {

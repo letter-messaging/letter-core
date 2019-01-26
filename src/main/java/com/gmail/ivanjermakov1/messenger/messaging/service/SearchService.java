@@ -1,11 +1,11 @@
 package com.gmail.ivanjermakov1.messenger.messaging.service;
 
-import com.gmail.ivanjermakov1.messenger.auth.dto.UserDTO;
+import com.gmail.ivanjermakov1.messenger.auth.dto.UserDto;
 import com.gmail.ivanjermakov1.messenger.auth.entity.User;
 import com.gmail.ivanjermakov1.messenger.auth.repository.UserRepository;
 import com.gmail.ivanjermakov1.messenger.auth.service.UserService;
 import com.gmail.ivanjermakov1.messenger.exception.InvalidSearchFormatException;
-import com.gmail.ivanjermakov1.messenger.messaging.dto.PreviewDTO;
+import com.gmail.ivanjermakov1.messenger.messaging.dto.PreviewDto;
 import com.gmail.ivanjermakov1.messenger.messaging.repository.UserInfoRepository;
 import com.gmail.ivanjermakov1.messenger.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +29,7 @@ public class SearchService {
 	}
 	
 	//	TODO: use non strict search engine
-	public List<PreviewDTO> searchConversations(User user, String search) {
+	public List<PreviewDto> searchConversations(User user, String search) {
 		return previewService.all(user)
 				.stream()
 				.filter(p -> Strings.startsWith(search, p.getWith().getFirstName()) ||
@@ -42,7 +42,7 @@ public class SearchService {
 	}
 	
 	// TODO: make amount of responses configurable
-	public List<UserDTO> searchUsers(String search) throws InvalidSearchFormatException {
+	public List<UserDto> searchUsers(String search) throws InvalidSearchFormatException {
 		if (search.charAt(0) != '@') throw new InvalidSearchFormatException("user search must starts with \'@\'");
 		
 		return userRepository.searchUsersAmount(search, 20)

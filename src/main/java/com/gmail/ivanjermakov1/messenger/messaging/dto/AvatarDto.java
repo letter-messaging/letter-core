@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 
 import java.time.LocalDate;
 
-public class AvatarDTO {
+public class AvatarDto {
 	
 	private Long id;
 	private String path;
@@ -12,10 +12,10 @@ public class AvatarDTO {
 	@JsonFormat(pattern = "yyyy-MM-dd")
 	private LocalDate uploaded;
 	
-	public AvatarDTO() {
+	public AvatarDto() {
 	}
 	
-	public AvatarDTO(Long id, String path, LocalDate uploaded) {
+	public AvatarDto(Long id, String path, LocalDate uploaded) {
 		this.id = id;
 		this.path = path;
 		this.uploaded = uploaded;

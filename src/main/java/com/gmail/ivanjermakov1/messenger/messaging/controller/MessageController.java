@@ -4,7 +4,7 @@ import com.gmail.ivanjermakov1.messenger.auth.entity.User;
 import com.gmail.ivanjermakov1.messenger.auth.service.UserService;
 import com.gmail.ivanjermakov1.messenger.exception.AuthenticationException;
 import com.gmail.ivanjermakov1.messenger.exception.NoSuchEntityException;
-import com.gmail.ivanjermakov1.messenger.messaging.dto.MessageDTO;
+import com.gmail.ivanjermakov1.messenger.messaging.dto.MessageDto;
 import com.gmail.ivanjermakov1.messenger.messaging.service.MessageService;
 import com.gmail.ivanjermakov1.messenger.messaging.service.MessagingService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +28,7 @@ public class MessageController {
 	}
 	
 	@GetMapping("get")
-	public List<MessageDTO> get(@RequestHeader("Auth-Token") String token,
+	public List<MessageDto> get(@RequestHeader("Auth-Token") String token,
 	                            @RequestParam("conversationId") Long conversationId,
 	                            @RequestParam("offset") Integer offset,
 	                            @RequestParam("amount") Integer amount) throws AuthenticationException, NoSuchEntityException {
@@ -38,7 +38,7 @@ public class MessageController {
 	}
 	
 	@PostMapping("delete")
-	public void delete(@RequestHeader("Auth-Token") String token, @RequestBody List<MessageDTO> deleteMessages) throws AuthenticationException {
+	public void delete(@RequestHeader("Auth-Token") String token, @RequestBody List<MessageDto> deleteMessages) throws AuthenticationException {
 		User user = userService.authenticate(token);
 		messageService.delete(user, deleteMessages);
 	}

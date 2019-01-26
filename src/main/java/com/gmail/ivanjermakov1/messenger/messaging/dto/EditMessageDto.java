@@ -2,17 +2,17 @@ package com.gmail.ivanjermakov1.messenger.messaging.dto;
 
 import java.util.List;
 
-public class EditMessageDTO {
+public class EditMessageDto {
 	
 	private Long id;
 	private String text;
-	private List<MessageDTO> forwarded;
-	private List<ImageDTO> images;
+	private List<MessageDto> forwarded;
+	private List<ImageDto> images;
 	
-	public EditMessageDTO() {
+	public EditMessageDto() {
 	}
 	
-	public EditMessageDTO(Long id, String text, List<MessageDTO> forwarded, List<ImageDTO> images) {
+	public EditMessageDto(Long id, String text, List<MessageDto> forwarded, List<ImageDto> images) {
 		this.id = id;
 		this.text = text;
 		this.forwarded = forwarded;
@@ -35,19 +35,19 @@ public class EditMessageDTO {
 		this.text = text;
 	}
 	
-	public List<MessageDTO> getForwarded() {
+	public List<MessageDto> getForwarded() {
 		return forwarded;
 	}
 	
-	public void setForwarded(List<MessageDTO> forwarded) {
+	public void setForwarded(List<MessageDto> forwarded) {
 		this.forwarded = forwarded;
 	}
 	
-	public List<ImageDTO> getImages() {
+	public List<ImageDto> getImages() {
 		return images;
 	}
 	
-	public void setImages(List<ImageDTO> images) {
+	public void setImages(List<ImageDto> images) {
 		this.images = images;
 	}
 	

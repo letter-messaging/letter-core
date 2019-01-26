@@ -1,6 +1,6 @@
 package com.gmail.ivanjermakov1.messenger.auth.controller;
 
-import com.gmail.ivanjermakov1.messenger.auth.dto.RegisterUserDTO;
+import com.gmail.ivanjermakov1.messenger.auth.dto.RegisterUserDto;
 import com.gmail.ivanjermakov1.messenger.auth.service.UserService;
 import com.gmail.ivanjermakov1.messenger.exception.RegistrationException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,8 +21,8 @@ public class RegistrationController {
 	}
 	
 	@PostMapping
-	public void register(@RequestBody RegisterUserDTO registerUserDTO) throws RegistrationException {
-		userService.register(registerUserDTO);
+	public void register(@RequestBody RegisterUserDto registerUserDto) throws RegistrationException {
+		userService.register(registerUserDto);
 	}
 	
 }

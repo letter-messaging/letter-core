@@ -4,7 +4,7 @@ import com.gmail.ivanjermakov1.messenger.auth.entity.User;
 import com.gmail.ivanjermakov1.messenger.auth.service.UserService;
 import com.gmail.ivanjermakov1.messenger.exception.AuthenticationException;
 import com.gmail.ivanjermakov1.messenger.exception.NoSuchEntityException;
-import com.gmail.ivanjermakov1.messenger.messaging.dto.MessageDTO;
+import com.gmail.ivanjermakov1.messenger.messaging.dto.MessageDto;
 import com.gmail.ivanjermakov1.messenger.messaging.entity.Conversation;
 import com.gmail.ivanjermakov1.messenger.messaging.entity.Message;
 import com.gmail.ivanjermakov1.messenger.messaging.repository.MessageRepository;
@@ -47,7 +47,7 @@ public class MessageService {
 		return messageRepository.getTop1ByConversationIdOrderBySentDesc(conversationId);
 	}
 	
-	public List<MessageDTO> get(Long userId, Long conversationId, Integer offset, Integer limit) throws AuthenticationException, NoSuchEntityException {
+	public List<MessageDto> get(Long userId, Long conversationId, Integer offset, Integer limit) throws AuthenticationException, NoSuchEntityException {
 		if (conversationService.get(conversationId).getUsers().stream().noneMatch(u -> u.getId().equals(userId)))
 			throw new AuthenticationException("invalid conversation id");
 		
@@ -59,40 +59,40 @@ public class MessageService {
 				.collect(Collectors.toList());
 	}
 	
-	public MessageDTO getFullMessage(Message message) {
-		MessageDTO messageDTO = new MessageDTO();
-		messageDTO.setId(message.getId());
-		messageDTO.setSent(message.getSent());
-		messageDTO.setRead(message.getRead());
-		messageDTO.setText(message.getText());
+	public MessageDto getFullMessage(Message message) {
+		MessageDto messageDto = new MessageDto();
+		messageDto.setId(message.getId());
+		messageDto.setSent(message.getSent());
+		messageDto.setRead(message.getRead());
+		messageDto.setText(message.getText());
 		
 		try {
 			Conversation conversation = conversationService.get(message.getConversation().getId());
-			messageDTO.setConversation(conversationService.get(message.getSender(), conversation));
+			messageDto.setConversation(conversationService.get(message.getSender(), conversation));
 		} catch (NoSuchEntityException e) {
 			e.printStackTrace();
 		}
 		
 		try {
 			User user = userService.getUser(message.getSender().getId());
-			messageDTO.setSender(userService.full(user));
+			messageDto.setSender(userService.full(user));
 			userService.full(user);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		
-		messageDTO.setForwarded(Optional
+		messageDto.setForwarded(Optional
 				.ofNullable(messageRepository.getById(message.getId()).getForwarded())
 				.orElse(Collections.emptyList())
 				.stream()
 				.map(this::getFullMessage)
 				.collect(Collectors.toList()));
 		
-		messageDTO.setImages(message.getImages().stream()
+		messageDto.setImages(message.getImages().stream()
 				.map(imageService::full)
 				.collect(Collectors.toList()));
 		
-		return messageDTO;
+		return messageDto;
 	}
 	
 	public void read(User user, Conversation conversation) {
@@ -109,7 +109,7 @@ public class MessageService {
 	 * @param user           messages owner
 	 * @param deleteMessages messages which going to be removed
 	 */
-	public void delete(User user, List<MessageDTO> deleteMessages) {
+	public void delete(User user, List<MessageDto> deleteMessages) {
 		deleteMessages
 				.stream()
 				.map(dto -> messageRepository.getById(dto.getId()))

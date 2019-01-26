@@ -3,17 +3,17 @@ package com.gmail.ivanjermakov1.messenger.auth.dto;
 import com.gmail.ivanjermakov1.messenger.exception.InvalidPasswordException;
 import com.gmail.ivanjermakov1.messenger.exception.RegistrationException;
 
-public class RegisterUserDTO {
+public class RegisterUserDto {
 	
 	private String firstName;
 	private String lastName;
 	private String login;
 	private String password;
 	
-	public RegisterUserDTO() {
+	public RegisterUserDto() {
 	}
 	
-	public RegisterUserDTO(String firstName, String lastName, String login, String password) {
+	public RegisterUserDto(String firstName, String lastName, String login, String password) {
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.login = login;

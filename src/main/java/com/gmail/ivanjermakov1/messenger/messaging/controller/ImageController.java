@@ -5,7 +5,7 @@ import com.gmail.ivanjermakov1.messenger.auth.service.UserService;
 import com.gmail.ivanjermakov1.messenger.exception.AuthenticationException;
 import com.gmail.ivanjermakov1.messenger.exception.InvalidFileException;
 import com.gmail.ivanjermakov1.messenger.exception.NoSuchEntityException;
-import com.gmail.ivanjermakov1.messenger.messaging.dto.NewImageDTO;
+import com.gmail.ivanjermakov1.messenger.messaging.dto.NewImageDto;
 import com.gmail.ivanjermakov1.messenger.messaging.service.ImageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -27,7 +27,7 @@ public class ImageController {
 	}
 	
 	@PostMapping("upload")
-	public NewImageDTO upload(@RequestHeader("Auth-Token") String token, @RequestParam("avatar") MultipartFile avatar) throws AuthenticationException, IOException, InvalidFileException {
+	public NewImageDto upload(@RequestHeader("Auth-Token") String token, @RequestParam("avatar") MultipartFile avatar) throws AuthenticationException, IOException, InvalidFileException {
 		User user = userService.authenticate(token);
 		
 		return imageService.upload(avatar);

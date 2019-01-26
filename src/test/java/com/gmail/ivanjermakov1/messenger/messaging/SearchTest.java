@@ -1,7 +1,7 @@
 package com.gmail.ivanjermakov1.messenger.messaging;
 
-import com.gmail.ivanjermakov1.messenger.auth.dto.RegisterUserDTO;
-import com.gmail.ivanjermakov1.messenger.auth.dto.UserDTO;
+import com.gmail.ivanjermakov1.messenger.auth.dto.RegisterUserDto;
+import com.gmail.ivanjermakov1.messenger.auth.dto.UserDto;
 import com.gmail.ivanjermakov1.messenger.auth.entity.User;
 import com.gmail.ivanjermakov1.messenger.auth.service.UserService;
 import com.gmail.ivanjermakov1.messenger.exception.AuthenticationException;
@@ -30,7 +30,7 @@ public class SearchTest {
 	private UserService userService;
 	
 	private String registerUser(String firstName, String lastName, String login) throws RegistrationException, AuthenticationException {
-		userService.register(new RegisterUserDTO(firstName, lastName, login, "password1"));
+		userService.register(new RegisterUserDto(firstName, lastName, login, "password1"));
 		return userService.authenticate(login, "password1");
 	}
 	
@@ -39,7 +39,7 @@ public class SearchTest {
 		String user1Token = registerUser("John", "Lens", "johnls");
 		User user1 = userService.authenticate(user1Token);
 		
-		List<UserDTO> searchResult = searchService.searchUsers("@John");
+		List<UserDto> searchResult = searchService.searchUsers("@John");
 		System.out.println("SIZE: " + searchResult.size());
 		Assert.assertTrue(searchResult
 				.stream()

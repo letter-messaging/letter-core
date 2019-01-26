@@ -1,12 +1,12 @@
 package com.gmail.ivanjermakov1.messenger.messaging.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.gmail.ivanjermakov1.messenger.auth.dto.UserDTO;
+import com.gmail.ivanjermakov1.messenger.auth.dto.UserDto;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
-public class MessageDTO {
+public class MessageDto {
 	
 	private Long id;
 	
@@ -14,15 +14,15 @@ public class MessageDTO {
 	private LocalDateTime sent;
 	private String text;
 	private Boolean read;
-	private UserDTO sender;
-	private ConversationDTO conversation;
-	private List<MessageDTO> forwarded;
-	private List<ImageDTO> images;
+	private UserDto sender;
+	private ConversationDto conversation;
+	private List<MessageDto> forwarded;
+	private List<ImageDto> images;
 	
-	public MessageDTO() {
+	public MessageDto() {
 	}
 	
-	public MessageDTO(Long id, LocalDateTime sent, String text, Boolean read, UserDTO sender, ConversationDTO conversation, List<MessageDTO> forwarded, List<ImageDTO> images) {
+	public MessageDto(Long id, LocalDateTime sent, String text, Boolean read, UserDto sender, ConversationDto conversation, List<MessageDto> forwarded, List<ImageDto> images) {
 		this.id = id;
 		this.sent = sent;
 		this.text = text;
@@ -65,35 +65,35 @@ public class MessageDTO {
 		this.read = read;
 	}
 	
-	public UserDTO getSender() {
+	public UserDto getSender() {
 		return sender;
 	}
 	
-	public void setSender(UserDTO sender) {
+	public void setSender(UserDto sender) {
 		this.sender = sender;
 	}
 	
-	public ConversationDTO getConversation() {
+	public ConversationDto getConversation() {
 		return conversation;
 	}
 	
-	public void setConversation(ConversationDTO conversation) {
+	public void setConversation(ConversationDto conversation) {
 		this.conversation = conversation;
 	}
 	
-	public List<MessageDTO> getForwarded() {
+	public List<MessageDto> getForwarded() {
 		return forwarded;
 	}
 	
-	public void setForwarded(List<MessageDTO> forwarded) {
+	public void setForwarded(List<MessageDto> forwarded) {
 		this.forwarded = forwarded;
 	}
 	
-	public List<ImageDTO> getImages() {
+	public List<ImageDto> getImages() {
 		return images;
 	}
 	
-	public void setImages(List<ImageDTO> images) {
+	public void setImages(List<ImageDto> images) {
 		this.images = images;
 	}
 	

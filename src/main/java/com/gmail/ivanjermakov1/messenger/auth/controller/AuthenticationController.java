@@ -1,6 +1,6 @@
 package com.gmail.ivanjermakov1.messenger.auth.controller;
 
-import com.gmail.ivanjermakov1.messenger.auth.dto.UserDTO;
+import com.gmail.ivanjermakov1.messenger.auth.dto.UserDto;
 import com.gmail.ivanjermakov1.messenger.auth.entity.User;
 import com.gmail.ivanjermakov1.messenger.auth.service.UserService;
 import com.gmail.ivanjermakov1.messenger.exception.AuthenticationException;
@@ -24,7 +24,7 @@ public class AuthenticationController {
 	}
 	
 	@GetMapping("validate")
-	public UserDTO validate(@RequestHeader("Auth-Token") String token) throws AuthenticationException {
+	public UserDto validate(@RequestHeader("Auth-Token") String token) throws AuthenticationException {
 		User user = userService.authenticate(token);
 		userService.appearOnline(user);
 		return userService.full(user);

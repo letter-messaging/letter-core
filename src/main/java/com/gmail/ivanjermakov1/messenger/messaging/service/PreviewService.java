@@ -2,7 +2,7 @@ package com.gmail.ivanjermakov1.messenger.messaging.service;
 
 import com.gmail.ivanjermakov1.messenger.auth.entity.User;
 import com.gmail.ivanjermakov1.messenger.auth.service.UserService;
-import com.gmail.ivanjermakov1.messenger.messaging.dto.PreviewDTO;
+import com.gmail.ivanjermakov1.messenger.messaging.dto.PreviewDto;
 import com.gmail.ivanjermakov1.messenger.messaging.entity.Conversation;
 import com.gmail.ivanjermakov1.messenger.messaging.entity.Message;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +28,7 @@ public class PreviewService {
 		this.userService = userService;
 	}
 	
-	public List<PreviewDTO> all(User user) {
+	public List<PreviewDto> all(User user) {
 		return allConversations(user)
 				.stream()
 				.map(c -> getPreview(user, c))
@@ -42,22 +42,22 @@ public class PreviewService {
 		return new ArrayList<>(conversationService.getConversations(user));
 	}
 	
-	public PreviewDTO getPreview(User user, Conversation conversation) {
-		PreviewDTO previewDTO = new PreviewDTO();
+	public PreviewDto getPreview(User user, Conversation conversation) {
+		PreviewDto previewDto = new PreviewDto();
 		
-		previewDTO.setConversation(conversationService.get(user, conversation));
+		previewDto.setConversation(conversationService.get(user, conversation));
 		Message lastMessage = messageService.getLastMessage(conversation.getId());
-		if (lastMessage != null) previewDTO.setLastMessage(messageService.getFullMessage(lastMessage));
+		if (lastMessage != null) previewDto.setLastMessage(messageService.getFullMessage(lastMessage));
 		
 		User with = conversation.getUsers()
 				.stream()
 				.filter(u -> !u.getId().equals(user.getId()))
 				.findFirst()
 				.orElse(user);
-		previewDTO.setWith(userService.full(with));
-		previewDTO.setUnread(messageService.unreadCount(user, conversation));
+		previewDto.setWith(userService.full(with));
+		previewDto.setUnread(messageService.unreadCount(user, conversation));
 		
-		return previewDTO;
+		return previewDto;
 	}
 	
 }

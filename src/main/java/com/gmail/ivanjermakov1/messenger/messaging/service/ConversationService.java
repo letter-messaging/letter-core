@@ -4,7 +4,7 @@ import com.gmail.ivanjermakov1.messenger.auth.entity.User;
 import com.gmail.ivanjermakov1.messenger.auth.service.UserService;
 import com.gmail.ivanjermakov1.messenger.exception.AuthenticationException;
 import com.gmail.ivanjermakov1.messenger.exception.NoSuchEntityException;
-import com.gmail.ivanjermakov1.messenger.messaging.dto.ConversationDTO;
+import com.gmail.ivanjermakov1.messenger.messaging.dto.ConversationDto;
 import com.gmail.ivanjermakov1.messenger.messaging.entity.Conversation;
 import com.gmail.ivanjermakov1.messenger.messaging.repository.ConversationRepository;
 import org.slf4j.Logger;
@@ -79,8 +79,8 @@ public class ConversationService {
 		return conversationRepository.getConversations(user.getId());
 	}
 	
-	public ConversationDTO get(User user, Conversation conversation) {
-		return new ConversationDTO(
+	public ConversationDto get(User user, Conversation conversation) {
+		return new ConversationDto(
 				conversation.getId(),
 				isHidden(user, conversation),
 				conversation.getUsers()

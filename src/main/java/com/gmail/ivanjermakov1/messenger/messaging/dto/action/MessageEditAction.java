@@ -1,25 +1,25 @@
 package com.gmail.ivanjermakov1.messenger.messaging.dto.action;
 
-import com.gmail.ivanjermakov1.messenger.messaging.dto.MessageDTO;
+import com.gmail.ivanjermakov1.messenger.messaging.dto.MessageDto;
 
 public class MessageEditAction extends Action {
 	
-	private MessageDTO message;
+	private MessageDto message;
 	
 	public MessageEditAction() {
 		setType(Type.MESSAGE_EDIT);
 	}
 	
-	public MessageEditAction(MessageDTO message) {
+	public MessageEditAction(MessageDto message) {
 		this();
 		this.message = message;
 	}
 	
-	public MessageDTO getMessage() {
+	public MessageDto getMessage() {
 		return message;
 	}
 	
-	public void setMessage(MessageDTO message) {
+	public void setMessage(MessageDto message) {
 		this.message = message;
 	}
 	

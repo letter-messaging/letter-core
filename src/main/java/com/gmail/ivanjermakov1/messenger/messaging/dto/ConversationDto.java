@@ -1,19 +1,19 @@
 package com.gmail.ivanjermakov1.messenger.messaging.dto;
 
-import com.gmail.ivanjermakov1.messenger.auth.dto.UserDTO;
+import com.gmail.ivanjermakov1.messenger.auth.dto.UserDto;
 
 import java.util.List;
 
-public class ConversationDTO {
+public class ConversationDto {
 	
 	private Long id;
 	private Boolean hidden;
-	private List<UserDTO> users;
+	private List<UserDto> users;
 	
-	public ConversationDTO() {
+	public ConversationDto() {
 	}
 	
-	public ConversationDTO(Long id, Boolean hidden, List<UserDTO> users) {
+	public ConversationDto(Long id, Boolean hidden, List<UserDto> users) {
 		this.id = id;
 		this.hidden = hidden;
 		this.users = users;
@@ -35,11 +35,11 @@ public class ConversationDTO {
 		this.hidden = hidden;
 	}
 	
-	public List<UserDTO> getUsers() {
+	public List<UserDto> getUsers() {
 		return users;
 	}
 	
-	public void setUsers(List<UserDTO> users) {
+	public void setUsers(List<UserDto> users) {
 		this.users = users;
 	}
 	

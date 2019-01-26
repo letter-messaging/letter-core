@@ -1,14 +1,14 @@
 package com.gmail.ivanjermakov1.messenger.messaging.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.gmail.ivanjermakov1.messenger.auth.dto.UserDTO;
+import com.gmail.ivanjermakov1.messenger.auth.dto.UserDto;
 
 import java.time.LocalDate;
 import java.util.List;
 
-public class UserInfoDTO {
+public class UserInfoDto {
 	
-	private UserDTO user;
+	private UserDto user;
 	private String firstName;
 	private String lastName;
 	private Boolean gender;
@@ -23,12 +23,12 @@ public class UserInfoDTO {
 	private String placeOfEducation;
 	private String placeOfWork;
 	private String about;
-	private List<AvatarDTO> avatars;
+	private List<AvatarDto> avatars;
 	
-	public UserInfoDTO() {
+	public UserInfoDto() {
 	}
 	
-	public UserInfoDTO(UserDTO user, String firstName, String lastName, Boolean gender, LocalDate birthDate, MaritalStatus maritalStatus, String country, String city, String location, String phoneNumber, String mail, String placeOfEducation, String placeOfWork, String about, List<AvatarDTO> avatars) {
+	public UserInfoDto(UserDto user, String firstName, String lastName, Boolean gender, LocalDate birthDate, MaritalStatus maritalStatus, String country, String city, String location, String phoneNumber, String mail, String placeOfEducation, String placeOfWork, String about, List<AvatarDto> avatars) {
 		this.user = user;
 		this.firstName = firstName;
 		this.lastName = lastName;
@@ -46,11 +46,11 @@ public class UserInfoDTO {
 		this.avatars = avatars;
 	}
 	
-	public UserDTO getUser() {
+	public UserDto getUser() {
 		return user;
 	}
 	
-	public void setUser(UserDTO user) {
+	public void setUser(UserDto user) {
 		this.user = user;
 	}
 	
@@ -158,11 +158,11 @@ public class UserInfoDTO {
 		this.about = about;
 	}
 	
-	public List<AvatarDTO> getAvatars() {
+	public List<AvatarDto> getAvatars() {
 		return avatars;
 	}
 	
-	public void setAvatars(List<AvatarDTO> avatars) {
+	public void setAvatars(List<AvatarDto> avatars) {
 		this.avatars = avatars;
 	}
 	

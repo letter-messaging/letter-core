@@ -4,7 +4,7 @@ import com.gmail.ivanjermakov1.messenger.auth.entity.User;
 import com.gmail.ivanjermakov1.messenger.auth.service.UserService;
 import com.gmail.ivanjermakov1.messenger.exception.AuthenticationException;
 import com.gmail.ivanjermakov1.messenger.exception.NoSuchEntityException;
-import com.gmail.ivanjermakov1.messenger.messaging.dto.ConversationDTO;
+import com.gmail.ivanjermakov1.messenger.messaging.dto.ConversationDto;
 import com.gmail.ivanjermakov1.messenger.messaging.service.ConversationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -23,7 +23,7 @@ public class ConversationController {
 	}
 	
 	@GetMapping("create")
-	public ConversationDTO create(@RequestHeader("Auth-Token") String token, @RequestParam("with") String withLogin) throws AuthenticationException {
+	public ConversationDto create(@RequestHeader("Auth-Token") String token, @RequestParam("with") String withLogin) throws AuthenticationException {
 		User user = userService.authenticate(token);
 		try {
 			return conversationService.get(user, conversationService.create(user, userService.getUser(withLogin)));

@@ -1,7 +1,7 @@
 package com.gmail.ivanjermakov1.messenger.auth;
 
 import com.gmail.ivanjermakov1.messenger.auth.controller.RegistrationController;
-import com.gmail.ivanjermakov1.messenger.auth.dto.RegisterUserDTO;
+import com.gmail.ivanjermakov1.messenger.auth.dto.RegisterUserDto;
 import com.gmail.ivanjermakov1.messenger.exception.InvalidPasswordException;
 import com.gmail.ivanjermakov1.messenger.exception.RegistrationException;
 import org.junit.Test;
@@ -22,19 +22,19 @@ public class PasswordTest {
 	@Test(expected = InvalidPasswordException.class)
 	public void shouldThrowInvalidPasswordException_WithEmptyPassword() throws RegistrationException {
 		registrationController.register(
-				new RegisterUserDTO("Jack", "Johnson", "jackj", ""));
+				new RegisterUserDto("Jack", "Johnson", "jackj", ""));
 	}
 	
 	@Test(expected = InvalidPasswordException.class)
 	public void shouldThrowInvalidPasswordException_WithLessThen8Characters() throws RegistrationException {
 		registrationController.register(
-				new RegisterUserDTO("Jack", "Johnson", "jackj", "1234567"));
+				new RegisterUserDto("Jack", "Johnson", "jackj", "1234567"));
 	}
 	
 	@Test(expected = InvalidPasswordException.class)
 	public void shouldThrowInvalidPasswordException_WithMoreThen32Characters() throws RegistrationException {
 		registrationController.register(
-				new RegisterUserDTO("Jack", "Johnson", "jackj", "1234567812345678123456781234567812345678"));
+				new RegisterUserDto("Jack", "Johnson", "jackj", "1234567812345678123456781234567812345678"));
 	}
 	
 }

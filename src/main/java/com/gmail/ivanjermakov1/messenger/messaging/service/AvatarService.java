@@ -4,7 +4,7 @@ import com.gmail.ivanjermakov1.messenger.auth.entity.User;
 import com.gmail.ivanjermakov1.messenger.core.util.Mapper;
 import com.gmail.ivanjermakov1.messenger.exception.AuthenticationException;
 import com.gmail.ivanjermakov1.messenger.exception.InvalidFileException;
-import com.gmail.ivanjermakov1.messenger.messaging.dto.AvatarDTO;
+import com.gmail.ivanjermakov1.messenger.messaging.dto.AvatarDto;
 import com.gmail.ivanjermakov1.messenger.messaging.entity.Avatar;
 import com.gmail.ivanjermakov1.messenger.messaging.enums.FileType;
 import com.gmail.ivanjermakov1.messenger.messaging.repository.AvatarRepository;
@@ -51,12 +51,12 @@ public class AvatarService {
 		return new ArrayList<>(avatarRepository.getByUserId(user.getId()));
 	}
 	
-	public AvatarDTO upload(User user, MultipartFile avatarFile) throws IOException, InvalidFileException {
+	public AvatarDto upload(User user, MultipartFile avatarFile) throws IOException, InvalidFileException {
 		if (!Uploads.isSupportedImage(avatarFile)) throw new InvalidFileException("provided file is not an image");
 		
 		String avatarPath = fileUploadService.upload(avatarFile, FileType.AVATAR);
 		Avatar avatar = avatarRepository.save(new Avatar(user, avatarPath, LocalDate.now()));
-		return Mapper.map(avatar, AvatarDTO.class);
+		return Mapper.map(avatar, AvatarDto.class);
 	}
 	
 }

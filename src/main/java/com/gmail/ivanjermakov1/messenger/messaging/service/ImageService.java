@@ -5,8 +5,8 @@ import com.gmail.ivanjermakov1.messenger.core.util.Mapper;
 import com.gmail.ivanjermakov1.messenger.exception.AuthenticationException;
 import com.gmail.ivanjermakov1.messenger.exception.InvalidFileException;
 import com.gmail.ivanjermakov1.messenger.exception.NoSuchEntityException;
-import com.gmail.ivanjermakov1.messenger.messaging.dto.ImageDTO;
-import com.gmail.ivanjermakov1.messenger.messaging.dto.NewImageDTO;
+import com.gmail.ivanjermakov1.messenger.messaging.dto.ImageDto;
+import com.gmail.ivanjermakov1.messenger.messaging.dto.NewImageDto;
 import com.gmail.ivanjermakov1.messenger.messaging.entity.Image;
 import com.gmail.ivanjermakov1.messenger.messaging.enums.FileType;
 import com.gmail.ivanjermakov1.messenger.messaging.repository.ImageRepository;
@@ -45,14 +45,14 @@ public class ImageService {
 		imageRepository.delete(image);
 	}
 	
-	public ImageDTO full(Image image) {
-		return Mapper.map(image, ImageDTO.class);
+	public ImageDto full(Image image) {
+		return Mapper.map(image, ImageDto.class);
 	}
 	
-	public NewImageDTO upload(MultipartFile imageFile) throws IOException, InvalidFileException {
+	public NewImageDto upload(MultipartFile imageFile) throws IOException, InvalidFileException {
 		if (!Uploads.isSupportedImage(imageFile)) throw new InvalidFileException("provided file is not an image");
 		
-		return new NewImageDTO(fileUploadService.upload(imageFile, FileType.IMAGE));
+		return new NewImageDto(fileUploadService.upload(imageFile, FileType.IMAGE));
 	}
 	
 	public void delete(User user, Long imageId) throws NoSuchEntityException, AuthenticationException {

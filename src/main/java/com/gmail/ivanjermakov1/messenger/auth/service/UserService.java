@@ -1,7 +1,7 @@
 package com.gmail.ivanjermakov1.messenger.auth.service;
 
-import com.gmail.ivanjermakov1.messenger.auth.dto.RegisterUserDTO;
-import com.gmail.ivanjermakov1.messenger.auth.dto.UserDTO;
+import com.gmail.ivanjermakov1.messenger.auth.dto.RegisterUserDto;
+import com.gmail.ivanjermakov1.messenger.auth.dto.UserDto;
 import com.gmail.ivanjermakov1.messenger.auth.entity.Token;
 import com.gmail.ivanjermakov1.messenger.auth.entity.User;
 import com.gmail.ivanjermakov1.messenger.auth.repository.TokenRepository;
@@ -79,17 +79,17 @@ public class UserService {
 		}
 	}
 	
-	public void register(RegisterUserDTO registerUserDTO) throws RegistrationException {
-		registerUserDTO.validate();
+	public void register(RegisterUserDto registerUserDto) throws RegistrationException {
+		registerUserDto.validate();
 		
-		LOG.debug("register user: @" + registerUserDTO.getLogin());
+		LOG.debug("register user: @" + registerUserDto.getLogin());
 		
-		if (userRepository.findByLogin(registerUserDTO.getLogin()) != null)
+		if (userRepository.findByLogin(registerUserDto.getLogin()) != null)
 			throw new RegistrationException("user already exists.");
 		
-		User user = new User(null, registerUserDTO.getLogin(), Hasher.getHash(registerUserDTO.getPassword()));
+		User user = new User(null, registerUserDto.getLogin(), Hasher.getHash(registerUserDto.getPassword()));
 		user = userRepository.save(user);
-		userInfoService.save(new UserInfo(user, registerUserDTO.getFirstName(), registerUserDTO.getLastName()));
+		userInfoService.save(new UserInfo(user, registerUserDto.getFirstName(), registerUserDto.getLastName()));
 	}
 	
 	public User getUser(Long id) throws NoSuchEntityException {
@@ -105,10 +105,10 @@ public class UserService {
 		return tokenRepository.findByToken(token).orElseThrow(() -> new NoSuchEntityException("no such user")).getUser();
 	}
 	
-	public UserDTO full(User user) {
+	public UserDto full(User user) {
 		UserInfo userInfo = userInfoService.getById(user.getId());
 		UserOnline userOnline = userOnlineRepository.findFirstByUserIdOrderBySeenDesc(user.getId());
-		return new UserDTO(
+		return new UserDto(
 				user.getId(),
 				user.getLogin(),
 				userInfo.getFirstName(),

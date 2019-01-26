@@ -1,7 +1,7 @@
 package com.gmail.ivanjermakov1.messenger.messaging;
 
-import com.gmail.ivanjermakov1.messenger.auth.dto.RegisterUserDTO;
-import com.gmail.ivanjermakov1.messenger.auth.dto.UserDTO;
+import com.gmail.ivanjermakov1.messenger.auth.dto.RegisterUserDto;
+import com.gmail.ivanjermakov1.messenger.auth.dto.UserDto;
 import com.gmail.ivanjermakov1.messenger.auth.service.UserService;
 import com.gmail.ivanjermakov1.messenger.exception.AuthenticationException;
 import com.gmail.ivanjermakov1.messenger.exception.InvalidMessageException;
@@ -9,8 +9,8 @@ import com.gmail.ivanjermakov1.messenger.exception.NoSuchEntityException;
 import com.gmail.ivanjermakov1.messenger.exception.RegistrationException;
 import com.gmail.ivanjermakov1.messenger.messaging.controller.ConversationController;
 import com.gmail.ivanjermakov1.messenger.messaging.controller.MessagingController;
-import com.gmail.ivanjermakov1.messenger.messaging.dto.ConversationDTO;
-import com.gmail.ivanjermakov1.messenger.messaging.dto.NewMessageDTO;
+import com.gmail.ivanjermakov1.messenger.messaging.dto.ConversationDto;
+import com.gmail.ivanjermakov1.messenger.messaging.dto.NewMessageDto;
 import com.gmail.ivanjermakov1.messenger.messaging.dto.action.NewMessageAction;
 import org.junit.Assert;
 import org.junit.Test;
@@ -18,9 +18,8 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.web.context.request.async.DeferredResult;
-
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.context.request.async.DeferredResult;
 
 import java.util.Collections;
 
@@ -40,23 +39,24 @@ public class MessagingIntegrationTest {
 	
 	@Test
 	public void shouldSendAndReceiveMessage() throws RegistrationException, AuthenticationException, NoSuchEntityException, InvalidMessageException {
-		userService.register(new RegisterUserDTO("Jack", "Johnson", "jackj", "password1"));
+		userService.register(new RegisterUserDto("Jack", "Johnson", "jackj", "password1"));
 		String user1Token = userService.authenticate("jackj", "password1");
-		UserDTO user1 = userService.full(userService.authenticate(user1Token));
+		UserDto user1 = userService.full(userService.authenticate(user1Token));
 		
-		userService.register(new RegisterUserDTO("Ron", "Richardson", "ronr", "password1"));
+		userService.register(new RegisterUserDto("Ron", "Richardson", "ronr", "password1"));
 		String user2Token = userService.authenticate("ronr", "password1");
-		UserDTO user2 = userService.full(userService.authenticate(user2Token));
+		UserDto user2 = userService.full(userService.authenticate(user2Token));
 		
 		Assert.assertNotNull(user1);
 		Assert.assertNotNull(user2);
 		
-		ConversationDTO conversationDTO = conversationController.create(user1Token, userService.getUser(user2.getId()).getLogin());
+		ConversationDto conversationDto = conversationController.create(user1Token, userService.getUser(user2.getId()).getLogin());
 		
-		NewMessageDTO message = new NewMessageDTO(
+		NewMessageDto message = new NewMessageDto(
 				user1.getId(),
-				conversationDTO.getId(),
+				conversationDto.getId(),
 				"Hello!",
+				Collections.emptyList(),
 				Collections.emptyList()
 		);
 		

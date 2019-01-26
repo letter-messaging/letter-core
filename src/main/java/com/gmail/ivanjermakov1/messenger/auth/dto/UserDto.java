@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 
 import java.time.LocalDateTime;
 
-public class UserDTO {
+public class UserDto {
 	
 	private Long id;
 	private String login;
@@ -15,10 +15,10 @@ public class UserDTO {
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	private LocalDateTime lastSeen;
 	
-	public UserDTO() {
+	public UserDto() {
 	}
 	
-	public UserDTO(Long id, String login, String firstName, String lastName, String avatar, LocalDateTime lastSeen) {
+	public UserDto(Long id, String login, String firstName, String lastName, String avatar, LocalDateTime lastSeen) {
 		this.id = id;
 		this.login = login;
 		this.firstName = firstName;

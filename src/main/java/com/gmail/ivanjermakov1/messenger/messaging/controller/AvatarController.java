@@ -4,7 +4,7 @@ import com.gmail.ivanjermakov1.messenger.auth.entity.User;
 import com.gmail.ivanjermakov1.messenger.auth.service.UserService;
 import com.gmail.ivanjermakov1.messenger.exception.AuthenticationException;
 import com.gmail.ivanjermakov1.messenger.exception.InvalidFileException;
-import com.gmail.ivanjermakov1.messenger.messaging.dto.AvatarDTO;
+import com.gmail.ivanjermakov1.messenger.messaging.dto.AvatarDto;
 import com.gmail.ivanjermakov1.messenger.messaging.service.AvatarService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -26,7 +26,7 @@ public class AvatarController {
 	}
 	
 	@PostMapping("upload")
-	public AvatarDTO upload(@RequestHeader("Auth-Token") String token, @RequestParam("avatar") MultipartFile avatar) throws AuthenticationException, IOException, InvalidFileException {
+	public AvatarDto upload(@RequestHeader("Auth-Token") String token, @RequestParam("avatar") MultipartFile avatar) throws AuthenticationException, IOException, InvalidFileException {
 		User user = userService.authenticate(token);
 		
 		return avatarService.upload(user, avatar);
