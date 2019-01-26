@@ -25,11 +25,13 @@ public class MessageService {
 	private final MessageRepository messageRepository;
 	private final UserService userService;
 	private ConversationService conversationService;
+	private final ImageService imageService;
 	
 	@Autowired
-	public MessageService(MessageRepository messageRepository, UserService userService) {
+	public MessageService(MessageRepository messageRepository, UserService userService, ImageService imageService) {
 		this.messageRepository = messageRepository;
 		this.userService = userService;
+		this.imageService = imageService;
 	}
 	
 	@Autowired
@@ -84,6 +86,10 @@ public class MessageService {
 				.orElse(Collections.emptyList())
 				.stream()
 				.map(this::getFullMessage)
+				.collect(Collectors.toList()));
+		
+		messageDTO.setImages(message.getImages().stream()
+				.map(imageService::full)
 				.collect(Collectors.toList()));
 		
 		return messageDTO;

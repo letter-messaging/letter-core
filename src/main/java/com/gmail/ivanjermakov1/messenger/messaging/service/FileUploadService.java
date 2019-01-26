@@ -22,8 +22,9 @@ public class FileUploadService {
 	private String webResources;
 	
 	//	TODO: prevent file overriding with the same filename
+	//	TODO: change filenames
 	public String upload(MultipartFile multipartFile, FileType fileType) throws IOException {
-		LOG.info("uploading file \'" + multipartFile.getOriginalFilename() + "\'; size: " + multipartFile.getSize() / 1_000_000 + "MB");
+		LOG.info("uploading [" + fileType + "] \'" + multipartFile.getOriginalFilename() + "\'; size: " + multipartFile.getSize() / 1_000_000 + "MB");
 		
 		String realPath = uploadPlaceholder;
 		new File(realPath + "/" + fileType.toString().toLowerCase()).mkdirs();

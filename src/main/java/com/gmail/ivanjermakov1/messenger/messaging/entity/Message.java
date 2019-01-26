@@ -42,16 +42,20 @@ public class Message {
 	)
 	private List<Message> forwarded;
 	
+	@OneToMany(mappedBy = "message")
+	private List<Image> images;
+	
 	public Message() {
 	}
 	
-	public Message(Conversation conversation, LocalDateTime sent, String text, Boolean read, User sender, List<Message> forwarded) {
+	public Message(Conversation conversation, LocalDateTime sent, String text, Boolean read, User sender, List<Message> forwarded, List<Image> images) {
 		this.conversation = conversation;
 		this.sent = sent;
 		this.text = text;
 		this.read = read;
 		this.sender = sender;
 		this.forwarded = forwarded;
+		this.images = images;
 	}
 	
 	public Long getId() {
@@ -108,6 +112,14 @@ public class Message {
 	
 	public void setForwarded(List<Message> forwarded) {
 		this.forwarded = forwarded;
+	}
+	
+	public List<Image> getImages() {
+		return images;
+	}
+	
+	public void setImages(List<Image> images) {
+		this.images = images;
 	}
 	
 	public boolean validate() {

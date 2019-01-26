@@ -1,5 +1,6 @@
 import {User} from './User';
 import {Conversation} from './Conversation';
+import {Image} from './Image';
 
 export class Message {
   id: number;
@@ -9,5 +10,6 @@ export class Message {
   sender: User;
   conversation: Conversation;
   forwarded: Array<Message>;
+  images: Array<Image>;
   selected = false;
 }

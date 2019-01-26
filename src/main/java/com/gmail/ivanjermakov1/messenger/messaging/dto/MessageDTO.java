@@ -17,11 +17,12 @@ public class MessageDTO {
 	private UserDTO sender;
 	private ConversationDTO conversation;
 	private List<MessageDTO> forwarded;
+	private List<ImageDTO> images;
 	
 	public MessageDTO() {
 	}
 	
-	public MessageDTO(Long id, LocalDateTime sent, String text, Boolean read, UserDTO sender, ConversationDTO conversation, List<MessageDTO> forwarded) {
+	public MessageDTO(Long id, LocalDateTime sent, String text, Boolean read, UserDTO sender, ConversationDTO conversation, List<MessageDTO> forwarded, List<ImageDTO> images) {
 		this.id = id;
 		this.sent = sent;
 		this.text = text;
@@ -29,6 +30,7 @@ public class MessageDTO {
 		this.sender = sender;
 		this.conversation = conversation;
 		this.forwarded = forwarded;
+		this.images = images;
 	}
 	
 	public Long getId() {
@@ -85,6 +87,14 @@ public class MessageDTO {
 	
 	public void setForwarded(List<MessageDTO> forwarded) {
 		this.forwarded = forwarded;
+	}
+	
+	public List<ImageDTO> getImages() {
+		return images;
+	}
+	
+	public void setImages(List<ImageDTO> images) {
+		this.images = images;
 	}
 	
 }

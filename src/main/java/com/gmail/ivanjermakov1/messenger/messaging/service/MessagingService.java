@@ -34,16 +34,18 @@ public class MessagingService {
 	private final MessageService messageService;
 	private final ConversationService conversationService;
 	private final UserService userService;
+	private final ImageService imageService;
 	
 	private final Queue<Request<NewMessageAction>> newMessageRequests = new ConcurrentLinkedQueue<>();
 	private final Queue<Request<MessageEditAction>> messageEditRequests = new ConcurrentLinkedQueue<>();
 	private final Queue<Request<ConversationReadAction>> conversationReadRequests = new ConcurrentLinkedQueue<>();
 	
 	@Autowired
-	public MessagingService(MessageService messageService, ConversationService conversationService, UserService userService) {
+	public MessagingService(MessageService messageService, ConversationService conversationService, UserService userService, ImageService imageService) {
 		this.messageService = messageService;
 		this.conversationService = conversationService;
 		this.userService = userService;
+		this.imageService = imageService;
 	}
 	
 	public Queue<Request<NewMessageAction>> getNewMessageRequests() {
@@ -79,14 +81,16 @@ public class MessagingService {
 				newMessageDTO.getForwarded()
 						.stream()
 						.map(dto -> messageService.get(dto.getId()))
+						.collect(Collectors.toList()),
+				newMessageDTO.getImages()
+						.stream()
+						.map(i -> imageService.get(i.getPath()))
 						.collect(Collectors.toList())
 		);
 		
 		if (!message.validate()) throw new InvalidMessageException("invalid message");
 		
-		if (conversation.getUsers().size() == 1) {
-			message.setRead(true);
-		}
+		if (conversation.getUsers().size() == 1) message.setRead(true);
 		
 		message = messageService.save(message);
 		
@@ -116,10 +120,17 @@ public class MessagingService {
 		original.setText(editMessageDTO.getText());
 		if (editMessageDTO.getForwarded() != null && editMessageDTO.getForwarded().isEmpty())
 			messageService.deleteForwarded(original);
+		
+		original.getImages()
+				.stream()
+				.filter(i -> editMessageDTO.getImages()
+						.stream()
+						.noneMatch(ei -> ei.getId().equals(i.getId())))
+				.forEach(imageService::delete);
+		
 		original = messageService.save(original);
 		
 		Conversation conversation = conversationService.get(original.getConversation().getId());
-		
 		MessageDTO messageDTO = messageService.getFullMessage(original);
 		
 		messageEditRequests
