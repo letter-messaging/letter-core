@@ -5,6 +5,6 @@ export class NewMessage {
   senderId: number;
   conversationId: number;
   text: string;
-  forwarded: Array<Message>;
-  images: Array<NewImage>;
+  forwarded: Array<Message> = [];
+  images: Array<NewImage> = [];
 }

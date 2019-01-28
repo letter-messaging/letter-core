@@ -22,6 +22,9 @@ import {UserInfoService} from '../../service/user-info.service';
 import {DateService} from '../../service/date.service';
 
 import * as moment from 'moment';
+import {NewMessageAction} from '../dto/action/NewMessageAction';
+import {ConversationReadAction} from '../dto/action/ConversationReadAction';
+import {MessageEditAction} from '../dto/action/MessageEditAction';
 
 @Component({
   selector: 'app-messaging',
@@ -157,7 +160,7 @@ export class MessagingComponent implements OnInit {
         // makes it execute only once per application load
         if (!this.isPolling) {
           this.isPolling = true;
-          this.startPolling();
+          this.startListening();
         }
 
         this.previewService.all(this.token).subscribe(previews => {
@@ -396,71 +399,58 @@ export class MessagingComponent implements OnInit {
     });
   }
 
-  private startPolling() {
-    this.getMessage();
-    this.getRead();
-    this.getEdit();
-  }
-
-  private getMessage() {
-    this.messagingService.getMessage(this.token).subscribe(
-      newMessageAction => {
-        this.getMessage();
-
-        this.updatePreviews();
-        if (newMessageAction.message.sender.id === this.me.id) {
-          return;
-        }
-
-        this.incrementBackgroundUnread();
-        this.soundNotificationService.notify();
-        if (this.currentPreview && newMessageAction.message.conversation.id === this.currentPreview.conversation.id) {
-          this.messages.unshift(newMessageAction.message);
-        }
-      },
-      error => {
-        this.getMessage();
+  private startListening() {
+    this.messagingService.getEvents(this.token).subscribe(action => {
+      console.log(action);
+      switch (action.type) {
+        case 'NEW_MESSAGE':
+          this.processNewMessage(action);
+          break;
+        case 'CONVERSATION_READ':
+          this.processRead(action);
+          break;
+        case 'MESSAGE_EDIT':
+          this.processEdit(action);
+          break;
       }
-    );
+    });
   }
 
-  private getRead() {
-    this.messagingService.getRead(this.token).subscribe(
-      conversationReadAction => {
-        this.getRead();
-        this.updatePreviews();
-        if (conversationReadAction.reader.id === this.me.id) {
-          return;
-        }
+  private processNewMessage(action: NewMessageAction) {
+    this.updatePreviews();
+    if (action.message.sender.id === this.me.id) {
+      return;
+    }
 
-        if (this.currentPreview && conversationReadAction.conversation.id === this.currentPreview.conversation.id) {
-          this.messages.forEach(m => m.read = true);
-        }
-      },
-      error => {
-        this.getRead();
+    this.incrementBackgroundUnread();
+    this.soundNotificationService.notify();
+    if (this.currentPreview && action.message.conversation.id === this.currentPreview.conversation.id) {
+      this.messages.unshift(action.message);
+    }
+  }
+
+  private processRead(action: ConversationReadAction) {
+    this.updatePreviews();
+    if (action.reader.id === this.me.id) {
+      return;
+    }
+
+    if (this.currentPreview && action.conversation.id === this.currentPreview.conversation.id) {
+      this.messages.forEach(m => m.read = true);
+    }
+  }
+
+  private processEdit(action: MessageEditAction) {
+    this.updatePreviews();
+
+    if (this.currentPreview && action.message.conversation.id === this.currentPreview.conversation.id) {
+      this.messages.filter(m => m.id !== action.message.id);
+      if (action.message.sender.login !== this.me.login) {
+        const updatedMessage = this.messages.find(_m => _m.id === action.message.id);
+        updatedMessage.text = action.message.text;
+        updatedMessage.forwarded = action.message.forwarded;
       }
-    );
+    }
   }
 
-  private getEdit() {
-    this.messagingService.getEdit(this.token).subscribe(
-      messageEditAction => {
-        this.getEdit();
-        this.updatePreviews();
-
-        if (this.currentPreview && messageEditAction.message.conversation.id === this.currentPreview.conversation.id) {
-          this.messages.filter(m => m.id !== messageEditAction.message.id);
-          if (messageEditAction.message.sender.login !== this.me.login) {
-            const updatedMessage = this.messages.find(_m => _m.id === messageEditAction.message.id);
-            updatedMessage.text = messageEditAction.message.text;
-            updatedMessage.forwarded = messageEditAction.message.forwarded;
-          }
-        }
-      },
-      error => {
-        this.getEdit();
-      }
-    );
-  }
 }

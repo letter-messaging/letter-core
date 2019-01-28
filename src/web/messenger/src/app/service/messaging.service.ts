@@ -3,11 +3,11 @@ import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {Message} from '../component/dto/Message';
 import {API_URL} from '../../../globals';
-import {NewMessageAction} from '../component/dto/action/NewMessageAction';
-import {ConversationReadAction} from '../component/dto/action/ConversationReadAction';
-import {MessageEditAction} from '../component/dto/action/MessageEditAction';
 import {NewMessage} from '../component/dto/NewMessage';
 import {EditMessage} from '../component/dto/EditMessage';
+import {ConversationReadAction} from '../component/dto/action/ConversationReadAction';
+import {MessageEditAction} from '../component/dto/action/MessageEditAction';
+import {NewMessageAction} from '../component/dto/action/NewMessageAction';
 
 @Injectable({
   providedIn: 'root'
@@ -17,21 +17,13 @@ export class MessagingService {
   constructor(private http: HttpClient) {
   }
 
-  getMessage(token: string): Observable<NewMessageAction> {
-    return this.http.get<NewMessageAction>(API_URL + 'messaging/get/m', {
-      headers: {'Auth-Token': token},
-    });
-  }
-
-  getRead(token: string): Observable<ConversationReadAction> {
-    return this.http.get<ConversationReadAction>(API_URL + 'messaging/get/r', {
-      headers: {'Auth-Token': token},
-    });
-  }
-
-  getEdit(token: string): Observable<MessageEditAction> {
-    return this.http.get<MessageEditAction>(API_URL + 'messaging/get/e', {
-      headers: {'Auth-Token': token},
+  getEvents(token: string): Observable<any> {
+    return new Observable(o => {
+      const es = new EventSource(API_URL + 'messaging/listen' + '?token=' + token);
+      es.addEventListener('message', (e: any) => {
+        o.next(JSON.parse(e.data));
+      });
+      return () => es.close();
     });
   }
 
