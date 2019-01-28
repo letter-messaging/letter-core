@@ -40,7 +40,6 @@ public class SearchTest {
 		User user1 = userService.authenticate(user1Token);
 		
 		List<UserDto> searchResult = searchService.searchUsers("@John");
-		System.out.println("SIZE: " + searchResult.size());
 		Assert.assertTrue(searchResult
 				.stream()
 				.anyMatch(dto -> dto.getLogin().equals(user1.getLogin()))

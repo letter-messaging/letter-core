@@ -11,16 +11,20 @@ import com.gmail.ivanjermakov1.messenger.messaging.controller.ConversationContro
 import com.gmail.ivanjermakov1.messenger.messaging.controller.MessagingController;
 import com.gmail.ivanjermakov1.messenger.messaging.dto.ConversationDto;
 import com.gmail.ivanjermakov1.messenger.messaging.dto.NewMessageDto;
-import com.gmail.ivanjermakov1.messenger.messaging.dto.action.NewMessageAction;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpMethod;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.context.request.async.DeferredResult;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyEmitter;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.Collections;
 
 @SpringBootTest
@@ -59,12 +63,6 @@ public class MessagingIntegrationTest {
 				Collections.emptyList(),
 				Collections.emptyList()
 		);
-		
-		DeferredResult<NewMessageAction> deferredResult = messagingController.getMessage(user2Token);
-		deferredResult.onCompletion(() -> {
-			NewMessageAction action = (NewMessageAction) deferredResult.getResult();
-			Assert.assertNotNull(action);
-		});
 		
 		messagingController.sendMessage(user1Token, message);
 	}
