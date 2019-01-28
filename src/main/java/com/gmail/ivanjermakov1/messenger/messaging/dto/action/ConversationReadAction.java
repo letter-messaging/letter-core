@@ -15,6 +15,7 @@ public class ConversationReadAction extends Action {
 	}
 	
 	public ConversationReadAction(ConversationDto conversation, UserDto reader) {
+		this();
 		this.conversation = conversation;
 		this.reader = reader;
 	}

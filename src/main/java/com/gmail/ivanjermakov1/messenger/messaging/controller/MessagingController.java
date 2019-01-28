@@ -8,14 +8,10 @@ import com.gmail.ivanjermakov1.messenger.exception.NoSuchEntityException;
 import com.gmail.ivanjermakov1.messenger.messaging.dto.EditMessageDto;
 import com.gmail.ivanjermakov1.messenger.messaging.dto.MessageDto;
 import com.gmail.ivanjermakov1.messenger.messaging.dto.NewMessageDto;
-import com.gmail.ivanjermakov1.messenger.messaging.dto.action.ConversationReadAction;
-import com.gmail.ivanjermakov1.messenger.messaging.dto.action.MessageEditAction;
-import com.gmail.ivanjermakov1.messenger.messaging.dto.action.NewMessageAction;
-import com.gmail.ivanjermakov1.messenger.messaging.dto.action.Request;
 import com.gmail.ivanjermakov1.messenger.messaging.service.MessagingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.context.request.async.DeferredResult;
+import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyEmitter;
 
 @RestController
 @RequestMapping("messaging")
@@ -30,52 +26,21 @@ public class MessagingController {
 		this.userService = userService;
 	}
 	
-	@RequestMapping("get/m")
-	@GetMapping
-	public DeferredResult<NewMessageAction> getMessage(@RequestHeader("Auth-Token") String token) throws AuthenticationException {
+	@GetMapping("listen")
+	public ResponseBodyEmitter getEvents(@RequestParam("token") String token) throws AuthenticationException {
 		User user = userService.authenticate(token);
 		
-		DeferredResult<NewMessageAction> request = new DeferredResult<>();
-		request.onTimeout(() -> messagingService.getNewMessageRequests().removeIf(r -> r.getDeferredResult().equals(request)));
-		messagingService.getNewMessageRequests().add(new Request<>(user, request));
-		
-		return request;
+		return messagingService.generateRequest(user);
 	}
 	
-	@RequestMapping("get/r")
-	@GetMapping
-	public DeferredResult<ConversationReadAction> getRead(@RequestHeader("Auth-Token") String token) throws AuthenticationException {
-		User user = userService.authenticate(token);
-		
-		DeferredResult<ConversationReadAction> request = new DeferredResult<>();
-		request.onTimeout(() -> messagingService.getConversationReadRequests().removeIf(r -> r.getDeferredResult().equals(request)));
-		messagingService.getConversationReadRequests().add(new Request<>(user, request));
-		
-		return request;
-	}
-	
-	@RequestMapping("get/e")
-	@GetMapping
-	public DeferredResult<MessageEditAction> getEdit(@RequestHeader("Auth-Token") String token) throws AuthenticationException {
-		User user = userService.authenticate(token);
-		
-		DeferredResult<MessageEditAction> request = new DeferredResult<>();
-		request.onTimeout(() -> messagingService.getMessageEditRequests().removeIf(r -> r.getDeferredResult().equals(request)));
-		messagingService.getMessageEditRequests().add(new Request<>(user, request));
-		
-		return request;
-	}
-	
-	@RequestMapping("send")
-	@PostMapping
+	@PostMapping("send")
 	public MessageDto sendMessage(@RequestHeader("Auth-Token") String token, @RequestBody NewMessageDto newMessageDto) throws AuthenticationException, InvalidMessageException, NoSuchEntityException {
 		User user = userService.authenticate(token);
 		
 		return messagingService.processNewMessage(user, newMessageDto);
 	}
 	
-	@RequestMapping("edit")
-	@PostMapping
+	@PostMapping("edit")
 	public MessageDto editMessage(@RequestHeader("Auth-Token") String token, @RequestBody EditMessageDto editMessageDto) throws AuthenticationException, InvalidMessageException, NoSuchEntityException {
 		User user = userService.authenticate(token);
 		

@@ -8,10 +8,7 @@ import com.gmail.ivanjermakov1.messenger.exception.NoSuchEntityException;
 import com.gmail.ivanjermakov1.messenger.messaging.dto.EditMessageDto;
 import com.gmail.ivanjermakov1.messenger.messaging.dto.MessageDto;
 import com.gmail.ivanjermakov1.messenger.messaging.dto.NewMessageDto;
-import com.gmail.ivanjermakov1.messenger.messaging.dto.action.ConversationReadAction;
-import com.gmail.ivanjermakov1.messenger.messaging.dto.action.MessageEditAction;
-import com.gmail.ivanjermakov1.messenger.messaging.dto.action.NewMessageAction;
-import com.gmail.ivanjermakov1.messenger.messaging.dto.action.Request;
+import com.gmail.ivanjermakov1.messenger.messaging.dto.action.*;
 import com.gmail.ivanjermakov1.messenger.messaging.entity.Conversation;
 import com.gmail.ivanjermakov1.messenger.messaging.entity.Message;
 import org.slf4j.Logger;
@@ -19,10 +16,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
-import java.util.Queue;
-import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.stream.Collectors;
 
 @Service
@@ -36,9 +35,7 @@ public class MessagingService {
 	private final UserService userService;
 	private final ImageService imageService;
 	
-	private final Queue<Request<NewMessageAction>> newMessageRequests = new ConcurrentLinkedQueue<>();
-	private final Queue<Request<MessageEditAction>> messageEditRequests = new ConcurrentLinkedQueue<>();
-	private final Queue<Request<ConversationReadAction>> conversationReadRequests = new ConcurrentLinkedQueue<>();
+	private final List<Request<Action>> requests = new CopyOnWriteArrayList<>();
 	
 	@Autowired
 	public MessagingService(MessageService messageService, ConversationService conversationService, UserService userService, ImageService imageService) {
@@ -48,24 +45,27 @@ public class MessagingService {
 		this.imageService = imageService;
 	}
 	
-	public Queue<Request<NewMessageAction>> getNewMessageRequests() {
-		return newMessageRequests;
+	public SseEmitter generateRequest(User user) {
+		SseEmitter emitter = new SseEmitter();
+		Request<Action> request = new Request<>(user, emitter);
+		emitter.onTimeout(() -> {
+			emitter.complete();
+			requests.remove(request);
+		});
+		requests.add(request);
+		return emitter;
 	}
 	
-	public Queue<Request<MessageEditAction>> getMessageEditRequests() {
-		return messageEditRequests;
+	public void sendRequest(Request<Action> request, Action action) {
+		LOG.info("sending request from @" + request.getUser().getLogin());
+		try {
+			request.getEmitter().send(action);
+		} catch (IOException e) {
+			LOG.warn("failed to send request from @" + request.getUser().getLogin());
+			request.getEmitter().complete();
+		}
 	}
 	
-	public Queue<Request<ConversationReadAction>> getConversationReadRequests() {
-		return conversationReadRequests;
-	}
-	
-	/**
-	 * Processes new message and close requests of /get listeners
-	 *
-	 * @param user          sender
-	 * @param newMessageDto new message
-	 */
 	public MessageDto processNewMessage(User user, NewMessageDto newMessageDto) throws NoSuchEntityException, InvalidMessageException {
 		LOG.debug("process new message from @" + user.getLogin() + " to conversation @" + newMessageDto.getConversationId() +
 				"; text: " + newMessageDto.getText());
@@ -96,15 +96,12 @@ public class MessagingService {
 		
 		MessageDto messageDto = messageService.getFullMessage(message);
 		
-		newMessageRequests
+		requests
 				.stream()
 				.filter(request -> conversation.getUsers()
 						.stream()
-						.anyMatch(i -> i.getId().equals(request.getUser().getId())))
-				.forEach(request -> {
-					request.set(new NewMessageAction(messageDto));
-					newMessageRequests.removeIf(r -> r.equals(request));
-				});
+						.anyMatch(u -> u.getId().equals(request.getUser().getId())))
+				.forEach(request -> sendRequest(request, new NewMessageAction(messageDto)));
 		
 		return messageDto;
 	}
@@ -133,15 +130,12 @@ public class MessagingService {
 		Conversation conversation = conversationService.get(original.getConversation().getId());
 		MessageDto messageDto = messageService.getFullMessage(original);
 		
-		messageEditRequests
+		requests
 				.stream()
 				.filter(request -> conversation.getUsers()
 						.stream()
-						.anyMatch(i -> i.getId().equals(request.getUser().getId())))
-				.forEach(request -> {
-					request.set(new MessageEditAction(messageDto));
-					messageEditRequests.removeIf(r -> r.equals(request));
-				});
+						.anyMatch(u -> u.getId().equals(request.getUser().getId())))
+				.forEach(request -> sendRequest(request, new MessageEditAction(messageDto)));
 		
 		return messageDto;
 	}
@@ -151,15 +145,15 @@ public class MessagingService {
 		
 		messageService.read(user, conversation);
 		
-		conversationReadRequests
+		requests
 				.stream()
 				.filter(requestEntry -> conversation.getUsers()
 						.stream()
 						.anyMatch(i -> i.getId().equals(requestEntry.getUser().getId())))
-				.forEach(e -> {
-					e.set(new ConversationReadAction(conversationService.get(user, conversation), userService.full(user)));
-					conversationReadRequests.removeIf(entry -> entry.equals(e));
-				});
+				.forEach(request -> sendRequest(
+						request,
+						new ConversationReadAction(conversationService.get(user, conversation), userService.full(user)))
+				);
 	}
 	
 }

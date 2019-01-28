@@ -1,36 +1,27 @@
 package com.gmail.ivanjermakov1.messenger.messaging.dto.action;
 
 import com.gmail.ivanjermakov1.messenger.auth.entity.User;
-import org.springframework.web.context.request.async.DeferredResult;
+import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
-public class Request<T extends Action> {
+public class Request<T> {
 	
 	private User user;
-	private DeferredResult<T> deferredResult;
+	private SseEmitter emitter;
 	
-	public Request(User user, DeferredResult<T> deferredResult) {
-		this.user = user;
-		this.deferredResult = deferredResult;
+	public Request() {
 	}
 	
-	public boolean isSetOrExpired() {
-		return deferredResult.isSetOrExpired();
+	public Request(User user, SseEmitter emitter) {
+		this.user = user;
+		this.emitter = emitter;
 	}
 	
 	public User getUser() {
 		return user;
 	}
 	
-	public DeferredResult<T> getDeferredResult() {
-		return deferredResult;
-	}
-	
-	public boolean isTimeout() {
-		return deferredResult.isSetOrExpired();
-	}
-	
-	public void set(T t) {
-		deferredResult.setResult(t);
+	public SseEmitter getEmitter() {
+		return emitter;
 	}
 	
 	@Override
@@ -39,7 +30,7 @@ public class Request<T extends Action> {
 		if (o == null || getClass() != o.getClass()) return false;
 		Request<?> request = (Request<?>) o;
 		return user.equals(request.user) &&
-				deferredResult.equals(request.deferredResult);
+				emitter.equals(request.emitter);
 	}
 	
 }
