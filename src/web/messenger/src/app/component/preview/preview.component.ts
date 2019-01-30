@@ -5,30 +5,30 @@ import {User} from '../dto/User';
 import {FILE_URL} from '../../../../globals';
 
 @Component({
-  selector: 'app-preview',
-  templateUrl: './preview.component.html',
-  styleUrls: ['./preview.component.scss']
+	selector: 'app-preview',
+	templateUrl: './preview.component.html',
+	styleUrls: ['./preview.component.scss']
 })
 export class PreviewComponent implements OnInit {
 
-  readonly FILE_URL = FILE_URL;
+	readonly FILE_URL = FILE_URL;
 
-  @Input()
-  preview: Preview;
+	@Input()
+	preview: Preview;
 
-  @Input()
-  selected: boolean;
+	@Input()
+	selected: boolean;
 
-  @Input()
-  isOnline: boolean;
+	@Input()
+	isOnline: boolean;
 
-  me: User;
+	me: User;
 
-  constructor(private messengerService: MessengerService) {
-  }
+	constructor(private messengerService: MessengerService) {
+	}
 
-  ngOnInit() {
-    this.messengerService.oMe.subscribe(me => this.me = me);
-  }
+	ngOnInit() {
+		this.messengerService.oMe.subscribe(me => this.me = me);
+	}
 
 }

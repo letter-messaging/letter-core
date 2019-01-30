@@ -1,113 +1,113 @@
 .header-right {
-  display: flex;
-  align-items: center;
+	display: flex;
+	align-items: center;
 
-  padding: 10px;
+	padding: 10px;
 
-  background: var(--dark);
+	background: var(--dark);
 
-  border-radius: 0 2px 2px 0;
+	border-radius: 0 2px 2px 0;
 
-  color: white;
+	color: white;
 
-  .avatar {
-    height: 40px;
-    width: 40px;
+	.avatar {
+		height: 40px;
+		width: 40px;
 
-    object-fit: cover;
-    border-radius: 20px;
-  }
+		object-fit: cover;
+		border-radius: 20px;
+	}
 
-  .conversation-name {
-    font-weight: bold;
-    padding: 11.5px;
+	.conversation-name {
+		font-weight: bold;
+		padding: 11.5px;
 
-    white-space: nowrap;
-  }
+		white-space: nowrap;
+	}
 
-  .conversation-name:hover {
-    cursor: pointer;
-    background: var(--black);
-  }
+	.conversation-name:hover {
+		cursor: pointer;
+		background: var(--black);
+	}
 
-  .status {
-    font-size: 20px;
-    font-style: italic;
+	.status {
+		font-size: 20px;
+		font-style: italic;
 
-    //fix cutoff
-    padding-right: 4px;
+		//fix cutoff
+		padding-right: 4px;
 
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+	}
 
-  .right {
-    display: flex;
-    align-items: center;
+	.right {
+		display: flex;
+		align-items: center;
 
-    margin-left: auto;
+		margin-left: auto;
 
-    background: unset;
+		background: unset;
 
-    .search {
-      cursor: pointer;
-    }
+		.search {
+			cursor: pointer;
+		}
 
-    i {
-      color: white;
-      font-size: 24px;
-      padding: 10px;
+		i {
+			color: white;
+			font-size: 24px;
+			padding: 10px;
 
-      cursor: pointer;
-    }
+			cursor: pointer;
+		}
 
-    i:hover {
-      color: var(--special);
-    }
+		i:hover {
+			color: var(--special);
+		}
 
-  }
+	}
 
-  .menu {
-    display: none;
-    align-items: center;
+	.menu {
+		display: none;
+		align-items: center;
 
-    padding: 2px;
+		padding: 2px;
 
-    height: 100%;
+		height: 100%;
 
-    cursor: pointer;
+		cursor: pointer;
 
-    i {
-      font-size: 32px;
-      color: white;
-    }
+		i {
+			font-size: 32px;
+			color: white;
+		}
 
-    i:hover {
-      color: var(--special);
-    }
+		i:hover {
+			color: var(--special);
+		}
 
-  }
+	}
 
-  .logout {
-    display: grid;
-    align-items: center;
+	.logout {
+		display: grid;
+		align-items: center;
 
-    padding: 2px;
+		padding: 2px;
 
-    height: 100%;
+		height: 100%;
 
-    cursor: pointer;
+		cursor: pointer;
 
-    i {
-      font-size: 32px;
-      color: white;
-    }
+		i {
+			font-size: 32px;
+			color: white;
+		}
 
-    i:hover {
-      color: var(--special);
-    }
+		i:hover {
+			color: var(--special);
+		}
 
-  }
+	}
 
 }

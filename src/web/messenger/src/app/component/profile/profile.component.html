@@ -1,110 +1,111 @@
 <div class="profile-container">
-  <div class="header">
-    <div class="name">User info</div>
-    <div class="right">
-      <div class="button" *ngIf="editView || editable" (click)="editView = true"><i class="fas fa-pen"></i></div>
-      <div class="button" (click)="close()"><i class="fas fa-times"></i></div>
-    </div>
-  </div>
-  <div class="main">
-    <div class="preview">
-      <div class="avatar-container">
-        <img class="avatar" [src]="FILE_URL + currentProfile.user.avatar" alt="">
-        <i class="upload-avatar fas fa-cloud-upload-alt" *ngIf="editView" (click)="selectAvatar()"></i>
-        <input #fileInput type="file" accept="image/*" style="display: none" (change)="uploadAvatar()">
-      </div>
-      <div class="info-container">
-        <div class="info">{{currentProfile.userInfo.firstName}} {{currentProfile.userInfo.lastName}}</div>
-        <div class="login">@{{currentProfile.user.login}}</div>
-      </div>
-    </div>
-  </div>
-  <div class="info">
-    <div class="record" *ngIf="editView || currentProfile.userInfo.about !== null">
-      <i class="fas fa-info"></i>
-      <textarea type="text" class="editable" autosize rows="1" placeholder="About"
-                [disabled]="!editable || !editView" [(ngModel)]="currentProfile.userInfo.about"></textarea>
-    </div>
-    <div class="record" *ngIf="editView || currentProfile.userInfo.gender !== null">
-      <i class="fas fa-user"></i>
-      <input type="text" class="editable" placeholder="Gender" *ngIf="!editView"
-             [disabled]="!editable || !editView"
-             [ngModel]="currentProfile.userInfo.gender ? 'Male' : 'Female'"
-             (ngModelChange)="currentProfile.userInfo.gender = $event">
-      <select class="gender-select editable" *ngIf="editView" [(ngModel)]="currentProfile.userInfo.gender">
-        <option [selected]="currentProfile.userInfo.gender === null" [value]="null">Gender</option>
-        <option [selected]="currentProfile.userInfo.gender === true" [value]="true">Male</option>
-        <option [selected]="currentProfile.userInfo.gender === false" [value]="false">Female</option>
-      </select>
-    </div>
-    <div class="record" *ngIf="editView || currentProfile.userInfo.birthDate !== null">
-      <i class="fas fa-birthday-cake"></i>
-      <input type="text" class="editable" placeholder="Birth date" *ngIf="!editView"
-             [disabled]="!editable || !editView"
-             [ngModel]="currentProfile.userInfo.birthDate | date: 'mediumDate'">
-      <div class="edit-date editable" *ngIf="editView">
-        <select class="day-select" [(ngModel)]="selectedDate.day">
-          <option [selected]="currentProfile.userInfo.birthDate === null" [value]="null">Day</option>
-          <option *ngFor="let d of date.days">{{d}}</option>
-        </select>
-        <select class="month-select" [(ngModel)]="selectedDate.month">
-          <option [selected]="currentProfile.userInfo.birthDate === null" [value]="null">Month</option>
-          <option *ngFor="let m of date.months" [value]="m">{{monthName(m)}}</option>
-        </select>
-        <select class="year-select" [(ngModel)]="selectedDate.year">
-          <option [selected]="currentProfile.userInfo.birthDate === null" [value]="null">Year</option>
-          <option *ngFor="let y of date.years">{{y}}</option>
-        </select>
-      </div>
-    </div>
-    <div class="record" *ngIf="editView || currentProfile.userInfo.maritalStatus !== null">
-      <i class="fas fa-heart"></i>
-      <input type="text" class="editable" placeholder="Marital status" *ngIf="!editView"
-             [disabled]="!editable || !editView" [(ngModel)]="currentProfile.userInfo.maritalStatus">
-      <select class="marital-status-select editable" *ngIf="editView"
-              [(ngModel)]="currentProfile.userInfo.maritalStatus">
-        <option [selected]="currentProfile.userInfo.maritalStatus === null" [value]="null">Marital status</option>
-        <option *ngFor="let o of maritalStatuses">{{o}}</option>
-      </select>
-    </div>
-    <div class="record" *ngIf="editView || currentProfile.userInfo.country !== null">
-      <i class="fas fa-globe-americas"></i>
-      <input type="text" class="editable" placeholder="Country"
-             [disabled]="!editable || !editView" [(ngModel)]="currentProfile.userInfo.country">
-    </div>
-    <div class="record" *ngIf="editView || currentProfile.userInfo.city !== null">
-      <i class="fas fa-city"></i>
-      <input type="text" class="editable" placeholder="City"
-             [disabled]="!editable || !editView" [(ngModel)]="currentProfile.userInfo.city">
-    </div>
-    <div class="record" *ngIf="editView || currentProfile.userInfo.location !== null">
-      <i class="fas fa-location-arrow"></i>
-      <input type="text" class="editable" placeholder="Location"
-             [disabled]="!editable || !editView" [(ngModel)]="currentProfile.userInfo.location">
-    </div>
-    <div class="record" *ngIf="editView || currentProfile.userInfo.phoneNumber !== null">
-      <i class="fas fa-mobile"></i>
-      <input type="text" class="editable" placeholder="Phone number"
-             [disabled]="!editable || !editView" [(ngModel)]="currentProfile.userInfo.phoneNumber">
-    </div>
-    <div class="record" *ngIf="editView || currentProfile.userInfo.mail !== null">
-      <i class="fas fa-envelope"></i>
-      <input type="text" class="editable" placeholder="Mail"
-             [disabled]="!editable || !editView" [(ngModel)]="currentProfile.userInfo.mail">
-    </div>
-    <div class="record" *ngIf="editView || currentProfile.userInfo.placeOfEducation !== null">
-      <i class="fas fa-university"></i>
-      <input type="text" class="editable" placeholder="Place of education"
-             [disabled]="!editable || !editView" [(ngModel)]="currentProfile.userInfo.placeOfEducation">
-    </div>
-    <div class="record" *ngIf="editView || currentProfile.userInfo.placeOfWork !== null">
-      <i class="fas fa-building"></i>
-      <input type="text" class="editable" placeholder="Place of work"
-             [disabled]="!editable || !editView" [(ngModel)]="currentProfile.userInfo.placeOfWork">
-    </div>
-  </div>
-  <div class="edit-controls" *ngIf="editView">
-    <div class="button cancel" (click)="editView = false">Cancel</div>
-    <div class="button apply" (click)="edit()">Edit</div>
-  </div>
+	<div class="header">
+		<div class="name">User info</div>
+		<div class="right">
+			<div class="button" *ngIf="editView || editable" (click)="editView = true"><i class="fas fa-pen"></i></div>
+			<div class="button" (click)="close()"><i class="fas fa-times"></i></div>
+		</div>
+	</div>
+	<div class="main">
+		<div class="preview">
+			<div class="avatar-container">
+				<img class="avatar" [src]="FILE_URL + currentProfile.user.avatar" alt="">
+				<i class="upload-avatar fas fa-cloud-upload-alt" *ngIf="editView" (click)="selectAvatar()"></i>
+				<input #fileInput type="file" accept="image/*" style="display: none" (change)="uploadAvatar()">
+			</div>
+			<div class="info-container">
+				<div class="info">{{currentProfile.userInfo.firstName}} {{currentProfile.userInfo.lastName}}</div>
+				<div class="login">@{{currentProfile.user.login}}</div>
+			</div>
+		</div>
+	</div>
+	<div class="info">
+		<div class="record" *ngIf="editView || currentProfile.userInfo.about !== null">
+			<i class="fas fa-info"></i>
+			<textarea type="text" class="editable" autosize rows="1" placeholder="About"
+			          [disabled]="!editable || !editView" [(ngModel)]="currentProfile.userInfo.about"></textarea>
+		</div>
+		<div class="record" *ngIf="editView || currentProfile.userInfo.gender !== null">
+			<i class="fas fa-user"></i>
+			<input type="text" class="editable" placeholder="Gender" *ngIf="!editView"
+			       [disabled]="!editable || !editView"
+			       [ngModel]="currentProfile.userInfo.gender ? 'Male' : 'Female'"
+			       (ngModelChange)="currentProfile.userInfo.gender = $event">
+			<select class="gender-select editable" *ngIf="editView" [(ngModel)]="currentProfile.userInfo.gender">
+				<option [selected]="currentProfile.userInfo.gender === null" [value]="null">Gender</option>
+				<option [selected]="currentProfile.userInfo.gender === true" [value]="true">Male</option>
+				<option [selected]="currentProfile.userInfo.gender === false" [value]="false">Female</option>
+			</select>
+		</div>
+		<div class="record" *ngIf="editView || currentProfile.userInfo.birthDate !== null">
+			<i class="fas fa-birthday-cake"></i>
+			<input type="text" class="editable" placeholder="Birth date" *ngIf="!editView"
+			       [disabled]="!editable || !editView"
+			       [ngModel]="currentProfile.userInfo.birthDate | date: 'mediumDate'">
+			<div class="edit-date editable" *ngIf="editView">
+				<select class="day-select" [(ngModel)]="selectedDate.day">
+					<option [selected]="currentProfile.userInfo.birthDate === null" [value]="null">Day</option>
+					<option *ngFor="let d of date.days">{{d}}</option>
+				</select>
+				<select class="month-select" [(ngModel)]="selectedDate.month">
+					<option [selected]="currentProfile.userInfo.birthDate === null" [value]="null">Month</option>
+					<option *ngFor="let m of date.months" [value]="m">{{monthName(m)}}</option>
+				</select>
+				<select class="year-select" [(ngModel)]="selectedDate.year">
+					<option [selected]="currentProfile.userInfo.birthDate === null" [value]="null">Year</option>
+					<option *ngFor="let y of date.years">{{y}}</option>
+				</select>
+			</div>
+		</div>
+		<div class="record" *ngIf="editView || currentProfile.userInfo.maritalStatus !== null">
+			<i class="fas fa-heart"></i>
+			<input type="text" class="editable" placeholder="Marital status" *ngIf="!editView"
+			       [disabled]="!editable || !editView" [(ngModel)]="currentProfile.userInfo.maritalStatus">
+			<select class="marital-status-select editable" *ngIf="editView"
+			        [(ngModel)]="currentProfile.userInfo.maritalStatus">
+				<option [selected]="currentProfile.userInfo.maritalStatus === null" [value]="null">Marital status
+				</option>
+				<option *ngFor="let o of maritalStatuses">{{o}}</option>
+			</select>
+		</div>
+		<div class="record" *ngIf="editView || currentProfile.userInfo.country !== null">
+			<i class="fas fa-globe-americas"></i>
+			<input type="text" class="editable" placeholder="Country"
+			       [disabled]="!editable || !editView" [(ngModel)]="currentProfile.userInfo.country">
+		</div>
+		<div class="record" *ngIf="editView || currentProfile.userInfo.city !== null">
+			<i class="fas fa-city"></i>
+			<input type="text" class="editable" placeholder="City"
+			       [disabled]="!editable || !editView" [(ngModel)]="currentProfile.userInfo.city">
+		</div>
+		<div class="record" *ngIf="editView || currentProfile.userInfo.location !== null">
+			<i class="fas fa-location-arrow"></i>
+			<input type="text" class="editable" placeholder="Location"
+			       [disabled]="!editable || !editView" [(ngModel)]="currentProfile.userInfo.location">
+		</div>
+		<div class="record" *ngIf="editView || currentProfile.userInfo.phoneNumber !== null">
+			<i class="fas fa-mobile"></i>
+			<input type="text" class="editable" placeholder="Phone number"
+			       [disabled]="!editable || !editView" [(ngModel)]="currentProfile.userInfo.phoneNumber">
+		</div>
+		<div class="record" *ngIf="editView || currentProfile.userInfo.mail !== null">
+			<i class="fas fa-envelope"></i>
+			<input type="text" class="editable" placeholder="Mail"
+			       [disabled]="!editable || !editView" [(ngModel)]="currentProfile.userInfo.mail">
+		</div>
+		<div class="record" *ngIf="editView || currentProfile.userInfo.placeOfEducation !== null">
+			<i class="fas fa-university"></i>
+			<input type="text" class="editable" placeholder="Place of education"
+			       [disabled]="!editable || !editView" [(ngModel)]="currentProfile.userInfo.placeOfEducation">
+		</div>
+		<div class="record" *ngIf="editView || currentProfile.userInfo.placeOfWork !== null">
+			<i class="fas fa-building"></i>
+			<input type="text" class="editable" placeholder="Place of work"
+			       [disabled]="!editable || !editView" [(ngModel)]="currentProfile.userInfo.placeOfWork">
+		</div>
+	</div>
+	<div class="edit-controls" *ngIf="editView">
+		<div class="button cancel" (click)="editView = false">Cancel</div>
+		<div class="button apply" (click)="edit()">Edit</div>
+	</div>
 </div>

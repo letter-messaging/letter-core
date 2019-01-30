@@ -2,6 +2,6 @@ import {Message} from './Message';
 
 export class MessageAttachments {
 
-  forwarded: Array<Message> = [];
+	forwarded: Array<Message> = [];
 
 }

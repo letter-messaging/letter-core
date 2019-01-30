@@ -2,22 +2,22 @@ import {Injectable} from '@angular/core';
 import {BehaviorSubject} from 'rxjs';
 
 @Injectable({
-  providedIn: 'root'
+	providedIn: 'root'
 })
 export class BackgroundUnreadService {
 
-  private unreadCount = new BehaviorSubject<number>(0);
-  oUnreadCount = this.unreadCount.asObservable();
+	private unreadCount = new BehaviorSubject<number>(0);
+	oUnreadCount = this.unreadCount.asObservable();
 
-  constructor() {
-  }
+	constructor() {
+	}
 
-  incrementUnreadCount() {
-    this.unreadCount.next(this.unreadCount.getValue() + 1);
-  }
+	incrementUnreadCount() {
+		this.unreadCount.next(this.unreadCount.getValue() + 1);
+	}
 
-  resetUnreadCount() {
-    this.unreadCount.next(0);
-  }
+	resetUnreadCount() {
+		this.unreadCount.next(0);
+	}
 
 }

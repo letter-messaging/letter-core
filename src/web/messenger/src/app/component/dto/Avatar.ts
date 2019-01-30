@@ -1,7 +1,7 @@
 export class Avatar {
 
-  id: number;
-  path: string;
-  uploaded: Date;
+	id: number;
+	path: string;
+	uploaded: Date;
 
 }

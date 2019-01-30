@@ -1,221 +1,221 @@
 .profile-container {
-  display: flex;
-  flex-direction: column;
+	display: flex;
+	flex-direction: column;
 
-  max-width: 500px;
-  min-width: 400px;
-  max-height: 100vh;
+	max-width: 500px;
+	min-width: 400px;
+	max-height: 100vh;
 
-  overflow-y: auto;
-  overflow-x: hidden;
+	overflow-y: auto;
+	overflow-x: hidden;
 
-  background: white;
+	background: white;
 
-  border-radius: 4px;
+	border-radius: 4px;
 
-  .header {
-    flex-shrink: 0;
+	.header {
+		flex-shrink: 0;
 
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
 
-    width: 100%;
+		width: 100%;
 
-    .name {
-      padding-left: 16px;
+		.name {
+			padding-left: 16px;
 
-      font-size: 24px;
-      font-weight: bold;
-    }
+			font-size: 24px;
+			font-weight: bold;
+		}
 
-    .right {
-      display: flex;
-      align-items: center;
-      justify-content: end;
+		.right {
+			display: flex;
+			align-items: center;
+			justify-content: end;
 
-      .button {
-        i {
-          font-size: 24px;
-          padding: 16px;
-        }
+			.button {
+				i {
+					font-size: 24px;
+					padding: 16px;
+				}
 
-      }
+			}
 
-      .button:hover {
-        color: var(--special);
-      }
+			.button:hover {
+				color: var(--special);
+			}
 
-    }
+		}
 
-  }
+	}
 
-  .main {
-    flex-shrink: 0;
+	.main {
+		flex-shrink: 0;
 
-    .preview {
-      display: flex;
-      align-items: center;
-      flex-wrap: wrap;
+		.preview {
+			display: flex;
+			align-items: center;
+			flex-wrap: wrap;
 
-      border-top: 1px solid var(--bright);
-      border-bottom: 1px solid var(--bright);
+			border-top: 1px solid var(--bright);
+			border-bottom: 1px solid var(--bright);
 
-      .avatar-container {
-        position: relative;
+			.avatar-container {
+				position: relative;
 
-        width: 100px;
-        height: 100px;
+				width: 100px;
+				height: 100px;
 
-        margin: 10px;
+				margin: 10px;
 
-        .avatar {
-          width: 100px;
-          height: 100px;
+				.avatar {
+					width: 100px;
+					height: 100px;
 
-          object-fit: cover;
-          border-radius: 50px;
-        }
+					object-fit: cover;
+					border-radius: 50px;
+				}
 
-        .upload-avatar {
-          position: absolute;
+				.upload-avatar {
+					position: absolute;
 
-          top: 0;
-          left: 0;
-          bottom: 0;
-          right: 0;
+					top: 0;
+					left: 0;
+					bottom: 0;
+					right: 0;
 
-          display: flex;
-          align-items: center;
-          justify-content: center;
+					display: flex;
+					align-items: center;
+					justify-content: center;
 
-          background: rgba(0, 0, 0, 0.3);
-          border-radius: 50px;
+					background: rgba(0, 0, 0, 0.3);
+					border-radius: 50px;
 
-          font-size: 30px;
-          color: white;
+					font-size: 30px;
+					color: white;
 
-          cursor: pointer;
-        }
+					cursor: pointer;
+				}
 
-      }
+			}
 
-      .info-container {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
+			.info-container {
+				display: flex;
+				flex-direction: column;
+				align-items: center;
 
-        .info {
-          margin-right: 10px;
-          grid-row: 2;
+				.info {
+					margin-right: 10px;
+					grid-row: 2;
 
-          font-size: 20px;
-        }
+					font-size: 20px;
+				}
 
-        .login {
-          grid-row: 3;
-          grid-column: 2/4;
+				.login {
+					grid-row: 3;
+					grid-column: 2/4;
 
-          font-size: 20px;
-        }
+					font-size: 20px;
+				}
 
-      }
+			}
 
-    }
+		}
 
-  }
+	}
 
-  .info {
-    flex-shrink: 0;
+	.info {
+		flex-shrink: 0;
 
-    display: flex;
-    flex-direction: column;
+		display: flex;
+		flex-direction: column;
 
-    padding: 5px;
+		padding: 5px;
 
-    .record {
-      display: grid;
-      grid-template-columns: 60px auto;
-      align-items: center;
+		.record {
+			display: grid;
+			grid-template-columns: 60px auto;
+			align-items: center;
 
-      i {
-        justify-self: center;
-        grid-column: 1;
+			i {
+				justify-self: center;
+				grid-column: 1;
 
-        font-size: 28px;
-        color: var(--grey);
+				font-size: 28px;
+				color: var(--grey);
 
-        margin: 14px;
-      }
+				margin: 14px;
+			}
 
-      .fa-circle {
-        font-size: 16px;
-      }
+			.fa-circle {
+				font-size: 16px;
+			}
 
-      textarea {
-        resize: none;
-      }
+			textarea {
+				resize: none;
+			}
 
-      .editable {
-        border: 0 none;
-        border-radius: 4px;
+			.editable {
+				border: 0 none;
+				border-radius: 4px;
 
-        grid-column: 2;
+				grid-column: 2;
 
-        font-size: 20px;
+				font-size: 20px;
 
-        margin-right: 14px;
-      }
+				margin-right: 14px;
+			}
 
-      .editable:disabled {
-        background: none;
-        color: inherit;
-      }
+			.editable:disabled {
+				background: none;
+				color: inherit;
+			}
 
-      .edit-date {
-        display: flex;
-        align-items: center;
-        justify-content: stretch;
-      }
+			.edit-date {
+				display: flex;
+				align-items: center;
+				justify-content: stretch;
+			}
 
-      .edit-date > select {
-        flex-grow: 1;
+			.edit-date > select {
+				flex-grow: 1;
 
-        border: 0 none;
-        border-radius: 4px;
-        margin: 0 1px;
-      }
+				border: 0 none;
+				border-radius: 4px;
+				margin: 0 1px;
+			}
 
-    }
+		}
 
-    select {
-      border: 1px solid var(--grey) !important;
-    }
+		select {
+			border: 1px solid var(--grey) !important;
+		}
 
-  }
+	}
 
-  .edit-controls {
-    flex-shrink: 0;
+	.edit-controls {
+		flex-shrink: 0;
 
-    display: flex;
-    align-items: center;
-    justify-content: space-around;
+		display: flex;
+		align-items: center;
+		justify-content: space-around;
 
-    padding: 5px 14px;
+		padding: 5px 14px;
 
-    .button {
-      padding: 10px;
-      cursor: pointer;
-    }
+		.button {
+			padding: 10px;
+			cursor: pointer;
+		}
 
-    .apply {
-      padding: 10px 30px;
+		.apply {
+			padding: 10px 30px;
 
-      border-radius: 5px;
-      background: var(--dark);
-      color: white;
-    }
+			border-radius: 5px;
+			background: var(--dark);
+			color: white;
+		}
 
-  }
+	}
 
 }

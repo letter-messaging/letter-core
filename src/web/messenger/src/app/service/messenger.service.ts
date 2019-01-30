@@ -3,25 +3,25 @@ import {BehaviorSubject} from 'rxjs';
 import {User} from '../component/dto/User';
 
 @Injectable({
-  providedIn: 'root'
+	providedIn: 'root'
 })
 export class MessengerService {
 
-  private me = new BehaviorSubject<User>(null);
-  oMe = this.me.asObservable();
+	private me = new BehaviorSubject<User>(null);
+	oMe = this.me.asObservable();
 
-  private token = new BehaviorSubject<string>('');
-  oToken = this.token.asObservable();
+	private token = new BehaviorSubject<string>('');
+	oToken = this.token.asObservable();
 
-  constructor() {
-  }
+	constructor() {
+	}
 
-  setMe(me: User) {
-    this.me.next(me);
-  }
+	setMe(me: User) {
+		this.me.next(me);
+	}
 
-  setToken(token: string) {
-    this.token.next(token);
-  }
+	setToken(token: string) {
+		this.token.next(token);
+	}
 
 }

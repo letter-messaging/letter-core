@@ -5,40 +5,40 @@ import {FILE_URL} from '../../../../globals';
 
 
 @Component({
-  selector: 'app-message',
-  templateUrl: './message.component.html',
-  styleUrls: [
-    './message.component.scss',
-    './message.component.forwarded.scss'
-  ]
+	selector: 'app-message',
+	templateUrl: './message.component.html',
+	styleUrls: [
+		'./message.component.scss',
+		'./message.component.forwarded.scss'
+	]
 })
 export class MessageComponent implements OnInit {
 
-  readonly FILE_URL = FILE_URL;
+	readonly FILE_URL = FILE_URL;
 
-  @Input()
-  message: Message;
+	@Input()
+	message: Message;
 
-  @Input()
-  isForwarded: boolean;
+	@Input()
+	isForwarded: boolean;
 
-  @Input()
-  me: User;
+	@Input()
+	me: User;
 
-  @Output()
-  openProfileEvent = new EventEmitter<User>();
+	@Output()
+	openProfileEvent = new EventEmitter<User>();
 
-  mine: boolean;
+	mine: boolean;
 
-  constructor() {
-  }
+	constructor() {
+	}
 
-  ngOnInit() {
-    this.mine = this.message.sender.id === this.me.id;
-  }
+	ngOnInit() {
+		this.mine = this.message.sender.id === this.me.id;
+	}
 
-  openProfile(user: User) {
-    this.openProfileEvent.emit(user);
-  }
+	openProfile(user: User) {
+		this.openProfileEvent.emit(user);
+	}
 
 }

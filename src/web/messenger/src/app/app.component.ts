@@ -5,55 +5,55 @@ import {MessengerService} from './service/messenger.service';
 import {ActivatedRoute, NavigationEnd, Router} from '@angular/router';
 
 @Component({
-  selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+	selector: 'app-root',
+	templateUrl: './app.component.html',
+	styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
 
-  constructor(private cookieService: CookieService,
-              private authService: AuthService,
-              private messengerService: MessengerService,
-              private router: Router,
-              private route: ActivatedRoute) {
-    this.autoLogin();
-  }
+	constructor(private cookieService: CookieService,
+	            private authService: AuthService,
+	            private messengerService: MessengerService,
+	            private router: Router,
+	            private route: ActivatedRoute) {
+		this.autoLogin();
+	}
 
-  private autoLogin() {
-    this.router.events.subscribe(
-      (event: any) => {
-        if (event instanceof NavigationEnd) {
-          if (this.router.url === '/auth') {
-            return;
-          }
+	private autoLogin() {
+		this.router.events.subscribe(
+			(event: any) => {
+				if (event instanceof NavigationEnd) {
+					if (this.router.url === '/auth') {
+						return;
+					}
 
-          const token = this.cookieService.getToken();
-          if (token !== null) {
-            this.authService.validate(token).subscribe(
-              user => {
-                this.messengerService.setToken(token);
-                this.messengerService.setMe(user);
+					const token = this.cookieService.getToken();
+					if (token !== null) {
+						this.authService.validate(token).subscribe(
+							user => {
+								this.messengerService.setToken(token);
+								this.messengerService.setMe(user);
 
-                this.route.queryParams.subscribe(params => {
-                  if (params['id']) {
-                    this.router.navigate(['/im'], {queryParams: {id: params['id']}, replaceUrl: true});
-                  } else {
-                    this.router.navigate(['/im'], {replaceUrl: true});
-                  }
-                });
-              },
-              error => {
-                this.router.navigate(['/auth'], {replaceUrl: true});
-              }
-            );
-          } else {
-            this.router.navigate(['/auth'], {replaceUrl: true});
-          }
+								this.route.queryParams.subscribe(params => {
+									if (params['id']) {
+										this.router.navigate(['/im'], {queryParams: {id: params['id']}, replaceUrl: true});
+									} else {
+										this.router.navigate(['/im'], {replaceUrl: true});
+									}
+								});
+							},
+							error => {
+								this.router.navigate(['/auth'], {replaceUrl: true});
+							}
+						);
+					} else {
+						this.router.navigate(['/auth'], {replaceUrl: true});
+					}
 
-        }
-      }
-    );
+				}
+			}
+		);
 
-  }
+	}
 
 }

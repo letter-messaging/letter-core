@@ -4,15 +4,15 @@ import {HttpClient} from '@angular/common/http';
 import {RegisterUser} from '../component/dto/RegisterUser';
 
 @Injectable({
-  providedIn: 'root'
+	providedIn: 'root'
 })
 export class RegisterService {
 
-  constructor(private http: HttpClient) {
-  }
+	constructor(private http: HttpClient) {
+	}
 
-  register(registerUser: RegisterUser) {
-    return this.http.post(API_URL + 'register', registerUser);
-  }
+	register(registerUser: RegisterUser) {
+		return this.http.post(API_URL + 'register', registerUser);
+	}
 
 }

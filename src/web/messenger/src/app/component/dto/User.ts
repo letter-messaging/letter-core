@@ -1,8 +1,8 @@
 export class User {
-  id: number;
-  login: string;
-  firstName: string;
-  lastName: string;
-  lastSeen: Date;
-  avatar: string;
+	id: number;
+	login: string;
+	firstName: string;
+	lastName: string;
+	lastSeen: Date;
+	avatar: string;
 }

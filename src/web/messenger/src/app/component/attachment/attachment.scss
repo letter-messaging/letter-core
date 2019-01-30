@@ -1,33 +1,33 @@
 .attachment-wrapper {
-  display: flex;
-  flex-direction: column;
-  flex-shrink: 0;
+	display: flex;
+	flex-direction: column;
+	flex-shrink: 0;
 
-  background: white;
-  border-top: 2px solid var(--bright);
+	background: white;
+	border-top: 2px solid var(--bright);
 }
 
 .attachment {
-  height: 50px;
-  border: 1px solid var(--light);
+	height: 50px;
+	border: 1px solid var(--light);
 
-  .splitter {
-    border: 2px solid var(--grey);
-    border-radius: 2px;
+	.splitter {
+		border: 2px solid var(--grey);
+		border-radius: 2px;
 
-    background: var(--grey);
-    margin-left: 50px;
-    margin-right: 5px;
-  }
+		background: var(--grey);
+		margin-left: 50px;
+		margin-right: 5px;
+	}
 
-  i {
-    font-size: 18px;
+	i {
+		font-size: 18px;
 
-    margin-right: 90px;
-  }
+		margin-right: 90px;
+	}
 
-  i:hover {
-    color: var(--special);
-  }
+	i:hover {
+		color: var(--special);
+	}
 
 }

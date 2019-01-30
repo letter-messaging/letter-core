@@ -3,32 +3,32 @@ import {MessagingComponent} from './messaging.component';
 import {HOVER_TIME} from '../../../../globals';
 
 @Directive({
-  selector: '[appShowAttachmentsMenu]',
+	selector: '[appShowAttachmentsMenu]',
 })
 export class ShowAttachmentsMenuDirective {
 
-  private timeout;
+	private timeout;
 
-  constructor(private messagingComponent: MessagingComponent) {
-  }
+	constructor(private messagingComponent: MessagingComponent) {
+	}
 
-  @HostListener('mouseover', ['$event'])
-  handleMouseover(event) {
-    this.messagingComponent.showAttachmentsMenu = true;
-    this.cancelClosing();
-  }
+	@HostListener('mouseover', ['$event'])
+	handleMouseover(event) {
+		this.messagingComponent.showAttachmentsMenu = true;
+		this.cancelClosing();
+	}
 
-  @HostListener('mouseout', ['$event'])
-  handleMouseout(event) {
-    this.close();
-  }
+	@HostListener('mouseout', ['$event'])
+	handleMouseout(event) {
+		this.close();
+	}
 
-  private close() {
-    this.timeout = setTimeout(() => this.messagingComponent.showAttachmentsMenu = false, HOVER_TIME);
-  }
+	private close() {
+		this.timeout = setTimeout(() => this.messagingComponent.showAttachmentsMenu = false, HOVER_TIME);
+	}
 
-  private cancelClosing() {
-    clearTimeout(this.timeout);
-  }
+	private cancelClosing() {
+		clearTimeout(this.timeout);
+	}
 
 }

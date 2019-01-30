@@ -1,75 +1,75 @@
 .content {
-  display: grid;
-  grid-template-columns: 2fr 5fr;
-  grid-template-rows: 50px auto;
+	display: grid;
+	grid-template-columns: 2fr 5fr;
+	grid-template-rows: 50px auto;
 
-  height: 100vh;
-  max-width: 1280px;
+	height: 100vh;
+	max-width: 1280px;
 
-  margin: 0 auto;
+	margin: 0 auto;
 
-  background: white;
+	background: white;
 
-  overflow-x: hidden;
-  overflow-y: hidden;
+	overflow-x: hidden;
+	overflow-y: hidden;
 }
 
 .preview-wrapper {
-  display: flex;
-  flex-direction: column;
+	display: flex;
+	flex-direction: column;
 
-  height: 100%;
+	height: 100%;
 
-  overflow-y: auto;
-  overflow-x: hidden;
+	overflow-y: auto;
+	overflow-x: hidden;
 
-  .selected {
-    background-color: var(--grey) !important;
+	.selected {
+		background-color: var(--grey) !important;
 
-    color: white;
+		color: white;
 
-    .info {
-      color: white;
-    }
+		.info {
+			color: white;
+		}
 
-    .from {
-      color: white !important;
-    }
+		.from {
+			color: white !important;
+		}
 
-    .text {
-      color: white;
-    }
+		.text {
+			color: white;
+		}
 
-    .delete i {
-      color: white;
-    }
+		.delete i {
+			color: white;
+		}
 
-    .unread-wrapper i {
-      color: white;
-    }
+		.unread-wrapper i {
+			color: white;
+		}
 
-    .sent {
-      color: white;
-    }
-  }
+		.sent {
+			color: white;
+		}
+	}
 
-  .splitter {
-    width: 100%;
-    height: 0;
-    border-top: 1px solid var(--bright);
-  }
+	.splitter {
+		width: 100%;
+		height: 0;
+		border-top: 1px solid var(--bright);
+	}
 
 }
 
 .overlay {
-  position: absolute;
+	position: absolute;
 
-  display: grid;
-  align-items: center;
-  justify-content: center;
+	display: grid;
+	align-items: center;
+	justify-content: center;
 
-  background: rgba(0, 0, 0, 0.5);
-  width: 100vw;
-  height: 100vh;
-  top: 0;
+	background: rgba(0, 0, 0, 0.5);
+	width: 100vw;
+	height: 100vh;
+	top: 0;
 }

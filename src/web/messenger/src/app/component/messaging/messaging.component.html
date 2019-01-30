@@ -1,164 +1,168 @@
 <div class="content" [ngClass]="isLeftView === true ? 'mobile-left' : 'mobile-right'">
-  <div class="header-left">
-    <div class="logo" routerLink="/im"><i class="fas fa-comment"></i></div>
-    <div class="logo-name">Messenger.</div>
-  </div>
+	<div class="header-left">
+		<div class="logo" routerLink="/im"><i class="fas fa-comment"></i></div>
+		<div class="logo-name">Messenger.</div>
+	</div>
 
-  <div class="header-right">
-    <div class="menu" (click)="closeConversation(); removeForwardedAttachment(); cancelEditing()">
-      <i class="fas fa-bars"></i>
-    </div>
-    <img class="avatar" [src]="FILE_URL + currentPreview.with.avatar" alt="" *ngIf="currentPreview">
-    <div class="conversation-name" *ngIf="currentPreview"
-         (click)="openProfile(currentPreview.with)">
-      {{currentPreview.with.firstName}}
-      {{currentPreview.with.lastName}}
-    </div>
-    <div class="status" *ngIf="currentPreview">
-      {{lastSeenView(currentPreview.with.lastSeen)}}
-    </div>
-    <div class="right">
-      <div class="search"><i class="fas fa-search"></i></div>
-      <div class="conversation-menu" *ngIf="currentPreview" (appOutsideClick)="conversationMenuView = false">
-        <div class="button" (click)="conversationMenuView = !conversationMenuView">
-          <i class="fas fa-ellipsis-v"></i>
-        </div>
-        <div class="context-menu" *ngIf="conversationMenuView">
-          <div class="button">Mute</div>
-          <div class="splitter"></div>
-          <div class="button">Photos</div>
-          <div class="button">Videos</div>
-          <div class="button">Attachments</div>
-          <div class="splitter"></div>
-          <div class="button" (click)="hideConversation(currentPreview.conversation.id)">Hide conversation</div>
-          <div class="button danger" (click)="deleteConversation(currentPreview.conversation.id)">Delete conversation
-          </div>
-        </div>
-      </div>
-      <div class="profile-menu" *ngIf="!currentPreview && me" (appOutsideClick)="profileMenuView = false">
-        <div class="button" (click)="profileMenuView = !profileMenuView">
-          <div class="text">{{me.firstName}}</div>
-          <img class="avatar" [src]="FILE_URL + me.avatar" alt="">
-          <!--TODO: animation-->
-          <!--TODO: fix bug with clicking on i's-->
-          <i class="fas fa-caret-down" *ngIf="!profileMenuView"></i>
-          <i class="fas fa-caret-up" *ngIf="profileMenuView"></i>
-        </div>
-        <div class="context-menu" *ngIf="profileMenuView">
-          <div class="button" (click)="openProfile(me)">Preview profile</div>
-          <div class="splitter"></div>
-          <div class="button">Settings</div>
-          <div class="splitter"></div>
-          <div class="button" (click)="logout()">Logout</div>
-        </div>
-      </div>
-    </div>
-  </div>
+	<div class="header-right">
+		<div class="menu" (click)="closeConversation(); removeForwardedAttachment(); cancelEditing()">
+			<i class="fas fa-bars"></i>
+		</div>
+		<img class="avatar" [src]="FILE_URL + currentPreview.with.avatar" alt="" *ngIf="currentPreview">
+		<div class="conversation-name" *ngIf="currentPreview"
+		     (click)="openProfile(currentPreview.with)">
+			{{currentPreview.with.firstName}}
+			{{currentPreview.with.lastName}}
+		</div>
+		<div class="status" *ngIf="currentPreview">
+			{{lastSeenView(currentPreview.with.lastSeen)}}
+		</div>
+		<div class="right">
+			<div class="search"><i class="fas fa-search"></i></div>
+			<div class="conversation-menu" *ngIf="currentPreview" (appOutsideClick)="conversationMenuView = false">
+				<div class="button" (click)="conversationMenuView = !conversationMenuView">
+					<i class="fas fa-ellipsis-v"></i>
+				</div>
+				<div class="context-menu" *ngIf="conversationMenuView">
+					<div class="button">Mute</div>
+					<div class="splitter"></div>
+					<div class="button">Photos</div>
+					<div class="button">Videos</div>
+					<div class="button">Attachments</div>
+					<div class="splitter"></div>
+					<div class="button" (click)="hideConversation(currentPreview.conversation.id)">Hide conversation
+					</div>
+					<div class="button danger" (click)="deleteConversation(currentPreview.conversation.id)">Delete
+						conversation
+					</div>
+				</div>
+			</div>
+			<div class="profile-menu" *ngIf="!currentPreview && me" (appOutsideClick)="profileMenuView = false">
+				<div class="button" (click)="profileMenuView = !profileMenuView">
+					<div class="text">{{me.firstName}}</div>
+					<img class="avatar" [src]="FILE_URL + me.avatar" alt="">
+					<!--TODO: animation-->
+					<!--TODO: fix bug with clicking on i's-->
+					<i class="fas fa-caret-down" *ngIf="!profileMenuView"></i>
+					<i class="fas fa-caret-up" *ngIf="profileMenuView"></i>
+				</div>
+				<div class="context-menu" *ngIf="profileMenuView">
+					<div class="button" (click)="openProfile(me)">Preview profile</div>
+					<div class="splitter"></div>
+					<div class="button">Settings</div>
+					<div class="splitter"></div>
+					<div class="button" (click)="logout()">Logout</div>
+				</div>
+			</div>
+		</div>
+	</div>
 
-  <div class="content-left">
-    <div class="search">
-      <div class="icon"><i class="fas fa-search"></i></div>
-      <input id="search-conversations" type="text" placeholder="Search" [(ngModel)]="searchText"
-             (ngModelChange)="searchForConversationsOrUsers($event)" name="search-conversations">
-    </div>
-    <div class="preview-wrapper">
-      <div class="splitter"></div>
-      <ng-container *ngIf="searchText.trim()[0] !== '@'">
-        <app-preview
-          *ngFor="let preview of previewsOrSearchPreviews()"
-          [preview]="preview"
-          [selected]="currentPreview && preview.conversation.id == currentPreview.conversation.id"
-          [isOnline]="isOnline(preview.with.lastSeen)"
-          (click)="openConversation(preview.conversation.id)">
-        </app-preview>
-        <div class="not-found" *ngIf="searchText && searchPreviews && searchPreviews.length === 0">
-          <i class="far fa-frown"></i>
-          <div class="text">No matching conversations found.</div>
-        </div>
-      </ng-container>
-      <ng-container *ngIf="searchText && searchText.trim()[0] === '@'">
-        <div class="user-preview"
-             *ngFor="let user of searchUsers"
-             (click)="createConversation(user)">
-          <img class="avatar" [src]="FILE_URL + user.avatar" alt="">
-          <div class="info">{{user.firstName}} {{user.lastName}}</div>
-          <div class="login">@{{user.login}}</div>
-        </div>
-        <div class="not-found" *ngIf="searchUsers && searchUsers.length === 0">
-          <i class="far fa-frown"></i>
-          <div class="text">No matching users found.</div>
-        </div>
-      </ng-container>
-    </div>
-  </div>
+	<div class="content-left">
+		<div class="search">
+			<div class="icon"><i class="fas fa-search"></i></div>
+			<input id="search-conversations" type="text" placeholder="Search" [(ngModel)]="searchText"
+			       (ngModelChange)="searchForConversationsOrUsers($event)" name="search-conversations">
+		</div>
+		<div class="preview-wrapper">
+			<div class="splitter"></div>
+			<ng-container *ngIf="searchText.trim()[0] !== '@'">
+				<app-preview
+					*ngFor="let preview of previewsOrSearchPreviews()"
+					[preview]="preview"
+					[selected]="currentPreview && preview.conversation.id == currentPreview.conversation.id"
+					[isOnline]="isOnline(preview.with.lastSeen)"
+					(click)="openConversation(preview.conversation.id)">
+				</app-preview>
+				<div class="not-found" *ngIf="searchText && searchPreviews && searchPreviews.length === 0">
+					<i class="far fa-frown"></i>
+					<div class="text">No matching conversations found.</div>
+				</div>
+			</ng-container>
+			<ng-container *ngIf="searchText && searchText.trim()[0] === '@'">
+				<div class="user-preview"
+				     *ngFor="let user of searchUsers"
+				     (click)="createConversation(user)">
+					<img class="avatar" [src]="FILE_URL + user.avatar" alt="">
+					<div class="info">{{user.firstName}} {{user.lastName}}</div>
+					<div class="login">@{{user.login}}</div>
+				</div>
+				<div class="not-found" *ngIf="searchUsers && searchUsers.length === 0">
+					<i class="far fa-frown"></i>
+					<div class="text">No matching users found.</div>
+				</div>
+			</ng-container>
+		</div>
+	</div>
 
-  <div class="conversation">
-    <div class="no-conversation" *ngIf="!currentPreview">
-      <i class="fas fa-comments"></i>
-      <div class="text">Select conversation to start messaging.</div>
-    </div>
-    <div class="no-conversation" *ngIf="currentPreview && isSelectForwardTo">
-      <i class="fas fa-arrow-right"></i>
-      <div class="text">Select conversation to forward messages to.</div>
-    </div>
-    <div class="no-messages" *ngIf="currentPreview && messages.length === 0 && !isSelectForwardTo">
-      <i class="fas fa-comment"></i>
-      <div class="text">Be the first. Messages will be displayed here.</div>
-    </div>
-    <div class="message-wrapper" #messageWrapper *ngIf="currentPreview && !isSelectForwardTo"
-         (appScrollTop)="loadMore()">
-      <app-message *ngFor="let message of messages | descSort: 'sent'"
-                   (click)="selectMessage(message, $event)"
-                   [message]="message" [isForwarded]="false" [me]="me"
-                   (openProfileEvent)="openProfile($event)">
-      </app-message>
-    </div>
-    <div class="attachment-wrapper">
-      <app-forwarded-attachment *ngIf="currentMessageAttachments && currentMessageAttachments.forwarded.length !== 0"
-                                [forwarded]="currentMessageAttachments.forwarded"
-                                (removeForwardedAttachmentEvent)="removeForwardedAttachment()">
-      </app-forwarded-attachment>
-    </div>
-    <div class="send-message-wrapper"
-         *ngIf="currentPreview && !(selectedMessages.length !== 0 && !editingMessage)">
-      <i class="fas fa-ban" *ngIf="editingMessage" (click)="cancelEditing()"></i>
-      <div appShowAttachmentsMenu>
-        <i class="fas fa-paperclip" *ngIf="!editingMessage"></i>
-        <div class="attachments-menu" *ngIf="showAttachmentsMenu">
-          <div class="button"><i class="fas fa-camera"></i> Image</div>
-          <div class="splitter"></div>
-          <div class="button"><i class="fas fa-video"></i> Video</div>
-          <div class="splitter"></div>
-          <div class="button"><i class="fas fa-file"></i> Document</div>
-        </div>
-      </div>
-      <textarea id="send-message-text" autofocus autosize rows="1" placeholder="Write a message..."
-                [(ngModel)]="messageText"
-                appMessageSend [minRows]="1" [maxRows]="10">
+	<div class="conversation">
+		<div class="no-conversation" *ngIf="!currentPreview">
+			<i class="fas fa-comments"></i>
+			<div class="text">Select conversation to start messaging.</div>
+		</div>
+		<div class="no-conversation" *ngIf="currentPreview && isSelectForwardTo">
+			<i class="fas fa-arrow-right"></i>
+			<div class="text">Select conversation to forward messages to.</div>
+		</div>
+		<div class="no-messages" *ngIf="currentPreview && messages.length === 0 && !isSelectForwardTo">
+			<i class="fas fa-comment"></i>
+			<div class="text">Be the first. Messages will be displayed here.</div>
+		</div>
+		<div class="message-wrapper" #messageWrapper *ngIf="currentPreview && !isSelectForwardTo"
+		     (appScrollTop)="loadMore()">
+			<app-message *ngFor="let message of messages | descSort: 'sent'"
+			             (click)="selectMessage(message, $event)"
+			             [message]="message" [isForwarded]="false" [me]="me"
+			             (openProfileEvent)="openProfile($event)">
+			</app-message>
+		</div>
+		<div class="attachment-wrapper">
+			<app-forwarded-attachment
+				*ngIf="currentMessageAttachments && currentMessageAttachments.forwarded.length !== 0"
+				[forwarded]="currentMessageAttachments.forwarded"
+				(removeForwardedAttachmentEvent)="removeForwardedAttachment()">
+			</app-forwarded-attachment>
+		</div>
+		<div class="send-message-wrapper"
+		     *ngIf="currentPreview && !(selectedMessages.length !== 0 && !editingMessage)">
+			<i class="fas fa-ban" *ngIf="editingMessage" (click)="cancelEditing()"></i>
+			<div appShowAttachmentsMenu>
+				<i class="fas fa-paperclip" *ngIf="!editingMessage"></i>
+				<div class="attachments-menu" *ngIf="showAttachmentsMenu">
+					<div class="button"><i class="fas fa-camera"></i> Image</div>
+					<div class="splitter"></div>
+					<div class="button"><i class="fas fa-video"></i> Video</div>
+					<div class="splitter"></div>
+					<div class="button"><i class="fas fa-file"></i> Document</div>
+				</div>
+			</div>
+			<textarea id="send-message-text" autofocus autosize rows="1" placeholder="Write a message..."
+			          [(ngModel)]="messageText"
+			          appMessageSend [minRows]="1" [maxRows]="10">
       </textarea>
-      <div class="emoji">
-        <i class="fas fa-smile"></i>
-      </div>
-      <div class="send-message">
-        <i *ngIf="!editingMessage" class="fas fa-angle-right" (click)="sendMessage()"></i>
-        <i *ngIf="editingMessage" class="fas fa-angle-up" (click)="editMessage()"></i>
-      </div>
-    </div>
-    <div class="selected-messages-menu" *ngIf="selectedMessages.length !== 0 && !editingMessage">
-      <div class="button" (click)="deleteSelectedMessages()"><i class="fas fa-trash"></i></div>
-      <div class="button" (click)="attachSelectedMessagesAsForwardedAttachment()"><i class="fas fa-reply"></i></div>
-      <div class="button" (click)="forwardSelectedMessages()"><i class="fas fa-arrow-right"></i></div>
-      <div class="button" *ngIf="selectedMessages.length === 1 && selectedMessages[0].sender.login === me.login"
-           (click)="editSelectedMessage()"><i class="fas fa-pen"></i></div>
-      <div class="right">
-        <div class="text-button" (click)="deselectMessages()">Cancel</div>
-      </div>
-    </div>
-  </div>
+			<div class="emoji">
+				<i class="fas fa-smile"></i>
+			</div>
+			<div class="send-message">
+				<i *ngIf="!editingMessage" class="fas fa-angle-right" (click)="sendMessage()"></i>
+				<i *ngIf="editingMessage" class="fas fa-angle-up" (click)="editMessage()"></i>
+			</div>
+		</div>
+		<div class="selected-messages-menu" *ngIf="selectedMessages.length !== 0 && !editingMessage">
+			<div class="button" (click)="deleteSelectedMessages()"><i class="fas fa-trash"></i></div>
+			<div class="button" (click)="attachSelectedMessagesAsForwardedAttachment()"><i class="fas fa-reply"></i>
+			</div>
+			<div class="button" (click)="forwardSelectedMessages()"><i class="fas fa-arrow-right"></i></div>
+			<div class="button" *ngIf="selectedMessages.length === 1 && selectedMessages[0].sender.login === me.login"
+			     (click)="editSelectedMessage()"><i class="fas fa-pen"></i></div>
+			<div class="right">
+				<div class="text-button" (click)="deselectMessages()">Cancel</div>
+			</div>
+		</div>
+	</div>
 </div>
 
 <div class="overlay" *ngIf="currentProfile.user">
-  <app-profile [currentProfile]="currentProfile" [me]="me" (closeProfile)="currentProfile.user = null"
-               (editProfile)="editProfile($event)" (appOverlayClick)="currentProfile.user = null">
-  </app-profile>
+	<app-profile [currentProfile]="currentProfile" [me]="me" (closeProfile)="currentProfile.user = null"
+	             (editProfile)="editProfile($event)" (appOverlayClick)="currentProfile.user = null">
+	</app-profile>
 </div>

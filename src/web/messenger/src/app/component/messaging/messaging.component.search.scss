@@ -1,107 +1,107 @@
 .search {
-  display: flex;
-  align-items: center;
+	display: flex;
+	align-items: center;
 
-  height: 0;
-  min-height: 24px;
-  padding: 8px;
+	height: 0;
+	min-height: 24px;
+	padding: 8px;
 
-  .icon {
-    margin-right: 8px;
+	.icon {
+		margin-right: 8px;
 
-    i {
-      color: var(--dark);
-    }
+		i {
+			color: var(--dark);
+		}
 
-  }
+	}
 
 }
 
 #search-conversations {
-  width: 100%;
+	width: 100%;
 
-  height: 30px;
+	height: 30px;
 
-  color: var(--dark);
+	color: var(--dark);
 
-  outline: none;
-  border: none;
+	outline: none;
+	border: none;
 }
 
 .user-preview {
-  flex-shrink: 0;
+	flex-shrink: 0;
 
-  display: grid;
-  grid-template-columns: 65px auto 40px;
-  grid-template-rows: 2.2fr 1fr 1fr;
+	display: grid;
+	grid-template-columns: 65px auto 40px;
+	grid-template-rows: 2.2fr 1fr 1fr;
 
-  align-items: center;
+	align-items: center;
 
-  height: 60px;
-  padding: 5px;
+	height: 60px;
+	padding: 5px;
 
-  border-top: 1px solid var(--bright);
-  border-bottom: 1px solid var(--bright);
+	border-top: 1px solid var(--bright);
+	border-bottom: 1px solid var(--bright);
 
-  .avatar {
-    grid-column: 1;
-    grid-row: 1/4;
+	.avatar {
+		grid-column: 1;
+		grid-row: 1/4;
 
-    margin: 5px;
+		margin: 5px;
 
-    width: 50px;
-    height: 50px;
+		width: 50px;
+		height: 50px;
 
-    object-fit: cover;
-    border-radius: 25px;
-  }
+		object-fit: cover;
+		border-radius: 25px;
+	}
 
-  .info {
-    grid-column: 2/3;
-    grid-row: 1;
+	.info {
+		grid-column: 2/3;
+		grid-row: 1;
 
-    font-size: 16px;
-    font-weight: bold;
+		font-size: 16px;
+		font-weight: bold;
 
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
 
-  .login {
-    grid-column: 2;
-    grid-row: 2;
+	.login {
+		grid-column: 2;
+		grid-row: 2;
 
-    font-size: 16px;
-    color: var(--dark);
+		font-size: 16px;
+		color: var(--dark);
 
-    min-width: 100px;
-    max-width: 400px;
-  }
+		min-width: 100px;
+		max-width: 400px;
+	}
 
 }
 
 .user-preview:hover {
-  background: var(--bright);
-  cursor: pointer;
+	background: var(--bright);
+	cursor: pointer;
 }
 
 .not-found {
-  flex-shrink: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+	flex-shrink: 0;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
 
-  i {
-    font-size: 48px;
-    margin: 16px;
-    color: var(--grey);
-  }
+	i {
+		font-size: 48px;
+		margin: 16px;
+		color: var(--grey);
+	}
 
-  .text {
-    color: var(--grey);
-    font-size: 16px;
-    font-style: italic;
-  }
+	.text {
+		color: var(--grey);
+		font-size: 16px;
+		font-style: italic;
+	}
 
 }

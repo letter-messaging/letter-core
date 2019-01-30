@@ -1,32 +1,32 @@
 <div class="message" [ngClass]="{'message-mine': mine, 'selected': message.selected}">
-  <div class="message-container">
-    <img class="avatar" [src]="FILE_URL + message.sender.avatar" alt=""
-         *ngIf="!isForwarded" (click)="openProfile(message.sender)">
-    <div class="message-content">
-      <div class="from">{{message.sender.firstName}}</div>
-      <div class="text">{{message.text}}</div>
-      <div class="info">
-        <div class="sent">{{message.sent | date: 'HH:mm'}}</div>
-        <div class="status" *ngIf="message.sender.login === me.login">
-          <div class="sending" *ngIf="!message.id">
-            <i class="far fa-clock"></i>
-          </div>
-          <div class="received"
-               *ngIf="message.id && message.read === false">
-            <i class="fas fa-check"></i>
-          </div>
-          <div class="read" *ngIf="message.id && message.read">
-            <i class="fas fa-eye"></i>
-          </div>
-        </div>
-      </div>
-      <div class="forwarded-wrapper" *ngIf="message.forwarded.length !== 0">
-        <app-message class="forwarded" *ngFor="let message of message.forwarded"
-                     [message]="message"
-                     [isForwarded]="true"
-                     [me]="me">
-        </app-message>
-      </div>
-    </div>
-  </div>
+	<div class="message-container">
+		<img class="avatar" [src]="FILE_URL + message.sender.avatar" alt=""
+		     *ngIf="!isForwarded" (click)="openProfile(message.sender)">
+		<div class="message-content">
+			<div class="from">{{message.sender.firstName}}</div>
+			<div class="text">{{message.text}}</div>
+			<div class="info">
+				<div class="sent">{{message.sent | date: 'HH:mm'}}</div>
+				<div class="status" *ngIf="message.sender.login === me.login">
+					<div class="sending" *ngIf="!message.id">
+						<i class="far fa-clock"></i>
+					</div>
+					<div class="received"
+					     *ngIf="message.id && message.read === false">
+						<i class="fas fa-check"></i>
+					</div>
+					<div class="read" *ngIf="message.id && message.read">
+						<i class="fas fa-eye"></i>
+					</div>
+				</div>
+			</div>
+			<div class="forwarded-wrapper" *ngIf="message.forwarded.length !== 0">
+				<app-message class="forwarded" *ngFor="let message of message.forwarded"
+				             [message]="message"
+				             [isForwarded]="true"
+				             [me]="me">
+				</app-message>
+			</div>
+		</div>
+	</div>
 </div>

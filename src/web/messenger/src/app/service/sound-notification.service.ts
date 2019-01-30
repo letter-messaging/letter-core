@@ -1,17 +1,17 @@
 import {Injectable} from '@angular/core';
 
 @Injectable({
-  providedIn: 'root'
+	providedIn: 'root'
 })
 export class SoundNotificationService {
 
-  private notificationAudio = new Audio('assets/sound/newmsg.mp3');
+	private notificationAudio = new Audio('assets/sound/newmsg.mp3');
 
-  constructor() {
-  }
+	constructor() {
+	}
 
-  notify() {
-    this.notificationAudio.play();
-  }
+	notify() {
+		this.notificationAudio.play();
+	}
 
 }

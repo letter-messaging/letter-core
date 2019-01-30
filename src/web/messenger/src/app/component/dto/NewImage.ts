@@ -1,3 +1,3 @@
 export class NewImage {
-  path: string;
+	path: string;
 }

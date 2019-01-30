@@ -1,25 +1,25 @@
 import {Injectable} from '@angular/core';
 
 @Injectable({
-  providedIn: 'root'
+	providedIn: 'root'
 })
 export class CookieService {
 
-  LOCAL_STORAGE_TOKEN_NAME = 'Auth-Token';
+	LOCAL_STORAGE_TOKEN_NAME = 'Auth-Token';
 
-  constructor() {
-  }
+	constructor() {
+	}
 
-  getToken(): string {
-    return localStorage.getItem(this.LOCAL_STORAGE_TOKEN_NAME);
-  }
+	getToken(): string {
+		return localStorage.getItem(this.LOCAL_STORAGE_TOKEN_NAME);
+	}
 
-  setToken(token: string) {
-    localStorage.setItem(this.LOCAL_STORAGE_TOKEN_NAME, token);
-  }
+	setToken(token: string) {
+		localStorage.setItem(this.LOCAL_STORAGE_TOKEN_NAME, token);
+	}
 
-  deleteToken() {
-    localStorage.removeItem(this.LOCAL_STORAGE_TOKEN_NAME);
-  }
+	deleteToken() {
+		localStorage.removeItem(this.LOCAL_STORAGE_TOKEN_NAME);
+	}
 
 }

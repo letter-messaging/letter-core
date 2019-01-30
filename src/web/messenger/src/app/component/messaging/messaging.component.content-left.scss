@@ -1,8 +1,8 @@
 .content-left {
-  display: flex;
-  flex-direction: column;
+	display: flex;
+	flex-direction: column;
 
-  max-height: calc(100vh - 52px);
+	max-height: calc(100vh - 52px);
 
-  border-right: 2px solid var(--bright);
+	border-right: 2px solid var(--bright);
 }

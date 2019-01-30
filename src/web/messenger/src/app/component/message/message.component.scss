@@ -1,124 +1,124 @@
 .message {
-  display: flex;
-  align-self: center;
-  flex-shrink: 0;
-  flex-direction: row;
+	display: flex;
+	align-self: center;
+	flex-shrink: 0;
+	flex-direction: row;
 
-  border-radius: 4px;
+	border-radius: 4px;
 
-  width: 100%;
-  min-height: 10px;
+	width: 100%;
+	min-height: 10px;
 
-  .avatar {
-    width: 50px;
-    height: 50px;
+	.avatar {
+		width: 50px;
+		height: 50px;
 
-    margin: 8px;
+		margin: 8px;
 
-    cursor: pointer;
+		cursor: pointer;
 
-    object-fit: cover;
-    border-radius: 25px;
-  }
+		object-fit: cover;
+		border-radius: 25px;
+	}
 
-  .from {
-    color: white;
+	.from {
+		color: white;
 
-    font-size: 16px;
-    font-weight: bold;
+		font-size: 16px;
+		font-weight: bold;
 
-    grid-row: 1;
-  }
+		grid-row: 1;
+	}
 
-  .text {
-    grid-row: 2;
+	.text {
+		grid-row: 2;
 
-    color: white;
+		color: white;
 
-    /*preserving line brakes*/
-    white-space: pre-wrap;
-    word-break: break-word;
-  }
+		/*preserving line brakes*/
+		white-space: pre-wrap;
+		word-break: break-word;
+	}
 
 }
 
 .message-container {
-  display: flex;
+	display: flex;
 
-  max-width: 800px;
+	max-width: 800px;
 
-  padding: 5px;
-  margin: 2px;
+	padding: 5px;
+	margin: 2px;
 }
 
 .selected {
-  width: 100%;
-  background: rgba(0, 0, 0, 0.05);
+	width: 100%;
+	background: rgba(0, 0, 0, 0.05);
 }
 
 .message-content {
-  display: grid;
+	display: grid;
 
-  padding: 0 10px;
+	padding: 0 10px;
 
-  background: var(--grey);
+	background: var(--grey);
 
-  cursor: pointer;
+	cursor: pointer;
 
-  border-radius: 10px 10px 10px 0;
+	border-radius: 10px 10px 10px 0;
 }
 
 .info {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
+	display: flex;
+	align-items: center;
+	justify-content: flex-end;
 
-  grid-column: 2;
-  grid-row: 4;
+	grid-column: 2;
+	grid-row: 4;
 
-  .sent {
-    color: white;
+	.sent {
+		color: white;
 
-    font-size: 12px;
-  }
+		font-size: 12px;
+	}
 
-  .status {
-    color: var(--special) !important;
+	.status {
+		color: var(--special) !important;
 
-    display: grid;
+		display: grid;
 
-    div {
-      display: grid;
-      margin-top: 2px;
-    }
+		div {
+			display: grid;
+			margin-top: 2px;
+		}
 
-    i {
-      font-size: 14px;
-      padding: 4px;
+		i {
+			font-size: 14px;
+			padding: 4px;
 
-      color: var(--special);
-    }
+			color: var(--special);
+		}
 
-  }
+	}
 
 }
 
 .message-mine {
-  flex-direction: row-reverse;
+	flex-direction: row-reverse;
 
-  .message-container {
-    flex-direction: row-reverse;
-  }
+	.message-container {
+		flex-direction: row-reverse;
+	}
 
-  .message-content {
-    background: var(--grey);
+	.message-content {
+		background: var(--grey);
 
-    border-radius: 10px 10px 0 10px;
-  }
+		border-radius: 10px 10px 0 10px;
+	}
 
-  .info {
-    grid-column: 1;
-    justify-content: flex-start;
-  }
+	.info {
+		grid-column: 1;
+		justify-content: flex-start;
+	}
 
 }

@@ -2,29 +2,29 @@ import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {Message} from '../../dto/Message';
 
 @Component({
-  selector: 'app-forwarded-attachment',
-  templateUrl: './forwarded-attachment.component.html',
-  styleUrls: [
-    './forwarded-attachment.component.scss',
-    './../attachment.scss',
-  ]
+	selector: 'app-forwarded-attachment',
+	templateUrl: './forwarded-attachment.component.html',
+	styleUrls: [
+		'./forwarded-attachment.component.scss',
+		'./../attachment.scss',
+	]
 })
 export class ForwardedAttachmentComponent implements OnInit {
 
-  @Input()
-  forwarded: Array<Message>;
+	@Input()
+	forwarded: Array<Message>;
 
-  @Output()
-  removeForwardedAttachmentEvent = new EventEmitter();
+	@Output()
+	removeForwardedAttachmentEvent = new EventEmitter();
 
-  constructor() {
-  }
+	constructor() {
+	}
 
-  ngOnInit() {
-  }
+	ngOnInit() {
+	}
 
-  removeForwardedAttachment() {
-    this.removeForwardedAttachmentEvent.next();
-  }
+	removeForwardedAttachment() {
+		this.removeForwardedAttachmentEvent.next();
+	}
 
 }

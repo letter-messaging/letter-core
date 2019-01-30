@@ -1,97 +1,97 @@
 :root {
-  --black: #313542;
-  --dark: #393e46;
-  --grey: #63676e;
-  --bright: #eeeeee;
-  --light: #f8f8f8;
-  --special: rgb(47, 183, 237);
+	--black: #313542;
+	--dark: #393e46;
+	--grey: #63676e;
+	--bright: #eeeeee;
+	--light: #f8f8f8;
+	--special: rgb(47, 183, 237);
 }
 
 * {
-  font-family: 'IBM Plex Sans', sans-serif;
-  font-size: 20px;
+	font-family: 'IBM Plex Sans', sans-serif;
+	font-size: 20px;
 }
 
 input:focus, select:focus, textarea:focus {
-  outline-color: var(--special);
+	outline-color: var(--special);
 }
 
 body {
-  padding: 0;
-  margin: 0;
+	padding: 0;
+	margin: 0;
 
-  height: 100vh;
+	height: 100vh;
 
-  background-color: var(--light);
+	background-color: var(--light);
 }
 
 .content {
-  display: grid;
-  grid-template-columns: 2fr 5fr;
-  grid-template-rows: 50px auto;
+	display: grid;
+	grid-template-columns: 2fr 5fr;
+	grid-template-rows: 50px auto;
 
-  height: 100vh;
-  max-width: 1280px;
+	height: 100vh;
+	max-width: 1280px;
 
-  margin: 0 auto;
+	margin: 0 auto;
 
-  background: white;
+	background: white;
 
-  overflow-x: hidden;
-  overflow-y: hidden;
+	overflow-x: hidden;
+	overflow-y: hidden;
 }
 
 //responsive
 @media screen and (max-width: 700px) {
 
-  .header-left {
-    display: none !important;
-  }
+	.header-left {
+		display: none !important;
+	}
 
-  .header-right .menu {
-    display: none;
-  }
+	.header-right .menu {
+		display: none;
+	}
 
-  .mobile-left {
-    .content-left {
-      grid-column: 1/3;
-      grid-row: 2;
-    }
+	.mobile-left {
+		.content-left {
+			grid-column: 1/3;
+			grid-row: 2;
+		}
 
-    .header-right {
-      grid-column: 1/3;
-      grid-row: 1;
-    }
+		.header-right {
+			grid-column: 1/3;
+			grid-row: 1;
+		}
 
-    .conversation {
-      display: none !important;
-    }
+		.conversation {
+			display: none !important;
+		}
 
-    .no-conversation {
-      display: none !important;
-    }
+		.no-conversation {
+			display: none !important;
+		}
 
-  }
+	}
 
-  .mobile-right {
-    .content-left {
-      display: none;
-    }
+	.mobile-right {
+		.content-left {
+			display: none;
+		}
 
-    .header-right {
-      grid-column: 1/3;
-      grid-row: 1;
-    }
+		.header-right {
+			grid-column: 1/3;
+			grid-row: 1;
+		}
 
-    .conversation {
-      grid-column: 1/3;
-      grid-row: 2;
-    }
+		.conversation {
+			grid-column: 1/3;
+			grid-row: 2;
+		}
 
-    .header-right .menu {
-      display: grid !important;
-    }
+		.header-right .menu {
+			display: grid !important;
+		}
 
-  }
+	}
 
 }

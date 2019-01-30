@@ -21,32 +21,32 @@ import {OutsideClickDirective} from './component/messaging/outside-click.directi
 import {OverlayClickDirective} from './component/messaging/overlay-click.directive';
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    AuthComponent,
-    RegisterComponent,
-    MessagingComponent,
-    PreviewComponent,
-    MessageComponent,
-    MessageSendDirective,
-    ShowAttachmentsMenuDirective,
-    ScrollTopDirective,
-    OutsideClickDirective,
-    OverlayClickDirective,
-    ArraySortPipeAsc,
-    ArraySortPipeDesc,
-    ForwardedAttachmentComponent,
-    ProfileComponent,
-  ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    FormsModule,
-    HttpClientModule,
-    AutosizeModule
-  ],
-  providers: [],
-  bootstrap: [AppComponent]
+	declarations: [
+		AppComponent,
+		AuthComponent,
+		RegisterComponent,
+		MessagingComponent,
+		PreviewComponent,
+		MessageComponent,
+		MessageSendDirective,
+		ShowAttachmentsMenuDirective,
+		ScrollTopDirective,
+		OutsideClickDirective,
+		OverlayClickDirective,
+		ArraySortPipeAsc,
+		ArraySortPipeDesc,
+		ForwardedAttachmentComponent,
+		ProfileComponent,
+	],
+	imports: [
+		BrowserModule,
+		AppRoutingModule,
+		FormsModule,
+		HttpClientModule,
+		AutosizeModule
+	],
+	providers: [],
+	bootstrap: [AppComponent]
 })
 export class AppModule {
 }

@@ -1,13 +1,13 @@
 <div class="auth-wrapper">
-  <div class="auth">
-    <div class="auth-content">
-      <form (ngSubmit)="login()">
-        <div class="heading">Log in</div>
-        <input autofocus type="text" placeholder="Login" [(ngModel)]="credentials.login" name="login">
-        <input type="password" placeholder="Password" [(ngModel)]="credentials.password" name="password">
-        <div class="register-hint">Haven't join yet? <a routerLink="/register">Register</a>.</div>
-        <input type="submit" value="Login">
-      </form>
-    </div>
-  </div>
+	<div class="auth">
+		<div class="auth-content">
+			<form (ngSubmit)="login()">
+				<div class="heading">Log in</div>
+				<input autofocus type="text" placeholder="Login" [(ngModel)]="credentials.login" name="login">
+				<input type="password" placeholder="Password" [(ngModel)]="credentials.password" name="password">
+				<div class="register-hint">Haven't join yet? <a routerLink="/register">Register</a>.</div>
+				<input type="submit" value="Login">
+			</form>
+		</div>
+	</div>
 </div>
