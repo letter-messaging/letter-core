@@ -19,5 +19,6 @@ export class UserInfo {
 	placeOfWork: string;
 	about: string;
 	avatars: Array<Avatar>;
+	newAvatar: File;
 
 }

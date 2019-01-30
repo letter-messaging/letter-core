@@ -11,7 +11,7 @@
 			<div class="avatar-container">
 				<img class="avatar" [src]="FILE_URL + currentProfile.user.avatar" alt="">
 				<i class="upload-avatar fas fa-cloud-upload-alt" *ngIf="editView" (click)="selectAvatar()"></i>
-				<input #fileInput type="file" accept="image/*" style="display: none" (change)="uploadAvatar()">
+				<input #fileInput type="file" accept="image/*" style="display: none">
 			</div>
 			<div class="info-container">
 				<div class="info">{{currentProfile.userInfo.firstName}} {{currentProfile.userInfo.lastName}}</div>

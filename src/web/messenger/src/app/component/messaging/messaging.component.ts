@@ -25,6 +25,7 @@ import * as moment from 'moment';
 import {NewMessageAction} from '../dto/action/NewMessageAction';
 import {ConversationReadAction} from '../dto/action/ConversationReadAction';
 import {MessageEditAction} from '../dto/action/MessageEditAction';
+import {AvatarService} from '../../service/avatar.service';
 
 @Component({
 	selector: 'app-messaging',
@@ -139,7 +140,8 @@ export class MessagingComponent implements OnInit {
 	            private conversationService: ConversationService,
 	            private soundNotificationService: SoundNotificationService,
 	            private userInfoService: UserInfoService,
-	            private backgroundUnreadService: BackgroundUnreadService) {
+	            private backgroundUnreadService: BackgroundUnreadService,
+	            private avatarService: AvatarService) {
 	}
 
 	// TODO: refactor method
@@ -383,7 +385,20 @@ export class MessagingComponent implements OnInit {
 
 	editProfile(userInfo) {
 		this.userInfoService.edit(this.token, userInfo).subscribe(info => {
+			this.uploadAvatar(userInfo.newAvatar);
+
 			this.currentProfile.userInfo = info;
+		});
+	}
+
+	uploadAvatar(avatar: File) {
+		if (!avatar) {
+			return;
+		}
+
+		this.avatarService.upload(this.token, avatar).subscribe(avatarResponse => {
+			console.log(avatarResponse);
+			this.currentProfile.user.avatar = avatarResponse.path;
 		});
 	}
 

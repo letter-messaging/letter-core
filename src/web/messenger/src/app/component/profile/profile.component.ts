@@ -1,5 +1,4 @@
 import {Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
-import {DateService} from '../../service/date.service';
 import {User} from '../dto/User';
 import {UserInfo} from '../dto/UserInfo';
 import {MaritalStatus} from '../dto/enum/MaritalStatus';
@@ -65,10 +64,6 @@ export class ProfileComponent implements OnInit {
 		}
 	}
 
-	lastSeenView(lastSeen: Date): string {
-		return DateService.lastSeenView(lastSeen);
-	}
-
 	close() {
 		this.closeProfile.emit();
 	}
@@ -85,6 +80,9 @@ export class ProfileComponent implements OnInit {
 			]).format('YYYY-MM-DD');
 		} else {
 			this.currentProfile.userInfo.birthDate = null;
+		}
+		if (this.fileInput.nativeElement.files[0]) {
+			this.currentProfile.userInfo.newAvatar = this.fileInput.nativeElement.files[0];
 		}
 		this.editProfile.emit(this.currentProfile.userInfo);
 		this.editView = false;
@@ -106,20 +104,6 @@ export class ProfileComponent implements OnInit {
 
 	selectAvatar() {
 		this.fileInput.nativeElement.click();
-	}
-
-	// TODO: edit avatar together with everything else
-	uploadAvatar() {
-		if (this.fileInput.nativeElement.files.length !== 1) {
-			return;
-		}
-		const avatar = this.fileInput.nativeElement.files[0];
-
-		this.messengerService.oToken.subscribe(token => {
-			this.avatarService.upload(token, avatar).subscribe(avatarResponse => {
-				console.log(avatarResponse);
-			});
-		});
 	}
 
 }
