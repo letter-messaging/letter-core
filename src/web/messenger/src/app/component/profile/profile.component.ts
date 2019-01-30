@@ -5,8 +5,6 @@ import {MaritalStatus} from '../dto/enum/MaritalStatus';
 
 import * as moment from 'moment';
 import {FILE_URL} from '../../../../globals';
-import {MessengerService} from '../../service/messenger.service';
-import {AvatarService} from '../../service/avatar.service';
 
 @Component({
 	selector: 'app-profile',
@@ -30,6 +28,10 @@ export class ProfileComponent implements OnInit {
 
 	@ViewChild('fileInput') fileInput;
 
+	unloadedAvatar = {
+		path: null
+	};
+
 	maritalStatuses = Object.keys(MaritalStatus).filter(key => typeof MaritalStatus[key] === 'number');
 
 	editable = false;
@@ -48,8 +50,7 @@ export class ProfileComponent implements OnInit {
 		year: null
 	};
 
-	constructor(private messengerService: MessengerService,
-	            private avatarService: AvatarService) {
+	constructor() {
 	}
 
 	ngOnInit() {
@@ -65,6 +66,7 @@ export class ProfileComponent implements OnInit {
 	}
 
 	close() {
+		this.unloadedAvatar.path = null;
 		this.closeProfile.emit();
 	}
 
@@ -104,6 +106,17 @@ export class ProfileComponent implements OnInit {
 
 	selectAvatar() {
 		this.fileInput.nativeElement.click();
+	}
+
+	onAvatarSelect() {
+		const reader = new FileReader();
+		reader.onload = (e: any) => {
+			console.log(e.target.result);
+			this.unloadedAvatar.path = e.target.result;
+		};
+		reader.readAsDataURL(this.fileInput.nativeElement.files[0]);
+
+		console.log(this.unloadedAvatar.path);
 	}
 
 }

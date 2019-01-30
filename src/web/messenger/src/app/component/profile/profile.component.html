@@ -1,6 +1,6 @@
 <div class="profile-container">
 	<div class="header">
-		<div class="name">User info</div>
+		<div class="name">{{editView ? 'User info edit' : 'User info'}}</div>
 		<div class="right">
 			<div class="button" *ngIf="editView || editable" (click)="editView = true"><i class="fas fa-pen"></i></div>
 			<div class="button" (click)="close()"><i class="fas fa-times"></i></div>
@@ -9,9 +9,12 @@
 	<div class="main">
 		<div class="preview">
 			<div class="avatar-container">
-				<img class="avatar" [src]="FILE_URL + currentProfile.user.avatar" alt="">
+				{{fileInput.nativeElement ? fileInput.nativeElement.files[0] : ''}}
+				<img class="avatar"
+				     [src]="editView && unloadedAvatar.path ? unloadedAvatar.path :
+				      FILE_URL + currentProfile.user.avatar" alt="">
 				<i class="upload-avatar fas fa-cloud-upload-alt" *ngIf="editView" (click)="selectAvatar()"></i>
-				<input #fileInput type="file" accept="image/*" style="display: none">
+				<input #fileInput type="file" accept="image/*" style="display: none" (change)="onAvatarSelect()">
 			</div>
 			<div class="info-container">
 				<div class="info">{{currentProfile.userInfo.firstName}} {{currentProfile.userInfo.lastName}}</div>
