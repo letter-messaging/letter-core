@@ -57,7 +57,7 @@ public class MessagingService {
 	}
 	
 	public void sendRequest(Request<Action> request, Action action) {
-		LOG.info("sending request from @" + request.getUser().getLogin());
+		LOG.debug("sending request from @" + request.getUser().getLogin());
 		try {
 			request.getEmitter().send(action);
 		} catch (IOException e) {
