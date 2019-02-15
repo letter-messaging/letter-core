@@ -29,11 +29,6 @@ public class SearchTest {
 	@Autowired
 	private UserService userService;
 	
-	private String registerUser(String firstName, String lastName, String login) throws RegistrationException, AuthenticationException {
-		userService.register(new RegisterUserDto(firstName, lastName, login, "password1"));
-		return userService.authenticate(login, "password1");
-	}
-	
 	@Test
 	public void shouldFindUserByLogin() throws RegistrationException, AuthenticationException, InvalidSearchFormatException {
 		String user1Token = registerUser("John", "Lens", "johnls");
@@ -51,6 +46,11 @@ public class SearchTest {
 		registerUser("John", "Lens", "johnls");
 		
 		searchService.searchUsers("John");
+	}
+	
+	private String registerUser(String firstName, String lastName, String login) throws RegistrationException, AuthenticationException {
+		userService.register(new RegisterUserDto(firstName, lastName, login, "password1"));
+		return userService.authenticate(login, "password1");
 	}
 	
 }
