@@ -12,7 +12,7 @@ import java.util.List;
 @Repository
 public interface ConversationRepository extends CrudRepository<Conversation, Long> {
 	
-	@Query("select c from Conversation c join c.users u where u.id = :id")
+	@Query("select c from Conversation c join c.users u on u.id = :id")
 	List<Conversation> getConversations(@Param("id") Long userId);
 	
 	@Modifying
