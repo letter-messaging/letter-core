@@ -25,6 +25,15 @@ public class SearchController {
 		this.userService = userService;
 	}
 	
+	/**
+	 * TODO: describe search algorithm more detailed
+	 * Find preview by companion first or last name
+	 *
+	 * @param token  user token
+	 * @param search search query
+	 * @return list of found previews
+	 * @throws AuthenticationException on invalid @param token
+	 */
 	@GetMapping("conversations")
 	public List<PreviewDto> searchConversations(@RequestHeader("Auth-Token") String token,
 	                                            @RequestParam("search") String search) throws AuthenticationException {
@@ -32,6 +41,17 @@ public class SearchController {
 		return searchService.searchConversations(user, search);
 	}
 	
+	/**
+	 * Find users by their login.
+	 * Search @param search should start with '@' otherwise {@code InvalidSearchFormatException} will be thrown.
+	 * Amount of results is limited by @value {@code search.result.limit}
+	 *
+	 * @param token  user token
+	 * @param search search query
+	 * @return list of found users
+	 * @throws AuthenticationException      on invalid @param token
+	 * @throws InvalidSearchFormatException on invalid @param query
+	 */
 	@GetMapping("users")
 	public List<UserDto> searchUsers(@RequestHeader("Auth-Token") String token,
 	                                 @RequestParam("search") String search) throws AuthenticationException, InvalidSearchFormatException {

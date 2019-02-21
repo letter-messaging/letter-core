@@ -26,6 +26,14 @@ public class MessagingController {
 		this.userService = userService;
 	}
 	
+	/**
+	 * Subscribe on server-sent events.
+	 * Calling user will receive events invoked by his own actions.
+	 *
+	 * @param token user token
+	 * @return event aka. {@code com.gmail.ivanjermakov1.messenger.messaging.dto.action.Action} entity
+	 * @throws AuthenticationException on invalid @param token
+	 */
 	@GetMapping("listen")
 	public ResponseBodyEmitter getEvents(@RequestParam("token") String token) throws AuthenticationException {
 		User user = userService.authenticate(token);
@@ -33,6 +41,16 @@ public class MessagingController {
 		return messagingService.generateRequest(user);
 	}
 	
+	/**
+	 * Send message and invoke {@code com.gmail.ivanjermakov1.messenger.messaging.dto.action.MessageEditAction}.
+	 *
+	 * @param token         user token
+	 * @param newMessageDto new message
+	 * @return sent message
+	 * @throws AuthenticationException on invalid @param token
+	 * @throws InvalidMessageException on invalid @param newMessageDto
+	 * @throws NoSuchEntityException   on invalid conversationId in @param newMessageDto
+	 */
 	@PostMapping("send")
 	public MessageDto sendMessage(@RequestHeader("Auth-Token") String token, @RequestBody NewMessageDto newMessageDto) throws AuthenticationException, InvalidMessageException, NoSuchEntityException {
 		User user = userService.authenticate(token);
@@ -40,6 +58,16 @@ public class MessagingController {
 		return messagingService.processNewMessage(user, newMessageDto);
 	}
 	
+	/**
+	 * Edit message.
+	 *
+	 * @param token          user token
+	 * @param editMessageDto editing message
+	 * @return edited message
+	 * @throws AuthenticationException on invalid @param token
+	 * @throws InvalidMessageException on invalid @param editMessageDto
+	 * @throws NoSuchEntityException   on invalid conversation
+	 */
 	@PostMapping("edit")
 	public MessageDto editMessage(@RequestHeader("Auth-Token") String token, @RequestBody EditMessageDto editMessageDto) throws AuthenticationException, InvalidMessageException, NoSuchEntityException {
 		User user = userService.authenticate(token);

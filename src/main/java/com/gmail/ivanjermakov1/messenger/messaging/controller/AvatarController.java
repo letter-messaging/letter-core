@@ -4,6 +4,7 @@ import com.gmail.ivanjermakov1.messenger.auth.entity.User;
 import com.gmail.ivanjermakov1.messenger.auth.service.UserService;
 import com.gmail.ivanjermakov1.messenger.exception.AuthenticationException;
 import com.gmail.ivanjermakov1.messenger.exception.InvalidFileException;
+import com.gmail.ivanjermakov1.messenger.exception.NoSuchEntityException;
 import com.gmail.ivanjermakov1.messenger.messaging.dto.AvatarDto;
 import com.gmail.ivanjermakov1.messenger.messaging.service.AvatarService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,17 @@ public class AvatarController {
 		this.avatarService = avatarService;
 	}
 	
+	/**
+	 * Upload avatar.
+	 *
+	 * @param token  user token
+	 * @param avatar multipart file to be uploaded
+	 * @return uploaded avatar
+	 * @throws AuthenticationException on invalid token
+	 * @throws IOException             on server file system error
+	 * @throws InvalidFileException    on upload of invalid file (mostly caused by invalid file extension or file size
+	 *                                 specified in @value {@code spring.servlet.multipart.max-file-size})
+	 */
 	@PostMapping("upload")
 	public AvatarDto upload(@RequestHeader("Auth-Token") String token, @RequestParam("avatar") MultipartFile avatar) throws AuthenticationException, IOException, InvalidFileException {
 		User user = userService.authenticate(token);
@@ -32,8 +44,16 @@ public class AvatarController {
 		return avatarService.upload(user, avatar);
 	}
 	
+	/**
+	 * Delete avatar from current avatar and avatar list
+	 *
+	 * @param token    user token
+	 * @param avatarId avatar id to delete
+	 * @throws AuthenticationException on invalid token
+	 * @throws NoSuchEntityException   on invalid avatar id
+	 */
 	@GetMapping("delete")
-	public void delete(@RequestHeader("Auth-Token") String token, @RequestParam("avatarId") Long avatarId) throws AuthenticationException {
+	public void delete(@RequestHeader("Auth-Token") String token, @RequestParam("avatarId") Long avatarId) throws AuthenticationException, NoSuchEntityException {
 		User user = userService.authenticate(token);
 		
 		avatarService.delete(user, avatarId);

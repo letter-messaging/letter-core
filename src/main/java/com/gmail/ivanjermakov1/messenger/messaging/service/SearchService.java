@@ -9,6 +9,7 @@ import com.gmail.ivanjermakov1.messenger.messaging.dto.PreviewDto;
 import com.gmail.ivanjermakov1.messenger.messaging.repository.UserInfoRepository;
 import com.gmail.ivanjermakov1.messenger.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,6 +21,9 @@ public class SearchService {
 	private final PreviewService previewService;
 	private final UserRepository userRepository;
 	private final UserService userService;
+	
+	@Value("${search.result.limit}")
+	private Integer searchResultLimit;
 	
 	@Autowired
 	public SearchService(PreviewService previewService, UserInfoRepository userInfoRepository, UserRepository userRepository, UserInfoService userInfoService, UserService userService) {
@@ -41,11 +45,10 @@ public class SearchService {
 				.collect(Collectors.toList());
 	}
 	
-	// TODO: make amount of responses configurable
 	public List<UserDto> searchUsers(String search) throws InvalidSearchFormatException {
 		if (search.charAt(0) != '@') throw new InvalidSearchFormatException("user search must starts with \'@\'");
 		
-		return userRepository.searchUsersAmount(search, 20)
+		return userRepository.searchUsersAmount(search, searchResultLimit)
 				.stream()
 				.map(userService::full)
 				.collect(Collectors.toList());

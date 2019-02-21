@@ -21,6 +21,14 @@ public class UserInfoController {
 		this.userInfoService = userInfoService;
 	}
 	
+	/**
+	 * Get user info.
+	 *
+	 * @param token  user token
+	 * @param userId user id to get user info of
+	 * @return user info
+	 * @throws AuthenticationException on invalid @param token
+	 */
 	@GetMapping
 	public UserInfoDto get(@RequestHeader("Auth-Token") String token, @RequestParam("userId") Long userId) throws AuthenticationException {
 		User user = userService.authenticate(token);
@@ -28,6 +36,15 @@ public class UserInfoController {
 		return userInfoService.get(userId);
 	}
 	
+	/**
+	 * Edit user info.
+	 * It is allowed to edit fields with null.
+	 *
+	 * @param token       user token
+	 * @param userInfoDto user info with edits
+	 * @return edited user info
+	 * @throws AuthenticationException on invalid @param token and attempting to edit other user info
+	 */
 	@PostMapping
 	public UserInfoDto edit(@RequestHeader("Auth-Token") String token, @RequestBody UserInfoDto userInfoDto) throws AuthenticationException {
 		User user = userService.authenticate(token);

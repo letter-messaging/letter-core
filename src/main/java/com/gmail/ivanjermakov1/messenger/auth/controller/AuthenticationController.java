@@ -18,11 +18,26 @@ public class AuthenticationController {
 		this.userService = userService;
 	}
 	
+	/**
+	 * Authenticate user by its credentials.
+	 *
+	 * @param login    user login
+	 * @param password user password
+	 * @return user authentication token
+	 * @throws AuthenticationException on invalid credentials
+	 */
 	@GetMapping
 	public String authenticate(@RequestParam("login") String login, @RequestParam("password") String password) throws AuthenticationException {
 		return userService.authenticate(login, password);
 	}
 	
+	/**
+	 * Validate user token.
+	 *
+	 * @param token user token
+	 * @return user
+	 * @throws AuthenticationException on invalid token
+	 */
 	@GetMapping("validate")
 	public UserDto validate(@RequestHeader("Auth-Token") String token) throws AuthenticationException {
 		User user = userService.authenticate(token);

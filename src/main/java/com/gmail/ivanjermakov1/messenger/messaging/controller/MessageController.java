@@ -27,6 +27,17 @@ public class MessageController {
 		this.messagingService = messagingService;
 	}
 	
+	/**
+	 * Get list of messages.
+	 *
+	 * @param token          user token
+	 * @param conversationId conversation id to get messages within
+	 * @param offset         offset
+	 * @param amount         amount
+	 * @return list of messages. Return empty list on empty conversation
+	 * @throws AuthenticationException on invalid @param token
+	 * @throws NoSuchEntityException   on invalid @param conversationId and on missing conversation with such id
+	 */
 	@GetMapping("get")
 	public List<MessageDto> get(@RequestHeader("Auth-Token") String token,
 	                            @RequestParam("conversationId") Long conversationId,
@@ -37,6 +48,14 @@ public class MessageController {
 		return messageService.get(user.getId(), conversationId, offset, amount);
 	}
 	
+	/**
+	 * Delete list of messages.
+	 * It is possible to delete only user-self messages. If in list are messages from another user they will be ignored.
+	 *
+	 * @param token          user token
+	 * @param deleteMessages list of messages to delete
+	 * @throws AuthenticationException on invalid @param token
+	 */
 	@PostMapping("delete")
 	public void delete(@RequestHeader("Auth-Token") String token, @RequestBody List<MessageDto> deleteMessages) throws AuthenticationException {
 		User user = userService.authenticate(token);

@@ -20,6 +20,12 @@ public class RegistrationController {
 		this.userService = userService;
 	}
 	
+	/**
+	 * Register user.
+	 *
+	 * @param registerUserDto registration data
+	 * @throws RegistrationException on invalid registration data. Not throws on successful registration
+	 */
 	@PostMapping
 	public void register(@RequestBody RegisterUserDto registerUserDto) throws RegistrationException {
 		userService.register(registerUserDto);

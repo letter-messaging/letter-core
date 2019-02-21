@@ -4,6 +4,7 @@ import com.gmail.ivanjermakov1.messenger.auth.entity.User;
 import com.gmail.ivanjermakov1.messenger.core.util.Mapper;
 import com.gmail.ivanjermakov1.messenger.exception.AuthenticationException;
 import com.gmail.ivanjermakov1.messenger.exception.InvalidFileException;
+import com.gmail.ivanjermakov1.messenger.exception.NoSuchEntityException;
 import com.gmail.ivanjermakov1.messenger.messaging.dto.AvatarDto;
 import com.gmail.ivanjermakov1.messenger.messaging.entity.Avatar;
 import com.gmail.ivanjermakov1.messenger.messaging.enums.FileType;
@@ -40,9 +41,10 @@ public class AvatarService {
 				.max(Comparator.comparing(Avatar::getUploaded));
 	}
 	
-	public void delete(User user, Long avatarId) throws AuthenticationException {
+	//	TODO: delete physical file from file system
+	public void delete(User user, Long avatarId) throws NoSuchEntityException {
 		if (avatarRepository.getByUserId(user.getId()).stream().noneMatch(a -> a.getId().equals(avatarId)))
-			throw new AuthenticationException("invalid avatar id");
+			throw new NoSuchEntityException("invalid avatar id");
 		
 		avatarRepository.deleteAvatarById(avatarId);
 	}
