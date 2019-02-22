@@ -21,6 +21,7 @@ ext {
 }
 
 dependencies {
+    compile group: 'javax.mail', name: 'mail', version: '1.4'
     compile "org.springframework.boot:spring-boot-starter-web:$springVersion"
     compile "org.springframework.boot:spring-boot-starter-data-jpa:$springVersion"
     compile "org.springframework.boot:spring-boot-starter-mail:$springVersion"
@@ -30,6 +31,8 @@ dependencies {
     compile "com.atlassian.commonmark:commonmark:0.12.1"
     compile "org.modelmapper:modelmapper:0.7.5"
     compile "org.apache.commons:commons-io:1.3.2"
+
+    compile group: "com.twilio.sdk", name: "twilio", version: "7.35.1"
 
     testCompile "org.springframework.boot:spring-boot-starter-test:$springVersion"
 }
