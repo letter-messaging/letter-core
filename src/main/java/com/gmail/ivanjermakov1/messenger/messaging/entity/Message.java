@@ -2,6 +2,7 @@ package com.gmail.ivanjermakov1.messenger.messaging.entity;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.gmail.ivanjermakov1.messenger.auth.entity.User;
+import com.gmail.ivanjermakov1.messenger.core.util.Objects;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -122,10 +123,16 @@ public class Message {
 		this.images = images;
 	}
 	
+	//	TODO: refactor
 	public boolean validate() {
 		if (sender == null || sender.getId() == null) return false;
 		if (conversation == null || conversation.getId() == null) return false;
-		return forwarded == null || !forwarded.isEmpty() || !text.trim().isEmpty();
+		
+		if (text.trim().isEmpty()) {
+			if (Objects.isNullOrEmpty(forwarded) && Objects.isNullOrEmpty(images)) return false;
+		}
+		
+		return true;
 	}
 	
 }

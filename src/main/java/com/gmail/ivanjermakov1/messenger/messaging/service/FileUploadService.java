@@ -24,12 +24,11 @@ public class FileUploadService {
 	//	TODO: prevent file overriding with the same filename
 	//	TODO: change filenames
 	public String upload(MultipartFile multipartFile, FileType fileType) throws IOException {
-		LOG.info("uploading [" + fileType + "] \'" + multipartFile.getOriginalFilename() + "\'; size: " + multipartFile.getSize() / 1_000_000 + "MB");
+		LOG.info("uploading [" + fileType + "] \'" + multipartFile.getOriginalFilename() + "\'; size: " + multipartFile.getSize() / 1000.0 + "KB");
 		
-		String realPath = uploadPlaceholder;
-		new File(realPath + "/" + fileType.toString().toLowerCase()).mkdirs();
+		new File(uploadPlaceholder + "/" + fileType.toString().toLowerCase()).mkdirs();
 		
-		File file = new File(realPath + "/" + fileType.toString().toLowerCase() + "/" + multipartFile.getOriginalFilename());
+		File file = new File(uploadPlaceholder + "/" + fileType.toString().toLowerCase() + "/" + multipartFile.getOriginalFilename());
 		multipartFile.transferTo(file);
 		
 		return fileType.toString().toLowerCase() + "/" + multipartFile.getOriginalFilename();

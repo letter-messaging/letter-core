@@ -121,6 +121,10 @@ public class MessageService {
 		messageRepository.deleteForwarded(message.getId());
 	}
 	
+	public void deleteImages(Message message) {
+		message.getImages().forEach(imageService::delete);
+	}
+	
 	public Message get(Long messageId) {
 		return messageRepository.getById(messageId);
 	}
@@ -132,12 +136,13 @@ public class MessageService {
 	
 	/**
 	 * Delete messages different way then just <code>.delete()</code>. Firstly deleting current message from all over
-	 * forwarded messages, then deletes itself
+	 * forwarded messages (including originally attached images), then deletes itself
 	 *
 	 * @param message message that will be deleted
 	 */
 	public void delete(Message message) {
 		messageRepository.deleteFromForwarded(message.getId());
+		deleteImages(message);
 		messageRepository.delete(message);
 	}
 	

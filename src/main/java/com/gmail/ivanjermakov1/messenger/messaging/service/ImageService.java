@@ -31,6 +31,10 @@ public class ImageService {
 		this.fileUploadService = fileUploadService;
 	}
 	
+	public Image save(Image image) {
+		return imageRepository.save(image);
+	}
+	
 	public Image get(String path) {
 		return imageRepository.findByPath(path);
 	}
