@@ -1,18 +1,13 @@
 import {Component, ElementRef, HostListener, OnInit, ViewChild} from '@angular/core';
-import {Preview} from '../dto/Preview';
 import {ActivatedRoute, Router} from '@angular/router';
 import {PreviewService} from '../../service/preview.service';
 import {MessengerService} from '../../service/messenger.service';
 import {MessageService} from '../../service/message.service';
-import {Message} from '../dto/Message';
-import {User} from '../dto/User';
 import {SearchService} from '../../service/search.service';
 import {AuthService} from '../../service/auth.service';
 import {CookieService} from '../../service/cookie.service';
 import {MessagingService} from '../../service/messaging.service';
-import {NewMessage} from '../dto/NewMessage';
 import {ConversationService} from '../../service/conversation.service';
-import {MessageAttachments} from '../dto/MessageAttachments';
 import {SoundNotificationService} from '../../service/sound-notification.service';
 import {Title} from '@angular/platform-browser';
 import {BackgroundUnreadService} from '../../service/background-unread.service';
@@ -22,10 +17,15 @@ import {UserInfoService} from '../../service/user-info.service';
 import {DateService} from '../../service/date.service';
 
 import * as moment from 'moment';
-import {NewMessageAction} from '../dto/action/NewMessageAction';
-import {ConversationReadAction} from '../dto/action/ConversationReadAction';
-import {MessageEditAction} from '../dto/action/MessageEditAction';
 import {AvatarService} from '../../service/avatar.service';
+import {User} from '../../dto/User';
+import {Preview} from '../../dto/Preview';
+import {Message} from '../../dto/Message';
+import {MessageAttachments} from '../../dto/MessageAttachments';
+import {NewMessage} from '../../dto/NewMessage';
+import {NewMessageAction} from '../../dto/action/NewMessageAction';
+import {ConversationReadAction} from '../../dto/action/ConversationReadAction';
+import {MessageEditAction} from '../../dto/action/MessageEditAction';
 
 @Component({
 	selector: 'app-messaging',

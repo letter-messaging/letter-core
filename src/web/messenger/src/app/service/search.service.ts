@@ -1,9 +1,9 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
-import {Preview} from '../component/dto/Preview';
 import {API_URL} from '../../../globals';
-import {User} from '../component/dto/User';
+import {Preview} from '../dto/Preview';
+import {User} from '../dto/User';
 
 @Injectable({
 	providedIn: 'root'

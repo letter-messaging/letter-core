@@ -1,8 +1,8 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {Preview} from '../dto/Preview';
 import {MessengerService} from '../../service/messenger.service';
-import {User} from '../dto/User';
 import {FILE_URL} from '../../../../globals';
+import {Preview} from '../../dto/Preview';
+import {User} from '../../dto/User';
 
 @Component({
 	selector: 'app-preview',

@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {API_URL} from '../../../globals';
 import {Observable} from 'rxjs';
-import {Avatar} from '../component/dto/Avatar';
+import {Avatar} from '../dto/Avatar';
 
 @Injectable({
 	providedIn: 'root'

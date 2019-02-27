@@ -1,7 +1,7 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {Message} from '../dto/Message';
-import {User} from '../dto/User';
 import {FILE_URL} from '../../../../globals';
+import {Message} from '../../dto/Message';
+import {User} from '../../dto/User';
 
 
 @Component({

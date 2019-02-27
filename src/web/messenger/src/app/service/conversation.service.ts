@@ -1,8 +1,8 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {API_URL} from '../../../globals';
-import {Conversation} from '../component/dto/Conversation';
 import {Observable} from 'rxjs';
+import {Conversation} from '../dto/Conversation';
 
 @Injectable({
 	providedIn: 'root'

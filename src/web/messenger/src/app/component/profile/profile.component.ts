@@ -1,10 +1,10 @@
 import {Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
-import {User} from '../dto/User';
-import {UserInfo} from '../dto/UserInfo';
-import {MaritalStatus} from '../dto/enum/MaritalStatus';
 
 import * as moment from 'moment';
 import {FILE_URL} from '../../../../globals';
+import {User} from '../../dto/User';
+import {UserInfo} from '../../dto/UserInfo';
+import {MaritalStatus} from '../../dto/enum/MaritalStatus';
 
 @Component({
 	selector: 'app-profile',

@@ -1,10 +1,10 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
-import {Message} from '../component/dto/Message';
 import {API_URL} from '../../../globals';
-import {NewMessage} from '../component/dto/NewMessage';
-import {EditMessage} from '../component/dto/EditMessage';
+import {EditMessage} from '../dto/EditMessage';
+import {Message} from '../dto/Message';
+import {NewMessage} from '../dto/NewMessage';
 
 @Injectable({
 	providedIn: 'root'

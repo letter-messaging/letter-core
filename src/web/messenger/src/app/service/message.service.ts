@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {API_URL, MESSAGES_AMOUNT} from '../../../globals';
-import {Message} from '../component/dto/Message';
+import {Message} from '../dto/Message';
 
 @Injectable({
 	providedIn: 'root'
