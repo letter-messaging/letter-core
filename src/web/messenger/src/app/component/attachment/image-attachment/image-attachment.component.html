@@ -1,0 +1,11 @@
+<div class="attachment image-attachment">
+	<div class="image-attachment-wrapper">
+		<div class="splitter"></div>
+		<!--TODO: use loading image if uploaded image haven't been loaded yet-->
+		<img
+			[src]="FILE_URL + image.path"
+			class="image" alt="">
+		<div class="text">Attached image</div>
+	</div>
+	<i class="fas fa-times" (click)="removeImageAttachment()"></i>
+</div>

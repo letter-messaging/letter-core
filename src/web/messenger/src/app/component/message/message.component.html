@@ -5,9 +5,19 @@
 		<div class="message-content">
 			<div class="from">{{message.sender.firstName}}</div>
 			<div class="text">{{message.text}}</div>
+			<div class="forwarded-wrapper" *ngIf="message.forwarded.length !== 0">
+				<app-message class="forwarded" *ngFor="let message of message.forwarded"
+				             [message]="message"
+				             [isForwarded]="true"
+				             [me]="me">
+				</app-message>
+			</div>
+			<div class="images-wrapper">
+				<img class="image" alt="" *ngFor="let i of message.images" [src]="FILE_URL + i.path">
+			</div>
 			<div class="info">
 				<div class="sent">{{message.sent | date: 'HH:mm'}}</div>
-				<div class="status" *ngIf="message.sender.login === me.login">
+				<div class="status" *ngIf="message.sender.login === me.login && !isForwarded">
 					<div class="sending" *ngIf="!message.id">
 						<i class="far fa-clock"></i>
 					</div>
@@ -19,13 +29,6 @@
 						<i class="fas fa-eye"></i>
 					</div>
 				</div>
-			</div>
-			<div class="forwarded-wrapper" *ngIf="message.forwarded.length !== 0">
-				<app-message class="forwarded" *ngFor="let message of message.forwarded"
-				             [message]="message"
-				             [isForwarded]="true"
-				             [me]="me">
-				</app-message>
 			</div>
 		</div>
 	</div>

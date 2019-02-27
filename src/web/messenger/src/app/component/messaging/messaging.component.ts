@@ -26,6 +26,8 @@ import {NewMessage} from '../../dto/NewMessage';
 import {NewMessageAction} from '../../dto/action/NewMessageAction';
 import {ConversationReadAction} from '../../dto/action/ConversationReadAction';
 import {MessageEditAction} from '../../dto/action/MessageEditAction';
+import {ImageService} from '../../service/image.service';
+import {NewImage} from '../../dto/NewImage';
 
 @Component({
 	selector: 'app-messaging',
@@ -79,7 +81,10 @@ export class MessagingComponent implements OnInit {
 	conversationMenuView = false;
 	profileMenuView = false;
 
+	attachedImages: Array<NewImage> = [];
+
 	@ViewChild('messageWrapper') messageWrapper: ElementRef;
+	@ViewChild('fileInput') fileInput;
 
 	@HostListener('document:keydown', ['$event'])
 	handleKeyboardEvent(event: KeyboardEvent) {
@@ -141,7 +146,8 @@ export class MessagingComponent implements OnInit {
 	            private soundNotificationService: SoundNotificationService,
 	            private userInfoService: UserInfoService,
 	            private backgroundUnreadService: BackgroundUnreadService,
-	            private avatarService: AvatarService) {
+	            private avatarService: AvatarService,
+	            private imageService: ImageService) {
 	}
 
 	// TODO: refactor method
@@ -247,8 +253,9 @@ export class MessagingComponent implements OnInit {
 		message.conversationId = this.currentPreview.conversation.id;
 		message.text = this.messageText;
 		message.forwarded = this.currentMessageAttachments.forwarded;
+		message.images = this.attachedImages;
 
-		if (message.forwarded.length === 0 && message.text.trim().length === 0) {
+		if ((message.forwarded.length === 0 && message.images.length === 0) && message.text.trim().length === 0) {
 			return;
 		}
 
@@ -266,6 +273,7 @@ export class MessagingComponent implements OnInit {
 			this.updatePreviews();
 			this.messages = this.messages.filter(mes => mes.id);
 			this.messages.unshift(m);
+			this.attachedImages = [];
 		});
 	}
 
@@ -412,6 +420,24 @@ export class MessagingComponent implements OnInit {
 		this.conversationService.hide(this.token, conversationId).subscribe(success => {
 			this.closeConversation();
 		});
+	}
+
+	selectImage() {
+		this.fileInput.nativeElement.click();
+	}
+
+	onImageSelect() {
+		Array.from(this.fileInput.nativeElement.files).forEach(f =>
+			this.imageService.upload(this.token, f).subscribe(newImage => {
+				this.attachedImages.push(newImage);
+			}, err => {
+			})
+		);
+
+	}
+
+	removeImageAttachment(image: NewImage) {
+		this.attachedImages = this.attachedImages.filter(i => i.path === image.path);
 	}
 
 	private startListening() {

@@ -19,6 +19,7 @@ import {ScrollTopDirective} from './component/messaging/scroll-top.directive';
 import {ProfileComponent} from './component/profile/profile.component';
 import {OutsideClickDirective} from './component/messaging/outside-click.directive';
 import {OverlayClickDirective} from './component/messaging/overlay-click.directive';
+import { ImageAttachmentComponent } from './component/attachment/image-attachment/image-attachment.component';
 
 @NgModule({
 	declarations: [
@@ -37,6 +38,7 @@ import {OverlayClickDirective} from './component/messaging/overlay-click.directi
 		ArraySortPipeDesc,
 		ForwardedAttachmentComponent,
 		ProfileComponent,
+		ImageAttachmentComponent,
 	],
 	imports: [
 		BrowserModule,

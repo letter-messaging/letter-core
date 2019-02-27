@@ -111,12 +111,9 @@ export class ProfileComponent implements OnInit {
 	onAvatarSelect() {
 		const reader = new FileReader();
 		reader.onload = (e: any) => {
-			console.log(e.target.result);
 			this.unloadedAvatar.path = e.target.result;
 		};
 		reader.readAsDataURL(this.fileInput.nativeElement.files[0]);
-
-		console.log(this.unloadedAvatar.path);
 	}
 
 }

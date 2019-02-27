@@ -57,49 +57,65 @@
 }
 
 .message-content {
-	display: grid;
+	display: flex;
+	flex-direction: column;
 
-	padding: 0 10px;
+	padding: 4px;
 
 	background: var(--grey);
 
 	cursor: pointer;
 
 	border-radius: 10px 10px 10px 0;
-}
 
-.info {
-	display: flex;
-	align-items: center;
-	justify-content: flex-end;
+	.info {
+		display: flex;
+		align-items: center;
+		justify-content: flex-end;
 
-	grid-column: 2;
-	grid-row: 4;
+		grid-column: 2;
+		grid-row: 4;
 
-	.sent {
-		color: white;
+		.sent {
+			color: white;
 
-		font-size: 12px;
-	}
+			font-size: 12px;
+		}
 
-	.status {
-		color: var(--special) !important;
+		.status {
+			color: var(--special) !important;
 
-		display: grid;
-
-		div {
 			display: grid;
-			margin-top: 2px;
-		}
 
-		i {
-			font-size: 14px;
-			padding: 4px;
+			div {
+				display: grid;
+				margin-top: 2px;
+			}
 
-			color: var(--special);
+			i {
+				font-size: 14px;
+				padding: 4px;
+
+				color: var(--special);
+			}
+
 		}
 
 	}
+
+	.images-wrapper {
+		display: grid;
+		grid-template-columns: repeat(3, auto);
+
+		.image {
+			width: 200px;
+			height: 200px;
+			object-fit: cover;
+
+			margin: 1px;
+		}
+	}
+
 
 }
 

@@ -121,6 +121,12 @@
 				[forwarded]="currentMessageAttachments.forwarded"
 				(removeForwardedAttachmentEvent)="removeForwardedAttachment()">
 			</app-forwarded-attachment>
+			<ng-container *ngIf="attachedImages && attachedImages.length != 0">
+				<app-image-attachment *ngFor="let i of attachedImages"
+				                      [image]="i"
+				                      (removeImageAttachmentEvent)="removeImageAttachment(i)">
+				</app-image-attachment>
+			</ng-container>
 		</div>
 		<div class="send-message-wrapper"
 		     *ngIf="currentPreview && !(selectedMessages.length !== 0 && !editingMessage)">
@@ -128,7 +134,9 @@
 			<div appShowAttachmentsMenu>
 				<i class="fas fa-paperclip" *ngIf="!editingMessage"></i>
 				<div class="attachments-menu" *ngIf="showAttachmentsMenu">
-					<div class="button"><i class="fas fa-camera"></i> Image</div>
+					<div class="button" (click)="selectImage()"><i class="fas fa-camera"></i> Image</div>
+					<input #fileInput type="file" accept="image/*" style="display: none" multiple
+					       (change)="onImageSelect()">
 					<div class="splitter"></div>
 					<div class="button"><i class="fas fa-video"></i> Video</div>
 					<div class="splitter"></div>
