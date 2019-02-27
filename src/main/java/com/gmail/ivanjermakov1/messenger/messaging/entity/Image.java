@@ -18,10 +18,6 @@ public class Image {
 	@JoinColumn(name = "user_id")
 	private User user;
 	
-	@ManyToOne
-	@JoinColumn(name = "message_id")
-	private Message message;
-	
 	@Column(name = "path")
 	private String path;
 	
@@ -31,9 +27,8 @@ public class Image {
 	public Image() {
 	}
 	
-	public Image(User user, Message message, String path, LocalDate uploaded) {
+	public Image(User user, String path, LocalDate uploaded) {
 		this.user = user;
-		this.message = message;
 		this.path = path;
 		this.uploaded = uploaded;
 	}
@@ -52,14 +47,6 @@ public class Image {
 	
 	public void setUser(User user) {
 		this.user = user;
-	}
-	
-	public Message getMessage() {
-		return message;
-	}
-	
-	public void setMessage(Message message) {
-		this.message = message;
 	}
 	
 	public String getPath() {

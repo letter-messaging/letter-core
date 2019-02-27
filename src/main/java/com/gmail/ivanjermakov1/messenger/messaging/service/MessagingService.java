@@ -22,7 +22,6 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.stream.Collectors;
@@ -85,23 +84,13 @@ public class MessagingService {
 						.stream()
 						.map(dto -> messageService.get(dto.getId()))
 						.collect(Collectors.toList()),
-				Collections.emptyList()
+				newMessageDto.getImages()
+						.stream()
+						.map(i -> new Image(user, i.getPath(), LocalDate.now()))
+						.collect(Collectors.toList())
 		);
 		
 		if (!message.validate()) throw new InvalidMessageException("invalid message");
-		
-		message = messageService.save(message);
-
-//		TODO: fix late saving of images (and with validating of a message without text and with an image only)
-		Message finalMessage = message;
-		List<Image> collect = newMessageDto.getImages()
-				.stream()
-				.map(i -> {
-					Image image = new Image(user, finalMessage, i.getPath(), LocalDate.now());
-					return imageService.save(image);
-				})
-				.collect(Collectors.toList());
-		message.setImages(collect);
 		
 		message = messageService.save(message);
 		

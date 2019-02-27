@@ -14,7 +14,7 @@ public class Message {
 	
 	@Id
 	@Column(name = "id")
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "message_id_seq")
 	private Long id;
 	
 	@OneToOne
@@ -43,7 +43,8 @@ public class Message {
 	)
 	private List<Message> forwarded;
 	
-	@OneToMany(mappedBy = "message")
+	@OneToMany(cascade = {CascadeType.ALL}, orphanRemoval = true)
+	@JoinColumn(name = "message_id", nullable = false)
 	private List<Image> images;
 	
 	public Message() {
