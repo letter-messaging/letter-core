@@ -38,7 +38,7 @@ public class ImageController {
 	 *                                 specified in @value {@code spring.servlet.multipart.max-file-size})
 	 */
 	@PostMapping("upload")
-	public NewImageDto upload(@RequestHeader("Auth-Token") String token, @RequestParam("avatar") MultipartFile image) throws AuthenticationException, IOException, InvalidFileException {
+	public NewImageDto upload(@RequestHeader("Auth-Token") String token, @RequestParam("image") MultipartFile image) throws AuthenticationException, IOException, InvalidFileException {
 		userService.authenticate(token);
 		
 		return imageService.upload(image);
