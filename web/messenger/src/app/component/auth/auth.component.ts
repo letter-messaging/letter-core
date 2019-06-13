@@ -12,7 +12,7 @@ import {MeProvider} from '../../provider/me-provider';
 })
 export class AuthComponent implements OnInit {
 
-	private credentials = {
+	credentials = {
 		login: null,
 		password: null
 	};

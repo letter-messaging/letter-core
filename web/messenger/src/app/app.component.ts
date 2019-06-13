@@ -12,6 +12,8 @@ import {MeProvider} from './provider/me-provider';
 })
 export class AppComponent {
 
+	isLoaded: boolean = false;
+
 	constructor(private cookieService: CookieService,
 	            private authService: AuthService,
 	            private tokenProvider: TokenProvider,
@@ -35,6 +37,7 @@ export class AppComponent {
 							user => {
 								this.tokenProvider.setToken(token);
 								this.meProvider.setMe(user);
+								this.isLoaded = true;
 
 								this.route.queryParams.subscribe(params => {
 									if (params['id']) {
@@ -55,7 +58,18 @@ export class AppComponent {
 				}
 			}
 		);
+	}
 
+	onLoad(loaded: () => void) {
+		setTimeout(() => {
+			if (this.isLoaded) {
+				console.debug('onload: loaded...');
+				loaded();
+			} else {
+				this.onLoad(loaded);
+				console.debug('onload: waiting...');
+			}
+		}, 10);
 	}
 
 }

@@ -29,6 +29,7 @@ import {ImageService} from '../../service/image.service';
 import {NewImage} from '../../dto/NewImage';
 import {TokenProvider} from '../../provider/token-provider';
 import {MeProvider} from '../../provider/me-provider';
+import {AppComponent} from '../../app.component';
 
 @Component({
 	selector: 'app-messaging',
@@ -133,7 +134,8 @@ export class MessagingComponent implements OnInit {
 		this.titleService.setTitle(APP_TITLE);
 	}
 
-	constructor(private route: ActivatedRoute,
+	constructor(private app: AppComponent,
+	            private route: ActivatedRoute,
 	            private router: Router,
 	            private titleService: Title,
 	            private previewService: PreviewService,
@@ -154,48 +156,36 @@ export class MessagingComponent implements OnInit {
 
 	// TODO: refactor method
 	ngOnInit() {
-		this.meProvider.oMe.subscribe(me => {
-			return this.me = me;
-		});
-
-		this.route.queryParams.subscribe(params => {
-			this.tokenProvider.oToken.subscribe(token => {
-				this.token = token;
-
-				// initial page load issue
-				if (this.token === '') {
-					return;
-				}
-
-				// makes it execute only once per application load
-				if (!this.isPolling) {
-					this.isPolling = true;
-					this.startListening();
-				}
-
-				this.previewService.all(this.token).subscribe(previews => {
-					this.previews = previews.filter(p => p.lastMessage && !p.conversation.hidden);
-
-					this.routeConversationId = params['id'];
-					if (this.routeConversationId) {
-						this.isLeftView = false;
-						this.messageService.get(this.token, this.routeConversationId, 0).subscribe(messages => {
-							this.searchText = '';
-
-							this.messages = messages;
-
-							this.previewService.get(this.token, this.routeConversationId).subscribe(preview => {
-								this.currentPreview = preview;
-								this.scrollToBottom();
-							});
-						}, error => this.closeConversation());
-					} else {
-						this.isLeftView = true;
-						this.currentPreview = null;
-						this.messages = [];
-					}
+		this.app.onLoad(() => {
+			if (!this.isPolling) {
+				this.meProvider.oMe.subscribe(me => {
+					return this.me = me;
 				});
-			});
+
+				this.tokenProvider.oToken.subscribe(token => {
+					this.token = token;
+
+					this.startListening();
+
+					this.previewService.all(this.token).subscribe(previews => {
+						this.previews = previews.filter(p => p.lastMessage && !p.conversation.hidden);
+
+						this.route.queryParams.subscribe(params => {
+							this.routeConversationId = params['id'];
+							if (this.routeConversationId) {
+								this.isLeftView = false;
+								this.loadCurrentConversation();
+							} else {
+								this.isLeftView = true;
+								this.currentPreview = null;
+								this.messages = [];
+							}
+						});
+					});
+				});
+			} else {
+				this.loadCurrentConversation();
+			}
 		});
 	}
 
@@ -439,6 +429,19 @@ export class MessagingComponent implements OnInit {
 
 	removeImageAttachment(image: NewImage) {
 		this.attachedImages = this.attachedImages.filter(i => i.path === image.path);
+	}
+
+	private loadCurrentConversation() {
+		this.messageService.get(this.token, this.routeConversationId, 0).subscribe(messages => {
+			this.searchText = '';
+
+			this.messages = messages;
+
+			this.previewService.get(this.token, this.routeConversationId).subscribe(preview => {
+				this.currentPreview = preview;
+				this.scrollToBottom();
+			});
+		}, error => this.closeConversation());
 	}
 
 	private startListening() {
