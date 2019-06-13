@@ -1,7 +1,6 @@
 import {Component, ElementRef, HostListener, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {PreviewService} from '../../service/preview.service';
-import {MessengerService} from '../../service/messenger.service';
 import {MessageService} from '../../service/message.service';
 import {SearchService} from '../../service/search.service';
 import {AuthService} from '../../service/auth.service';
@@ -28,6 +27,8 @@ import {ConversationReadAction} from '../../dto/action/ConversationReadAction';
 import {MessageEditAction} from '../../dto/action/MessageEditAction';
 import {ImageService} from '../../service/image.service';
 import {NewImage} from '../../dto/NewImage';
+import {TokenProvider} from '../../provider/token-provider';
+import {MeProvider} from '../../provider/me-provider';
 
 @Component({
 	selector: 'app-messaging',
@@ -136,7 +137,8 @@ export class MessagingComponent implements OnInit {
 	            private router: Router,
 	            private titleService: Title,
 	            private previewService: PreviewService,
-	            private messengerService: MessengerService,
+	            private tokenProvider: TokenProvider,
+	            private meProvider: MeProvider,
 	            private messageService: MessageService,
 	            private authService: AuthService,
 	            private searchService: SearchService,
@@ -152,12 +154,12 @@ export class MessagingComponent implements OnInit {
 
 	// TODO: refactor method
 	ngOnInit() {
-		this.messengerService.oMe.subscribe(me => {
+		this.meProvider.oMe.subscribe(me => {
 			return this.me = me;
 		});
 
 		this.route.queryParams.subscribe(params => {
-			this.messengerService.oToken.subscribe(token => {
+			this.tokenProvider.oToken.subscribe(token => {
 				this.token = token;
 
 				// initial page load issue
@@ -405,7 +407,6 @@ export class MessagingComponent implements OnInit {
 		}
 
 		this.avatarService.upload(this.token, avatar).subscribe(avatarResponse => {
-			console.log(avatarResponse);
 			this.currentProfile.user.avatar = avatarResponse.path;
 		});
 	}
@@ -442,7 +443,6 @@ export class MessagingComponent implements OnInit {
 
 	private startListening() {
 		this.messagingService.getEvents(this.token).subscribe(action => {
-			console.log(action);
 			switch (action.type) {
 				case 'NEW_MESSAGE':
 					this.processNewMessage(action);

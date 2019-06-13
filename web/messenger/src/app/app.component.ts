@@ -1,8 +1,9 @@
 import {Component} from '@angular/core';
 import {CookieService} from './service/cookie.service';
 import {AuthService} from './service/auth.service';
-import {MessengerService} from './service/messenger.service';
 import {ActivatedRoute, NavigationEnd, Router} from '@angular/router';
+import {TokenProvider} from './provider/token-provider';
+import {MeProvider} from './provider/me-provider';
 
 @Component({
 	selector: 'app-root',
@@ -13,7 +14,8 @@ export class AppComponent {
 
 	constructor(private cookieService: CookieService,
 	            private authService: AuthService,
-	            private messengerService: MessengerService,
+	            private tokenProvider: TokenProvider,
+	            private meProvider: MeProvider,
 	            private router: Router,
 	            private route: ActivatedRoute) {
 		this.autoLogin();
@@ -31,8 +33,8 @@ export class AppComponent {
 					if (token !== null) {
 						this.authService.validate(token).subscribe(
 							user => {
-								this.messengerService.setToken(token);
-								this.messengerService.setMe(user);
+								this.tokenProvider.setToken(token);
+								this.meProvider.setMe(user);
 
 								this.route.queryParams.subscribe(params => {
 									if (params['id']) {

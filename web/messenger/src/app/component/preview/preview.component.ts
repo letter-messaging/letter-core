@@ -1,8 +1,8 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {MessengerService} from '../../service/messenger.service';
 import {FILE_URL} from '../../../../globals';
 import {Preview} from '../../dto/Preview';
 import {User} from '../../dto/User';
+import {MeProvider} from '../../provider/me-provider';
 
 @Component({
 	selector: 'app-preview',
@@ -24,11 +24,11 @@ export class PreviewComponent implements OnInit {
 
 	me: User;
 
-	constructor(private messengerService: MessengerService) {
+	constructor(private meProvider: MeProvider) {
 	}
 
 	ngOnInit() {
-		this.messengerService.oMe.subscribe(me => this.me = me);
+		this.meProvider.oMe.subscribe(me => this.me = me);
 	}
 
 }

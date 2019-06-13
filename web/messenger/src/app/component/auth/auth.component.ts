@@ -1,8 +1,9 @@
 import {Component, OnInit} from '@angular/core';
 import {AuthService} from '../../service/auth.service';
-import {MessengerService} from '../../service/messenger.service';
 import {Router} from '@angular/router';
 import {CookieService} from '../../service/cookie.service';
+import {TokenProvider} from '../../provider/token-provider';
+import {MeProvider} from '../../provider/me-provider';
 
 @Component({
 	selector: 'app-auth',
@@ -17,7 +18,8 @@ export class AuthComponent implements OnInit {
 	};
 
 	constructor(private authService: AuthService,
-	            private messengerService: MessengerService,
+	            private tokenProvider: TokenProvider,
+	            private meProvider: MeProvider,
 	            private cookieService: CookieService,
 	            private router: Router) {
 	}
@@ -30,11 +32,12 @@ export class AuthComponent implements OnInit {
 			token => {
 				this.credentials.password = null;
 
-				this.messengerService.setToken(token);
+				this.tokenProvider.setToken(token);
+				// TODO: refactor so tokenProvider deal with cookies
 				this.cookieService.setToken(token);
 
 				this.authService.validate(token).subscribe(user => {
-					this.messengerService.setMe(user);
+					this.meProvider.setMe(user);
 					this.router.navigate(['/im'], {replaceUrl: true});
 				});
 

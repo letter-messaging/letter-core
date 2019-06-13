@@ -5,23 +5,16 @@ import {User} from '../dto/User';
 @Injectable({
 	providedIn: 'root'
 })
-export class MessengerService {
+export class MeProvider {
 
 	private me = new BehaviorSubject<User>(null);
 	oMe = this.me.asObservable();
-
-	private token = new BehaviorSubject<string>('');
-	oToken = this.token.asObservable();
 
 	constructor() {
 	}
 
 	setMe(me: User) {
 		this.me.next(me);
-	}
-
-	setToken(token: string) {
-		this.token.next(token);
 	}
 
 }
