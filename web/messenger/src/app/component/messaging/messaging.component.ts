@@ -424,7 +424,6 @@ export class MessagingComponent implements OnInit {
 			}, err => {
 			})
 		);
-
 	}
 
 	removeImageAttachment(image: NewImage) {
@@ -432,16 +431,14 @@ export class MessagingComponent implements OnInit {
 	}
 
 	private loadCurrentConversation() {
+		this.previewService.get(this.token, this.routeConversationId).subscribe(preview => {
+			this.currentPreview = preview;
+			this.scrollToBottom();
+		}, error => this.closeConversation());
 		this.messageService.get(this.token, this.routeConversationId, 0).subscribe(messages => {
 			this.searchText = '';
-
 			this.messages = messages;
-
-			this.previewService.get(this.token, this.routeConversationId).subscribe(preview => {
-				this.currentPreview = preview;
-				this.scrollToBottom();
-			});
-		}, error => this.closeConversation());
+		});
 	}
 
 	private startListening() {
@@ -462,6 +459,7 @@ export class MessagingComponent implements OnInit {
 
 	private processNewMessage(action: NewMessageAction) {
 		this.updatePreviews();
+
 		if (action.message.sender.id === this.me.id) {
 			return;
 		}
@@ -475,6 +473,7 @@ export class MessagingComponent implements OnInit {
 
 	private processRead(action: ConversationReadAction) {
 		this.updatePreviews();
+
 		if (action.reader.id === this.me.id) {
 			return;
 		}
