@@ -3,12 +3,18 @@ package com.gmail.ivanjermakov1.messenger.messaging.controller;
 import com.gmail.ivanjermakov1.messenger.auth.entity.User;
 import com.gmail.ivanjermakov1.messenger.auth.service.UserService;
 import com.gmail.ivanjermakov1.messenger.exception.AuthenticationException;
+import com.gmail.ivanjermakov1.messenger.exception.AuthorizationException;
 import com.gmail.ivanjermakov1.messenger.exception.InvalidFileException;
 import com.gmail.ivanjermakov1.messenger.exception.NoSuchEntityException;
 import com.gmail.ivanjermakov1.messenger.messaging.dto.NewImageDto;
 import com.gmail.ivanjermakov1.messenger.messaging.service.ImageService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -53,7 +59,7 @@ public class ImageController {
 	 * @throws NoSuchEntityException   on invalid avatar id
 	 */
 	@GetMapping("delete")
-	public void delete(@RequestHeader("Auth-Token") String token, @RequestParam("imageId") Long imageId) throws AuthenticationException, NoSuchEntityException {
+	public void delete(@RequestHeader("Auth-Token") String token, @RequestParam("imageId") Long imageId) throws AuthenticationException, NoSuchEntityException, AuthorizationException {
 		User user = userService.authenticate(token);
 		
 		imageService.delete(user, imageId);

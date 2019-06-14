@@ -15,7 +15,8 @@ public class Mapper {
 	}
 	
 	public static <D, T> List<D> mapAll(Collection<T> entities, Class<D> outCLass) {
-		return entities.stream()
+		return entities
+				.stream()
 				.map(e -> map(e, outCLass))
 				.collect(Collectors.toList());
 	}

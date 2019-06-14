@@ -2,8 +2,10 @@ package com.gmail.ivanjermakov1.messenger.messaging.service;
 
 import com.gmail.ivanjermakov1.messenger.auth.entity.User;
 import com.gmail.ivanjermakov1.messenger.auth.service.UserService;
+import com.gmail.ivanjermakov1.messenger.core.util.Mapper;
 import com.gmail.ivanjermakov1.messenger.exception.AuthenticationException;
 import com.gmail.ivanjermakov1.messenger.exception.NoSuchEntityException;
+import com.gmail.ivanjermakov1.messenger.messaging.dto.ImageDto;
 import com.gmail.ivanjermakov1.messenger.messaging.dto.MessageDto;
 import com.gmail.ivanjermakov1.messenger.messaging.entity.Conversation;
 import com.gmail.ivanjermakov1.messenger.messaging.entity.Message;
@@ -88,9 +90,13 @@ public class MessageService {
 				.map(this::getFullMessage)
 				.collect(Collectors.toList()));
 		
-		messageDto.setImages(message.getImages().stream()
-				.map(imageService::full)
-				.collect(Collectors.toList()));
+		messageDto.setImages(Mapper.mapAll(
+				message.getImages()
+						.stream()
+						.map(imageService::full)
+						.collect(Collectors.toList()),
+				ImageDto.class
+		));
 		
 		return messageDto;
 	}
