@@ -1,5 +1,7 @@
 <div class="preview" [ngClass]="{'selected': selected}" *ngIf="preview.lastMessage">
-	<img class="avatar" [src]="FILE_URL + preview.with.avatar" alt="">
+	<img class="avatar"
+	     [src]="ImageService.getImagePathByCompressionMode(FILE_URL + preview.with.avatar, ImageCompressionMode.SMALL)"
+	     alt="">
 	<div class="info">
 		<div class="text">{{preview.with.firstName}} {{preview.with.lastName}}</div>
 		<i class="fas fa-circle" *ngIf="isOnline"></i>

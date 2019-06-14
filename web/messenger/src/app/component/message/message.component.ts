@@ -2,6 +2,8 @@ import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {FILE_URL} from '../../../../globals';
 import {Message} from '../../dto/Message';
 import {User} from '../../dto/User';
+import {ImageCompressionMode} from '../../dto/enum/ImageCompressionMode';
+import {ImageService} from '../../service/image.service';
 
 
 @Component({
@@ -14,6 +16,8 @@ import {User} from '../../dto/User';
 })
 export class MessageComponent implements OnInit {
 
+	readonly ImageCompressionMode: typeof ImageCompressionMode = ImageCompressionMode;
+	readonly ImageService: typeof ImageService = ImageService;
 	readonly FILE_URL = FILE_URL;
 
 	@Input()
@@ -37,7 +41,7 @@ export class MessageComponent implements OnInit {
 		this.mine = this.message.sender.id === this.me.id;
 	}
 
-	openProfile(user: User) {
+	openProfile(user: User): void {
 		this.openProfileEvent.emit(user);
 	}
 

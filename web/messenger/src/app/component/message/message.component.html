@@ -1,6 +1,8 @@
 <div class="message" [ngClass]="{'message-mine': mine, 'selected': message.selected}">
 	<div class="message-container">
-		<img class="avatar" [src]="FILE_URL + message.sender.avatar" alt=""
+		<img class="avatar"
+		     [src]="ImageService.getImagePathByCompressionMode(FILE_URL + message.sender.avatar, ImageCompressionMode.SMALL)"
+		     alt=""
 		     *ngIf="!isForwarded" (click)="openProfile(message.sender)">
 		<div class="message-content">
 			<div class="from">{{message.sender.firstName}}</div>
@@ -13,7 +15,8 @@
 				</app-message>
 			</div>
 			<div class="images-wrapper">
-				<img class="image" alt="" *ngFor="let i of message.images" [src]="FILE_URL + i.path">
+				<img class="image" alt="" *ngFor="let i of message.images"
+				     [src]="ImageService.getImagePathByCompressionMode(FILE_URL + i.path, ImageCompressionMode.MEDIUM)">
 			</div>
 			<div class="info">
 				<div class="sent">{{message.sent | date: 'HH:mm'}}</div>

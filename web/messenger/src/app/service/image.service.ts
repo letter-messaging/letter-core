@@ -3,6 +3,7 @@ import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {API_URL} from '../../../globals';
 import {NewImage} from '../dto/NewImage';
+import {ImageCompressionMode} from '../dto/enum/ImageCompressionMode';
 
 @Injectable({
 	providedIn: 'root'
@@ -21,6 +22,12 @@ export class ImageService {
 				'Auth-Token': token
 			}
 		});
+	}
+
+	static getImagePathByCompressionMode(path: string, compressionMode: ImageCompressionMode): string {
+		const pathName = path.substring(0, path.lastIndexOf('.'));
+		const extension = path.substring(path.lastIndexOf('.'));
+		return `${pathName}_${compressionMode.toString()}${extension}`;
 	}
 
 }

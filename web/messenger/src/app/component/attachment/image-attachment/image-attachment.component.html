@@ -3,7 +3,7 @@
 		<div class="splitter"></div>
 		<!--TODO: use loading image if uploaded image haven't been loaded yet-->
 		<img
-			[src]="FILE_URL + image.path"
+			[src]="ImageService.getImagePathByCompressionMode(FILE_URL + image.path, ImageCompressionMode.SMALL)"
 			class="image" alt="">
 		<div class="text">Attached image</div>
 	</div>

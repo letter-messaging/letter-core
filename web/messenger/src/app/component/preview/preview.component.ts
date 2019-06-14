@@ -3,6 +3,8 @@ import {FILE_URL} from '../../../../globals';
 import {Preview} from '../../dto/Preview';
 import {User} from '../../dto/User';
 import {MeProvider} from '../../provider/me-provider';
+import {ImageCompressionMode} from '../../dto/enum/ImageCompressionMode';
+import {ImageService} from '../../service/image.service';
 
 @Component({
 	selector: 'app-preview',
@@ -11,6 +13,8 @@ import {MeProvider} from '../../provider/me-provider';
 })
 export class PreviewComponent implements OnInit {
 
+	readonly ImageCompressionMode: typeof ImageCompressionMode = ImageCompressionMode;
+	readonly ImageService: typeof ImageService = ImageService;
 	readonly FILE_URL = FILE_URL;
 
 	@Input()

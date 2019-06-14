@@ -30,6 +30,7 @@ import {NewImage} from '../../dto/NewImage';
 import {TokenProvider} from '../../provider/token-provider';
 import {MeProvider} from '../../provider/me-provider';
 import {AppComponent} from '../../app.component';
+import {ImageCompressionMode} from '../../dto/enum/ImageCompressionMode';
 
 @Component({
 	selector: 'app-messaging',
@@ -48,6 +49,8 @@ import {AppComponent} from '../../app.component';
 })
 export class MessagingComponent implements OnInit {
 
+	readonly ImageCompressionMode: typeof ImageCompressionMode = ImageCompressionMode;
+	readonly ImageService: typeof ImageService = ImageService;
 	readonly FILE_URL = FILE_URL;
 
 	token: string;
@@ -430,6 +433,7 @@ export class MessagingComponent implements OnInit {
 		this.attachedImages = this.attachedImages.filter(i => i.path === image.path);
 	}
 
+	// TODO: load icon on message list loading
 	private loadCurrentConversation() {
 		this.previewService.get(this.token, this.routeConversationId).subscribe(preview => {
 			this.currentPreview = preview;
