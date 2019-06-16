@@ -221,6 +221,7 @@ export class MessagingComponent implements OnInit {
 	}
 
 	openConversation(conversationId: number) {
+		if (this.currentPreview && this.currentPreview.conversation.id === conversationId) return;
 		this.router.navigate(['/im'], {queryParams: {id: conversationId}, replaceUrl: true});
 		this.messages = null;
 		this.isSelectForwardTo = false;
