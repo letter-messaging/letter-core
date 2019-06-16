@@ -1,6 +1,6 @@
 import {Directive, HostListener} from '@angular/core';
 import {MessagingComponent} from './messaging.component';
-import {HOVER_TIME} from '../../../../globals';
+import {HOVER_TIME} from '../../../../../globals';
 
 @Directive({
 	selector: '[appShowAttachmentsMenu]',

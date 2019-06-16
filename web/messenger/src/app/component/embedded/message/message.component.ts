@@ -1,9 +1,9 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {FILE_URL} from '../../../../globals';
-import {Message} from '../../dto/Message';
-import {User} from '../../dto/User';
-import {ImageCompressionMode} from '../../dto/enum/ImageCompressionMode';
-import {ImageService} from '../../service/image.service';
+import {Message} from '../../../dto/Message';
+import {User} from '../../../dto/User';
+import {FILE_URL} from '../../../../../globals';
+import {ImageService} from '../../../service/image.service';
+import {ImageCompressionMode} from '../../../dto/enum/ImageCompressionMode';
 
 
 @Component({

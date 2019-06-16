@@ -1,17 +1,17 @@
 import {Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
 
 import * as moment from 'moment';
-import {FILE_URL} from '../../../../globals';
-import {User} from '../../dto/User';
-import {UserInfo} from '../../dto/UserInfo';
-import {MaritalStatus} from '../../dto/enum/MaritalStatus';
+import {FILE_URL} from '../../../../../globals';
+import {User} from '../../../dto/User';
+import {UserInfo} from '../../../dto/UserInfo';
+import {MaritalStatus} from '../../../dto/enum/MaritalStatus';
 
 @Component({
 	selector: 'app-profile',
 	templateUrl: './profile.component.html',
 	styleUrls: [
 		'./profile.component.scss',
-		'./../messaging/messaging.component.search.scss'
+		'./../../routed/messaging/messaging.component.search.scss'
 	]
 })
 export class ProfileComponent implements OnInit {

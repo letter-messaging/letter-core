@@ -1,5 +1,5 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {Message} from '../../../dto/Message';
+import {Message} from '../../../../dto/Message';
 
 @Component({
 	selector: 'app-forwarded-attachment',

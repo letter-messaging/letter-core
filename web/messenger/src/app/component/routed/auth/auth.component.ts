@@ -1,9 +1,9 @@
 import {Component, OnInit} from '@angular/core';
-import {AuthService} from '../../service/auth.service';
 import {Router} from '@angular/router';
-import {CookieService} from '../../service/cookie.service';
-import {TokenProvider} from '../../provider/token-provider';
-import {MeProvider} from '../../provider/me-provider';
+import {AuthService} from '../../../service/auth.service';
+import {TokenProvider} from '../../../provider/token-provider';
+import {MeProvider} from '../../../provider/me-provider';
+import {CookieService} from '../../../service/cookie.service';
 
 @Component({
 	selector: 'app-auth',

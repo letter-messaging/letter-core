@@ -1,8 +1,8 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {NewImage} from '../../../dto/NewImage';
-import {FILE_URL} from '../../../../../globals';
-import {ImageCompressionMode} from '../../../dto/enum/ImageCompressionMode';
-import {ImageService} from '../../../service/image.service';
+import {NewImage} from '../../../../dto/NewImage';
+import {ImageCompressionMode} from '../../../../dto/enum/ImageCompressionMode';
+import {ImageService} from '../../../../service/image.service';
+import {FILE_URL} from '../../../../../../globals';
 
 @Component({
 	selector: 'app-image-attachment',

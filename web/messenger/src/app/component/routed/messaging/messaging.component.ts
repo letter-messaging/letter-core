@@ -1,38 +1,38 @@
 import {Component, ElementRef, HostListener, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
-import {PreviewService} from '../../service/preview.service';
-import {MessageService} from '../../service/message.service';
-import {SearchService} from '../../service/search.service';
-import {AuthService} from '../../service/auth.service';
-import {CookieService} from '../../service/cookie.service';
-import {MessagingService} from '../../service/messaging.service';
-import {ConversationService} from '../../service/conversation.service';
-import {SoundNotificationService} from '../../service/sound-notification.service';
 import {Title} from '@angular/platform-browser';
-import {BackgroundUnreadService} from '../../service/background-unread.service';
-import {APP_TITLE, FILE_URL, MINUTES_AS_ONLINE_LIMIT} from '../../../../globals';
 
-import {UserInfoService} from '../../service/user-info.service';
-import {DateService} from '../../service/date.service';
 
 import * as moment from 'moment';
-import {AvatarService} from '../../service/avatar.service';
-import {User} from '../../dto/User';
-import {Preview} from '../../dto/Preview';
-import {Message} from '../../dto/Message';
-import {MessageAttachments} from '../../dto/MessageAttachments';
-import {NewMessage} from '../../dto/NewMessage';
-import {NewMessageAction} from '../../dto/action/NewMessageAction';
-import {ConversationReadAction} from '../../dto/action/ConversationReadAction';
-import {MessageEditAction} from '../../dto/action/MessageEditAction';
-import {ImageService} from '../../service/image.service';
-import {NewImage} from '../../dto/NewImage';
-import {TokenProvider} from '../../provider/token-provider';
-import {MeProvider} from '../../provider/me-provider';
-import {AppComponent} from '../../app.component';
-import {ImageCompressionMode} from '../../dto/enum/ImageCompressionMode';
 import {Subject} from 'rxjs';
 import {debounceTime, distinctUntilChanged} from 'rxjs/operators';
+import {User} from '../../../dto/User';
+import {Preview} from '../../../dto/Preview';
+import {Message} from '../../../dto/Message';
+import {MessageAttachments} from '../../../dto/MessageAttachments';
+import {ImageCompressionMode} from '../../../dto/enum/ImageCompressionMode';
+import {ImageService} from '../../../service/image.service';
+import {NewImage} from '../../../dto/NewImage';
+import {AppComponent} from '../../../app.component';
+import {MeProvider} from '../../../provider/me-provider';
+import {MessageService} from '../../../service/message.service';
+import {TokenProvider} from '../../../provider/token-provider';
+import {PreviewService} from '../../../service/preview.service';
+import {AuthService} from '../../../service/auth.service';
+import {SearchService} from '../../../service/search.service';
+import {CookieService} from '../../../service/cookie.service';
+import {MessagingService} from '../../../service/messaging.service';
+import {ConversationService} from '../../../service/conversation.service';
+import {SoundNotificationService} from '../../../service/sound-notification.service';
+import {UserInfoService} from '../../../service/user-info.service';
+import {BackgroundUnreadService} from '../../../service/background-unread.service';
+import {AvatarService} from '../../../service/avatar.service';
+import {APP_TITLE, FILE_URL, MINUTES_AS_ONLINE_LIMIT} from '../../../../../globals';
+import {NewMessage} from '../../../dto/NewMessage';
+import {DateService} from '../../../service/date.service';
+import {NewMessageAction} from '../../../dto/action/NewMessageAction';
+import {ConversationReadAction} from '../../../dto/action/ConversationReadAction';
+import {MessageEditAction} from '../../../dto/action/MessageEditAction';
 
 @Component({
 	selector: 'app-messaging',

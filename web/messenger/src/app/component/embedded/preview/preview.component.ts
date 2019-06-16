@@ -1,10 +1,10 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {FILE_URL} from '../../../../globals';
-import {Preview} from '../../dto/Preview';
-import {User} from '../../dto/User';
-import {MeProvider} from '../../provider/me-provider';
-import {ImageCompressionMode} from '../../dto/enum/ImageCompressionMode';
-import {ImageService} from '../../service/image.service';
+import {FILE_URL} from '../../../../../globals';
+import {Preview} from '../../../dto/Preview';
+import {User} from '../../../dto/User';
+import {MeProvider} from '../../../provider/me-provider';
+import {ImageCompressionMode} from '../../../dto/enum/ImageCompressionMode';
+import {ImageService} from '../../../service/image.service';
 
 @Component({
 	selector: 'app-preview',

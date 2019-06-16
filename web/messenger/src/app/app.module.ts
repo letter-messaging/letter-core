@@ -3,23 +3,23 @@ import {NgModule} from '@angular/core';
 
 import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
-import {AuthComponent} from './component/auth/auth.component';
-import {RegisterComponent} from './component/register/register.component';
-import {MessagingComponent} from './component/messaging/messaging.component';
 import {FormsModule} from '@angular/forms';
 import {HttpClientModule} from '@angular/common/http';
-import {PreviewComponent} from './component/preview/preview.component';
-import {MessageComponent} from './component/message/message.component';
 import {AutosizeModule} from 'ngx-autosize';
-import {MessageSendDirective} from './component/messaging/message-send.directive';
 import {ArraySortPipeAsc, ArraySortPipeDesc} from './pipe/array-sort.pipe';
-import {ForwardedAttachmentComponent} from './component/attachment/forwarded-attachment/forwarded-attachment.component';
-import {ShowAttachmentsMenuDirective} from './component/messaging/show-attachments-menu.directive';
-import {ScrollTopDirective} from './component/messaging/scroll-top.directive';
-import {ProfileComponent} from './component/profile/profile.component';
-import {OutsideClickDirective} from './component/messaging/outside-click.directive';
-import {OverlayClickDirective} from './component/messaging/overlay-click.directive';
-import { ImageAttachmentComponent } from './component/attachment/image-attachment/image-attachment.component';
+import {AuthComponent} from './component/routed/auth/auth.component';
+import {RegisterComponent} from './component/routed/register/register.component';
+import {ImageAttachmentComponent} from './component/embedded/attachment/image-attachment/image-attachment.component';
+import {ProfileComponent} from './component/embedded/profile/profile.component';
+import {ForwardedAttachmentComponent} from './component/embedded/attachment/forwarded-attachment/forwarded-attachment.component';
+import {OverlayClickDirective} from './component/routed/messaging/overlay-click.directive';
+import {OutsideClickDirective} from './component/routed/messaging/outside-click.directive';
+import {ScrollTopDirective} from './component/routed/messaging/scroll-top.directive';
+import {ShowAttachmentsMenuDirective} from './component/routed/messaging/show-attachments-menu.directive';
+import {MessageSendDirective} from './component/routed/messaging/message-send.directive';
+import {MessageComponent} from './component/embedded/message/message.component';
+import {PreviewComponent} from './component/embedded/preview/preview.component';
+import {MessagingComponent} from './component/routed/messaging/messaging.component';
 
 @NgModule({
 	declarations: [
