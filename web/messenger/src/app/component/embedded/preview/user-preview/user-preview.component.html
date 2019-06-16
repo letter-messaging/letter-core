@@ -1,0 +1,7 @@
+<div class="user-preview">
+	<img class="avatar"
+	     [src]="ImageService.getImagePathByCompressionMode(FILE_URL + user.avatar, ImageCompressionMode.SMALL)"
+	     alt="">
+	<div class="info">{{user.firstName}} {{user.lastName}}</div>
+	<div class="login">@{{user.login}}</div>
+</div>

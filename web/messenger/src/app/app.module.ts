@@ -18,8 +18,9 @@ import {ScrollTopDirective} from './component/routed/messaging/scroll-top.direct
 import {ShowAttachmentsMenuDirective} from './component/routed/messaging/show-attachments-menu.directive';
 import {MessageSendDirective} from './component/routed/messaging/message-send.directive';
 import {MessageComponent} from './component/embedded/message/message.component';
-import {PreviewComponent} from './component/embedded/preview/preview.component';
 import {MessagingComponent} from './component/routed/messaging/messaging.component';
+import {ConversationPreviewComponent} from './component/embedded/preview/conversation-preview/conversation-preview.component';
+import {UserPreviewComponent} from './component/embedded/preview/user-preview/user-preview.component';
 
 @NgModule({
 	declarations: [
@@ -27,7 +28,6 @@ import {MessagingComponent} from './component/routed/messaging/messaging.compone
 		AuthComponent,
 		RegisterComponent,
 		MessagingComponent,
-		PreviewComponent,
 		MessageComponent,
 		MessageSendDirective,
 		ShowAttachmentsMenuDirective,
@@ -39,6 +39,8 @@ import {MessagingComponent} from './component/routed/messaging/messaging.compone
 		ForwardedAttachmentComponent,
 		ProfileComponent,
 		ImageAttachmentComponent,
+		ConversationPreviewComponent,
+		UserPreviewComponent,
 	],
 	imports: [
 		BrowserModule,

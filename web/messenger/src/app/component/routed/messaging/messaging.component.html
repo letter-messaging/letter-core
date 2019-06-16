@@ -74,28 +74,24 @@
 				<i class="fas fa-circle-notch fa-spin"></i>
 			</div>
 			<ng-container *ngIf="previews && searchText.trim()[0] !== '@'">
-				<app-preview
+				<app-conversation-preview
 					*ngFor="let preview of previewsOrSearchPreviews()"
 					[preview]="preview"
 					[selected]="currentPreview && preview.conversation.id == currentPreview.conversation.id"
 					[isOnline]="isOnline(preview.with.lastSeen)"
 					(click)="openConversation(preview.conversation.id)">
-				</app-preview>
+				</app-conversation-preview>
 				<div class="not-found" *ngIf="searchText && searchPreviews && searchPreviews.length === 0">
 					<i class="far fa-frown"></i>
 					<div class="text">No matching conversations found.</div>
 				</div>
 			</ng-container>
 			<ng-container *ngIf="previews && searchText && searchText.trim()[0] === '@'">
-				<div class="user-preview"
-				     *ngFor="let user of searchUsers"
-				     (click)="createConversation(user)">
-					<img class="avatar"
-					     [src]="ImageService.getImagePathByCompressionMode(FILE_URL + user.avatar, ImageCompressionMode.SMALL)"
-					     alt="">
-					<div class="info">{{user.firstName}} {{user.lastName}}</div>
-					<div class="login">@{{user.login}}</div>
-				</div>
+				<ng-container
+					*ngFor="let user of searchUsers">
+					<app-user-preview [user]="user" (click)="createConversation(user)">
+					</app-user-preview>
+				</ng-container>
 				<div class="not-found" *ngIf="searchUsers && searchUsers.length === 0">
 					<i class="far fa-frown"></i>
 					<div class="text">No matching users found.</div>
