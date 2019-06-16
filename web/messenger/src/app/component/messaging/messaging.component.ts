@@ -31,6 +31,8 @@ import {TokenProvider} from '../../provider/token-provider';
 import {MeProvider} from '../../provider/me-provider';
 import {AppComponent} from '../../app.component';
 import {ImageCompressionMode} from '../../dto/enum/ImageCompressionMode';
+import {Subject} from 'rxjs';
+import {debounceTime, distinctUntilChanged} from 'rxjs/operators';
 
 @Component({
 	selector: 'app-messaging',
@@ -66,6 +68,8 @@ export class MessagingComponent implements OnInit {
 	messageText = '';
 
 	searchText = '';
+	searchTextChanged: Subject<string> = new Subject();
+
 	searchUsers: Array<User> = [];
 	searchPreviews: Array<Preview> = [];
 
@@ -157,8 +161,12 @@ export class MessagingComponent implements OnInit {
 	            private imageService: ImageService) {
 	}
 
-	// TODO: refactor method
 	ngOnInit() {
+		this.searchTextChanged
+			.pipe(debounceTime(200), distinctUntilChanged())
+			.subscribe(searchText => {
+				this.searchForConversationsOrUsers(searchText);
+			});
 		this.app.onLoad(() => {
 			if (!this.isPolling) {
 				this.meProvider.oMe.subscribe(me => {
@@ -204,7 +212,6 @@ export class MessagingComponent implements OnInit {
 		});
 	}
 
-	// TODO: add debounce support
 	previewsOrSearchPreviews(): Array<Preview> {
 		if (this.searchText === '') {
 			return this.previews;
@@ -229,16 +236,16 @@ export class MessagingComponent implements OnInit {
 		});
 	}
 
-	searchForConversationsOrUsers() {
-		if (this.searchText === '') {
+	searchForConversationsOrUsers(searchText: string) {
+		if (searchText === '') {
 			return;
 		}
 
-		if (this.searchText[0] === '@') {
-			this.searchService.searchUsers(this.token, this.searchText)
+		if (searchText[0] === '@') {
+			this.searchService.searchUsers(this.token, searchText)
 				.subscribe(users => this.searchUsers = users);
 		} else {
-			this.searchService.searchConversations(this.token, this.searchText)
+			this.searchService.searchConversations(this.token, searchText)
 				.subscribe(conversations => this.searchPreviews = conversations);
 		}
 	}
@@ -434,7 +441,6 @@ export class MessagingComponent implements OnInit {
 		this.attachedImages = this.attachedImages.filter(i => i.path === image.path);
 	}
 
-	// TODO: load icon on message list loading
 	private loadCurrentConversation() {
 		this.previewService.get(this.token, this.routeConversationId).subscribe(preview => {
 			this.currentPreview = preview;

@@ -64,8 +64,9 @@
 	<div class="content-left">
 		<div class="search">
 			<div class="icon"><i class="fas fa-search"></i></div>
-			<input id="search-conversations" type="text" placeholder="Search" [(ngModel)]="searchText"
-			       (ngModelChange)="searchForConversationsOrUsers()" name="search-conversations">
+			<input id="search-conversations" type="text" placeholder="Search"
+			       [(ngModel)]="searchText"
+			       (ngModelChange)="searchTextChanged.next($event)" name="search-conversations">
 		</div>
 		<div class="preview-wrapper">
 			<div class="splitter"></div>
