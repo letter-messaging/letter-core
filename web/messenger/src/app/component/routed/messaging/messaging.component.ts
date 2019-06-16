@@ -44,8 +44,7 @@ import {MessageEditAction} from '../../../dto/action/MessageEditAction';
 		'./messaging.component.search.scss',
 		'./messaging.component.select-message.scss',
 		'./messaging.component.content-left.scss',
-		'./messaging.component.conversation.scss',
-		'./messaging.component.conversation-menu.scss'
+		'./messaging.component.conversation.scss'
 	]
 })
 export class MessagingComponent implements OnInit {
@@ -84,14 +83,10 @@ export class MessagingComponent implements OnInit {
 
 	isLeftView = true;
 	isSelectForwardTo = false;
-	showAttachmentsMenu = false;
-
-	conversationMenuView = false;
 
 	attachedImages: Array<NewImage> = [];
 
 	@ViewChild('messageWrapper') messageWrapper: ElementRef;
-	@ViewChild('fileInput') fileInput;
 
 	@HostListener('document:keydown', ['$event'])
 	handleKeyboardEvent(event: KeyboardEvent) {
@@ -400,31 +395,6 @@ export class MessagingComponent implements OnInit {
 		this.avatarService.upload(this.token, avatar).subscribe(avatarResponse => {
 			this.currentProfile.user.avatar = avatarResponse.path;
 		});
-	}
-
-	deleteConversation(conversationId: number) {
-		this.conversationService.delete(this.token, conversationId).subscribe(success => {
-			this.closeConversation();
-		});
-	}
-
-	hideConversation(conversationId: number) {
-		this.conversationService.hide(this.token, conversationId).subscribe(success => {
-			this.closeConversation();
-		});
-	}
-
-	selectImage() {
-		this.fileInput.nativeElement.click();
-	}
-
-	onImageSelect() {
-		Array.from(this.fileInput.nativeElement.files).forEach(f =>
-			this.imageService.upload(this.token, f).subscribe(newImage => {
-				this.attachedImages.push(newImage);
-			}, err => {
-			})
-		);
 	}
 
 	removeImageAttachment(image: NewImage) {

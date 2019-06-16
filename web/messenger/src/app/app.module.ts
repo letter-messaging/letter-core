@@ -15,7 +15,6 @@ import {ForwardedAttachmentComponent} from './component/embedded/attachment/forw
 import {OverlayClickDirective} from './component/routed/messaging/overlay-click.directive';
 import {OutsideClickDirective} from './component/routed/messaging/outside-click.directive';
 import {ScrollTopDirective} from './component/routed/messaging/scroll-top.directive';
-import {ShowAttachmentsMenuDirective} from './component/routed/messaging/show-attachments-menu.directive';
 import {MessageSendDirective} from './component/routed/messaging/message-send.directive';
 import {MessageComponent} from './component/embedded/message/message.component';
 import {MessagingComponent} from './component/routed/messaging/messaging.component';
@@ -34,7 +33,6 @@ import { ConversationMenuComponent } from './component/embedded/menu/conversatio
 		MessagingComponent,
 		MessageComponent,
 		MessageSendDirective,
-		ShowAttachmentsMenuDirective,
 		ScrollTopDirective,
 		OutsideClickDirective,
 		OverlayClickDirective,

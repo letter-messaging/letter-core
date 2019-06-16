@@ -21,25 +21,9 @@
 		</div>
 		<div class="right">
 			<div class="search"><i class="fas fa-search"></i></div>
-			<div class="conversation-menu" *ngIf="currentPreview" (appOutsideClick)="conversationMenuView = false">
-				<div class="button" (click)="conversationMenuView = !conversationMenuView">
-					<i class="fas fa-ellipsis-v"></i>
-				</div>
-				<div class="context-menu" *ngIf="conversationMenuView">
-					<div class="button">Mute</div>
-					<div class="splitter"></div>
-					<div class="button">Photos</div>
-					<div class="button">Videos</div>
-					<div class="button">Attachments</div>
-					<div class="splitter"></div>
-					<div class="button" (click)="hideConversation(currentPreview.conversation.id)">Hide conversation
-					</div>
-					<!--TODO: add alerts to danger buttons-->
-					<div class="button danger" (click)="deleteConversation(currentPreview.conversation.id)">
-						Delete conversation
-					</div>
-				</div>
-			</div>
+			<app-conversation-menu [currentPreview]="currentPreview"
+			                       (closeConversation)="closeConversation()">
+			</app-conversation-menu>
 			<app-profile-menu [currentPreview]="currentPreview"
 			                  (openProfile)="openProfile($event)">
 			</app-profile-menu>
@@ -125,18 +109,8 @@
 		<div class="send-message-wrapper"
 		     *ngIf="routeConversationId && !(selectedMessages.length !== 0 && !editingMessage)">
 			<i class="fas fa-ban" *ngIf="editingMessage" (click)="cancelEditing()"></i>
-			<div appShowAttachmentsMenu>
-				<i class="fas fa-paperclip" *ngIf="!editingMessage"></i>
-				<div class="attachments-menu" *ngIf="showAttachmentsMenu">
-					<div class="button" (click)="selectImage()"><i class="fas fa-camera"></i> Image</div>
-					<input #fileInput type="file" accept="image/*" style="display: none" multiple
-					       (change)="onImageSelect()">
-					<div class="splitter"></div>
-					<div class="button"><i class="fas fa-video"></i> Video</div>
-					<div class="splitter"></div>
-					<div class="button"><i class="fas fa-file"></i> Document</div>
-				</div>
-			</div>
+			<app-attachments-menu [editingMessage]="editingMessage" (attachedImages)="attachedImages.push($event)">
+			</app-attachments-menu>
 			<textarea id="send-message-text" autofocus autosize rows="1" placeholder="Write a message..."
 			          [(ngModel)]="messageText"
 			          appMessageSend [minRows]="1" [maxRows]="10">
