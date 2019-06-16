@@ -79,3 +79,16 @@ body {
 	}
 
 }
+
+.loading-icon {
+	i {
+		color: var(--grey);
+		opacity: .7;
+		font-size: 32px;
+
+		.fa-spin {
+			animation-duration: .5s;
+		}
+	}
+}
+

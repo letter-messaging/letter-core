@@ -14,53 +14,6 @@
 	overflow-y: hidden;
 }
 
-.preview-wrapper {
-	display: flex;
-	flex-direction: column;
-
-	height: 100%;
-
-	overflow-y: auto;
-	overflow-x: hidden;
-
-	.selected {
-		background-color: var(--grey) !important;
-
-		color: white;
-
-		.info {
-			color: white;
-		}
-
-		.from {
-			color: white !important;
-		}
-
-		.text {
-			color: white;
-		}
-
-		.delete i {
-			color: white;
-		}
-
-		.unread-wrapper i {
-			color: white;
-		}
-
-		.sent {
-			color: white;
-		}
-	}
-
-	.splitter {
-		width: 100%;
-		height: 0;
-		border-top: 1px solid var(--bright);
-	}
-
-}
-
 .overlay {
 	position: absolute;
 

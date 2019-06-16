@@ -69,7 +69,10 @@
 		</div>
 		<div class="preview-wrapper">
 			<div class="splitter"></div>
-			<ng-container *ngIf="searchText.trim()[0] !== '@'">
+			<div class="loading-previews loading-icon" *ngIf="!previews">
+				<i class="fas fa-circle-notch fa-spin"></i>
+			</div>
+			<ng-container *ngIf="previews && searchText.trim()[0] !== '@'">
 				<app-preview
 					*ngFor="let preview of previewsOrSearchPreviews()"
 					[preview]="preview"
@@ -82,7 +85,7 @@
 					<div class="text">No matching conversations found.</div>
 				</div>
 			</ng-container>
-			<ng-container *ngIf="searchText && searchText.trim()[0] === '@'">
+			<ng-container *ngIf="previews && searchText && searchText.trim()[0] === '@'">
 				<div class="user-preview"
 				     *ngFor="let user of searchUsers"
 				     (click)="createConversation(user)">
@@ -100,8 +103,11 @@
 		</div>
 	</div>
 
-	<div class="conversation" *ngIf="messages">
-		<div class="no-conversation" *ngIf="!currentPreview">
+	<div class="conversation">
+		<div class="loading-messages loading-icon" *ngIf="!previews || !messages">
+			<i class="fas fa-circle-notch fa-spin"></i>
+		</div>
+		<div class="no-conversation" *ngIf="previews && messages && !currentPreview">
 			<i class="fas fa-comments"></i>
 			<div class="text">Select conversation to start messaging.</div>
 		</div>
@@ -109,11 +115,11 @@
 			<i class="fas fa-arrow-right"></i>
 			<div class="text">Select conversation to forward messages to.</div>
 		</div>
-		<div class="no-messages" *ngIf="currentPreview && messages.length === 0 && !isSelectForwardTo">
+		<div class="no-messages" *ngIf="currentPreview && messages && messages.length === 0 && !isSelectForwardTo">
 			<i class="fas fa-comment"></i>
 			<div class="text">Be the first. Messages will be displayed here.</div>
 		</div>
-		<div class="message-wrapper" #messageWrapper *ngIf="currentPreview && !isSelectForwardTo"
+		<div class="message-wrapper" #messageWrapper *ngIf="messages && currentPreview && !isSelectForwardTo"
 		     (appScrollTop)="loadMore()">
 			<app-message *ngFor="let message of messages | descSort: 'sent'"
 			             (click)="selectMessage(message, $event)"
@@ -135,7 +141,7 @@
 			</ng-container>
 		</div>
 		<div class="send-message-wrapper"
-		     *ngIf="currentPreview && !(selectedMessages.length !== 0 && !editingMessage)">
+		     *ngIf="routeConversationId && !(selectedMessages.length !== 0 && !editingMessage)">
 			<i class="fas fa-ban" *ngIf="editingMessage" (click)="cancelEditing()"></i>
 			<div appShowAttachmentsMenu>
 				<i class="fas fa-paperclip" *ngIf="!editingMessage"></i>
