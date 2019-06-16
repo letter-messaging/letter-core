@@ -1,0 +1,12 @@
+<div class="attachments-menu-wrapper" (click)="visible = true" (appOutsideClick)="visible = false">
+	<i class="fas fa-paperclip" *ngIf="!editingMessage"></i>
+	<div class="attachments-menu" *ngIf="visible">
+		<div class="button" (click)="selectImage()"><i class="fas fa-camera"></i> Image</div>
+		<input #fileInput type="file" accept="image/*" style="display: none" multiple
+		       (change)="onImageSelect()">
+		<div class="splitter"></div>
+		<div class="button"><i class="fas fa-video"></i> Video</div>
+		<div class="splitter"></div>
+		<div class="button"><i class="fas fa-file"></i> Document</div>
+	</div>
+</div>
