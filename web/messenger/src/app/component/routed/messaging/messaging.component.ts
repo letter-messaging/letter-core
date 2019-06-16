@@ -45,8 +45,7 @@ import {MessageEditAction} from '../../../dto/action/MessageEditAction';
 		'./messaging.component.select-message.scss',
 		'./messaging.component.content-left.scss',
 		'./messaging.component.conversation.scss',
-		'./messaging.component.conversation-menu.scss',
-		'./messaging.component.profile-menu.scss'
+		'./messaging.component.conversation-menu.scss'
 	]
 })
 export class MessagingComponent implements OnInit {
@@ -88,7 +87,6 @@ export class MessagingComponent implements OnInit {
 	showAttachmentsMenu = false;
 
 	conversationMenuView = false;
-	profileMenuView = false;
 
 	attachedImages: Array<NewImage> = [];
 
@@ -221,7 +219,9 @@ export class MessagingComponent implements OnInit {
 	}
 
 	openConversation(conversationId: number) {
-		if (this.currentPreview && this.currentPreview.conversation.id === conversationId) return;
+		if (this.currentPreview && this.currentPreview.conversation.id === conversationId) {
+			return;
+		}
 		this.router.navigate(['/im'], {queryParams: {id: conversationId}, replaceUrl: true});
 		this.messages = null;
 		this.isSelectForwardTo = false;
@@ -346,17 +346,6 @@ export class MessagingComponent implements OnInit {
 		this.deselectMessages();
 		this.editingMessage = null;
 		this.messageText = '';
-	}
-
-	logout() {
-		this.cookieService.deleteToken();
-		this.router.navigate(['/auth'], {replaceUrl: true});
-	}
-
-	forceLogout() {
-		this.authService.logout(this.token).subscribe(success => {
-		});
-		this.logout();
 	}
 
 	incrementBackgroundUnread() {

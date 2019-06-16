@@ -34,30 +34,15 @@
 					<div class="splitter"></div>
 					<div class="button" (click)="hideConversation(currentPreview.conversation.id)">Hide conversation
 					</div>
-					<div class="button danger" (click)="deleteConversation(currentPreview.conversation.id)">Delete
-						conversation
+					<!--TODO: add alerts to danger buttons-->
+					<div class="button danger" (click)="deleteConversation(currentPreview.conversation.id)">
+						Delete conversation
 					</div>
 				</div>
 			</div>
-			<div class="profile-menu" *ngIf="!currentPreview && me" (appOutsideClick)="profileMenuView = false">
-				<div class="button" (click)="profileMenuView = !profileMenuView">
-					<div class="text">{{me.firstName}}</div>
-					<img class="avatar"
-					     [src]="ImageService.getImagePathByCompressionMode(FILE_URL + me.avatar, ImageCompressionMode.SMALL)"
-					     alt="">
-					<!--TODO: animation-->
-					<!--TODO: fix bug with clicking on i's-->
-					<i class="fas fa-caret-down" *ngIf="!profileMenuView"></i>
-					<i class="fas fa-caret-up" *ngIf="profileMenuView"></i>
-				</div>
-				<div class="context-menu" *ngIf="profileMenuView">
-					<div class="button" (click)="openProfile(me)">Preview profile</div>
-					<div class="splitter"></div>
-					<div class="button">Settings</div>
-					<div class="splitter"></div>
-					<div class="button" (click)="logout()">Logout</div>
-				</div>
-			</div>
+			<app-profile-menu [currentPreview]="currentPreview"
+			                  (openProfile)="openProfile($event)">
+			</app-profile-menu>
 		</div>
 	</div>
 
