@@ -22,7 +22,6 @@ import {ConversationPreviewComponent} from './component/embedded/preview/convers
 import {UserPreviewComponent} from './component/embedded/preview/user-preview/user-preview.component';
 import { ProfileMenuComponent } from './component/embedded/menu/profile-menu/profile-menu.component';
 import { AttachmentsMenuComponent } from './component/embedded/menu/attachments-menu/attachments-menu.component';
-import { SelectedMessagesMenuComponent } from './component/embedded/menu/selected-messages-menu/selected-messages-menu.component';
 import { ConversationMenuComponent } from './component/embedded/menu/conversation-menu/conversation-menu.component';
 
 @NgModule({
@@ -45,7 +44,6 @@ import { ConversationMenuComponent } from './component/embedded/menu/conversatio
 		UserPreviewComponent,
 		ProfileMenuComponent,
 		AttachmentsMenuComponent,
-		SelectedMessagesMenuComponent,
 		ConversationMenuComponent,
 	],
 	imports: [

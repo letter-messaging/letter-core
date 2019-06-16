@@ -150,8 +150,7 @@ export class MessagingComponent implements OnInit {
 	            private soundNotificationService: SoundNotificationService,
 	            private userInfoService: UserInfoService,
 	            private backgroundUnreadService: BackgroundUnreadService,
-	            private avatarService: AvatarService,
-	            private imageService: ImageService) {
+	            private avatarService: AvatarService) {
 	}
 
 	ngOnInit() {
