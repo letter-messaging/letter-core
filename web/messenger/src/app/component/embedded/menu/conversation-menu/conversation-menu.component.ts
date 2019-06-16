@@ -3,6 +3,7 @@ import {AppComponent} from '../../../../app.component';
 import {TokenProvider} from '../../../../provider/token-provider';
 import {ConversationService} from '../../../../service/conversation.service';
 import {Preview} from '../../../../dto/Preview';
+import {ConfirmService} from '../../../../service/confirm.service';
 
 @Component({
 	selector: 'app-conversation-menu',
@@ -24,7 +25,8 @@ export class ConversationMenuComponent implements OnInit {
 	constructor(
 		private app: AppComponent,
 		private tokenProvider: TokenProvider,
-		private conversationService: ConversationService
+		private conversationService: ConversationService,
+		private confirmService: ConfirmService
 	) {
 	}
 
@@ -37,9 +39,11 @@ export class ConversationMenuComponent implements OnInit {
 	}
 
 	deleteConversation(conversationId: number) {
-		this.conversationService.delete(this.token, conversationId).subscribe(success => {
-			this.closeConversation.next();
-		});
+		if (this.confirmService.confirm('All conversation messages will be deleted')) {
+			this.conversationService.delete(this.token, conversationId).subscribe(success => {
+				this.closeConversation.next();
+			});
+		}
 	}
 
 	hideConversation(conversationId: number) {

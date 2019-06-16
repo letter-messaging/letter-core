@@ -1,4 +1,18 @@
 .conversation-menu {
+
+	.button {
+		i {
+			color: white;
+			font-size: 24px;
+			padding: 10px;
+			cursor: pointer;
+		}
+
+		i:hover {
+			color: var(--special);
+		}
+	}
+
 	.context-menu {
 		position: absolute;
 		top: 50px;
