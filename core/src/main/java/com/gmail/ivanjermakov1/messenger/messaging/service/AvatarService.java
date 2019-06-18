@@ -52,7 +52,7 @@ public class AvatarService {
 		return new ArrayList<>(avatarRepository.getByUserId(user.getId()));
 	}
 	
-	public AvatarDto upload(User user, MultipartFile avatarFile) throws IOException, InvalidFileException {
+	public AvatarDto upload(User user, MultipartFile avatarFile) throws IOException {
 		if (!Uploads.isSupportedImage(avatarFile)) throw new InvalidFileException("provided file is not an image");
 		
 		String avatarPath = fileUploadService.upload(avatarFile, FileType.AVATAR);
