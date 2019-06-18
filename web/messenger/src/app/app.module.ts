@@ -12,17 +12,17 @@ import {RegisterComponent} from './component/routed/register/register.component'
 import {ImageAttachmentComponent} from './component/embedded/attachment/image-attachment/image-attachment.component';
 import {ProfileComponent} from './component/embedded/profile/profile.component';
 import {ForwardedAttachmentComponent} from './component/embedded/attachment/forwarded-attachment/forwarded-attachment.component';
-import {OverlayClickDirective} from './component/routed/messaging/overlay-click.directive';
-import {OutsideClickDirective} from './component/routed/messaging/outside-click.directive';
-import {ScrollTopDirective} from './component/routed/messaging/scroll-top.directive';
-import {MessageSendDirective} from './component/routed/messaging/message-send.directive';
 import {MessageComponent} from './component/embedded/message/message.component';
 import {MessagingComponent} from './component/routed/messaging/messaging.component';
 import {ConversationPreviewComponent} from './component/embedded/preview/conversation-preview/conversation-preview.component';
 import {UserPreviewComponent} from './component/embedded/preview/user-preview/user-preview.component';
-import { ProfileMenuComponent } from './component/embedded/menu/profile-menu/profile-menu.component';
-import { AttachmentsMenuComponent } from './component/embedded/menu/attachments-menu/attachments-menu.component';
-import { ConversationMenuComponent } from './component/embedded/menu/conversation-menu/conversation-menu.component';
+import {ProfileMenuComponent} from './component/embedded/menu/profile-menu/profile-menu.component';
+import {AttachmentsMenuComponent} from './component/embedded/menu/attachments-menu/attachments-menu.component';
+import {ConversationMenuComponent} from './component/embedded/menu/conversation-menu/conversation-menu.component';
+import {MessageSendDirective} from './directive/message-send.directive';
+import {OverlayClickDirective} from './directive/overlay-click.directive';
+import {OutsideClickDirective} from './directive/outside-click.directive';
+import {ScrollTopDirective} from './directive/scroll-top.directive';
 
 @NgModule({
 	declarations: [

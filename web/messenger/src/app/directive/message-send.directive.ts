@@ -1,5 +1,5 @@
 import {Directive, HostListener} from '@angular/core';
-import {MessagingComponent} from './messaging.component';
+import {MessagingComponent} from '../component/routed/messaging/messaging.component';
 
 @Directive({selector: '[appMessageSend]'})
 export class MessageSendDirective {
