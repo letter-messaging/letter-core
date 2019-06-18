@@ -5,6 +5,7 @@ import com.gmail.ivanjermakov1.messenger.auth.service.UserService;
 import com.gmail.ivanjermakov1.messenger.core.util.Mapper;
 import com.gmail.ivanjermakov1.messenger.exception.AuthenticationException;
 import com.gmail.ivanjermakov1.messenger.exception.NoSuchEntityException;
+import com.gmail.ivanjermakov1.messenger.messaging.dto.DocumentDto;
 import com.gmail.ivanjermakov1.messenger.messaging.dto.ImageDto;
 import com.gmail.ivanjermakov1.messenger.messaging.dto.MessageDto;
 import com.gmail.ivanjermakov1.messenger.messaging.entity.Conversation;
@@ -93,11 +94,13 @@ public class MessageService {
 				.collect(Collectors.toList()));
 		
 		messageDto.setImages(Mapper.mapAll(
-				message.getImages()
-						.stream()
-						.map(imageService::full)
-						.collect(Collectors.toList()),
+				message.getImages(),
 				ImageDto.class
+		));
+		
+		messageDto.setDocuments(Mapper.mapAll(
+				message.getDocuments(),
+				DocumentDto.class
 		));
 		
 		return messageDto;

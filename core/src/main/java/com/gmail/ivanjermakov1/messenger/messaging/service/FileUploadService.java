@@ -46,13 +46,13 @@ public class FileUploadService {
 	}
 	
 	public void uploadCompressedVersions(MultipartFile multipartFile, String filePath) throws IOException {
-		String extension = FilenameUtils.getExtension(filePath);
+		String extension = "." + FilenameUtils.getExtension(filePath);
 		String fileName = FilenameUtils.getBaseName(filePath);
 		String path = FilenameUtils.getFullPath(filePath);
 //		so {path}{fileName}.{extension} is {filePath}
 		
-		ImageCompressor.compress(filePath, path + fileName + "_" + ImageCompressionMode.MEDIUM.getFilePathMark() + "." + extension, .4f);
-		ImageCompressor.compress(filePath, path + fileName + "_" + ImageCompressionMode.SMALL.getFilePathMark() + "." + extension, .1f);
+		ImageCompressor.compress(filePath, path + fileName + "_" + ImageCompressionMode.MEDIUM.getFilePathMark() + extension, .4f);
+		ImageCompressor.compress(filePath, path + fileName + "_" + ImageCompressionMode.SMALL.getFilePathMark() + extension, .1f);
 	}
 	
 }

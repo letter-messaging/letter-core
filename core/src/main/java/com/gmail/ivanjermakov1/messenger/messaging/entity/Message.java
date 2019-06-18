@@ -58,10 +58,14 @@ public class Message {
 	@JoinColumn(name = "message_id", nullable = false)
 	private List<Image> images;
 	
+	@OneToMany(cascade = {CascadeType.ALL}, orphanRemoval = true)
+	@JoinColumn(name = "message_id", nullable = false)
+	private List<Document> documents;
+	
 	public Message() {
 	}
 	
-	public Message(Conversation conversation, LocalDateTime sent, String text, Boolean read, User sender, List<Message> forwarded, List<Image> images) {
+	public Message(Conversation conversation, LocalDateTime sent, String text, Boolean read, User sender, List<Message> forwarded, List<Image> images, List<Document> documents) {
 		this.conversation = conversation;
 		this.sent = sent;
 		this.text = text;
@@ -69,6 +73,7 @@ public class Message {
 		this.sender = sender;
 		this.forwarded = forwarded;
 		this.images = images;
+		this.documents = documents;
 	}
 	
 	public Long getId() {
@@ -135,13 +140,21 @@ public class Message {
 		this.images = images;
 	}
 	
+	public List<Document> getDocuments() {
+		return documents;
+	}
+	
+	public void setDocuments(List<Document> documents) {
+		this.documents = documents;
+	}
+	
 	//	TODO: refactor
 	public boolean validate() {
 		if (sender == null || sender.getId() == null) return false;
 		if (conversation == null || conversation.getId() == null) return false;
 		
 		if (text.trim().isEmpty()) {
-			return !Objects.isNullOrEmpty(forwarded) || !Objects.isNullOrEmpty(images);
+			return !Objects.isNullOrEmpty(forwarded) || !Objects.isNullOrEmpty(images) || !Objects.isNullOrEmpty(documents);
 		}
 		
 		return true;

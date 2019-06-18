@@ -8,15 +8,17 @@ public class EditMessageDto {
 	private String text;
 	private List<MessageDto> forwarded;
 	private List<ImageDto> images;
+	private List<DocumentDto> documents;
 	
 	public EditMessageDto() {
 	}
 	
-	public EditMessageDto(Long id, String text, List<MessageDto> forwarded, List<ImageDto> images) {
+	public EditMessageDto(Long id, String text, List<MessageDto> forwarded, List<ImageDto> images, List<DocumentDto> documents) {
 		this.id = id;
 		this.text = text;
 		this.forwarded = forwarded;
 		this.images = images;
+		this.documents = documents;
 	}
 	
 	public Long getId() {
@@ -49,6 +51,14 @@ public class EditMessageDto {
 	
 	public void setImages(List<ImageDto> images) {
 		this.images = images;
+	}
+	
+	public List<DocumentDto> getDocuments() {
+		return documents;
+	}
+	
+	public void setDocuments(List<DocumentDto> documents) {
+		this.documents = documents;
 	}
 	
 }

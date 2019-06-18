@@ -58,7 +58,8 @@ public class MessagingController {
 	 * @throws NoSuchEntityException   on invalid conversationId in @param newMessageDto
 	 */
 	@PostMapping("send")
-	public MessageDto sendMessage(@RequestHeader("Auth-Token") String token, @RequestBody NewMessageDto newMessageDto) throws AuthenticationException, InvalidMessageException, NoSuchEntityException {
+	public MessageDto sendMessage(@RequestHeader("Auth-Token") String token,
+	                              @RequestBody NewMessageDto newMessageDto) throws AuthenticationException, InvalidMessageException, NoSuchEntityException {
 		User user = userService.authenticate(token);
 		
 		return messagingService.processNewMessage(user, newMessageDto);
@@ -75,7 +76,8 @@ public class MessagingController {
 	 * @throws NoSuchEntityException   on invalid conversation
 	 */
 	@PostMapping("edit")
-	public MessageDto editMessage(@RequestHeader("Auth-Token") String token, @RequestBody EditMessageDto editMessageDto) throws AuthenticationException, InvalidMessageException, NoSuchEntityException {
+	public MessageDto editMessage(@RequestHeader("Auth-Token") String token,
+	                              @RequestBody EditMessageDto editMessageDto) throws AuthenticationException, InvalidMessageException, NoSuchEntityException {
 		User user = userService.authenticate(token);
 		
 		if (editMessageDto.getText() == null)

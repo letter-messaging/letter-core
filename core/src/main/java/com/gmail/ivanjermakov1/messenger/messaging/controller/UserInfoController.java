@@ -36,7 +36,8 @@ public class UserInfoController {
 	 * @throws AuthenticationException on invalid @param token
 	 */
 	@GetMapping
-	public UserInfoDto get(@RequestHeader("Auth-Token") String token, @RequestParam("userId") Long userId) throws AuthenticationException {
+	public UserInfoDto get(@RequestHeader("Auth-Token") String token,
+	                       @RequestParam("userId") Long userId) throws AuthenticationException {
 		User user = userService.authenticate(token);
 		
 		return userInfoService.get(userId);
@@ -52,7 +53,8 @@ public class UserInfoController {
 	 * @throws AuthenticationException on invalid @param token and attempting to edit other user info
 	 */
 	@PostMapping
-	public UserInfoDto edit(@RequestHeader("Auth-Token") String token, @RequestBody UserInfoDto userInfoDto) throws AuthenticationException {
+	public UserInfoDto edit(@RequestHeader("Auth-Token") String token,
+	                        @RequestBody UserInfoDto userInfoDto) throws AuthenticationException {
 		User user = userService.authenticate(token);
 		
 		return userInfoService.edit(user, userInfoDto);

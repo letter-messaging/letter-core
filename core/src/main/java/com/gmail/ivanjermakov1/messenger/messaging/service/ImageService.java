@@ -31,22 +31,8 @@ public class ImageService {
 		this.fileUploadService = fileUploadService;
 	}
 	
-	public Image get(String path) {
-		return imageRepository.findByPath(path);
-	}
-	
-	/**
-	 * Preform deletion from static file availability and also from referencing message (which means it deletes from
-	 * everywhere, where it was used)
-	 *
-	 * @param image Image to be deleted
-	 */
 	public void delete(Image image) {
 		imageRepository.delete(image);
-	}
-	
-	public ImageDto full(Image image) {
-		return Mapper.map(image, ImageDto.class);
 	}
 	
 	public NewImageDto upload(MultipartFile imageFile) throws IOException {

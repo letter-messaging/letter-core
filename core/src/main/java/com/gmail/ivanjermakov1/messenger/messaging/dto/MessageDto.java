@@ -12,17 +12,19 @@ public class MessageDto {
 	
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	private LocalDateTime sent;
+	
 	private String text;
 	private Boolean read;
 	private UserDto sender;
 	private ConversationDto conversation;
 	private List<MessageDto> forwarded;
 	private List<ImageDto> images;
+	private List<DocumentDto> documents;
 	
 	public MessageDto() {
 	}
 	
-	public MessageDto(Long id, LocalDateTime sent, String text, Boolean read, UserDto sender, ConversationDto conversation, List<MessageDto> forwarded, List<ImageDto> images) {
+	public MessageDto(Long id, LocalDateTime sent, String text, Boolean read, UserDto sender, ConversationDto conversation, List<MessageDto> forwarded, List<ImageDto> images, List<DocumentDto> documents) {
 		this.id = id;
 		this.sent = sent;
 		this.text = text;
@@ -31,6 +33,7 @@ public class MessageDto {
 		this.conversation = conversation;
 		this.forwarded = forwarded;
 		this.images = images;
+		this.documents = documents;
 	}
 	
 	public Long getId() {
@@ -95,6 +98,14 @@ public class MessageDto {
 	
 	public void setImages(List<ImageDto> images) {
 		this.images = images;
+	}
+	
+	public List<DocumentDto> getDocuments() {
+		return documents;
+	}
+	
+	public void setDocuments(List<DocumentDto> documents) {
+		this.documents = documents;
 	}
 	
 }

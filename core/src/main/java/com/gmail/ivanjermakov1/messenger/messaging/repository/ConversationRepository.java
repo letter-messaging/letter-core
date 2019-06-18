@@ -10,7 +10,6 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-@Repository
 public interface ConversationRepository extends CrudRepository<Conversation, Long> {
 	
 	@Query("select c from Conversation c join c.users u on u.id = :id")

@@ -43,7 +43,8 @@ public class AvatarController {
 	 *                                 specified in @value {@code spring.servlet.multipart.max-file-size})
 	 */
 	@PostMapping("upload")
-	public AvatarDto upload(@RequestHeader("Auth-Token") String token, @RequestParam("avatar") MultipartFile avatar) throws AuthenticationException, IOException, InvalidFileException {
+	public AvatarDto upload(@RequestHeader("Auth-Token") String token,
+	                        @RequestParam("avatar") MultipartFile avatar) throws AuthenticationException, IOException, InvalidFileException {
 		User user = userService.authenticate(token);
 		
 		return avatarService.upload(user, avatar);
@@ -58,7 +59,8 @@ public class AvatarController {
 	 * @throws NoSuchEntityException   on invalid avatar id
 	 */
 	@GetMapping("delete")
-	public void delete(@RequestHeader("Auth-Token") String token, @RequestParam("avatarId") Long avatarId) throws AuthenticationException, NoSuchEntityException {
+	public void delete(@RequestHeader("Auth-Token") String token,
+	                   @RequestParam("avatarId") Long avatarId) throws AuthenticationException, NoSuchEntityException {
 		User user = userService.authenticate(token);
 		
 		avatarService.delete(user, avatarId);

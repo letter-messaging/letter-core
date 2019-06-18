@@ -14,6 +14,7 @@ import com.gmail.ivanjermakov1.messenger.messaging.dto.action.MessageEditAction;
 import com.gmail.ivanjermakov1.messenger.messaging.dto.action.NewMessageAction;
 import com.gmail.ivanjermakov1.messenger.messaging.dto.action.Request;
 import com.gmail.ivanjermakov1.messenger.messaging.entity.Conversation;
+import com.gmail.ivanjermakov1.messenger.messaging.entity.Document;
 import com.gmail.ivanjermakov1.messenger.messaging.entity.Image;
 import com.gmail.ivanjermakov1.messenger.messaging.entity.Message;
 import org.slf4j.Logger;
@@ -41,6 +42,7 @@ public class MessagingService {
 	private final ConversationService conversationService;
 	private final UserService userService;
 	private final ImageService imageService;
+	private final DocumentService documentService;
 	
 	private final List<Request<Action>> requests = new CopyOnWriteArrayList<>();
 	
@@ -48,11 +50,12 @@ public class MessagingService {
 	private Long sseTimeout;
 	
 	@Autowired
-	public MessagingService(MessageService messageService, ConversationService conversationService, UserService userService, ImageService imageService) {
+	public MessagingService(MessageService messageService, ConversationService conversationService, UserService userService, ImageService imageService, DocumentService documentService) {
 		this.messageService = messageService;
 		this.conversationService = conversationService;
 		this.userService = userService;
 		this.imageService = imageService;
+		this.documentService = documentService;
 	}
 	
 	public SseEmitter generateRequest(User user) {
@@ -98,6 +101,10 @@ public class MessagingService {
 				newMessageDto.getImages()
 						.stream()
 						.map(i -> new Image(user, i.getPath(), LocalDate.now()))
+						.collect(Collectors.toList()),
+				newMessageDto.getDocuments()
+						.stream()
+						.map(d -> new Document(user, d.getPath(), LocalDate.now()))
 						.collect(Collectors.toList())
 		);
 		
@@ -135,6 +142,13 @@ public class MessagingService {
 						.stream()
 						.noneMatch(ei -> ei.getId().equals(i.getId())))
 				.forEach(imageService::delete);
+		
+		original.getDocuments()
+				.stream()
+				.filter(d -> editMessageDto.getDocuments()
+						.stream()
+						.noneMatch(ed -> ed.getId().equals(d.getId())))
+				.forEach(documentService::delete);
 		
 		original = messageService.save(original);
 		

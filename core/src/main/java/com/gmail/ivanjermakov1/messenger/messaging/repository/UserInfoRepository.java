@@ -8,7 +8,6 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
-@Repository
 public interface UserInfoRepository extends CrudRepository<UserInfo, Long> {
 	
 	@Query("select i from UserInfo i where i.user.id = :userId")

@@ -12,8 +12,10 @@ public class UserInfoDto {
 	private String firstName;
 	private String lastName;
 	private Boolean gender;
+	
 	@JsonFormat(pattern = "yyyy-MM-dd")
 	private LocalDate birthDate;
+	
 	private MaritalStatus maritalStatus;
 	private String country;
 	private String city;

@@ -9,16 +9,18 @@ public class NewMessageDto {
 	private String text;
 	private List<MessageDto> forwarded;
 	private List<NewImageDto> images;
+	private List<NewDocumentDto> documents;
 	
 	public NewMessageDto() {
 	}
 	
-	public NewMessageDto(Long senderId, Long conversationId, String text, List<MessageDto> forwarded, List<NewImageDto> images) {
+	public NewMessageDto(Long senderId, Long conversationId, String text, List<MessageDto> forwarded, List<NewImageDto> images, List<NewDocumentDto> documents) {
 		this.senderId = senderId;
 		this.conversationId = conversationId;
 		this.text = text;
 		this.forwarded = forwarded;
 		this.images = images;
+		this.documents = documents;
 	}
 	
 	public Long getSenderId() {
@@ -59,6 +61,14 @@ public class NewMessageDto {
 	
 	public void setImages(List<NewImageDto> images) {
 		this.images = images;
+	}
+	
+	public List<NewDocumentDto> getDocuments() {
+		return documents;
+	}
+	
+	public void setDocuments(List<NewDocumentDto> documents) {
+		this.documents = documents;
 	}
 	
 }

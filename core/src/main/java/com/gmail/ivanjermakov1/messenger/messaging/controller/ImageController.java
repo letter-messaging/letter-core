@@ -44,7 +44,8 @@ public class ImageController {
 	 *                                 specified in @value {@code spring.servlet.multipart.max-file-size})
 	 */
 	@PostMapping("upload")
-	public NewImageDto upload(@RequestHeader("Auth-Token") String token, @RequestParam("image") MultipartFile image) throws AuthenticationException, IOException, InvalidFileException {
+	public NewImageDto upload(@RequestHeader("Auth-Token") String token,
+	                          @RequestParam("image") MultipartFile image) throws AuthenticationException, IOException, InvalidFileException {
 		userService.authenticate(token);
 		
 		return imageService.upload(image);
@@ -59,7 +60,8 @@ public class ImageController {
 	 * @throws NoSuchEntityException   on invalid avatar id
 	 */
 	@GetMapping("delete")
-	public void delete(@RequestHeader("Auth-Token") String token, @RequestParam("imageId") Long imageId) throws AuthenticationException, NoSuchEntityException, AuthorizationException {
+	public void delete(@RequestHeader("Auth-Token") String token,
+	                   @RequestParam("imageId") Long imageId) throws AuthenticationException, NoSuchEntityException, AuthorizationException {
 		User user = userService.authenticate(token);
 		
 		imageService.delete(user, imageId);

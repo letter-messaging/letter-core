@@ -37,7 +37,8 @@ public class ConversationController {
 	 * @throws NoSuchEntityException   on invalid @param withLogin
 	 */
 	@GetMapping("create")
-	public ConversationDto create(@RequestHeader("Auth-Token") String token, @RequestParam("with") String withLogin) throws AuthenticationException, NoSuchEntityException {
+	public ConversationDto create(@RequestHeader("Auth-Token") String token,
+	                              @RequestParam("with") String withLogin) throws AuthenticationException, NoSuchEntityException {
 		User user = userService.authenticate(token);
 		try {
 			return conversationService.get(user, conversationService.create(user, userService.getUser(withLogin)));
@@ -55,7 +56,8 @@ public class ConversationController {
 	 * @throws NoSuchEntityException   on invalid @param conversationId
 	 */
 	@GetMapping("delete")
-	public void delete(@RequestHeader("Auth-Token") String token, @RequestParam("id") Long conversationId) throws AuthenticationException, NoSuchEntityException {
+	public void delete(@RequestHeader("Auth-Token") String token,
+	                   @RequestParam("id") Long conversationId) throws AuthenticationException, NoSuchEntityException {
 		User user = userService.authenticate(token);
 		
 		conversationService.delete(user, conversationService.get(conversationId));
@@ -70,7 +72,8 @@ public class ConversationController {
 	 * @throws NoSuchEntityException   on invalid @param conversationId
 	 */
 	@GetMapping("hide")
-	public void hide(@RequestHeader("Auth-Token") String token, @RequestParam("id") Long conversationId) throws AuthenticationException, NoSuchEntityException {
+	public void hide(@RequestHeader("Auth-Token") String token,
+	                 @RequestParam("id") Long conversationId) throws AuthenticationException, NoSuchEntityException {
 		User user = userService.authenticate(token);
 		
 		conversationService.hide(user, conversationService.get(conversationId));

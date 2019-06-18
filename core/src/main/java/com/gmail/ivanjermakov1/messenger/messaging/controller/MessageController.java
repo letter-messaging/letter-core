@@ -64,7 +64,8 @@ public class MessageController {
 	 * @throws AuthenticationException on invalid @param token
 	 */
 	@PostMapping("delete")
-	public void delete(@RequestHeader("Auth-Token") String token, @RequestBody List<MessageDto> deleteMessages) throws AuthenticationException {
+	public void delete(@RequestHeader("Auth-Token") String token,
+	                   @RequestBody List<MessageDto> deleteMessages) throws AuthenticationException {
 		User user = userService.authenticate(token);
 		messageService.delete(user, deleteMessages);
 	}

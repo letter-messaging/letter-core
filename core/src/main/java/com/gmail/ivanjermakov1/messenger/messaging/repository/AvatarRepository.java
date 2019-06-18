@@ -6,13 +6,13 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Set;
 
-@Repository
 public interface AvatarRepository extends CrudRepository<Avatar, Long> {
 	
 	@Query("select a from Avatar a where a.user.id = :userId order by a.id desc")
-	Set<Avatar> getByUserId(@Param("userId") Long userId);
+	List<Avatar> getByUserId(@Param("userId") Long userId);
 	
 	void deleteAvatarById(Long avatarId);
 	

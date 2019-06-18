@@ -1,13 +1,13 @@
 package com.gmail.ivanjermakov1.messenger.messaging.repository;
 
-import com.gmail.ivanjermakov1.messenger.messaging.entity.Image;
+import com.gmail.ivanjermakov1.messenger.messaging.entity.Document;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
-public interface ImageRepository extends CrudRepository<Image, Long> {
+public interface DocumentRepository extends CrudRepository<Document, Long> {
 	
-	Optional<Image> findByPath(String path);
+	Optional<Document> findByPath(String path);
 	
 }

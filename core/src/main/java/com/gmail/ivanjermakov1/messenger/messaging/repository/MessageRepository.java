@@ -13,7 +13,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-@Repository
 public interface MessageRepository extends CrudRepository<Message, Long> {
 	
 	Message getById(Long messageId);

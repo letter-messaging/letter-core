@@ -6,7 +6,6 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-@Repository
 public interface UserOnlineRepository extends CrudRepository<UserOnline, Long> {
 	
 	@Query(value = "select * from user_online " +
