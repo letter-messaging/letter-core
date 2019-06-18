@@ -45,7 +45,7 @@
 			<div class="no-previews" *ngIf="previews && previews.length === 0 && searchText.length === 0">
 				<i class="fas fa-user-friends"></i>
 				<div class="text">No conversations yet.</div>
-				<a (click)="searchText = '@'; previewSearchFocus()">Let's find some.</a>
+				<a (click)="searchText = '@'; previewSearchFocus()">Let's find some people.</a>
 			</div>
 			<ng-container *ngIf="previews && searchText.trim()[0] !== '@'">
 				<app-conversation-preview
@@ -116,7 +116,8 @@
 			<i class="fas fa-ban" *ngIf="editingMessage" (click)="cancelEditing()"></i>
 			<app-attachments-menu [editingMessage]="editingMessage" (attachedImages)="attachedImages.push($event)">
 			</app-attachments-menu>
-			<textarea #sendMessageText id="send-message-text" autofocus autosize rows="1" placeholder="Write a message..."
+			<textarea #sendMessageText id="send-message-text" autofocus autosize rows="1"
+			          placeholder="Write a message..."
 			          [(ngModel)]="messageText"
 			          appMessageSend [minRows]="1" [maxRows]="10">
       </textarea>

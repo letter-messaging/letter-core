@@ -219,6 +219,7 @@ export class MessagingComponent implements OnInit {
 		this.router.navigate(['/im'], {queryParams: {id: conversationId}});
 		this.messages = null;
 		this.isSelectForwardTo = false;
+		this.sendMessageTextFocus();
 	}
 
 	closeConversation() {
@@ -363,11 +364,8 @@ export class MessagingComponent implements OnInit {
 	}
 
 	loadMorePreviews() {
-		console.debug('load more previews');
-		console.debug(this.previews.length % PREVIEWS_AMOUNT !== 0);
 		if (this.previews.length % PREVIEWS_AMOUNT !== 0) return;
 		const pageable = new Pageable(Math.floor(this.previews.length / PREVIEWS_AMOUNT), PREVIEWS_AMOUNT);
-		console.debug(Math.floor(this.previews.length / PREVIEWS_AMOUNT), PREVIEWS_AMOUNT);
 		this.previewService.all(this.token, pageable).subscribe(previews => {
 			this.previews = this.previews.concat(previews);
 		});
