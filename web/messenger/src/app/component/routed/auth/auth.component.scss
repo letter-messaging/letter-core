@@ -34,17 +34,11 @@
 	}
 
 	.register-hint {
+		font-style: italic;
+		color: var(--grey);
 		font-size: 18px;
 
 		margin: 5px;
-
-		a {
-			text-decoration: underline;
-			cursor: pointer;
-
-			font-size: 18px;
-			color: var(--dark);
-		}
 	}
 }
 

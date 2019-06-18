@@ -27,7 +27,7 @@ export class AppComponent {
 		this.router.events.subscribe(
 			(event: any) => {
 				if (event instanceof NavigationEnd) {
-					if (this.router.url === '/auth') {
+					if (this.router.url === '/auth' || this.router.url === '/register') {
 						return;
 					}
 
@@ -43,7 +43,7 @@ export class AppComponent {
 									if (params['id']) {
 										this.router.navigate(['/im'], {queryParams: {id: params['id']}, replaceUrl: true});
 									} else {
-										this.router.navigate(['/im']);
+										this.router.navigate(['/im'], {replaceUrl: true});
 									}
 								});
 							},

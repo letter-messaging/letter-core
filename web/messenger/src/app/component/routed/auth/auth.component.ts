@@ -38,7 +38,7 @@ export class AuthComponent implements OnInit {
 
 				this.authService.validate(token).subscribe(user => {
 					this.meProvider.setMe(user);
-					this.router.navigate(['/im']);
+					this.router.navigate(['/im'], {replaceUrl: true});
 				});
 
 			},

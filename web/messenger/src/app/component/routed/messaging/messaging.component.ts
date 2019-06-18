@@ -87,6 +87,10 @@ export class MessagingComponent implements OnInit {
 
 	attachedImages: NewImage[] = [];
 
+	@ViewChild('sendMessageText') sendMessageText: ElementRef;
+
+	@ViewChild('previewSearch') previewSearch: ElementRef;
+
 	@ViewChild('messageWrapper') messageWrapper: ElementRef;
 
 	@HostListener('document:keydown', ['$event'])
@@ -301,7 +305,7 @@ export class MessagingComponent implements OnInit {
 	editSelectedMessage() {
 		this.editingMessage = this.selectedMessages[0];
 		this.messageText = this.editingMessage.text;
-		setTimeout(() => document.getElementById('send-message-text').focus(), 0);
+		this.sendMessageTextFocus();
 	}
 
 	editMessage() {
@@ -400,6 +404,14 @@ export class MessagingComponent implements OnInit {
 
 	removeImageAttachment(image: NewImage) {
 		this.attachedImages = this.attachedImages.filter(i => i.path === image.path);
+	}
+
+	sendMessageTextFocus() {
+		setTimeout(() => this.sendMessageText.nativeElement.focus(), 0);
+	}
+
+	previewSearchFocus() {
+		setTimeout(() => this.previewSearch.nativeElement.focus(), 0);
 	}
 
 	private loadCurrentConversation() {

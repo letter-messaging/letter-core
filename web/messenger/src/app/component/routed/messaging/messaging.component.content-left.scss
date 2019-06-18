@@ -15,11 +15,29 @@
 		overflow-y: auto;
 		overflow-x: hidden;
 
-		.loading-previews {
+		.loading-previews, .no-previews {
 			display: flex;
 			align-items: center;
 			justify-content: center;
+
+			height: 100%;
 			padding: 20px;
+		}
+
+		.no-previews {
+			flex-direction: column;
+
+			i {
+				margin: 10px;
+				font-size: 80px;
+				color: var(--grey);
+			}
+
+			.text {
+				font-style: italic;
+				color: var(--grey);
+			}
+
 		}
 
 		.selected {
