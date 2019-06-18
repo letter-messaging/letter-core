@@ -112,8 +112,8 @@
 			</ng-container>
 			<ng-container *ngIf="attachedDocuments && attachedDocuments.length != 0">
 				<app-document-attachment *ngFor="let d of attachedDocuments"
-				                      [document]="d"
-				                      (removeDocumentAttachment)="removeDocumentAttachment(d)">
+				                         [document]="d"
+				                         (removeDocumentAttachment)="removeDocumentAttachment(d)">
 				</app-document-attachment>
 			</ng-container>
 		</div>
