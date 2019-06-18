@@ -19,6 +19,7 @@ import com.gmail.ivanjermakov1.messenger.messaging.entity.Message;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
@@ -43,6 +44,9 @@ public class MessagingService {
 	
 	private final List<Request<Action>> requests = new CopyOnWriteArrayList<>();
 	
+	@Value("${sse.timeout}")
+	private Long sseTimeout;
+	
 	@Autowired
 	public MessagingService(MessageService messageService, ConversationService conversationService, UserService userService, ImageService imageService) {
 		this.messageService = messageService;
@@ -52,7 +56,7 @@ public class MessagingService {
 	}
 	
 	public SseEmitter generateRequest(User user) {
-		SseEmitter emitter = new SseEmitter();
+		SseEmitter emitter = new SseEmitter(sseTimeout);
 		Request<Action> request = new Request<>(user, emitter);
 		emitter.onTimeout(() -> {
 			emitter.complete();
@@ -65,7 +69,10 @@ public class MessagingService {
 	public void sendRequest(Request<Action> request, Action action) {
 		LOG.debug("sending request from @" + request.getUser().getLogin());
 		try {
-			request.getEmitter().send(action);
+			SseEmitter.SseEventBuilder event = SseEmitter.event()
+					.data(action)
+					.reconnectTime(100);
+			request.getEmitter().send(event);
 		} catch (IOException e) {
 			LOG.warn("failed to send request from @" + request.getUser().getLogin());
 			request.getEmitter().complete();
