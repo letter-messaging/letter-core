@@ -1,11 +1,9 @@
 package com.gmail.ivanjermakov1.messenger.messaging.service;
 
 import com.gmail.ivanjermakov1.messenger.auth.entity.User;
-import com.gmail.ivanjermakov1.messenger.core.util.Mapper;
 import com.gmail.ivanjermakov1.messenger.exception.AuthorizationException;
 import com.gmail.ivanjermakov1.messenger.exception.InvalidFileException;
 import com.gmail.ivanjermakov1.messenger.exception.NoSuchEntityException;
-import com.gmail.ivanjermakov1.messenger.messaging.dto.ImageDto;
 import com.gmail.ivanjermakov1.messenger.messaging.dto.NewImageDto;
 import com.gmail.ivanjermakov1.messenger.messaging.entity.Image;
 import com.gmail.ivanjermakov1.messenger.messaging.enums.FileType;
