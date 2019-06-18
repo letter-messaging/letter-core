@@ -47,7 +47,7 @@ export class ProfileMenuComponent implements OnInit {
 
 	logout() {
 		this.cookieService.deleteToken();
-		this.router.navigate(['/auth']);
+		location.replace('/');
 	}
 
 	open(me: User) {
