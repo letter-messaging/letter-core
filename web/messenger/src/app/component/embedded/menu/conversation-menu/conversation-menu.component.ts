@@ -18,7 +18,7 @@ export class ConversationMenuComponent implements OnInit {
 	@Output()
 	closeConversation = new EventEmitter();
 
-	conversationMenuView = false;
+	visible = false;
 
 	private token: string;
 
@@ -41,6 +41,7 @@ export class ConversationMenuComponent implements OnInit {
 	deleteConversation(conversationId: number) {
 		if (this.confirmService.confirm('All conversation messages will be deleted')) {
 			this.conversationService.delete(this.token, conversationId).subscribe(success => {
+				this.visible = false;
 				this.closeConversation.next();
 			});
 		}
@@ -48,6 +49,7 @@ export class ConversationMenuComponent implements OnInit {
 
 	hideConversation(conversationId: number) {
 		this.conversationService.hide(this.token, conversationId).subscribe(success => {
+			this.visible = false;
 			this.closeConversation.next();
 		});
 	}

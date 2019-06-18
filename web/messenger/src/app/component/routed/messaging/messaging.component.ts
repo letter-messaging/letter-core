@@ -159,42 +159,43 @@ export class MessagingComponent implements OnInit {
 			.subscribe(searchText => {
 				this.searchForConversationsOrUsers(searchText);
 			});
+
 		this.app.onLoad(() => {
-			if (!this.isPolling) {
-				this.meProvider.oMe.subscribe(me => {
-					return this.me = me;
-				});
+			this.route.queryParams.subscribe(params => {
+				console.debug('queryChange');
 
-				this.tokenProvider.oToken.subscribe(token => {
-					this.token = token;
-
-					this.startListening();
-
-					this.previewService.all(this.token).subscribe(previews => {
-						this.previews = previews.filter(p => p.lastMessage && !p.conversation.hidden);
-
-						this.route.queryParams.subscribe(params => {
-							this.routeConversationId = params['id'];
-							if (this.routeConversationId) {
-								this.isLeftView = false;
-								this.loadCurrentConversation();
-							} else {
-								this.isLeftView = true;
-								this.currentPreview = null;
-								this.messages = [];
-							}
-						});
+				if (!this.isPolling) {
+					this.meProvider.oMe.subscribe(me => {
+						return this.me = me;
 					});
-				});
-			} else {
-				this.loadCurrentConversation();
-			}
+
+					this.tokenProvider.oToken.subscribe(token => {
+						this.token = token;
+
+						this.startListening();
+						this.updatePreviews();
+
+						this.routeConversationId = params['id'];
+						if (this.routeConversationId) {
+							this.isLeftView = false;
+							this.loadCurrentConversation();
+						} else {
+							this.isLeftView = true;
+							this.currentPreview = null;
+							this.messages = [];
+						}
+					});
+				} else {
+					this.updatePreviews();
+					this.loadCurrentConversation();
+				}
+			});
 		});
 	}
 
 	updatePreviews() {
 		this.previewService.all(this.token).subscribe(previews => {
-			this.previews = previews;
+			this.previews = previews.filter(p => p.lastMessage && !p.conversation.hidden);
 		});
 	}
 
@@ -214,13 +215,13 @@ export class MessagingComponent implements OnInit {
 
 	openConversation(conversationId: number) {
 		if (this.currentPreview && this.currentPreview.conversation.id === conversationId) return;
-		this.router.navigate(['/im'], {queryParams: {id: conversationId}, replaceUrl: true});
+		this.router.navigate(['/im'], {queryParams: {id: conversationId}});
 		this.messages = null;
 		this.isSelectForwardTo = false;
 	}
 
 	closeConversation() {
-		this.router.navigate(['/im'], {replaceUrl: true});
+		this.router.navigate(['/im']);
 	}
 
 	createConversation(user: User) {

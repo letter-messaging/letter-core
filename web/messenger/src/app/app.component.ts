@@ -43,16 +43,16 @@ export class AppComponent {
 									if (params['id']) {
 										this.router.navigate(['/im'], {queryParams: {id: params['id']}, replaceUrl: true});
 									} else {
-										this.router.navigate(['/im'], {replaceUrl: true});
+										this.router.navigate(['/im']);
 									}
 								});
 							},
 							error => {
-								this.router.navigate(['/auth'], {replaceUrl: true});
+								this.router.navigate(['/auth']);
 							}
 						);
 					} else {
-						this.router.navigate(['/auth'], {replaceUrl: true});
+						this.router.navigate(['/auth']);
 					}
 
 				}

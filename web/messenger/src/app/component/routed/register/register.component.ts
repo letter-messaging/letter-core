@@ -23,7 +23,7 @@ export class RegisterComponent implements OnInit {
 	register() {
 		if (this.registerUser.password === this.passwordConfirmation) {
 			this.registerService.register(this.registerUser).subscribe(success => {
-				this.router.navigate(['/auth'], {replaceUrl: true});
+				this.router.navigate(['/auth']);
 			}, error => {
 			});
 		}
