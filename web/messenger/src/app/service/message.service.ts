@@ -1,8 +1,9 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
-import {API_URL, MESSAGES_AMOUNT} from '../../../globals';
+import {API_URL} from '../../../globals';
 import {Message} from '../dto/Message';
+import {Pageable} from '../dto/Pageable';
 
 @Injectable({
 	providedIn: 'root'
@@ -12,16 +13,11 @@ export class MessageService {
 	constructor(private http: HttpClient) {
 	}
 
-	get(token: string, conversationId: number, offset: number, amount?: number): Observable<Array<Message>> {
-		amount = amount ? amount : MESSAGES_AMOUNT;
-
+	get(token: string, conversationId: number, pageable: Pageable): Observable<Array<Message>> {
 		return this.http.get<Array<Message>>(API_URL + 'message/get', {
 			headers: {'Auth-Token': token},
-			params: {
-				'conversationId': conversationId.toString(),
-				'offset': offset.toString(),
-				'amount': amount.toString()
-			}
+			params: pageable.toHttpParams()
+				.append('conversationId', conversationId.toString())
 		});
 	}
 

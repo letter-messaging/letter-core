@@ -27,12 +27,13 @@ import {SoundNotificationService} from '../../../service/sound-notification.serv
 import {UserInfoService} from '../../../service/user-info.service';
 import {BackgroundUnreadService} from '../../../service/background-unread.service';
 import {AvatarService} from '../../../service/avatar.service';
-import {APP_TITLE, FILE_URL, MINUTES_AS_ONLINE_LIMIT} from '../../../../../globals';
+import {APP_TITLE, FILE_URL, MESSAGES_AMOUNT, MINUTES_AS_ONLINE_LIMIT, PREVIEWS_AMOUNT} from '../../../../../globals';
 import {NewMessage} from '../../../dto/NewMessage';
 import {DateService} from '../../../service/date.service';
 import {NewMessageAction} from '../../../dto/action/NewMessageAction';
 import {ConversationReadAction} from '../../../dto/action/ConversationReadAction';
 import {MessageEditAction} from '../../../dto/action/MessageEditAction';
+import {Pageable} from '../../../dto/Pageable';
 
 @Component({
 	selector: 'app-messaging',
@@ -162,8 +163,6 @@ export class MessagingComponent implements OnInit {
 
 		this.app.onLoad(() => {
 			this.route.queryParams.subscribe(params => {
-				console.debug('queryChange');
-
 				if (!this.isPolling) {
 					this.meProvider.oMe.subscribe(me => {
 						return this.me = me;
@@ -173,34 +172,32 @@ export class MessagingComponent implements OnInit {
 						this.token = token;
 
 						this.startListening();
-						this.updatePreviews();
-
-						this.routeConversationId = params['id'];
-						if (this.routeConversationId) {
-							this.isLeftView = false;
-							this.loadCurrentConversation();
-						} else {
-							this.isLeftView = true;
-							this.currentPreview = null;
-							this.messages = [];
-						}
 					});
-				} else {
-					this.updatePreviews();
-					this.loadCurrentConversation();
 				}
+
+				this.routeConversationId = params['id'];
+				if (this.routeConversationId) {
+					this.isLeftView = false;
+					this.loadCurrentConversation();
+				} else {
+					this.isLeftView = true;
+					this.currentPreview = null;
+					this.messages = [];
+				}
+
+				this.updatePreviews();
 			});
 		});
 	}
 
 	updatePreviews() {
-		this.previewService.all(this.token).subscribe(previews => {
+		this.previewService.all(this.token, new Pageable(0, PREVIEWS_AMOUNT)).subscribe(previews => {
 			this.previews = previews.filter(p => p.lastMessage && !p.conversation.hidden);
 		});
 	}
 
 	updateMessages() {
-		this.messageService.get(this.token, this.routeConversationId, 0).subscribe(messages => {
+		this.messageService.get(this.token, this.routeConversationId, new Pageable(0, MESSAGES_AMOUNT)).subscribe(messages => {
 			this.messages = messages;
 		});
 	}
@@ -354,7 +351,9 @@ export class MessagingComponent implements OnInit {
 	}
 
 	loadMore() {
-		this.messageService.get(this.token, this.currentPreview.conversation.id, this.messages.length).subscribe(messages => {
+		if (this.messages.length % MESSAGES_AMOUNT !== 0) return;
+		const pageable = new Pageable(Math.floor(this.messages.length / MESSAGES_AMOUNT), MESSAGES_AMOUNT);
+		this.messageService.get(this.token, this.currentPreview.conversation.id, pageable).subscribe(messages => {
 			this.messages = this.messages.concat(messages);
 		});
 	}
@@ -397,14 +396,16 @@ export class MessagingComponent implements OnInit {
 			this.currentPreview = preview;
 			this.scrollToBottom();
 		}, error => this.closeConversation());
-		this.messageService.get(this.token, this.routeConversationId, 0).subscribe(messages => {
+		this.messageService.get(this.token, this.routeConversationId, new Pageable(0, MESSAGES_AMOUNT)).subscribe(messages => {
 			this.searchText = '';
 			this.messages = messages;
 		});
 	}
 
 	private startListening() {
+		this.isPolling = true;
 		this.messagingService.getEvents(this.token).subscribe(action => {
+			console.debug(action);
 			switch (action.type) {
 				case 'NEW_MESSAGE':
 					this.processNewMessage(action);
