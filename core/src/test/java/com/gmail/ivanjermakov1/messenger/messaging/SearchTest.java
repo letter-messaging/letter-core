@@ -13,6 +13,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,7 +35,7 @@ public class SearchTest {
 		String user1Token = registerUser("John", "Lens", "johnls");
 		User user1 = userService.authenticate(user1Token);
 		
-		List<UserDto> searchResult = searchService.searchUsers("@John");
+		List<UserDto> searchResult = searchService.searchUsers("@John", PageRequest.of(0, Integer.MAX_VALUE));
 		Assert.assertTrue(searchResult
 				.stream()
 				.anyMatch(dto -> dto.getLogin().equals(user1.getLogin()))
@@ -45,7 +46,7 @@ public class SearchTest {
 	public void shouldThrowInvalidSearchFormatException_WithInvalidSearch() throws RegistrationException, AuthenticationException, InvalidSearchFormatException {
 		registerUser("John", "Lens", "johnls");
 		
-		searchService.searchUsers("John");
+		searchService.searchUsers("John", PageRequest.of(0, Integer.MAX_VALUE));
 	}
 	
 	private String registerUser(String firstName, String lastName, String login) throws RegistrationException, AuthenticationException {

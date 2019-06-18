@@ -16,15 +16,9 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.HttpMethod;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.client.RestTemplate;
-import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyEmitter;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.Collections;
 
 @SpringBootTest
@@ -60,6 +54,7 @@ public class MessagingIntegrationTest {
 				user1.getId(),
 				conversationDto.getId(),
 				"Hello!",
+				Collections.emptyList(),
 				Collections.emptyList(),
 				Collections.emptyList()
 		);

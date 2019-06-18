@@ -3,7 +3,11 @@ package com.gmail.ivanjermakov1.messenger.messaging;
 import com.gmail.ivanjermakov1.messenger.auth.dto.RegisterUserDto;
 import com.gmail.ivanjermakov1.messenger.auth.dto.UserDto;
 import com.gmail.ivanjermakov1.messenger.auth.service.UserService;
-import com.gmail.ivanjermakov1.messenger.exception.*;
+import com.gmail.ivanjermakov1.messenger.exception.AuthenticationException;
+import com.gmail.ivanjermakov1.messenger.exception.InvalidFileException;
+import com.gmail.ivanjermakov1.messenger.exception.InvalidMessageException;
+import com.gmail.ivanjermakov1.messenger.exception.NoSuchEntityException;
+import com.gmail.ivanjermakov1.messenger.exception.RegistrationException;
 import com.gmail.ivanjermakov1.messenger.messaging.controller.ConversationController;
 import com.gmail.ivanjermakov1.messenger.messaging.controller.ImageController;
 import com.gmail.ivanjermakov1.messenger.messaging.controller.MessagingController;
@@ -72,7 +76,8 @@ public class MessageTest {
 								user1Token,
 								Images.multipartFileFromFile(new File("src/test/resources/test-image.jpg"))
 						))
-						.collect(Collectors.toList())
+						.collect(Collectors.toList()),
+				Collections.emptyList()
 		);
 		
 		MessageDto messageDto = messagingController.sendMessage(user1Token, message);
