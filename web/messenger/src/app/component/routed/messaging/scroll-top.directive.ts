@@ -10,9 +10,7 @@ export class ScrollTopDirective {
 
 	@HostListener('scroll', ['$event'])
 	handleScroll(event) {
-		if (event.target.scrollTop === 0) {
-			this.scrollTop.emit();
-		}
+		if (event.target.scrollTop === 0) this.scrollTop.emit();
 	}
 
 }

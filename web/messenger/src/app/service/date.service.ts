@@ -12,29 +12,21 @@ export class DateService {
 	}
 
 	static lastSeenView(lastSeen: Date): string {
-		if (!lastSeen) {
-			return 'Offline';
-		}
+		if (!lastSeen) return 'Offline';
 
 		const now = moment();
 		const time = moment(lastSeen);
 
 		const minDiff = now.diff(time, 'minutes');
-		if (minDiff < MINUTES_AS_ONLINE_LIMIT) {
-			return 'Online';
-		}
-		if (minDiff < 60) {
-			return 'Seen ' + minDiff + ' minutes ago';
-		}
-		const hourDiff = now.diff(time, 'hours');
-		if (hourDiff < 24) {
-			return 'Seen today at ' + time.format('hh:mm');
-		}
-		if (hourDiff < 48) {
-			return 'Seen tomorrow at ' + time.format('hh:mm');
-		}
+		if (minDiff < MINUTES_AS_ONLINE_LIMIT) return 'Online';
 
-		return time.format('[Seen ] MMM Do [ at ] hh:mm');
+		if (minDiff < 60) return 'Seen ' + minDiff + ' minutes ago';
+
+		const hourDiff = now.diff(time, 'hours');
+
+		if (hourDiff < 24) return 'Seen today at ' + time.format('hh:mm');
+
+		return hourDiff < 48 ? 'Seen tomorrow at ' + time.format('hh:mm') : time.format('[Seen ] MMM Do [ at ] hh:mm');
 	}
 
 }

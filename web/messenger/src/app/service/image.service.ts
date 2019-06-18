@@ -25,6 +25,8 @@ export class ImageService {
 	}
 
 	static getImagePathByCompressionMode(path: string, compressionMode: ImageCompressionMode): string {
+		if (compressionMode === ImageCompressionMode.FULL) return path;
+
 		const pathName = path.substring(0, path.lastIndexOf('.'));
 		const extension = path.substring(path.lastIndexOf('.'));
 		return `${pathName}_${compressionMode.toString()}${extension}`;

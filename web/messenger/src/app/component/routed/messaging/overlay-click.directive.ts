@@ -11,9 +11,7 @@ export class OverlayClickDirective {
 	@Output('appOverlayClick') clickOutside: EventEmitter<any> = new EventEmitter();
 
 	@HostListener('document:click', ['$event.target']) onMouseEnter(targetElement) {
-		if (targetElement.className === 'overlay') {
-			this.clickOutside.emit(null);
-		}
+		if (targetElement.className === 'overlay') this.clickOutside.emit(null);
 	}
 
 }

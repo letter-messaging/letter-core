@@ -12,9 +12,7 @@ export class OutsideClickDirective {
 
 	@HostListener('document:click', ['$event.target']) onMouseEnter(targetElement) {
 		const clickedInside = this._elementRef.nativeElement.contains(targetElement);
-		if (!clickedInside) {
-			this.clickOutside.emit(null);
-		}
+		if (!clickedInside) this.clickOutside.emit(null);
 	}
 
 }

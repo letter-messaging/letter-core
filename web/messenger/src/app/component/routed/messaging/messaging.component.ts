@@ -213,9 +213,7 @@ export class MessagingComponent implements OnInit {
 	}
 
 	openConversation(conversationId: number) {
-		if (this.currentPreview && this.currentPreview.conversation.id === conversationId) {
-			return;
-		}
+		if (this.currentPreview && this.currentPreview.conversation.id === conversationId) return;
 		this.router.navigate(['/im'], {queryParams: {id: conversationId}, replaceUrl: true});
 		this.messages = null;
 		this.isSelectForwardTo = false;
@@ -232,9 +230,7 @@ export class MessagingComponent implements OnInit {
 	}
 
 	searchForConversationsOrUsers(searchText: string) {
-		if (searchText === '') {
-			return;
-		}
+		if (searchText === '') return;
 
 		if (searchText[0] === '@') {
 			this.searchService.searchUsers(this.token, searchText)
@@ -253,9 +249,7 @@ export class MessagingComponent implements OnInit {
 		message.forwarded = this.currentMessageAttachments.forwarded;
 		message.images = this.attachedImages;
 
-		if ((message.forwarded.length === 0 && message.images.length === 0) && message.text.trim().length === 0) {
-			return;
-		}
+		if ((message.forwarded.length === 0 && message.images.length === 0) && message.text.trim().length === 0) return;
 
 		this.messageText = '';
 		this.currentMessageAttachments = new MessageAttachments();
@@ -276,9 +270,8 @@ export class MessagingComponent implements OnInit {
 	}
 
 	selectMessage(message: Message, event?) {
-		if (event.target.className === 'avatar') {
-			return;
-		}
+		if (event.target.className === 'avatar') return;
+
 		if (!message.selected) {
 			message.selected = true;
 			this.selectedMessages.push(message);
@@ -366,9 +359,7 @@ export class MessagingComponent implements OnInit {
 	}
 
 	scrollToBottom() {
-		if (this.messageWrapper) {
-			this.messageWrapper.nativeElement.scrollTop = this.messageWrapper.nativeElement.scrollHeight;
-		}
+		if (this.messageWrapper) this.messageWrapper.nativeElement.scrollTop = this.messageWrapper.nativeElement.scrollHeight;
 	}
 
 	openProfile(user: User) {
@@ -430,9 +421,7 @@ export class MessagingComponent implements OnInit {
 	private processNewMessage(action: NewMessageAction) {
 		this.updatePreviews();
 
-		if (action.message.sender.id === this.me.id) {
-			return;
-		}
+		if (action.message.sender.id === this.me.id) return;
 
 		this.incrementBackgroundUnread();
 		this.soundNotificationService.notify();
@@ -444,9 +433,7 @@ export class MessagingComponent implements OnInit {
 	private processRead(action: ConversationReadAction) {
 		this.updatePreviews();
 
-		if (action.reader.id === this.me.id) {
-			return;
-		}
+		if (action.reader.id === this.me.id) return;
 
 		if (this.currentPreview && action.conversation.id === this.currentPreview.conversation.id) {
 			this.messages.forEach(m => m.read = true);

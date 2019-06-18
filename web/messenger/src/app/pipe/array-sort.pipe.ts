@@ -5,9 +5,8 @@ import {Pipe, PipeTransform} from '@angular/core';
 })
 export class ArraySortPipeAsc implements PipeTransform {
 	transform(array: any, field: string, asc: boolean): any[] {
-		if (!Array.isArray(array)) {
-			return;
-		}
+		if (!Array.isArray(array)) return;
+
 		array.sort((a: any, b: any) => {
 			if (a[field] < b[field]) {
 				return -1;
@@ -26,9 +25,8 @@ export class ArraySortPipeAsc implements PipeTransform {
 })
 export class ArraySortPipeDesc implements PipeTransform {
 	transform(array: any, field: string, asc: boolean): any[] {
-		if (!Array.isArray(array)) {
-			return;
-		}
+		if (!Array.isArray(array)) return;
+
 		array.sort((a: any, b: any) => {
 			if (a[field] < b[field]) {
 				return 1;
