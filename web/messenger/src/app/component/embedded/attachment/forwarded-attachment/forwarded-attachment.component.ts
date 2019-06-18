@@ -12,7 +12,7 @@ import {Message} from '../../../../dto/Message';
 export class ForwardedAttachmentComponent implements OnInit {
 
 	@Input()
-	forwarded: Array<Message>;
+	forwarded: Message[];
 
 	@Output()
 	removeForwardedAttachmentEvent = new EventEmitter();

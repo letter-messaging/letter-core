@@ -13,8 +13,8 @@ export class PreviewService {
 	constructor(private http: HttpClient) {
 	}
 
-	all(token: string, pageable: Pageable): Observable<Array<Preview>> {
-		return this.http.get<Array<Preview>>(API_URL + 'preview/all', {
+	all(token: string, pageable: Pageable): Observable<Preview[]> {
+		return this.http.get<Preview[]>(API_URL + 'preview/all', {
 			headers: {'Auth-Token': token},
 			params: pageable.toHttpParams()
 		});

@@ -59,8 +59,8 @@ export class MessagingComponent implements OnInit {
 
 	me: User;
 
-	previews: Array<Preview>;
-	messages: Array<Message>;
+	previews: Preview[];
+	messages: Message[];
 	routeConversationId: number;
 	currentPreview: Preview;
 
@@ -69,10 +69,10 @@ export class MessagingComponent implements OnInit {
 	searchText = '';
 	searchTextChanged: Subject<string> = new Subject();
 
-	searchUsers: Array<User> = [];
-	searchPreviews: Array<Preview> = [];
+	searchUsers: User[] = [];
+	searchPreviews: Preview[] = [];
 
-	selectedMessages: Array<Message> = [];
+	selectedMessages: Message[] = [];
 
 	editingMessage: Message;
 	currentMessageAttachments: MessageAttachments = new MessageAttachments();
@@ -85,7 +85,7 @@ export class MessagingComponent implements OnInit {
 	isLeftView = true;
 	isSelectForwardTo = false;
 
-	attachedImages: Array<NewImage> = [];
+	attachedImages: NewImage[] = [];
 
 	@ViewChild('messageWrapper') messageWrapper: ElementRef;
 
@@ -202,7 +202,7 @@ export class MessagingComponent implements OnInit {
 		});
 	}
 
-	previewsOrSearchPreviews(): Array<Preview> {
+	previewsOrSearchPreviews(): Preview[] {
 		if (this.searchText === '') {
 			return this.previews;
 		} else {

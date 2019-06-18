@@ -9,7 +9,7 @@ export class Message {
 	read: boolean;
 	sender: User;
 	conversation: Conversation;
-	forwarded: Array<Message>;
-	images: Array<Image>;
+	forwarded: Message[];
+	images: Image[];
 	selected = false;
 }
