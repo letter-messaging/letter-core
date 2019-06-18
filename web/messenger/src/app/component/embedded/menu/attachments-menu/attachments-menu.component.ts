@@ -44,6 +44,7 @@ export class AttachmentsMenuComponent implements OnInit {
 	}
 
 	onImageSelect() {
+		this.visible = false;
 		Array.from(this.fileInput.nativeElement.files).forEach(f =>
 			this.imageService.upload(this.token, f).subscribe(newImage => {
 				this.attachedImages.emit(newImage);
