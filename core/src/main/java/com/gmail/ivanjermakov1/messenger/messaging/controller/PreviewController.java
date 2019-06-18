@@ -7,9 +7,9 @@ import com.gmail.ivanjermakov1.messenger.exception.NoSuchEntityException;
 import com.gmail.ivanjermakov1.messenger.messaging.dto.PreviewDto;
 import com.gmail.ivanjermakov1.messenger.messaging.entity.Conversation;
 import com.gmail.ivanjermakov1.messenger.messaging.service.ConversationService;
-import com.gmail.ivanjermakov1.messenger.messaging.service.MessagingService;
 import com.gmail.ivanjermakov1.messenger.messaging.service.PreviewService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,28 +25,27 @@ public class PreviewController {
 	private final UserService userService;
 	private final PreviewService previewService;
 	private final ConversationService conversationService;
-	private final MessagingService messagingService;
 	
 	@Autowired
-	public PreviewController(PreviewService previewService, UserService userService, ConversationService conversationService, MessagingService messagingService) {
+	public PreviewController(PreviewService previewService, UserService userService, ConversationService conversationService) {
 		this.previewService = previewService;
 		this.userService = userService;
 		this.conversationService = conversationService;
-		this.messagingService = messagingService;
 	}
 	
 	/**
-	 * List all previews.
+	 * List previews.
 	 *
 	 * @param token user token
 	 * @return list of previews
 	 * @throws AuthenticationException on invalid @param token
 	 */
 	@GetMapping("all")
-	public List<PreviewDto> all(@RequestHeader("Auth-Token") String token) throws AuthenticationException {
+	public List<PreviewDto> all(@RequestHeader("Auth-Token") String token,
+	                            Pageable pageable) throws AuthenticationException {
 		User user = userService.authenticate(token);
 		
-		return previewService.all(user);
+		return previewService.all(user, pageable);
 	}
 	
 	/**
@@ -67,7 +66,6 @@ public class PreviewController {
 		
 		PreviewDto preview = previewService.getPreview(user, conversation);
 		conversationService.show(user, conversation);
-		messagingService.processConversationRead(user, conversationId);
 		
 		return preview;
 	}

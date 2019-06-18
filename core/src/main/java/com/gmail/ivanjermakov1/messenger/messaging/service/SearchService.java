@@ -10,11 +10,14 @@ import com.gmail.ivanjermakov1.messenger.messaging.repository.UserInfoRepository
 import com.gmail.ivanjermakov1.messenger.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
+//	TODO: use non strict search engine
 @Service
 public class SearchService {
 	
@@ -32,9 +35,8 @@ public class SearchService {
 		this.userService = userService;
 	}
 	
-	//	TODO: use non strict search engine
-	public List<PreviewDto> searchConversations(User user, String search) {
-		return previewService.all(user)
+	public List<PreviewDto> searchConversations(User user, String search, Pageable pageable) {
+		return previewService.all(user, PageRequest.of(0, Integer.MAX_VALUE))
 				.stream()
 				.filter(p -> Strings.startsWith(search, p.getWith().getFirstName()) ||
 						Strings.startsWith(search, p.getWith().getLastName()) ||
@@ -45,10 +47,10 @@ public class SearchService {
 				.collect(Collectors.toList());
 	}
 	
-	public List<UserDto> searchUsers(String search) throws InvalidSearchFormatException {
+	public List<UserDto> searchUsers(String search, Pageable pageable) throws InvalidSearchFormatException {
 		if (search.charAt(0) != '@') throw new InvalidSearchFormatException("user search must starts with \'@\'");
 		
-		return userRepository.searchUsersAmount(search, searchResultLimit)
+		return userRepository.searchUsers(search, pageable)
 				.stream()
 				.map(userService::full)
 				.collect(Collectors.toList());

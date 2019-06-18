@@ -8,6 +8,9 @@ import com.gmail.ivanjermakov1.messenger.messaging.dto.MessageDto;
 import com.gmail.ivanjermakov1.messenger.messaging.service.MessageService;
 import com.gmail.ivanjermakov1.messenger.messaging.service.MessagingService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -38,8 +41,7 @@ public class MessageController {
 	 *
 	 * @param token          user token
 	 * @param conversationId conversation id to get messages within
-	 * @param offset         offset
-	 * @param amount         amount
+	 * @param pageable       pageable
 	 * @return list of messages. Return empty list on empty conversation
 	 * @throws AuthenticationException on invalid @param token
 	 * @throws NoSuchEntityException   on invalid @param conversationId and on missing conversation with such id
@@ -47,11 +49,10 @@ public class MessageController {
 	@GetMapping("get")
 	public List<MessageDto> get(@RequestHeader("Auth-Token") String token,
 	                            @RequestParam("conversationId") Long conversationId,
-	                            @RequestParam("offset") Integer offset,
-	                            @RequestParam("amount") Integer amount) throws AuthenticationException, NoSuchEntityException {
+	                            @PageableDefault(direction = Sort.Direction.DESC, sort = {"sent"}) Pageable pageable) throws AuthenticationException, NoSuchEntityException {
 		User user = userService.authenticate(token);
 		messagingService.processConversationRead(user, conversationId);
-		return messageService.get(user.getId(), conversationId, offset, amount);
+		return messageService.get(user.getId(), conversationId, pageable);
 	}
 	
 	/**

@@ -8,6 +8,7 @@ import com.gmail.ivanjermakov1.messenger.exception.InvalidSearchFormatException;
 import com.gmail.ivanjermakov1.messenger.messaging.dto.PreviewDto;
 import com.gmail.ivanjermakov1.messenger.messaging.service.SearchService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -40,9 +41,10 @@ public class SearchController {
 	 */
 	@GetMapping("conversations")
 	public List<PreviewDto> searchConversations(@RequestHeader("Auth-Token") String token,
-	                                            @RequestParam("search") String search) throws AuthenticationException {
+	                                            @RequestParam("search") String search,
+	                                            Pageable pageable) throws AuthenticationException {
 		User user = userService.authenticate(token);
-		return searchService.searchConversations(user, search);
+		return searchService.searchConversations(user, search, pageable);
 	}
 	
 	/**
@@ -58,9 +60,10 @@ public class SearchController {
 	 */
 	@GetMapping("users")
 	public List<UserDto> searchUsers(@RequestHeader("Auth-Token") String token,
-	                                 @RequestParam("search") String search) throws AuthenticationException, InvalidSearchFormatException {
+	                                 @RequestParam("search") String search,
+	                                 Pageable pageable) throws AuthenticationException, InvalidSearchFormatException {
 		userService.authenticate(token);
-		return searchService.searchUsers(search);
+		return searchService.searchUsers(search, pageable);
 	}
 	
 }

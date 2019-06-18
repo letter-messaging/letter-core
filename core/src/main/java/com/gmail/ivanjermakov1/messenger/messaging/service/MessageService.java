@@ -11,13 +11,13 @@ import com.gmail.ivanjermakov1.messenger.messaging.entity.Conversation;
 import com.gmail.ivanjermakov1.messenger.messaging.entity.Message;
 import com.gmail.ivanjermakov1.messenger.messaging.repository.MessageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -49,11 +49,13 @@ public class MessageService {
 		return messageRepository.getTop1ByConversationIdOrderBySentDesc(conversationId);
 	}
 	
-	public List<MessageDto> get(Long userId, Long conversationId, Integer offset, Integer limit) throws AuthenticationException, NoSuchEntityException {
-		if (conversationService.get(conversationId).getUsers().stream().noneMatch(u -> u.getId().equals(userId)))
+	public List<MessageDto> get(Long userId, Long conversationId, Pageable pageable) throws AuthenticationException, NoSuchEntityException {
+		Conversation conversation = conversationService.get(conversationId);
+		
+		if (conversation.getUsers().stream().noneMatch(u -> u.getId().equals(userId)))
 			throw new AuthenticationException("invalid conversation id");
 		
-		Set<Message> messagesIds = messageRepository.get(conversationId, offset, limit);
+		List<Message> messagesIds = messageRepository.findAllByConversation(conversation, pageable);
 		
 		return messagesIds
 				.stream()

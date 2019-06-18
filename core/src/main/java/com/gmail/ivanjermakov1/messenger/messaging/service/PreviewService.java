@@ -6,6 +6,7 @@ import com.gmail.ivanjermakov1.messenger.messaging.dto.PreviewDto;
 import com.gmail.ivanjermakov1.messenger.messaging.entity.Conversation;
 import com.gmail.ivanjermakov1.messenger.messaging.entity.Message;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,18 +29,14 @@ public class PreviewService {
 		this.userService = userService;
 	}
 	
-	public List<PreviewDto> all(User user) {
-		return allConversations(user)
+	public List<PreviewDto> all(User user, Pageable pageable) {
+		return conversationService.getConversations(user, pageable)
 				.stream()
 				.map(c -> getPreview(user, c))
 				.filter(p -> p.getLastMessage() != null)
 				.sorted((p1, p2) -> p2.getLastMessage().getSent()
 						.compareTo(p1.getLastMessage().getSent()))
 				.collect(Collectors.toList());
-	}
-	
-	private List<Conversation> allConversations(User user) {
-		return new ArrayList<>(conversationService.getConversations(user));
 	}
 	
 	public PreviewDto getPreview(User user, Conversation conversation) {

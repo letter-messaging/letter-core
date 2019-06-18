@@ -10,6 +10,8 @@ import com.gmail.ivanjermakov1.messenger.messaging.repository.ConversationReposi
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -75,8 +77,8 @@ public class ConversationService {
 		return conversationRepository.findById(conversationId).orElseThrow(() -> new NoSuchEntityException("no such conversation"));
 	}
 	
-	public List<Conversation> getConversations(User user) {
-		return conversationRepository.getConversations(user.getId());
+	public List<Conversation> getConversations(User user, Pageable pageable) {
+		return conversationRepository.getConversations(user.getId(), pageable);
 	}
 	
 	public ConversationDto get(User user, Conversation conversation) {
@@ -91,11 +93,11 @@ public class ConversationService {
 	}
 	
 	public void hide(User user, Conversation conversation) {
-		conversationRepository.hide(user.getId(), conversation.getId());
+		conversationRepository.setHidden(user.getId(), conversation.getId(), true);
 	}
 	
 	public void show(User user, Conversation conversation) {
-		conversationRepository.show(user.getId(), conversation.getId());
+		conversationRepository.setHidden(user.getId(), conversation.getId(), false);
 	}
 	
 	public Boolean isHidden(User user, Conversation conversation) {
@@ -103,7 +105,7 @@ public class ConversationService {
 	}
 	
 	private Conversation conversationWith(User user1, User user2) throws NoSuchEntityException {
-		return conversationRepository.getConversations(user1.getId())
+		return conversationRepository.getConversations(user1.getId(), PageRequest.of(0, Integer.MAX_VALUE))
 				.stream()
 				.filter(c -> c.getUsers()
 						.stream()
@@ -113,7 +115,7 @@ public class ConversationService {
 	}
 	
 	private Conversation create(User user) {
-		Conversation self = conversationRepository.getConversations(user.getId())
+		Conversation self = conversationRepository.getConversations(user.getId(), PageRequest.of(0, Integer.MAX_VALUE))
 				.stream()
 				.filter(c -> c.getUsers().size() == 1)
 				.findFirst().orElse(null);
