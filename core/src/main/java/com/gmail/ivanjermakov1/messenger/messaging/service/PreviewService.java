@@ -6,11 +6,12 @@ import com.gmail.ivanjermakov1.messenger.messaging.dto.PreviewDto;
 import com.gmail.ivanjermakov1.messenger.messaging.entity.Conversation;
 import com.gmail.ivanjermakov1.messenger.messaging.entity.Message;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -30,12 +31,13 @@ public class PreviewService {
 	}
 	
 	public List<PreviewDto> all(User user, Pageable pageable) {
-		return conversationService.getConversations(user, pageable)
+		return conversationService.getConversations(user, PageRequest.of(0, Integer.MAX_VALUE))
 				.stream()
 				.map(c -> getPreview(user, c))
 				.filter(p -> p.getLastMessage() != null)
-				.sorted((p1, p2) -> p2.getLastMessage().getSent()
-						.compareTo(p1.getLastMessage().getSent()))
+				.sorted(Comparator.comparing(p -> p.getLastMessage().getSent(), Comparator.reverseOrder()))
+				.skip(pageable.getOffset())
+				.limit(pageable.getPageSize())
 				.collect(Collectors.toList());
 	}
 	
