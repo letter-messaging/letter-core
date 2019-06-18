@@ -18,6 +18,13 @@
 				<img class="image" alt="" *ngFor="let i of message.images"
 				     [src]="ImageService.getImagePathByCompressionMode(FILE_URL + i.path, ImageCompressionMode.MEDIUM)">
 			</div>
+			<div class="documents-wrapper">
+				<div class="document" *ngFor="let d of message.documents"
+				     (click)="openDocument(d); $event.stopPropagation()">
+					<i class="fas fa-file"></i>
+					<div class="text">{{d.path.substring(d.path.lastIndexOf('/') + 1)}}</div>
+				</div>
+			</div>
 			<div class="info">
 				<div class="sent">{{message.sent | date: 'HH:mm'}}</div>
 				<div class="status" *ngIf="message.sender.login === me.login && !isForwarded">

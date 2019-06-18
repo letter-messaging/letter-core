@@ -23,6 +23,7 @@ import {MessageSendDirective} from './directive/message-send.directive';
 import {OverlayClickDirective} from './directive/overlay-click.directive';
 import {OutsideClickDirective} from './directive/outside-click.directive';
 import {ScrollPositionDirective} from './directive/scroll-position.directive';
+import { DocumentAttachmentComponent } from './component/embedded/attachment/document-attachment/document-attachment.component';
 
 @NgModule({
 	declarations: [
@@ -45,6 +46,7 @@ import {ScrollPositionDirective} from './directive/scroll-position.directive';
 		ProfileMenuComponent,
 		AttachmentsMenuComponent,
 		ConversationMenuComponent,
+		DocumentAttachmentComponent,
 	],
 	imports: [
 		BrowserModule,

@@ -7,7 +7,8 @@ import {FILE_URL} from '../../../../../../globals';
 @Component({
 	selector: 'app-image-attachment',
 	templateUrl: './image-attachment.component.html',
-	styleUrls: ['./image-attachment.component.scss',
+	styleUrls: [
+		'./image-attachment.component.scss',
 		'./../attachment.scss',
 	]
 })
@@ -17,11 +18,8 @@ export class ImageAttachmentComponent implements OnInit {
 	readonly ImageService: typeof ImageService = ImageService;
 	readonly FILE_URL = FILE_URL;
 
-	@Input()
-	image: NewImage;
-
-	@Output()
-	removeImageAttachmentEvent = new EventEmitter();
+	@Input() image: NewImage;
+	@Output() removeImageAttachment = new EventEmitter();
 
 	constructor() {
 	}
@@ -29,8 +27,8 @@ export class ImageAttachmentComponent implements OnInit {
 	ngOnInit() {
 	}
 
-	removeImageAttachment() {
-		this.removeImageAttachmentEvent.next();
+	remove() {
+		this.removeImageAttachment.next();
 	}
 
 }

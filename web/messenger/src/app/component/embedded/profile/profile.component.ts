@@ -19,11 +19,8 @@ export class ProfileComponent implements OnInit {
 	readonly FILE_URL = FILE_URL;
 
 	@Input() currentProfile;
-
 	@Input() me: User;
-
 	@Output() closeProfile = new EventEmitter();
-
 	@Output() editProfile = new EventEmitter<UserInfo>();
 
 	@ViewChild('fileInput') fileInput;

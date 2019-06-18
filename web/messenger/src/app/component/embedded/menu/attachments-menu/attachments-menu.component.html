@@ -2,11 +2,13 @@
 	<i class="fas fa-paperclip" *ngIf="!editingMessage" (click)="visible = !visible"></i>
 	<div class="attachments-menu" *ngIf="visible">
 		<div class="button" (click)="selectImage()"><i class="fas fa-camera"></i> Image</div>
-		<input #fileInput type="file" accept="image/*" multiple
+		<input #imageInput type="file" accept="image/*" style="display: none" multiple
 		       (change)="onImageSelect()">
 		<div class="splitter"></div>
 		<div class="button"><i class="fas fa-video"></i> Video</div>
 		<div class="splitter"></div>
-		<div class="button"><i class="fas fa-file"></i> Document</div>
+		<div class="button" (click)="selectDocument()"><i class="fas fa-file"></i> Document</div>
+		<input #documentInput type="file" style="display: none" multiple
+		       (change)="onDocumentSelect()">
 	</div>
 </div>

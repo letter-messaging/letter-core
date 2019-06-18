@@ -11,11 +11,8 @@ import {Message} from '../../../../dto/Message';
 })
 export class ForwardedAttachmentComponent implements OnInit {
 
-	@Input()
-	forwarded: Message[];
-
-	@Output()
-	removeForwardedAttachmentEvent = new EventEmitter();
+	@Input() forwarded: Message[];
+	@Output() removeForwardedAttachmentEvent = new EventEmitter();
 
 	constructor() {
 	}

@@ -107,14 +107,22 @@
 			<ng-container *ngIf="attachedImages && attachedImages.length != 0">
 				<app-image-attachment *ngFor="let i of attachedImages"
 				                      [image]="i"
-				                      (removeImageAttachmentEvent)="removeImageAttachment(i)">
+				                      (removeImageAttachment)="removeImageAttachment(i)">
 				</app-image-attachment>
+			</ng-container>
+			<ng-container *ngIf="attachedDocuments && attachedDocuments.length != 0">
+				<app-document-attachment *ngFor="let d of attachedDocuments"
+				                      [document]="d"
+				                      (removeDocumentAttachment)="removeDocumentAttachment(d)">
+				</app-document-attachment>
 			</ng-container>
 		</div>
 		<div class="send-message-wrapper"
 		     *ngIf="routeConversationId && !(selectedMessages.length !== 0 && !editingMessage)">
 			<i class="fas fa-ban" *ngIf="editingMessage" (click)="cancelEditing()"></i>
-			<app-attachments-menu [editingMessage]="editingMessage" (attachedImages)="attachedImages.push($event)">
+			<app-attachments-menu [editingMessage]="editingMessage"
+			                      (attachedImages)="attachedImages.push($event)"
+			                      (attachedDocuments)="attachedDocuments.push($event)">
 			</app-attachments-menu>
 			<textarea #sendMessageText id="send-message-text" autofocus autosize rows="1"
 			          placeholder="Write a message..."

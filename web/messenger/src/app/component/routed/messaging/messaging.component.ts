@@ -34,6 +34,7 @@ import {NewMessageAction} from '../../../dto/action/NewMessageAction';
 import {ConversationReadAction} from '../../../dto/action/ConversationReadAction';
 import {MessageEditAction} from '../../../dto/action/MessageEditAction';
 import {Pageable} from '../../../dto/Pageable';
+import {NewDocument} from '../../../dto/NewDocument';
 
 @Component({
 	selector: 'app-messaging',
@@ -86,11 +87,10 @@ export class MessagingComponent implements OnInit {
 	isSelectForwardTo = false;
 
 	attachedImages: NewImage[] = [];
+	attachedDocuments: NewDocument[] = [];
 
 	@ViewChild('sendMessageText') sendMessageText: ElementRef;
-
 	@ViewChild('previewSearch') previewSearch: ElementRef;
-
 	@ViewChild('messageWrapper') messageWrapper: ElementRef;
 
 	@HostListener('document:keydown', ['$event'])
@@ -251,12 +251,14 @@ export class MessagingComponent implements OnInit {
 		message.text = this.messageText;
 		message.forwarded = this.currentMessageAttachments.forwarded;
 		message.images = this.attachedImages;
+		message.documents = this.attachedDocuments;
 
-		if ((message.forwarded.length === 0 && message.images.length === 0) && message.text.trim().length === 0) return;
+		if ((message.forwarded.length === 0 && message.images.length === 0 && message.documents.length === 0) && message.text.trim().length === 0) return;
 
 		this.messageText = '';
 		this.currentMessageAttachments = new MessageAttachments();
 
+		// TODO: use temp unique id to identify temp message instead of unshifting last
 		const tempViewMessage = new Message();
 		tempViewMessage.sender = this.me;
 		tempViewMessage.forwarded = message.forwarded;
@@ -269,6 +271,7 @@ export class MessagingComponent implements OnInit {
 			this.messages = this.messages.filter(mes => mes.id);
 			this.messages.unshift(m);
 			this.attachedImages = [];
+			this.attachedDocuments = [];
 		});
 	}
 
@@ -402,6 +405,10 @@ export class MessagingComponent implements OnInit {
 
 	removeImageAttachment(image: NewImage) {
 		this.attachedImages = this.attachedImages.filter(i => i.path === image.path);
+	}
+
+	removeDocumentAttachment(document: NewDocument) {
+		this.attachedDocuments = this.attachedDocuments.filter(d => d.path === document.path);
 	}
 
 	sendMessageTextFocus() {

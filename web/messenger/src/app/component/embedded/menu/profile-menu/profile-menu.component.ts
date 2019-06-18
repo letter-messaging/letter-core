@@ -20,11 +20,8 @@ export class ProfileMenuComponent implements OnInit {
 	readonly ImageService: typeof ImageService = ImageService;
 	readonly FILE_URL = FILE_URL;
 
-	@Input()
-	currentPreview: Preview;
-
-	@Output()
-	openProfile = new EventEmitter<User>();
+	@Input() currentPreview: Preview;
+	@Output() openProfile = new EventEmitter<User>();
 
 	visible = false;
 	me: User;

@@ -17,14 +17,9 @@ export class ConversationPreviewComponent implements OnInit {
 	readonly ImageService: typeof ImageService = ImageService;
 	readonly FILE_URL = FILE_URL;
 
-	@Input()
-	preview: Preview;
-
-	@Input()
-	selected: boolean;
-
-	@Input()
-	isOnline: boolean;
+	@Input() preview: Preview;
+	@Input() selected: boolean;
+	@Input() isOnline: boolean;
 
 	me: User;
 

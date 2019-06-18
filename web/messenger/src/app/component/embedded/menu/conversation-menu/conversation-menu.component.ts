@@ -12,11 +12,8 @@ import {ConfirmService} from '../../../../service/confirm.service';
 })
 export class ConversationMenuComponent implements OnInit {
 
-	@Input()
-	currentPreview: Preview;
-
-	@Output()
-	closeConversation = new EventEmitter();
+	@Input() currentPreview: Preview;
+	@Output() closeConversation = new EventEmitter();
 
 	visible = false;
 

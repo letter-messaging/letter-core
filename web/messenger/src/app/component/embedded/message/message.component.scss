@@ -116,6 +116,47 @@
 		}
 	}
 
+	.documents-wrapper {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: flex-start;
+
+		.document {
+			display: flex;
+			align-items: center;
+
+			margin: 4px 1px 0 1px;
+
+			i {
+				font-size: 28px;
+				width: 28px;
+				text-align: center;
+
+				padding: 8px;
+
+				color: var(--bright);
+
+				background: var(--dark);
+				border-radius: 4px;
+			}
+
+			.text {
+				padding: 4px;
+			}
+		}
+
+		.document:hover {
+			i {
+				color: var(--special);
+			}
+
+			.text {
+				color: var(--special);
+			}
+		}
+	}
+
 
 }
 

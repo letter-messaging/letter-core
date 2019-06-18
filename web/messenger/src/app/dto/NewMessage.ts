@@ -1,5 +1,6 @@
 import {Message} from './Message';
 import {NewImage} from './NewImage';
+import {NewDocument} from './NewDocument';
 
 export class NewMessage {
 	senderId: number;
@@ -7,4 +8,5 @@ export class NewMessage {
 	text: string;
 	forwarded: Message[] = [];
 	images: NewImage[] = [];
+	documents: NewDocument[] = [];
 }

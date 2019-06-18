@@ -1,9 +1,10 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {Message} from '../../../dto/Message';
 import {User} from '../../../dto/User';
-import {FILE_URL} from '../../../../../globals';
+import {API_URL, FILE_URL} from '../../../../../globals';
 import {ImageService} from '../../../service/image.service';
 import {ImageCompressionMode} from '../../../dto/enum/ImageCompressionMode';
+import {Document} from '../../../dto/Document';
 
 
 @Component({
@@ -45,4 +46,7 @@ export class MessageComponent implements OnInit {
 		this.openProfileEvent.emit(user);
 	}
 
+	openDocument(document: Document) {
+		window.open(FILE_URL + document.path, '_blank')
+	}
 }

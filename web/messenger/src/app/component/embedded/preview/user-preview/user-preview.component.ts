@@ -15,8 +15,7 @@ export class UserPreviewComponent implements OnInit {
 	readonly ImageService: typeof ImageService = ImageService;
 	readonly FILE_URL = FILE_URL;
 
-	@Input()
-	user: User;
+	@Input() user: User;
 
 	constructor() {
 	}
