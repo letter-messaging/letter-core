@@ -45,7 +45,7 @@
 			<div class="no-previews" *ngIf="previews && previews.length === 0 && searchText.length === 0">
 				<i class="fas fa-user-friends"></i>
 				<div class="text">No conversations yet.</div>
-				<a (click)="searchText = '@'; previewSearchFocus()">Let's find some people.</a>
+				<a (click)="searchText = '@'; previewSearchFocus()">Find companions.</a>
 			</div>
 			<ng-container *ngIf="previews && searchText.trim()[0] !== '@'">
 				<app-conversation-preview
