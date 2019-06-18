@@ -37,7 +37,7 @@
 			       [(ngModel)]="searchText"
 			       (ngModelChange)="searchTextChanged.next($event)" name="search-conversations">
 		</div>
-		<div class="preview-wrapper">
+		<div class="preview-wrapper" appScroll (appScrollBottom)="loadMorePreviews()">
 			<div class="splitter"></div>
 			<div class="loading-previews loading-icon" *ngIf="!previews">
 				<i class="fas fa-circle-notch fa-spin"></i>
@@ -86,7 +86,7 @@
 			<div class="text">Be the first. Messages will be displayed here.</div>
 		</div>
 		<div class="message-wrapper" #messageWrapper *ngIf="messages && currentPreview && !isSelectForwardTo"
-		     (appScrollTop)="loadMore()">
+		     (appScrollTop)="loadMoreMessages()">
 			<app-message *ngFor="let message of messages | descSort: 'sent'"
 			             (click)="selectMessage(message, $event)"
 			             [message]="message" [isForwarded]="false" [me]="me"

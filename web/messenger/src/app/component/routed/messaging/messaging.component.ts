@@ -350,11 +350,22 @@ export class MessagingComponent implements OnInit {
 		return time && moment().diff(time, 'minutes') < MINUTES_AS_ONLINE_LIMIT;
 	}
 
-	loadMore() {
+	loadMoreMessages() {
 		if (this.messages.length % MESSAGES_AMOUNT !== 0) return;
 		const pageable = new Pageable(Math.floor(this.messages.length / MESSAGES_AMOUNT), MESSAGES_AMOUNT);
 		this.messageService.get(this.token, this.currentPreview.conversation.id, pageable).subscribe(messages => {
 			this.messages = this.messages.concat(messages);
+		});
+	}
+
+	loadMorePreviews() {
+		console.debug('load more previews');
+		console.debug(this.previews.length % PREVIEWS_AMOUNT !== 0);
+		if (this.previews.length % PREVIEWS_AMOUNT !== 0) return;
+		const pageable = new Pageable(Math.floor(this.previews.length / PREVIEWS_AMOUNT), PREVIEWS_AMOUNT);
+		console.debug(Math.floor(this.previews.length / PREVIEWS_AMOUNT), PREVIEWS_AMOUNT);
+		this.previewService.all(this.token, pageable).subscribe(previews => {
+			this.previews = this.previews.concat(previews);
 		});
 	}
 
@@ -454,5 +465,4 @@ export class MessagingComponent implements OnInit {
 			}
 		}
 	}
-
 }

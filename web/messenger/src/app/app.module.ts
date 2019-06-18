@@ -22,7 +22,7 @@ import {ConversationMenuComponent} from './component/embedded/menu/conversation-
 import {MessageSendDirective} from './directive/message-send.directive';
 import {OverlayClickDirective} from './directive/overlay-click.directive';
 import {OutsideClickDirective} from './directive/outside-click.directive';
-import {ScrollTopDirective} from './directive/scroll-top.directive';
+import {ScrollPositionDirective} from './directive/scroll-position.directive';
 
 @NgModule({
 	declarations: [
@@ -32,7 +32,7 @@ import {ScrollTopDirective} from './directive/scroll-top.directive';
 		MessagingComponent,
 		MessageComponent,
 		MessageSendDirective,
-		ScrollTopDirective,
+		ScrollPositionDirective,
 		OutsideClickDirective,
 		OverlayClickDirective,
 		ArraySortPipeAsc,

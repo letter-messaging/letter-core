@@ -63,11 +63,9 @@ export class AppComponent {
 	onLoad(loaded: () => void) {
 		setTimeout(() => {
 			if (this.isLoaded) {
-				console.debug('onload: loaded...');
 				loaded();
 			} else {
 				this.onLoad(loaded);
-				console.debug('onload: waiting...');
 			}
 		}, 10);
 	}
