@@ -6,6 +6,7 @@ import {EditMessage} from '../dto/EditMessage';
 import {Message} from '../dto/Message';
 import {NewMessage} from '../dto/NewMessage';
 
+// TODO: deal with 2s lag between EventSource reconnections
 @Injectable({
 	providedIn: 'root'
 })
@@ -20,7 +21,6 @@ export class MessagingService {
 			es.addEventListener('message', (e: any) => {
 				o.next(JSON.parse(e.data));
 			});
-			return () => es.close();
 		});
 	}
 
