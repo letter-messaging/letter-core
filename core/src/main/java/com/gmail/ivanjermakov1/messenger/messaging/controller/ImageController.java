@@ -52,7 +52,7 @@ public class ImageController {
 	}
 	
 	/**
-	 * Delete avatar from current avatar and avatar list
+	 * Delete image from certain message
 	 *
 	 * @param token   user token
 	 * @param imageId image id to delete
