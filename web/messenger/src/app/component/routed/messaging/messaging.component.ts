@@ -35,18 +35,19 @@ import {ConversationReadAction} from '../../../dto/action/ConversationReadAction
 import {MessageEditAction} from '../../../dto/action/MessageEditAction';
 import {Pageable} from '../../../dto/Pageable';
 import {NewDocument} from '../../../dto/NewDocument';
+import {MessageImage} from '../../../dto/local/MessageImage';
 
 @Component({
 	selector: 'app-messaging',
 	templateUrl: './messaging.component.html',
 	styleUrls: [
 		'./messaging.component.scss',
-		'./messaging.component.header-left.scss',
-		'./messaging.component.header-right.scss',
-		'./messaging.component.search.scss',
-		'./messaging.component.select-message.scss',
-		'./messaging.component.content-left.scss',
-		'./messaging.component.conversation.scss'
+		'./style/messaging.component.header-left.scss',
+		'./style/messaging.component.header-right.scss',
+		'./style/messaging.component.search.scss',
+		'./style/messaging.component.select-message.scss',
+		'./style/messaging.component.content-left.scss',
+		'./style/messaging.component.conversation.scss'
 	]
 })
 export class MessagingComponent implements OnInit {
@@ -89,6 +90,8 @@ export class MessagingComponent implements OnInit {
 	attachedImages: NewImage[] = [];
 	attachedDocuments: NewDocument[] = [];
 
+	messageImage: MessageImage = null;
+
 	@ViewChild('sendMessageText') sendMessageText: ElementRef;
 	@ViewChild('previewSearch') previewSearch: ElementRef;
 	@ViewChild('messageWrapper') messageWrapper: ElementRef;
@@ -96,6 +99,11 @@ export class MessagingComponent implements OnInit {
 	@HostListener('document:keydown', ['$event'])
 	handleKeyboardEvent(event: KeyboardEvent) {
 		if (event.key === 'Escape') {
+			if (this.messageImage) {
+				this.messageImage = null;
+				return;
+			}
+
 			if (this.currentProfile.user) {
 				this.currentProfile.user = null;
 				return;

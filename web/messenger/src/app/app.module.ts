@@ -24,6 +24,7 @@ import {OverlayClickDirective} from './directive/overlay-click.directive';
 import {OutsideClickDirective} from './directive/outside-click.directive';
 import {ScrollPositionDirective} from './directive/scroll-position.directive';
 import { DocumentAttachmentComponent } from './component/embedded/attachment/document-attachment/document-attachment.component';
+import { ImagePreviewComponent } from './component/embedded/image-preview/image-preview.component';
 
 @NgModule({
 	declarations: [
@@ -47,6 +48,7 @@ import { DocumentAttachmentComponent } from './component/embedded/attachment/doc
 		AttachmentsMenuComponent,
 		ConversationMenuComponent,
 		DocumentAttachmentComponent,
+		ImagePreviewComponent,
 	],
 	imports: [
 		BrowserModule,

@@ -11,7 +11,7 @@ import {MaritalStatus} from '../../../dto/enum/MaritalStatus';
 	templateUrl: './profile.component.html',
 	styleUrls: [
 		'./profile.component.scss',
-		'./../../routed/messaging/messaging.component.search.scss'
+		'./../../routed/messaging/style/messaging.component.search.scss'
 	]
 })
 export class ProfileComponent implements OnInit {

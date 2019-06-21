@@ -91,11 +91,12 @@
 			<div class="text">Be the first. Messages will be displayed here.</div>
 		</div>
 		<div class="message-wrapper" #messageWrapper *ngIf="messages && currentPreview && !isSelectForwardTo"
-		     (appScrollTop)="loadMoreMessages()">
+		     appScroll (appScrollTop)="loadMoreMessages()">
 			<app-message *ngFor="let message of messages | descSort: 'sent'"
 			             (click)="selectMessage(message, $event)"
 			             [message]="message" [isForwarded]="false" [me]="me"
-			             (openProfileEvent)="openProfile($event)">
+			             (openProfileEvent)="openProfile($event)"
+			             (openImageEvent)="messageImage = $event">
 			</app-message>
 		</div>
 		<div class="attachment-wrapper">
@@ -151,8 +152,13 @@
 	</div>
 </div>
 
-<div class="overlay" *ngIf="currentProfile.user">
-	<app-profile [currentProfile]="currentProfile" [me]="me" (closeProfile)="currentProfile.user = null"
+<div class="overlay" *ngIf="(currentProfile && currentProfile.user) || messageImage">
+	<app-image-preview *ngIf="messageImage"
+	                   [messageImage]="messageImage"
+	                   (closeEvent)="messageImage = null">
+	</app-image-preview>
+	<app-profile *ngIf="currentProfile && currentProfile.user"
+	             [currentProfile]="currentProfile" [me]="me" (closeProfile)="currentProfile.user = null"
 	             (editProfile)="editProfile($event)" (appOverlayClick)="currentProfile.user = null">
 	</app-profile>
 </div>
