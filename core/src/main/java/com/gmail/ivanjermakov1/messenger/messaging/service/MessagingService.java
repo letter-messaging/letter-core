@@ -61,24 +61,20 @@ public class MessagingService {
 	public SseEmitter generateRequest(User user) {
 		SseEmitter emitter = new SseEmitter(sseTimeout);
 		Request<Action> request = new Request<>(user, emitter);
-		emitter.onTimeout(() -> {
-			emitter.complete();
-			requests.remove(request);
-		});
+		emitter.onTimeout(() -> requests.remove(request));
 		requests.add(request);
 		return emitter;
 	}
 	
 	public void sendRequest(Request<Action> request, Action action) {
-		LOG.debug("sending request from @" + request.getUser().getLogin());
+		LOG.debug("sending response to @" + request.getUser().getLogin() + "; type: " + action.getType());
 		try {
 			SseEmitter.SseEventBuilder event = SseEmitter.event()
 					.data(action)
 					.reconnectTime(100);
 			request.getEmitter().send(event);
 		} catch (IOException e) {
-			LOG.warn("failed to send request from @" + request.getUser().getLogin());
-			request.getEmitter().complete();
+			requests.remove(request);
 		}
 	}
 	
