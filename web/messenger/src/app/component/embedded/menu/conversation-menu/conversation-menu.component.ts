@@ -37,7 +37,7 @@ export class ConversationMenuComponent implements OnInit {
 
 	deleteConversation(conversationId: number) {
 		if (this.confirmService.confirm('All conversation messages will be deleted')) {
-			this.conversationService.delete(this.token, conversationId).subscribe(success => {
+			this.conversationService.delete(this.token, conversationId).subscribe(() => {
 				this.visible = false;
 				this.closeConversation.next();
 			});
@@ -45,7 +45,7 @@ export class ConversationMenuComponent implements OnInit {
 	}
 
 	hideConversation(conversationId: number) {
-		this.conversationService.hide(this.token, conversationId).subscribe(success => {
+		this.conversationService.hide(this.token, conversationId).subscribe(() => {
 			this.visible = false;
 			this.closeConversation.next();
 		});

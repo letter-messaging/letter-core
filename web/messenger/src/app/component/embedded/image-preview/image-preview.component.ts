@@ -5,6 +5,10 @@ import {ImageCompressionMode} from '../../../dto/enum/ImageCompressionMode';
 import {ImageService} from '../../../service/image.service';
 import {FILE_URL} from '../../../../../globals';
 import * as moment from 'moment';
+import {ConfirmService} from '../../../service/confirm.service';
+import {MeProvider} from '../../../provider/me-provider';
+import {AppComponent} from '../../../app.component';
+import {User} from '../../../dto/User';
 
 @Component({
 	selector: 'app-image-preview',
@@ -23,12 +27,15 @@ export class ImagePreviewComponent implements OnInit {
 	@Output()
 	closeEvent = new EventEmitter();
 
+	@Output()
+	deleteImageEvent = new EventEmitter();
+
 	images: Image[];
 	currentImageIndex: number;
+	me: User;
 
 	@HostListener('document:keydown', ['$event'])
 	handleKeyboardEvent(event: KeyboardEvent) {
-		console.debug(event);
 		if (event.code === 'ArrowLeft') {
 			this.openPrevious();
 			return;
@@ -39,10 +46,19 @@ export class ImagePreviewComponent implements OnInit {
 		}
 	}
 
-	constructor() {
+	constructor(
+		private app: AppComponent,
+		private meProvider: MeProvider,
+		private confirmService: ConfirmService,
+	) {
 	}
 
 	ngOnInit() {
+		this.app.onLoad(() => {
+			this.meProvider.oMe.subscribe(me => {
+				this.me = me;
+			});
+		});
 		this.images = this.messageImage.message.images;
 		this.currentImageIndex = this.images.findIndex(i => i.id === this.messageImage.image.id);
 	}
@@ -60,7 +76,9 @@ export class ImagePreviewComponent implements OnInit {
 	}
 
 	deleteImage() {
-		// TODO: image deletion
+		if (this.confirmService.confirm('This image will be deleted')) {
+			this.deleteImageEvent.emit();
+		}
 	}
 
 	openPrevious() {

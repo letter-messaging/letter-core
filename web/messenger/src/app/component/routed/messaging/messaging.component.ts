@@ -163,7 +163,8 @@ export class MessagingComponent implements OnInit {
 	            private soundNotificationService: SoundNotificationService,
 	            private userInfoService: UserInfoService,
 	            private backgroundUnreadService: BackgroundUnreadService,
-	            private avatarService: AvatarService) {
+	            private avatarService: AvatarService,
+	            private imageService: ImageService) {
 	}
 
 	ngOnInit() {
@@ -302,7 +303,7 @@ export class MessagingComponent implements OnInit {
 
 	deleteSelectedMessages() {
 		this.messageService.delete(this.token, this.selectedMessages).subscribe(
-			success => {
+			() => {
 				this.updatePreviews();
 				this.updateMessages();
 			},
@@ -325,6 +326,7 @@ export class MessagingComponent implements OnInit {
 
 		this.messagingService.editMessage(this.token, this.editingMessage).subscribe(m => {
 			this.cancelEditing();
+			this.messageImage = null;
 		});
 	}
 
@@ -427,6 +429,13 @@ export class MessagingComponent implements OnInit {
 		setTimeout(() => this.previewSearch.nativeElement.focus(), 0);
 	}
 
+	deleteImageFromMessage() {
+		this.imageService.delete(this.token, this.messageImage.image.id).subscribe(() => {
+			this.editingMessage = this.messageImage.message;
+			this.editMessage();
+		});
+	}
+
 	private loadCurrentConversation() {
 		this.previewService.get(this.token, this.routeConversationId).subscribe(preview => {
 			this.currentPreview = preview;
@@ -438,56 +447,66 @@ export class MessagingComponent implements OnInit {
 		});
 	}
 
-	private startListening() {
-		this.isPolling = true;
-		this.messagingService.getEvents(this.token).subscribe(action => {
-			console.debug(action);
-			switch (action.type) {
-				case 'NEW_MESSAGE':
-					this.processNewMessage(action);
-					break;
-				case 'CONVERSATION_READ':
-					this.processRead(action);
-					break;
-				case 'MESSAGE_EDIT':
-					this.processEdit(action);
-					break;
+	private loadOrUpdatePreview(conversationId: number) {
+		this.previewService.get(this.token, conversationId).subscribe(preview => {
+			const existingPreview = this.previews.find(p => p.conversation.id === preview.conversation.id);
+			if (existingPreview) {
+				Object.assign(existingPreview, preview);
+			} else {
+				this.previews.push(preview);
 			}
 		});
 	}
 
+	private startListening() {
+		this.isPolling = true;
+		this.messagingService.getEvents(this.token).subscribe(action => {
+			console.debug(action);
+			setTimeout(() => {
+				switch (action.type) {
+					case 'NEW_MESSAGE':
+						this.processNewMessage(action);
+						break;
+					case 'CONVERSATION_READ':
+						this.processRead(action);
+						break;
+					case 'MESSAGE_EDIT':
+						this.processEdit(action);
+						break;
+				}
+				// TODO: investigate magic
+			}, 100);
+		});
+	}
+
 	private processNewMessage(action: NewMessageAction) {
-		this.updatePreviews();
+		this.loadOrUpdatePreview(action.message.conversation.id);
 
 		if (action.message.sender.id === this.me.id) return;
 
 		this.incrementBackgroundUnread();
 		this.soundNotificationService.notify();
+
 		if (this.currentPreview && action.message.conversation.id === this.currentPreview.conversation.id) {
 			this.messages.unshift(action.message);
 		}
 	}
 
 	private processRead(action: ConversationReadAction) {
-		this.updatePreviews();
+		this.loadOrUpdatePreview(action.conversation.id);
 
 		if (action.reader.id === this.me.id) return;
-
 		if (this.currentPreview && action.conversation.id === this.currentPreview.conversation.id) {
 			this.messages.forEach(m => m.read = true);
 		}
 	}
 
 	private processEdit(action: MessageEditAction) {
-		this.updatePreviews();
+		this.loadOrUpdatePreview(action.message.conversation.id);
 
 		if (this.currentPreview && action.message.conversation.id === this.currentPreview.conversation.id) {
-			this.messages.filter(m => m.id !== action.message.id);
-			if (action.message.sender.login !== this.me.login) {
-				const updatedMessage = this.messages.find(_m => _m.id === action.message.id);
-				updatedMessage.text = action.message.text;
-				updatedMessage.forwarded = action.message.forwarded;
-			}
+			const updatedMessage = this.messages.find(_m => _m.id === action.message.id);
+			Object.assign(updatedMessage, action.message);
 		}
 	}
 }

@@ -155,7 +155,9 @@
 <div class="overlay" *ngIf="(currentProfile && currentProfile.user) || messageImage">
 	<app-image-preview *ngIf="messageImage"
 	                   [messageImage]="messageImage"
-	                   (closeEvent)="messageImage = null">
+	                   (closeEvent)="messageImage = null"
+	                   (deleteImageEvent)="deleteImageFromMessage()"
+	                   (appOverlayClick)="messageImage = null">
 	</app-image-preview>
 	<app-profile *ngIf="currentProfile && currentProfile.user"
 	             [currentProfile]="currentProfile" [me]="me" (closeProfile)="currentProfile.user = null"
