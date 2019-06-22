@@ -30,6 +30,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 @Service
@@ -66,7 +67,7 @@ public class MessagingService {
 		return emitter;
 	}
 	
-	public void sendRequest(Request<Action> request, Action action) {
+	public void sendResponse(Request<Action> request, Action action) {
 		LOG.debug("sending response to @" + request.getUser().getLogin() + "; type: " + action.getType());
 		try {
 			SseEmitter.SseEventBuilder event = SseEmitter.event()
@@ -76,6 +77,15 @@ public class MessagingService {
 		} catch (IOException e) {
 			requests.remove(request);
 		}
+	}
+	
+	public void forEachRequest(Conversation conversation, Consumer<Request<Action>> consumer) {
+		new Thread(() -> requests
+				.stream()
+				.filter(r -> conversation.getUsers()
+						.stream()
+						.anyMatch(i -> i.getId().equals(r.getUser().getId())))
+				.forEach(consumer)).run();
 	}
 	
 	public MessageDto processNewMessage(User user, NewMessageDto newMessageDto) throws NoSuchEntityException, InvalidMessageException {
@@ -110,12 +120,7 @@ public class MessagingService {
 		
 		MessageDto messageDto = messageService.getFullMessage(message);
 		
-		requests
-				.stream()
-				.filter(request -> conversation.getUsers()
-						.stream()
-						.anyMatch(u -> u.getId().equals(request.getUser().getId())))
-				.forEach(request -> sendRequest(request, new NewMessageAction(messageDto)));
+		forEachRequest(conversation, request -> sendResponse(request, new NewMessageAction(messageDto)));
 		
 		return messageDto;
 	}
@@ -151,12 +156,7 @@ public class MessagingService {
 		Conversation conversation = conversationService.get(original.getConversation().getId());
 		MessageDto messageDto = messageService.getFullMessage(original);
 		
-		requests
-				.stream()
-				.filter(request -> conversation.getUsers()
-						.stream()
-						.anyMatch(u -> u.getId().equals(request.getUser().getId())))
-				.forEach(request -> sendRequest(request, new MessageEditAction(messageDto)));
+		forEachRequest(conversation, request -> sendResponse(request, new MessageEditAction(messageDto)));
 		
 		return messageDto;
 	}
@@ -171,10 +171,15 @@ public class MessagingService {
 				.filter(requestEntry -> conversation.getUsers()
 						.stream()
 						.anyMatch(i -> i.getId().equals(requestEntry.getUser().getId())))
-				.forEach(request -> sendRequest(
+				.forEach(request -> sendResponse(
 						request,
 						new ConversationReadAction(conversationService.get(user, conversation), userService.full(user)))
 				);
+		
+		forEachRequest(conversation, request -> sendResponse(
+				request,
+				new ConversationReadAction(conversationService.get(user, conversation), userService.full(user))
+		));
 	}
 	
 }
