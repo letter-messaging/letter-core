@@ -496,7 +496,7 @@ export class MessagingComponent implements OnInit {
 		this.loadOrUpdatePreview(action.conversation.id);
 
 		if (action.reader.id === this.me.id) return;
-		if (this.currentPreview && action.conversation.id === this.currentPreview.conversation.id) {
+		if (this.messages && this.currentPreview && action.conversation.id === this.currentPreview.conversation.id) {
 			this.messages.forEach(m => m.read = true);
 		}
 	}
