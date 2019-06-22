@@ -60,7 +60,7 @@ export class ImagePreviewComponent implements OnInit {
 	}
 
 	deleteImage() {
-		console.log('image delete');
+		// TODO: image deletion
 	}
 
 	openPrevious() {
