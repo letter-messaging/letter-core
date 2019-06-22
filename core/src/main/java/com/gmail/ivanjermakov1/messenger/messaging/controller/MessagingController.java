@@ -62,6 +62,7 @@ public class MessagingController {
 	                              @RequestBody NewMessageDto newMessageDto) throws AuthenticationException, InvalidMessageException, NoSuchEntityException {
 		User user = userService.authenticate(token);
 		
+		messagingService.processConversationRead(user, newMessageDto.getConversationId());
 		return messagingService.processNewMessage(user, newMessageDto);
 	}
 	
