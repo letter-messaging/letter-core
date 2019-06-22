@@ -24,6 +24,17 @@ export class ImageService {
 		});
 	}
 
+	delete(token: string, imageId: number): Observable<void> {
+		return this.http.get<void>(API_URL + 'image/delete', {
+			headers: {
+				'Auth-Token': token
+			},
+			params: {
+				'imageId': imageId.toString()
+			}
+		});
+	}
+
 	static getImagePathByCompressionMode(path: string, compressionMode: ImageCompressionMode): string {
 		if (compressionMode === ImageCompressionMode.FULL) return path;
 
