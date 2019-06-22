@@ -21,13 +21,17 @@ export class AuthService {
 
 	validate(token: string): Observable<User> {
 		return this.http.get<User>(API_URL + 'auth/validate', {
-			headers: {'Auth-Token': token}
+			headers: {
+				'Auth-Token': token
+			}
 		});
 	}
 
 	logout(token: string) {
 		return this.http.get<User>(API_URL + 'auth/logout', {
-			headers: {'Auth-Token': token}
+			headers: {
+				'Auth-Token': token
+			}
 		});
 	}
 

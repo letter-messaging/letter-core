@@ -15,15 +15,21 @@ export class PreviewService {
 
 	all(token: string, pageable: Pageable): Observable<Preview[]> {
 		return this.http.get<Preview[]>(API_URL + 'preview/all', {
-			headers: {'Auth-Token': token},
+			headers: {
+				'Auth-Token': token
+			},
 			params: pageable.toHttpParams()
 		});
 	}
 
 	get(token: string, conversationId: number): Observable<Preview> {
 		return this.http.get<Preview>(API_URL + 'preview/get', {
-			headers: {'Auth-Token': token},
-			params: {'conversationId': conversationId.toString()}
+			headers: {
+				'Auth-Token': token
+			},
+			params: {
+				'conversationId': conversationId.toString()
+			}
 		});
 	}
 

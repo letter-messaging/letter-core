@@ -14,11 +14,11 @@ export class UserInfoService {
 
 	get(token: string, userId: number): Observable<UserInfo> {
 		return this.http.get<UserInfo>(API_URL + 'info', {
-			params: {
-				userId: userId.toString()
-			},
 			headers: {
 				'Auth-Token': token
+			},
+			params: {
+				userId: userId.toString()
 			}
 		});
 	}

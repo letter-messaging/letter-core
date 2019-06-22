@@ -15,7 +15,9 @@ export class MessageService {
 
 	get(token: string, conversationId: number, pageable: Pageable): Observable<Message[]> {
 		return this.http.get<Message[]>(API_URL + 'message/get', {
-			headers: {'Auth-Token': token},
+			headers: {
+				'Auth-Token': token
+			},
 			params: pageable.toHttpParams()
 				.append('conversationId', conversationId.toString())
 		});
@@ -23,7 +25,9 @@ export class MessageService {
 
 	delete(token: string, deleteMessages: Message[]) {
 		return this.http.post(API_URL + 'message/delete', deleteMessages, {
-			headers: {'Auth-Token': token}
+			headers: {
+				'Auth-Token': token
+			}
 		});
 	}
 

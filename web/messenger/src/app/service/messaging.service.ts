@@ -26,13 +26,17 @@ export class MessagingService {
 
 	sendMessage(token: string, newMessage: NewMessage): Observable<Message> {
 		return this.http.post<Message>(API_URL + 'messaging/send', newMessage, {
-			headers: {'Auth-Token': token}
+			headers: {
+				'Auth-Token': token
+			}
 		});
 	}
 
 	editMessage(token: string, editMessage: EditMessage): Observable<Message> {
 		return this.http.post<Message>(API_URL + 'messaging/edit', editMessage, {
-			headers: {'Auth-Token': token}
+			headers: {
+				'Auth-Token': token
+			}
 		});
 	}
 
