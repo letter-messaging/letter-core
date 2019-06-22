@@ -72,16 +72,12 @@ public class MessagingController {
 	 * @param editMessageDto editing message
 	 * @return edited message
 	 * @throws AuthenticationException on invalid @param token
-	 * @throws InvalidMessageException on invalid @param editMessageDto
 	 * @throws NoSuchEntityException   on invalid conversation
 	 */
 	@PostMapping("edit")
 	public MessageDto editMessage(@RequestHeader("Auth-Token") String token,
-	                              @RequestBody EditMessageDto editMessageDto) throws AuthenticationException, InvalidMessageException, NoSuchEntityException {
+	                              @RequestBody EditMessageDto editMessageDto) throws AuthenticationException, NoSuchEntityException {
 		User user = userService.authenticate(token);
-		
-		if (editMessageDto.getText() == null)
-			throw new InvalidMessageException("invalid message");
 		
 		return messagingService.processMessageEdit(user, editMessageDto);
 	}
