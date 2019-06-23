@@ -4,7 +4,6 @@ import com.gmail.ivanjermakov1.messenger.auth.entity.User;
 import com.gmail.ivanjermakov1.messenger.auth.service.UserService;
 import com.gmail.ivanjermakov1.messenger.exception.AuthenticationException;
 import com.gmail.ivanjermakov1.messenger.exception.InvalidMessageException;
-import com.gmail.ivanjermakov1.messenger.exception.NoSuchEntityException;
 import com.gmail.ivanjermakov1.messenger.messaging.dto.EditMessageDto;
 import com.gmail.ivanjermakov1.messenger.messaging.dto.MessageDto;
 import com.gmail.ivanjermakov1.messenger.messaging.dto.NewMessageDto;
@@ -55,11 +54,10 @@ public class MessagingController {
 	 * @return sent message
 	 * @throws AuthenticationException on invalid @param token
 	 * @throws InvalidMessageException on invalid @param newMessageDto
-	 * @throws NoSuchEntityException   on invalid conversationId in @param newMessageDto
 	 */
 	@PostMapping("send")
 	public MessageDto sendMessage(@RequestHeader("Auth-Token") String token,
-	                              @RequestBody NewMessageDto newMessageDto) throws AuthenticationException, InvalidMessageException, NoSuchEntityException {
+	                              @RequestBody NewMessageDto newMessageDto) throws AuthenticationException, InvalidMessageException {
 		User user = userService.authenticate(token);
 		
 		messagingService.processConversationRead(user, newMessageDto.getConversationId());
@@ -73,11 +71,10 @@ public class MessagingController {
 	 * @param editMessageDto editing message
 	 * @return edited message
 	 * @throws AuthenticationException on invalid @param token
-	 * @throws NoSuchEntityException   on invalid conversation
 	 */
 	@PostMapping("edit")
 	public MessageDto editMessage(@RequestHeader("Auth-Token") String token,
-	                              @RequestBody EditMessageDto editMessageDto) throws AuthenticationException, NoSuchEntityException {
+	                              @RequestBody EditMessageDto editMessageDto) throws AuthenticationException {
 		User user = userService.authenticate(token);
 		
 		return messagingService.processMessageEdit(user, editMessageDto);

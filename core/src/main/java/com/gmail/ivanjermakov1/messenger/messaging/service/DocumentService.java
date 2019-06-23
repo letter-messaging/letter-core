@@ -36,7 +36,7 @@ public class DocumentService {
 		return new NewDocumentDto(fileUploadService.upload(documentFile, FileType.DOCUMENT));
 	}
 	
-	public void delete(User user, Long documentId) throws NoSuchEntityException, AuthorizationException {
+	public void delete(User user, Long documentId) throws AuthorizationException {
 		Document document = documentRepository.findById(documentId)
 				.orElseThrow(() -> new NoSuchEntityException("such document does not exist"));
 		

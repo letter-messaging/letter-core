@@ -21,7 +21,7 @@ public class ImageCompressor {
 	 * @param qualityFactor
 	 * @throws IOException
 	 */
-//	TODO: compress not by factor but by maximum size
+	//	TODO: compress not by factor but by maximum size
 	public static void compress(String targetPath, String destinationPath, float qualityFactor) throws IOException {
 		File input = new File(targetPath);
 		BufferedImage image = ImageIO.read(input);

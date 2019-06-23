@@ -10,6 +10,7 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 public interface MessageRepository extends CrudRepository<Message, Long> {
@@ -22,16 +23,8 @@ public interface MessageRepository extends CrudRepository<Message, Long> {
 	
 	List<Message> findAllByConversation(Conversation conversation, Pageable pageable);
 	
-	@Modifying
-	@Query("update Message m " +
-			"set m.read = true " +
-			"where m.sender.id <> :exceptUserId and m.conversation.id = :conversationId")
-	void readAllExcept(@Param("exceptUserId") Long exceptUserId, @Param("conversationId") Long conversationId);
-	
-	@Query("select count(m) " +
-			"from Message m " +
-			"where m.conversation.id = :conversationId and m.sender.id <> :exceptUserId and m.read = false")
-	Integer getUnreadCount(@Param("exceptUserId") Long exceptUserId, @Param("conversationId") Long conversationId);
+	@Query("select count(m) from Message m where m.conversation = :conversation and m.sender <> :user and m.sent > :lastRead")
+	Integer countUnread(@Param("user") User user, @Param("conversation") Conversation conversation, @Param("lastRead") LocalDateTime lastRead);
 	
 	@Modifying
 	@Transactional

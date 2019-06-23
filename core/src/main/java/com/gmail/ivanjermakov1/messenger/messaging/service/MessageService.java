@@ -10,12 +10,15 @@ import com.gmail.ivanjermakov1.messenger.messaging.dto.ImageDto;
 import com.gmail.ivanjermakov1.messenger.messaging.dto.MessageDto;
 import com.gmail.ivanjermakov1.messenger.messaging.entity.Conversation;
 import com.gmail.ivanjermakov1.messenger.messaging.entity.Message;
+import com.gmail.ivanjermakov1.messenger.messaging.entity.UserConversation;
 import com.gmail.ivanjermakov1.messenger.messaging.repository.MessageRepository;
+import com.gmail.ivanjermakov1.messenger.messaging.repository.UserConversationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -29,12 +32,14 @@ public class MessageService {
 	private final UserService userService;
 	private ConversationService conversationService;
 	private final ImageService imageService;
+	private final UserConversationRepository userConversationRepository;
 	
 	@Autowired
-	public MessageService(MessageRepository messageRepository, UserService userService, ImageService imageService) {
+	public MessageService(MessageRepository messageRepository, UserService userService, ImageService imageService, UserConversationRepository userConversationRepository) {
 		this.messageRepository = messageRepository;
 		this.userService = userService;
 		this.imageService = imageService;
+		this.userConversationRepository = userConversationRepository;
 	}
 	
 	@Autowired
@@ -50,7 +55,8 @@ public class MessageService {
 		return messageRepository.getTop1ByConversationIdOrderBySentDesc(conversationId);
 	}
 	
-	public List<MessageDto> get(Long userId, Long conversationId, Pageable pageable) throws AuthenticationException, NoSuchEntityException {
+	public List<MessageDto> get(Long userId, Long conversationId, Pageable pageable) throws AuthenticationException {
+		User user = userService.getUser(userId);
 		Conversation conversation = conversationService.get(conversationId);
 		
 		if (conversation.getUsers().stream().noneMatch(u -> u.getId().equals(userId)))
@@ -60,37 +66,31 @@ public class MessageService {
 		
 		return messagesIds
 				.stream()
-				.map(this::getFullMessage)
+				.map(message -> getFullMessage(user, message))
 				.collect(Collectors.toList());
 	}
 	
-	public MessageDto getFullMessage(Message message) {
+	public MessageDto getFullMessage(User user, Message message) {
+		UserConversation userConversation = userConversationRepository.findByUserAndConversation(user, message.getConversation())
+				.orElseThrow(() -> new NoSuchEntityException("no such user's conversation"));
+		
 		MessageDto messageDto = new MessageDto();
 		messageDto.setId(message.getId());
 		messageDto.setSent(message.getSent());
-		messageDto.setRead(message.getRead());
+		messageDto.setRead(userConversation.getLastRead().isAfter(message.getSent()));
 		messageDto.setText(message.getText());
 		
-		try {
-			Conversation conversation = conversationService.get(message.getConversation().getId());
-			messageDto.setConversation(conversationService.get(message.getSender(), conversation));
-		} catch (NoSuchEntityException e) {
-			e.printStackTrace();
-		}
+		Conversation conversation = conversationService.get(message.getConversation().getId());
+		messageDto.setConversation(conversationService.get(message.getSender(), conversation));
 		
-		try {
-			User user = userService.getUser(message.getSender().getId());
-			messageDto.setSender(userService.full(user));
-			userService.full(user);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		User sender = userService.getUser(message.getSender().getId());
+		messageDto.setSender(userService.full(sender));
 		
 		messageDto.setForwarded(Optional
 				.ofNullable(messageRepository.getById(message.getId()).getForwarded())
 				.orElse(Collections.emptyList())
 				.stream()
-				.map(this::getFullMessage)
+				.map(m -> getFullMessage(user, m))
 				.collect(Collectors.toList()));
 		
 		messageDto.setImages(Mapper.mapAll(
@@ -107,11 +107,10 @@ public class MessageService {
 	}
 	
 	public void read(User user, Conversation conversation) {
-		messageRepository.readAllExcept(user.getId(), conversation.getId());
-	}
-	
-	public Integer unreadCount(User user, Conversation conversation) {
-		return messageRepository.getUnreadCount(user.getId(), conversation.getId());
+		UserConversation userConversation = userConversationRepository.findByUserAndConversation(user, conversation)
+				.orElseThrow(() -> new NoSuchEntityException("no such user's conversation"));
+		
+		userConversation.setLastRead(LocalDateTime.now());
 	}
 	
 	/**

@@ -31,16 +31,15 @@ public class UserInfoService {
 		this.avatarService = avatarService;
 	}
 	
-	public UserInfo getById(Long userId) {
-		return userInfoRepository.findByUserId(userId).orElse(null);
+	public UserInfo getByUser(User user) {
+		return userInfoRepository.findByUser(user).orElse(null);
 	}
 	
 	public UserInfo save(UserInfo userInfo) {
 		return userInfoRepository.save(userInfo);
 	}
 	
-	public UserInfoDto get(Long userId) {
-		UserInfo userInfo = getById(userId);
+	public UserInfoDto full(UserInfo userInfo) {
 		UserInfoDto userInfoDto = Mapper.map(userInfo, UserInfoDto.class);
 		userInfoDto.setAvatars(Mapper.mapAll(avatarService.getAll(userInfo.getUser()), AvatarDto.class));
 		userInfoDto.setUser(userService.full(userInfo.getUser()));
@@ -51,7 +50,7 @@ public class UserInfoService {
 		if (!userInfoDto.getUser().getId().equals(user.getId()))
 			throw new AuthenticationException("allow only to edit personal info");
 		
-		UserInfo userInfo = getById(user.getId());
+		UserInfo userInfo = getByUser(user);
 		
 		userInfo.setUser(user);
 		userInfo.setFirstName(userInfoDto.getFirstName());

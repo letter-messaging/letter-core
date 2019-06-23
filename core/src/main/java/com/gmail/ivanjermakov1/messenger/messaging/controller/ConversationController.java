@@ -34,11 +34,10 @@ public class ConversationController {
 	 * @param withLogin login of user to create conversation with
 	 * @return created conversation
 	 * @throws AuthenticationException on invalid token
-	 * @throws NoSuchEntityException   on invalid @param withLogin
 	 */
 	@GetMapping("create")
 	public ConversationDto create(@RequestHeader("Auth-Token") String token,
-	                              @RequestParam("with") String withLogin) throws AuthenticationException, NoSuchEntityException {
+	                              @RequestParam("with") String withLogin) throws AuthenticationException {
 		User user = userService.authenticate(token);
 		try {
 			return conversationService.get(user, conversationService.create(user, userService.getUser(withLogin)));
@@ -53,11 +52,10 @@ public class ConversationController {
 	 * @param token          calling user token
 	 * @param conversationId id of conversation to delete
 	 * @throws AuthenticationException on invalid @param token
-	 * @throws NoSuchEntityException   on invalid @param conversationId
 	 */
 	@GetMapping("delete")
 	public void delete(@RequestHeader("Auth-Token") String token,
-	                   @RequestParam("id") Long conversationId) throws AuthenticationException, NoSuchEntityException {
+	                   @RequestParam("id") Long conversationId) throws AuthenticationException {
 		User user = userService.authenticate(token);
 		
 		conversationService.delete(user, conversationService.get(conversationId));
@@ -69,11 +67,10 @@ public class ConversationController {
 	 * @param token          calling user token
 	 * @param conversationId id of conversation to hide
 	 * @throws AuthenticationException on invalid @param token
-	 * @throws NoSuchEntityException   on invalid @param conversationId
 	 */
 	@GetMapping("hide")
 	public void hide(@RequestHeader("Auth-Token") String token,
-	                 @RequestParam("id") Long conversationId) throws AuthenticationException, NoSuchEntityException {
+	                 @RequestParam("id") Long conversationId) throws AuthenticationException {
 		User user = userService.authenticate(token);
 		
 		conversationService.hide(user, conversationService.get(conversationId));

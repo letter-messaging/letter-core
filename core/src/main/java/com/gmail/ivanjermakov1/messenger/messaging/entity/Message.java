@@ -38,9 +38,6 @@ public class Message {
 	@Column(name = "text")
 	private String text;
 	
-	@Column(name = "read")
-	private Boolean read = false;
-	
 	@OneToOne
 	@JoinColumn(name = "sender_id")
 	private User sender;
@@ -65,11 +62,10 @@ public class Message {
 	public Message() {
 	}
 	
-	public Message(Conversation conversation, LocalDateTime sent, String text, Boolean read, User sender, List<Message> forwarded, List<Image> images, List<Document> documents) {
+	public Message(Conversation conversation, LocalDateTime sent, String text, User sender, List<Message> forwarded, List<Image> images, List<Document> documents) {
 		this.conversation = conversation;
 		this.sent = sent;
 		this.text = text;
-		this.read = read;
 		this.sender = sender;
 		this.forwarded = forwarded;
 		this.images = images;
@@ -106,14 +102,6 @@ public class Message {
 	
 	public void setText(String text) {
 		this.text = text;
-	}
-	
-	public Boolean getRead() {
-		return read;
-	}
-	
-	public void setRead(Boolean read) {
-		this.read = read;
 	}
 	
 	public User getSender() {

@@ -12,6 +12,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import java.util.List;
 
@@ -33,6 +34,9 @@ public class Conversation {
 	)
 	private List<User> users;
 	
+	@OneToMany(mappedBy = "conversation")
+	private List<UserConversation> userConversations;
+	
 	public Conversation() {
 	}
 	
@@ -50,6 +54,14 @@ public class Conversation {
 	
 	public void setUsers(List<User> users) {
 		this.users = users;
+	}
+	
+	public List<UserConversation> getUserConversations() {
+		return userConversations;
+	}
+	
+	public void setUserConversations(List<UserConversation> userConversations) {
+		this.userConversations = userConversations;
 	}
 	
 }

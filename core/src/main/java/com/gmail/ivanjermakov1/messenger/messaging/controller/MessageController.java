@@ -3,7 +3,6 @@ package com.gmail.ivanjermakov1.messenger.messaging.controller;
 import com.gmail.ivanjermakov1.messenger.auth.entity.User;
 import com.gmail.ivanjermakov1.messenger.auth.service.UserService;
 import com.gmail.ivanjermakov1.messenger.exception.AuthenticationException;
-import com.gmail.ivanjermakov1.messenger.exception.NoSuchEntityException;
 import com.gmail.ivanjermakov1.messenger.messaging.dto.MessageDto;
 import com.gmail.ivanjermakov1.messenger.messaging.service.MessageService;
 import com.gmail.ivanjermakov1.messenger.messaging.service.MessagingService;
@@ -44,12 +43,11 @@ public class MessageController {
 	 * @param pageable       pageable
 	 * @return list of messages. Return empty list on empty conversation
 	 * @throws AuthenticationException on invalid @param token
-	 * @throws NoSuchEntityException   on invalid @param conversationId and on missing conversation with such id
 	 */
 	@GetMapping("get")
 	public List<MessageDto> get(@RequestHeader("Auth-Token") String token,
 	                            @RequestParam("conversationId") Long conversationId,
-	                            @PageableDefault(direction = Sort.Direction.DESC, sort = {"sent"}) Pageable pageable) throws AuthenticationException, NoSuchEntityException {
+	                            @PageableDefault(direction = Sort.Direction.DESC, sort = {"sent"}) Pageable pageable) throws AuthenticationException {
 		User user = userService.authenticate(token);
 		messagingService.processConversationRead(user, conversationId);
 		return messageService.get(user.getId(), conversationId, pageable);

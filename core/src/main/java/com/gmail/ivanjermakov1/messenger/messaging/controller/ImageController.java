@@ -61,7 +61,7 @@ public class ImageController {
 	 */
 	@GetMapping("delete")
 	public void delete(@RequestHeader("Auth-Token") String token,
-	                   @RequestParam("imageId") Long imageId) throws AuthenticationException, NoSuchEntityException, AuthorizationException {
+	                   @RequestParam("imageId") Long imageId) throws AuthenticationException, AuthorizationException {
 		User user = userService.authenticate(token);
 		
 		imageService.delete(user, imageId);

@@ -6,7 +6,10 @@ import com.gmail.ivanjermakov1.messenger.exception.AuthenticationException;
 import com.gmail.ivanjermakov1.messenger.exception.NoSuchEntityException;
 import com.gmail.ivanjermakov1.messenger.messaging.dto.ConversationDto;
 import com.gmail.ivanjermakov1.messenger.messaging.entity.Conversation;
+import com.gmail.ivanjermakov1.messenger.messaging.entity.UserConversation;
 import com.gmail.ivanjermakov1.messenger.messaging.repository.ConversationRepository;
+import com.gmail.ivanjermakov1.messenger.messaging.repository.MessageRepository;
+import com.gmail.ivanjermakov1.messenger.messaging.repository.UserConversationRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +18,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -26,12 +30,16 @@ public class ConversationService {
 	private final static Logger LOG = LoggerFactory.getLogger(ConversationService.class);
 	private final ConversationRepository conversationRepository;
 	private final UserService userService;
+	private final MessageRepository messageRepository;
+	private final UserConversationRepository userConversationRepository;
 	private MessageService messageService;
 	
 	@Autowired
-	public ConversationService(ConversationRepository conversationRepository, UserService userService) {
+	public ConversationService(ConversationRepository conversationRepository, UserService userService, MessageRepository messageRepository, UserConversationRepository userConversationRepository) {
 		this.conversationRepository = conversationRepository;
 		this.userService = userService;
+		this.messageRepository = messageRepository;
+		this.userConversationRepository = userConversationRepository;
 	}
 	
 	@Autowired
@@ -49,6 +57,8 @@ public class ConversationService {
 			conversation = conversationWith(user, with);
 			show(user, conversation);
 		} catch (NoSuchEntityException e) {
+			userConversationRepository.save(new UserConversation(user, conversation, false, LocalDateTime.now()));
+			
 			conversation.setUsers(new ArrayList<>());
 			conversation.getUsers().add(user);
 			conversation.getUsers().add(with);
@@ -73,7 +83,7 @@ public class ConversationService {
 		hide(user, conversation);
 	}
 	
-	public Conversation get(Long conversationId) throws NoSuchEntityException {
+	public Conversation get(Long conversationId) {
 		return conversationRepository.findById(conversationId).orElseThrow(() -> new NoSuchEntityException("no such conversation"));
 	}
 	
@@ -82,9 +92,11 @@ public class ConversationService {
 	}
 	
 	public ConversationDto get(User user, Conversation conversation) {
+		UserConversation userConversation = userConversationRepository.findByUserAndConversation(user, conversation)
+				.orElseThrow(NoSuchEntityException::new);
 		return new ConversationDto(
 				conversation.getId(),
-				isHidden(user, conversation),
+				userConversation.getHidden(),
 				conversation.getUsers()
 						.stream()
 						.map(userService::full)
@@ -93,18 +105,22 @@ public class ConversationService {
 	}
 	
 	public void hide(User user, Conversation conversation) {
-		conversationRepository.setHidden(user.getId(), conversation.getId(), true);
+		setHidden(user, conversation, true);
 	}
 	
 	public void show(User user, Conversation conversation) {
-		conversationRepository.setHidden(user.getId(), conversation.getId(), false);
+		setHidden(user, conversation, false);
 	}
 	
-	public Boolean isHidden(User user, Conversation conversation) {
-		return conversationRepository.isHidden(user.getId(), conversation.getId());
+	public void setHidden(User user, Conversation conversation, boolean hidden) {
+		UserConversation userConversation = userConversationRepository.findByUserAndConversation(user, conversation)
+				.orElseThrow(NoSuchEntityException::new);
+		
+		userConversation.setHidden(hidden);
+		userConversationRepository.save(userConversation);
 	}
 	
-	private Conversation conversationWith(User user1, User user2) throws NoSuchEntityException {
+	private Conversation conversationWith(User user1, User user2) {
 		return conversationRepository.getConversations(user1.getId(), PageRequest.of(0, Integer.MAX_VALUE))
 				.stream()
 				.filter(c -> c.getUsers()
@@ -127,6 +143,15 @@ public class ConversationService {
 		self.getUsers().add(user);
 		
 		return conversationRepository.save(self);
+	}
+	
+	public Integer unreadCount(User user, Conversation conversation) {
+		return messageRepository.countUnread(
+				user,
+				conversation,
+				userConversationRepository.findByUserAndConversation(user, conversation)
+						.orElseThrow(NoSuchEntityException::new).getLastRead()
+		);
 	}
 	
 }

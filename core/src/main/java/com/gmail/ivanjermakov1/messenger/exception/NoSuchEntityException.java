@@ -1,6 +1,6 @@
 package com.gmail.ivanjermakov1.messenger.exception;
 
-public class NoSuchEntityException extends Exception {
+public class NoSuchEntityException extends RuntimeException {
 	
 	public NoSuchEntityException() {
 	}

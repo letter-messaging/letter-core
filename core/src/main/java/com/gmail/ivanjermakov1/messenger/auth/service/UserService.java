@@ -92,21 +92,21 @@ public class UserService {
 		userInfoService.save(new UserInfo(user, registerUserDto.getFirstName(), registerUserDto.getLastName()));
 	}
 	
-	public User getUser(Long id) throws NoSuchEntityException {
+	public User getUser(Long id) {
 		return userRepository.findById(id).orElseThrow(() -> new NoSuchEntityException("no such user"));
 	}
 	
-	public User getUser(String login) throws NoSuchEntityException {
+	public User getUser(String login) {
 		return Optional.ofNullable(userRepository.findByLogin(login))
 				.orElseThrow(() -> new NoSuchEntityException("no such user"));
 	}
 	
-	public User getUserByToken(String token) throws NoSuchEntityException {
+	public User getUserByToken(String token) {
 		return tokenRepository.findByToken(token).orElseThrow(() -> new NoSuchEntityException("no such user")).getUser();
 	}
 	
 	public UserDto full(User user) {
-		UserInfo userInfo = userInfoService.getById(user.getId());
+		UserInfo userInfo = userInfoService.getByUser(user);
 		UserOnline userOnline = userOnlineRepository.findFirstByUserIdOrderBySeenDesc(user.getId());
 		return new UserDto(
 				user.getId(),

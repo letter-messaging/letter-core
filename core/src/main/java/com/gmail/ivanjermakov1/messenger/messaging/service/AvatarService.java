@@ -41,7 +41,7 @@ public class AvatarService {
 	}
 	
 	//	TODO: delete physical file from file system
-	public void delete(User user, Long avatarId) throws NoSuchEntityException {
+	public void delete(User user, Long avatarId) {
 		if (avatarRepository.getByUserId(user.getId()).stream().noneMatch(a -> a.getId().equals(avatarId)))
 			throw new NoSuchEntityException("invalid avatar id");
 		

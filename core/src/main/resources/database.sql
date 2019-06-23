@@ -27,7 +27,6 @@ create table message
             references conversation,
     sent            timestamp with time zone not null,
     text            varchar,
-    read            boolean                  not null,
     sender_id       bigint                   not null
         constraint message_user_id_fk
             references "user"
@@ -44,14 +43,21 @@ create unique index user_login_uindex
 
 create table user_conversation
 (
-    user_id         bigint not null
+    user_id         bigint                   not null
         constraint user_conversation_user_id_fk
             references "user",
-    conversation_id bigint not null
+    conversation_id bigint                   not null
         constraint user_conversation_conversation_id_fk
             references conversation,
-    hidden          boolean default false
+    hidden          boolean default false,
+    last_read       timestamp with time zone not null,
+    id              bigserial                not null
+        constraint user_conversation_pk
+            primary key
 );
+
+create unique index user_conversation_id_uindex
+    on user_conversation (id);
 
 create table forwarded_message
 (

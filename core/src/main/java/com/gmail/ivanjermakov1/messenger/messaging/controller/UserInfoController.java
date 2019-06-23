@@ -40,7 +40,7 @@ public class UserInfoController {
 	                       @RequestParam("userId") Long userId) throws AuthenticationException {
 		User user = userService.authenticate(token);
 		
-		return userInfoService.get(userId);
+		return userInfoService.full(userInfoService.getByUser(user));
 	}
 	
 	/**

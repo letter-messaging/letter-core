@@ -46,7 +46,7 @@ public class PreviewService {
 		
 		previewDto.setConversation(conversationService.get(user, conversation));
 		Message lastMessage = messageService.getLastMessage(conversation.getId());
-		if (lastMessage != null) previewDto.setLastMessage(messageService.getFullMessage(lastMessage));
+		if (lastMessage != null) previewDto.setLastMessage(messageService.getFullMessage(user, lastMessage));
 		
 		User with = conversation.getUsers()
 				.stream()
@@ -54,7 +54,7 @@ public class PreviewService {
 				.findFirst()
 				.orElse(user);
 		previewDto.setWith(userService.full(with));
-		previewDto.setUnread(messageService.unreadCount(user, conversation));
+		previewDto.setUnread(conversationService.unreadCount(user, conversation));
 		
 		return previewDto;
 	}

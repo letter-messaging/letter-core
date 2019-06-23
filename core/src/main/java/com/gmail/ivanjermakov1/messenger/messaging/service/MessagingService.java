@@ -17,6 +17,8 @@ import com.gmail.ivanjermakov1.messenger.messaging.entity.Conversation;
 import com.gmail.ivanjermakov1.messenger.messaging.entity.Document;
 import com.gmail.ivanjermakov1.messenger.messaging.entity.Image;
 import com.gmail.ivanjermakov1.messenger.messaging.entity.Message;
+import com.gmail.ivanjermakov1.messenger.messaging.entity.UserConversation;
+import com.gmail.ivanjermakov1.messenger.messaging.repository.UserConversationRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,6 +46,7 @@ public class MessagingService {
 	private final UserService userService;
 	private final ImageService imageService;
 	private final DocumentService documentService;
+	private final UserConversationRepository userConversationRepository;
 	
 	private final List<Request<Action>> requests = new CopyOnWriteArrayList<>();
 	
@@ -51,12 +54,13 @@ public class MessagingService {
 	private Long sseTimeout;
 	
 	@Autowired
-	public MessagingService(MessageService messageService, ConversationService conversationService, UserService userService, ImageService imageService, DocumentService documentService) {
+	public MessagingService(MessageService messageService, ConversationService conversationService, UserService userService, ImageService imageService, DocumentService documentService, UserConversationRepository userConversationRepository) {
 		this.messageService = messageService;
 		this.conversationService = conversationService;
 		this.userService = userService;
 		this.imageService = imageService;
 		this.documentService = documentService;
+		this.userConversationRepository = userConversationRepository;
 	}
 	
 	public SseEmitter generateRequest(User user) {
@@ -88,7 +92,7 @@ public class MessagingService {
 				.forEach(consumer)).run();
 	}
 	
-	public MessageDto processNewMessage(User user, NewMessageDto newMessageDto) throws NoSuchEntityException, InvalidMessageException {
+	public MessageDto processNewMessage(User user, NewMessageDto newMessageDto) throws InvalidMessageException {
 		LOG.debug("process new message from @" + user.getLogin() + " to conversation @" + newMessageDto.getConversationId() +
 				"; text: " + newMessageDto.getText());
 		
@@ -98,7 +102,6 @@ public class MessagingService {
 				conversation,
 				LocalDateTime.now(),
 				newMessageDto.getText(),
-				conversation.getUsers().size() == 1,
 				user,
 				newMessageDto.getForwarded()
 						.stream()
@@ -118,14 +121,18 @@ public class MessagingService {
 		
 		message = messageService.save(message);
 		
-		MessageDto messageDto = messageService.getFullMessage(message);
+		UserConversation userConversation = userConversationRepository.findByUserAndConversation(user, conversation)
+				.orElseThrow(NoSuchEntityException::new);
+		userConversationRepository.save(userConversation);
+		
+		MessageDto messageDto = messageService.getFullMessage(user, message);
 		
 		forEachRequest(conversation, request -> sendResponse(request, new NewMessageAction(messageDto)));
 		
 		return messageDto;
 	}
 	
-	public MessageDto processMessageEdit(User user, EditMessageDto editMessageDto) throws NoSuchEntityException, AuthenticationException {
+	public MessageDto processMessageEdit(User user, EditMessageDto editMessageDto) throws AuthenticationException {
 		LOG.debug("process message edit @" + editMessageDto.getId() + "; text: " + editMessageDto.getText());
 		
 		Message original = messageService.get(editMessageDto.getId());
@@ -154,14 +161,14 @@ public class MessagingService {
 		original = messageService.save(original);
 		
 		Conversation conversation = conversationService.get(original.getConversation().getId());
-		MessageDto messageDto = messageService.getFullMessage(original);
+		MessageDto messageDto = messageService.getFullMessage(user, original);
 		
 		forEachRequest(conversation, request -> sendResponse(request, new MessageEditAction(messageDto)));
 		
 		return messageDto;
 	}
 	
-	public void processConversationRead(User user, Long conversationId) throws NoSuchEntityException {
+	public void processConversationRead(User user, Long conversationId) {
 		Conversation conversation = conversationService.get(conversationId);
 		
 		messageService.read(user, conversation);

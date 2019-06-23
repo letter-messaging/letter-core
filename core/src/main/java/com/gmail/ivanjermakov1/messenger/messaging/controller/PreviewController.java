@@ -3,7 +3,6 @@ package com.gmail.ivanjermakov1.messenger.messaging.controller;
 import com.gmail.ivanjermakov1.messenger.auth.entity.User;
 import com.gmail.ivanjermakov1.messenger.auth.service.UserService;
 import com.gmail.ivanjermakov1.messenger.exception.AuthenticationException;
-import com.gmail.ivanjermakov1.messenger.exception.NoSuchEntityException;
 import com.gmail.ivanjermakov1.messenger.messaging.dto.PreviewDto;
 import com.gmail.ivanjermakov1.messenger.messaging.entity.Conversation;
 import com.gmail.ivanjermakov1.messenger.messaging.service.ConversationService;
@@ -55,11 +54,10 @@ public class PreviewController {
 	 * @param conversationId conversation id
 	 * @return conversation
 	 * @throws AuthenticationException on invalid @param token
-	 * @throws NoSuchEntityException   on invalid @param conversationId
 	 */
 	@GetMapping("get")
 	public PreviewDto get(@RequestHeader("Auth-Token") String token,
-	                      @RequestParam("conversationId") Long conversationId) throws AuthenticationException, NoSuchEntityException {
+	                      @RequestParam("conversationId") Long conversationId) throws AuthenticationException {
 		User user = userService.authenticate(token);
 		Conversation conversation = conversationService.get(conversationId);
 		

@@ -4,7 +4,6 @@ import com.gmail.ivanjermakov1.messenger.auth.entity.User;
 import com.gmail.ivanjermakov1.messenger.auth.service.UserService;
 import com.gmail.ivanjermakov1.messenger.exception.AuthenticationException;
 import com.gmail.ivanjermakov1.messenger.exception.InvalidFileException;
-import com.gmail.ivanjermakov1.messenger.exception.NoSuchEntityException;
 import com.gmail.ivanjermakov1.messenger.messaging.dto.AvatarDto;
 import com.gmail.ivanjermakov1.messenger.messaging.service.AvatarService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,11 +55,10 @@ public class AvatarController {
 	 * @param token    user token
 	 * @param avatarId avatar id to delete
 	 * @throws AuthenticationException on invalid token
-	 * @throws NoSuchEntityException   on invalid avatar id
 	 */
 	@GetMapping("delete")
 	public void delete(@RequestHeader("Auth-Token") String token,
-	                   @RequestParam("avatarId") Long avatarId) throws AuthenticationException, NoSuchEntityException {
+	                   @RequestParam("avatarId") Long avatarId) throws AuthenticationException {
 		User user = userService.authenticate(token);
 		
 		avatarService.delete(user, avatarId);

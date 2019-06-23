@@ -39,7 +39,7 @@ public class ImageService {
 		return new NewImageDto(fileUploadService.upload(imageFile, FileType.IMAGE));
 	}
 	
-	public void delete(User user, Long imageId) throws NoSuchEntityException, AuthorizationException {
+	public void delete(User user, Long imageId) throws AuthorizationException {
 		Image image = imageRepository.findById(imageId)
 				.orElseThrow(() -> new NoSuchEntityException("such image does not exist"));
 		
