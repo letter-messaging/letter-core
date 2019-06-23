@@ -147,6 +147,12 @@ create unique index image_id_uindex
 create unique index image_path_uindex
     on image (path);
 
+create unique index document_id_uindex
+    on image (id);
+
+create unique index document_path_uindex
+    on image (path);
+
 create table document
 (
     id         bigserial not null
@@ -162,8 +168,3 @@ create table document
     uploaded   date      not null
 );
 
-create unique index document_id_uindex
-    on image (id);
-
-create unique index document_path_uindex
-    on image (path);
