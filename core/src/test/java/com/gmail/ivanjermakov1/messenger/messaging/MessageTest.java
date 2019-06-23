@@ -52,7 +52,7 @@ public class MessageTest {
 	private ImageController imageController;
 	
 	@Test
-	public void shouldSendMessageWithImage() throws RegistrationException, AuthenticationException, NoSuchEntityException, InvalidMessageException, IOException, InvalidFileException {
+	public void shouldSendMessageWithImage() throws RegistrationException, AuthenticationException, NoSuchEntityException, InvalidMessageException, IOException {
 		userService.register(new RegisterUserDto("Jack", "Johnson", "jackj", "password1"));
 		String user1Token = userService.authenticate("jackj", "password1");
 		UserDto user1 = userService.full(userService.authenticate(user1Token));
