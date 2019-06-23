@@ -17,6 +17,8 @@ import com.gmail.ivanjermakov1.messenger.messaging.service.UserInfoService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -31,6 +33,9 @@ public class UserService {
 	private final TokenRepository tokenRepository;
 	private final UserOnlineRepository userOnlineRepository;
 	private UserInfoService userInfoService;
+	
+	@Value("${online.lifetime-days}")
+	public Integer onlineLifetimeDays;
 	
 	@Autowired
 	public void setUserInfoService(UserInfoService userInfoService) {
@@ -61,11 +66,7 @@ public class UserService {
 	}
 	
 	public User authenticate(String token) throws AuthenticationException {
-		try {
-			return getUserByToken(token);
-		} catch (NoSuchEntityException e) {
-			throw new AuthenticationException("invalid token");
-		}
+		return tokenRepository.findByToken(token).orElseThrow(() -> new AuthenticationException("invalid token")).getUser();
 	}
 	
 	public void register(RegisterUserDto registerUserDto) throws RegistrationException {
@@ -90,10 +91,6 @@ public class UserService {
 				.orElseThrow(() -> new NoSuchEntityException("no such user"));
 	}
 	
-	public User getUserByToken(String token) {
-		return tokenRepository.findByToken(token).orElseThrow(() -> new NoSuchEntityException("no such user")).getUser();
-	}
-	
 	public void appearOnline(User user) {
 		LOG.debug("user @" + user.getLogin() + " is now online");
 		userOnlineRepository.save(new UserOnline(user, LocalDateTime.now()));
@@ -103,6 +100,19 @@ public class UserService {
 		LOG.debug("user @" + user.getLogin() + " is logout from everywhere");
 		
 		tokenRepository.deleteAllByUser(user);
+	}
+	
+	/**
+	 * Scheduled method that executes each hour. Delete all user_online records that older then
+	 * {@code online.lifetime-days} days.
+	 */
+	@Scheduled(cron = "0 0 * * * *")
+	public void deleteOnline() {
+		long countBefore = userOnlineRepository.count();
+		LOG.info("delete online records older then " + onlineLifetimeDays + " day(s)");
+		userOnlineRepository.deleteOlderThanDays(onlineLifetimeDays);
+		long countAfter = userOnlineRepository.count();
+		LOG.info("deleted " + (countBefore - countAfter) + " records");
 	}
 	
 }
