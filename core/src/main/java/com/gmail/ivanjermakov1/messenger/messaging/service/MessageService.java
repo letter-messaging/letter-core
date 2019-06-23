@@ -51,10 +51,6 @@ public class MessageService {
 		return messageRepository.save(message);
 	}
 	
-	public Message getLastMessage(Long conversationId) {
-		return messageRepository.getTop1ByConversationIdOrderBySentDesc(conversationId);
-	}
-	
 	public List<MessageDto> get(Long userId, Long conversationId, Pageable pageable) throws AuthenticationException {
 		User user = userService.getUser(userId);
 		Conversation conversation = conversationService.get(conversationId);
@@ -77,7 +73,10 @@ public class MessageService {
 		MessageDto messageDto = new MessageDto();
 		messageDto.setId(message.getId());
 		messageDto.setSent(message.getSent());
-		messageDto.setRead(userConversation.getLastRead().isAfter(message.getSent()));
+		boolean read = userConversation.getConversation().getUserConversations()
+				.stream()
+				.anyMatch(uc -> uc.getLastRead().isAfter(message.getSent()));
+		messageDto.setRead(read);
 		messageDto.setText(message.getText());
 		
 		Conversation conversation = conversationService.get(message.getConversation().getId());

@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 public interface MessageRepository extends CrudRepository<Message, Long> {
 	
@@ -19,7 +20,7 @@ public interface MessageRepository extends CrudRepository<Message, Long> {
 	
 	List<Message> getAllBySenderAndConversation(User sender, Conversation conversation);
 	
-	Message getTop1ByConversationIdOrderBySentDesc(Long conversationId);
+	Optional<Message> getTop1ByConversationOrderBySentDesc(Conversation conversation);
 	
 	List<Message> findAllByConversation(Conversation conversation, Pageable pageable);
 	

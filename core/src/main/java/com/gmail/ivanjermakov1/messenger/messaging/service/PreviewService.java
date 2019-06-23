@@ -4,7 +4,7 @@ import com.gmail.ivanjermakov1.messenger.auth.entity.User;
 import com.gmail.ivanjermakov1.messenger.auth.service.UserService;
 import com.gmail.ivanjermakov1.messenger.messaging.dto.PreviewDto;
 import com.gmail.ivanjermakov1.messenger.messaging.entity.Conversation;
-import com.gmail.ivanjermakov1.messenger.messaging.entity.Message;
+import com.gmail.ivanjermakov1.messenger.messaging.repository.MessageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -22,12 +22,14 @@ public class PreviewService {
 	private final ConversationService conversationService;
 	private final MessageService messageService;
 	private final UserService userService;
+	private final MessageRepository messageRepository;
 	
 	@Autowired
-	public PreviewService(ConversationService conversationService, MessageService messageService, UserService userService) {
+	public PreviewService(ConversationService conversationService, MessageService messageService, UserService userService, MessageRepository messageRepository) {
 		this.conversationService = conversationService;
 		this.messageService = messageService;
 		this.userService = userService;
+		this.messageRepository = messageRepository;
 	}
 	
 	public List<PreviewDto> all(User user, Pageable pageable) {
@@ -45,8 +47,8 @@ public class PreviewService {
 		PreviewDto previewDto = new PreviewDto();
 		
 		previewDto.setConversation(conversationService.get(user, conversation));
-		Message lastMessage = messageService.getLastMessage(conversation.getId());
-		if (lastMessage != null) previewDto.setLastMessage(messageService.getFullMessage(user, lastMessage));
+		messageRepository.getTop1ByConversationOrderBySentDesc(conversation)
+				.ifPresent(lastMessage -> previewDto.setLastMessage(messageService.getFullMessage(user, lastMessage)));
 		
 		User with = conversation.getUsers()
 				.stream()
