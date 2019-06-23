@@ -1,7 +1,6 @@
 package com.gmail.ivanjermakov1.messenger.auth.service;
 
 import com.gmail.ivanjermakov1.messenger.auth.dto.RegisterUserDto;
-import com.gmail.ivanjermakov1.messenger.auth.dto.UserDto;
 import com.gmail.ivanjermakov1.messenger.auth.entity.Token;
 import com.gmail.ivanjermakov1.messenger.auth.entity.User;
 import com.gmail.ivanjermakov1.messenger.auth.repository.TokenRepository;
@@ -11,24 +10,19 @@ import com.gmail.ivanjermakov1.messenger.auth.security.TokenGenerator;
 import com.gmail.ivanjermakov1.messenger.exception.AuthenticationException;
 import com.gmail.ivanjermakov1.messenger.exception.NoSuchEntityException;
 import com.gmail.ivanjermakov1.messenger.exception.RegistrationException;
-import com.gmail.ivanjermakov1.messenger.messaging.entity.Avatar;
 import com.gmail.ivanjermakov1.messenger.messaging.entity.UserInfo;
 import com.gmail.ivanjermakov1.messenger.messaging.entity.UserOnline;
 import com.gmail.ivanjermakov1.messenger.messaging.repository.UserOnlineRepository;
-import com.gmail.ivanjermakov1.messenger.messaging.service.AvatarService;
 import com.gmail.ivanjermakov1.messenger.messaging.service.UserInfoService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Service
-@Transactional
 public class UserService {
 	
 	private final static Logger LOG = LoggerFactory.getLogger(UserService.class);
@@ -36,11 +30,7 @@ public class UserService {
 	private final UserRepository userRepository;
 	private final TokenRepository tokenRepository;
 	private final UserOnlineRepository userOnlineRepository;
-	private final AvatarService avatarService;
 	private UserInfoService userInfoService;
-	
-	@Value("${default.avatar.path}")
-	private String defaultAvatarPath;
 	
 	@Autowired
 	public void setUserInfoService(UserInfoService userInfoService) {
@@ -48,11 +38,10 @@ public class UserService {
 	}
 	
 	@Autowired
-	public UserService(UserRepository userRepository, TokenRepository tokenRepository, UserOnlineRepository userOnlineRepository, AvatarService avatarService) {
+	public UserService(UserRepository userRepository, TokenRepository tokenRepository, UserOnlineRepository userOnlineRepository) {
 		this.userRepository = userRepository;
 		this.tokenRepository = tokenRepository;
 		this.userOnlineRepository = userOnlineRepository;
-		this.avatarService = avatarService;
 	}
 	
 	public String authenticate(String login, String password) throws AuthenticationException {
@@ -103,19 +92,6 @@ public class UserService {
 	
 	public User getUserByToken(String token) {
 		return tokenRepository.findByToken(token).orElseThrow(() -> new NoSuchEntityException("no such user")).getUser();
-	}
-	
-	public UserDto full(User user) {
-		UserInfo userInfo = userInfoService.getByUser(user);
-		UserOnline userOnline = userOnlineRepository.findFirstByUserIdOrderBySeenDesc(user.getId());
-		return new UserDto(
-				user.getId(),
-				user.getLogin(),
-				userInfo.getFirstName(),
-				userInfo.getLastName(),
-				avatarService.getCurrent(user).map(Avatar::getPath).orElse(defaultAvatarPath),
-				Optional.ofNullable(userOnline).map(UserOnline::getSeen).orElse(null)
-		);
 	}
 	
 	public void appearOnline(User user) {

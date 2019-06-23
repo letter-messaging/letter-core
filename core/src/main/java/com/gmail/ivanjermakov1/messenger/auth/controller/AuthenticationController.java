@@ -3,8 +3,10 @@ package com.gmail.ivanjermakov1.messenger.auth.controller;
 import com.gmail.ivanjermakov1.messenger.auth.dto.UserDto;
 import com.gmail.ivanjermakov1.messenger.auth.entity.User;
 import com.gmail.ivanjermakov1.messenger.auth.service.UserService;
+import com.gmail.ivanjermakov1.messenger.core.mapper.UserMapper;
 import com.gmail.ivanjermakov1.messenger.exception.AuthenticationException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,13 +15,17 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("auth")
+@Transactional
 public class AuthenticationController {
 	
 	private final UserService userService;
 	
+	private final UserMapper userMapper;
+	
 	@Autowired
-	public AuthenticationController(UserService userService) {
+	public AuthenticationController(UserService userService, UserMapper userMapper) {
 		this.userService = userService;
+		this.userMapper = userMapper;
 	}
 	
 	/**
@@ -46,7 +52,7 @@ public class AuthenticationController {
 	public UserDto validate(@RequestHeader("Auth-Token") String token) throws AuthenticationException {
 		User user = userService.authenticate(token);
 		userService.appearOnline(user);
-		return userService.full(user);
+		return userMapper.map(user);
 	}
 	
 	/**

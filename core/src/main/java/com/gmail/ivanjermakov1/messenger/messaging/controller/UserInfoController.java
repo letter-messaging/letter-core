@@ -2,10 +2,12 @@ package com.gmail.ivanjermakov1.messenger.messaging.controller;
 
 import com.gmail.ivanjermakov1.messenger.auth.entity.User;
 import com.gmail.ivanjermakov1.messenger.auth.service.UserService;
+import com.gmail.ivanjermakov1.messenger.core.mapper.UserInfoMapper;
 import com.gmail.ivanjermakov1.messenger.exception.AuthenticationException;
 import com.gmail.ivanjermakov1.messenger.messaging.dto.UserInfoDto;
 import com.gmail.ivanjermakov1.messenger.messaging.service.UserInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -16,15 +18,23 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("info")
+@Transactional
 public class UserInfoController {
 	
 	private final UserService userService;
 	private final UserInfoService userInfoService;
 	
+	private UserInfoMapper userInfoMapper;
+	
 	@Autowired
 	public UserInfoController(UserService userService, UserInfoService userInfoService) {
 		this.userService = userService;
 		this.userInfoService = userInfoService;
+	}
+	
+	@Autowired
+	public void setUserInfoMapper(UserInfoMapper userInfoMapper) {
+		this.userInfoMapper = userInfoMapper;
 	}
 	
 	/**
@@ -40,7 +50,7 @@ public class UserInfoController {
 	                       @RequestParam("userId") Long userId) throws AuthenticationException {
 		User user = userService.authenticate(token);
 		
-		return userInfoService.full(userInfoService.getByUser(user));
+		return userInfoMapper.map(userInfoService.getByUser(userService.getUser(userId)));
 	}
 	
 	/**

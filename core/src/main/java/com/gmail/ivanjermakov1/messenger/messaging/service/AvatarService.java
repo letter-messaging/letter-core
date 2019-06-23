@@ -1,7 +1,7 @@
 package com.gmail.ivanjermakov1.messenger.messaging.service;
 
 import com.gmail.ivanjermakov1.messenger.auth.entity.User;
-import com.gmail.ivanjermakov1.messenger.core.util.Mapper;
+import com.gmail.ivanjermakov1.messenger.core.mapper.AvatarMapper;
 import com.gmail.ivanjermakov1.messenger.exception.InvalidFileException;
 import com.gmail.ivanjermakov1.messenger.exception.NoSuchEntityException;
 import com.gmail.ivanjermakov1.messenger.messaging.dto.AvatarDto;
@@ -11,7 +11,6 @@ import com.gmail.ivanjermakov1.messenger.messaging.repository.AvatarRepository;
 import com.gmail.ivanjermakov1.messenger.util.Uploads;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -22,16 +21,22 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-@Transactional
 public class AvatarService {
 	
 	private final AvatarRepository avatarRepository;
 	private final FileUploadService fileUploadService;
 	
+	private AvatarMapper avatarMapper;
+	
 	@Autowired
 	public AvatarService(AvatarRepository avatarRepository, FileUploadService fileUploadService) {
 		this.avatarRepository = avatarRepository;
 		this.fileUploadService = fileUploadService;
+	}
+	
+	@Autowired
+	public void setAvatarMapper(AvatarMapper avatarMapper) {
+		this.avatarMapper = avatarMapper;
 	}
 	
 	public Optional<Avatar> getCurrent(User user) {
@@ -57,7 +62,7 @@ public class AvatarService {
 		
 		String avatarPath = fileUploadService.upload(avatarFile, FileType.AVATAR);
 		Avatar avatar = avatarRepository.save(new Avatar(user, avatarPath, LocalDate.now()));
-		return Mapper.map(avatar, AvatarDto.class);
+		return avatarMapper.map(avatar);
 	}
 	
 }

@@ -3,10 +3,9 @@ package com.gmail.ivanjermakov1.messenger.messaging.service;
 import com.gmail.ivanjermakov1.messenger.auth.dto.UserDto;
 import com.gmail.ivanjermakov1.messenger.auth.entity.User;
 import com.gmail.ivanjermakov1.messenger.auth.repository.UserRepository;
-import com.gmail.ivanjermakov1.messenger.auth.service.UserService;
+import com.gmail.ivanjermakov1.messenger.core.mapper.UserMapper;
 import com.gmail.ivanjermakov1.messenger.exception.InvalidSearchFormatException;
 import com.gmail.ivanjermakov1.messenger.messaging.dto.PreviewDto;
-import com.gmail.ivanjermakov1.messenger.messaging.repository.UserInfoRepository;
 import com.gmail.ivanjermakov1.messenger.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -23,16 +22,17 @@ public class SearchService {
 	
 	private final PreviewService previewService;
 	private final UserRepository userRepository;
-	private final UserService userService;
+	
+	private final UserMapper userMapper;
 	
 	@Value("${search.result.limit}")
 	private Integer searchResultLimit;
 	
 	@Autowired
-	public SearchService(PreviewService previewService, UserInfoRepository userInfoRepository, UserRepository userRepository, UserInfoService userInfoService, UserService userService) {
+	public SearchService(PreviewService previewService, UserRepository userRepository, UserMapper userMapper) {
 		this.previewService = previewService;
 		this.userRepository = userRepository;
-		this.userService = userService;
+		this.userMapper = userMapper;
 	}
 	
 	public List<PreviewDto> searchConversations(User user, String search, Pageable pageable) {
@@ -52,7 +52,7 @@ public class SearchService {
 		
 		return userRepository.searchUsers(search, pageable)
 				.stream()
-				.map(userService::full)
+				.map(userMapper::map)
 				.collect(Collectors.toList());
 	}
 	

@@ -2,11 +2,9 @@ package com.gmail.ivanjermakov1.messenger.messaging.service;
 
 import com.gmail.ivanjermakov1.messenger.auth.entity.User;
 import com.gmail.ivanjermakov1.messenger.auth.service.UserService;
-import com.gmail.ivanjermakov1.messenger.core.util.Mapper;
+import com.gmail.ivanjermakov1.messenger.core.mapper.MessageMapper;
 import com.gmail.ivanjermakov1.messenger.exception.AuthenticationException;
 import com.gmail.ivanjermakov1.messenger.exception.NoSuchEntityException;
-import com.gmail.ivanjermakov1.messenger.messaging.dto.DocumentDto;
-import com.gmail.ivanjermakov1.messenger.messaging.dto.ImageDto;
 import com.gmail.ivanjermakov1.messenger.messaging.dto.MessageDto;
 import com.gmail.ivanjermakov1.messenger.messaging.entity.Conversation;
 import com.gmail.ivanjermakov1.messenger.messaging.entity.Message;
@@ -16,16 +14,12 @@ import com.gmail.ivanjermakov1.messenger.messaging.repository.UserConversationRe
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-@Transactional
 public class MessageService {
 	
 	private final MessageRepository messageRepository;
@@ -33,6 +27,8 @@ public class MessageService {
 	private ConversationService conversationService;
 	private final ImageService imageService;
 	private final UserConversationRepository userConversationRepository;
+	
+	private MessageMapper messageMapper;
 	
 	@Autowired
 	public MessageService(MessageRepository messageRepository, UserService userService, ImageService imageService, UserConversationRepository userConversationRepository) {
@@ -47,6 +43,11 @@ public class MessageService {
 		this.conversationService = conversationService;
 	}
 	
+	@Autowired
+	public void setMessageMapper(MessageMapper messageMapper) {
+		this.messageMapper = messageMapper;
+	}
+	
 	public Message save(Message message) {
 		return messageRepository.save(message);
 	}
@@ -55,54 +56,18 @@ public class MessageService {
 		User user = userService.getUser(userId);
 		Conversation conversation = conversationService.get(conversationId);
 		
-		if (conversation.getUsers().stream().noneMatch(u -> u.getId().equals(userId)))
+		if (conversation.getUserConversations()
+				.stream()
+				.map(UserConversation::getUser)
+				.noneMatch(u -> u.getId().equals(userId)))
 			throw new AuthenticationException("invalid conversation id");
 		
 		List<Message> messagesIds = messageRepository.findAllByConversation(conversation, pageable);
 		
 		return messagesIds
 				.stream()
-				.map(message -> getFullMessage(user, message))
+				.map(message -> messageMapper.with(user).map(message))
 				.collect(Collectors.toList());
-	}
-	
-	public MessageDto getFullMessage(User user, Message message) {
-		UserConversation userConversation = userConversationRepository.findByUserAndConversation(user, message.getConversation())
-				.orElseThrow(() -> new NoSuchEntityException("no such user's conversation"));
-		
-		MessageDto messageDto = new MessageDto();
-		messageDto.setId(message.getId());
-		messageDto.setSent(message.getSent());
-		boolean read = userConversation.getConversation().getUserConversations()
-				.stream()
-				.anyMatch(uc -> uc.getLastRead().isAfter(message.getSent()));
-		messageDto.setRead(read);
-		messageDto.setText(message.getText());
-		
-		Conversation conversation = conversationService.get(message.getConversation().getId());
-		messageDto.setConversation(conversationService.get(message.getSender(), conversation));
-		
-		User sender = userService.getUser(message.getSender().getId());
-		messageDto.setSender(userService.full(sender));
-		
-		messageDto.setForwarded(Optional
-				.ofNullable(messageRepository.getById(message.getId()).getForwarded())
-				.orElse(Collections.emptyList())
-				.stream()
-				.map(m -> getFullMessage(user, m))
-				.collect(Collectors.toList()));
-		
-		messageDto.setImages(Mapper.mapAll(
-				message.getImages(),
-				ImageDto.class
-		));
-		
-		messageDto.setDocuments(Mapper.mapAll(
-				message.getDocuments(),
-				DocumentDto.class
-		));
-		
-		return messageDto;
 	}
 	
 	public void read(User user, Conversation conversation) {

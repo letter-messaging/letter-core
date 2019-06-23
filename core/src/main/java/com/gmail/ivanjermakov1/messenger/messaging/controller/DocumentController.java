@@ -5,6 +5,7 @@ import com.gmail.ivanjermakov1.messenger.exception.AuthenticationException;
 import com.gmail.ivanjermakov1.messenger.messaging.dto.NewDocumentDto;
 import com.gmail.ivanjermakov1.messenger.messaging.service.DocumentService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,6 +17,7 @@ import java.io.IOException;
 
 @RestController
 @RequestMapping("document")
+@Transactional
 public class DocumentController {
 	
 	private final UserService userService;

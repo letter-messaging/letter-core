@@ -7,6 +7,7 @@ import com.gmail.ivanjermakov1.messenger.exception.InvalidFileException;
 import com.gmail.ivanjermakov1.messenger.messaging.dto.AvatarDto;
 import com.gmail.ivanjermakov1.messenger.messaging.service.AvatarService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -19,6 +20,7 @@ import java.io.IOException;
 
 @RestController
 @RequestMapping("avatar")
+@Transactional
 public class AvatarController {
 	
 	private final UserService userService;

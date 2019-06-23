@@ -1,10 +1,8 @@
 package com.gmail.ivanjermakov1.messenger.messaging.service;
 
 import com.gmail.ivanjermakov1.messenger.auth.entity.User;
-import com.gmail.ivanjermakov1.messenger.auth.service.UserService;
 import com.gmail.ivanjermakov1.messenger.exception.AuthenticationException;
 import com.gmail.ivanjermakov1.messenger.exception.NoSuchEntityException;
-import com.gmail.ivanjermakov1.messenger.messaging.dto.ConversationDto;
 import com.gmail.ivanjermakov1.messenger.messaging.entity.Conversation;
 import com.gmail.ivanjermakov1.messenger.messaging.entity.UserConversation;
 import com.gmail.ivanjermakov1.messenger.messaging.repository.ConversationRepository;
@@ -16,28 +14,23 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
-@Transactional
 public class ConversationService {
 	
 	private final static Logger LOG = LoggerFactory.getLogger(ConversationService.class);
 	private final ConversationRepository conversationRepository;
-	private final UserService userService;
 	private final MessageRepository messageRepository;
 	private final UserConversationRepository userConversationRepository;
 	private MessageService messageService;
 	
 	@Autowired
-	public ConversationService(ConversationRepository conversationRepository, UserService userService, MessageRepository messageRepository, UserConversationRepository userConversationRepository) {
+	public ConversationService(ConversationRepository conversationRepository, MessageRepository messageRepository, UserConversationRepository userConversationRepository) {
 		this.conversationRepository = conversationRepository;
-		this.userService = userService;
 		this.messageRepository = messageRepository;
 		this.userConversationRepository = userConversationRepository;
 	}
@@ -57,11 +50,11 @@ public class ConversationService {
 			conversation = conversationWith(user, with);
 			show(user, conversation);
 		} catch (NoSuchEntityException e) {
-			userConversationRepository.save(new UserConversation(user, conversation, false, LocalDateTime.now()));
+			conversation = conversationRepository.save(conversation);
 			
-			conversation.setUsers(new ArrayList<>());
-			conversation.getUsers().add(user);
-			conversation.getUsers().add(with);
+			conversation.setUserConversations(new ArrayList<>());
+			conversation.getUserConversations().add(new UserConversation(user, conversation, false, LocalDateTime.now()));
+			conversation.getUserConversations().add(new UserConversation(with, conversation, false, LocalDateTime.now()));
 		}
 		
 		return conversationRepository.save(conversation);
@@ -76,7 +69,7 @@ public class ConversationService {
 	 * @throws AuthenticationException when interrogator has no permission to delete defined conversation
 	 */
 	public void delete(User user, Conversation conversation) throws AuthenticationException {
-		if (conversation.getUsers().stream().noneMatch(u -> u.getId().equals(user.getId())))
+		if (conversation.getUserConversations().stream().noneMatch(uc -> uc.getUser().getId().equals(user.getId())))
 			throw new AuthenticationException("you can delete only conversations you are member within");
 		
 		messageService.deleteAll(user, conversation);
@@ -89,19 +82,6 @@ public class ConversationService {
 	
 	public List<Conversation> getConversations(User user, Pageable pageable) {
 		return conversationRepository.getConversations(user.getId(), pageable);
-	}
-	
-	public ConversationDto get(User user, Conversation conversation) {
-		UserConversation userConversation = userConversationRepository.findByUserAndConversation(user, conversation)
-				.orElseThrow(NoSuchEntityException::new);
-		return new ConversationDto(
-				conversation.getId(),
-				userConversation.getHidden(),
-				conversation.getUsers()
-						.stream()
-						.map(userService::full)
-						.collect(Collectors.toList())
-		);
 	}
 	
 	public void hide(User user, Conversation conversation) {
@@ -123,24 +103,28 @@ public class ConversationService {
 	private Conversation conversationWith(User user1, User user2) {
 		return conversationRepository.getConversations(user1.getId(), PageRequest.of(0, Integer.MAX_VALUE))
 				.stream()
-				.filter(c -> c.getUsers()
+				.filter(c -> c.getUserConversations()
 						.stream()
+						.map(UserConversation::getUser)
 						.anyMatch(u -> u.getId().equals(user2.getId())) &&
-						c.getUsers().size() == 2)
+						c.getUserConversations().size() == 2)
 				.findFirst().orElseThrow(() -> new NoSuchEntityException("no such conversation"));
 	}
 	
 	private Conversation create(User user) {
 		Conversation self = conversationRepository.getConversations(user.getId(), PageRequest.of(0, Integer.MAX_VALUE))
 				.stream()
-				.filter(c -> c.getUsers().size() == 1)
+				.filter(c -> c.getUserConversations().size() == 1)
 				.findFirst().orElse(null);
 		
 		if (self != null) return self;
 		
 		self = new Conversation();
-		self.setUsers(new ArrayList<>());
-		self.getUsers().add(user);
+		self.setUserConversations(new ArrayList<>());
+		
+		self = conversationRepository.save(self);
+		
+		self.getUserConversations().add(new UserConversation(user, self, false, LocalDateTime.now()));
 		
 		return conversationRepository.save(self);
 	}

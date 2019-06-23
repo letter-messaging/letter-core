@@ -9,6 +9,7 @@ import com.gmail.ivanjermakov1.messenger.messaging.service.ConversationService;
 import com.gmail.ivanjermakov1.messenger.messaging.service.PreviewService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,6 +20,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("preview")
+@Transactional
 public class PreviewController {
 	
 	private final UserService userService;

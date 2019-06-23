@@ -1,7 +1,9 @@
 package com.gmail.ivanjermakov1.messenger.messaging.service;
 
 import com.gmail.ivanjermakov1.messenger.auth.entity.User;
-import com.gmail.ivanjermakov1.messenger.auth.service.UserService;
+import com.gmail.ivanjermakov1.messenger.core.mapper.ConversationMapper;
+import com.gmail.ivanjermakov1.messenger.core.mapper.MessageMapper;
+import com.gmail.ivanjermakov1.messenger.core.mapper.UserMapper;
 import com.gmail.ivanjermakov1.messenger.exception.AuthenticationException;
 import com.gmail.ivanjermakov1.messenger.exception.InvalidMessageException;
 import com.gmail.ivanjermakov1.messenger.exception.NoSuchEntityException;
@@ -24,7 +26,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import java.io.IOException;
@@ -36,17 +37,19 @@ import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 @Service
-@Transactional
 public class MessagingService {
 	
 	private final static Logger LOG = LoggerFactory.getLogger(MessagingService.class);
 	
 	private final MessageService messageService;
 	private final ConversationService conversationService;
-	private final UserService userService;
 	private final ImageService imageService;
 	private final DocumentService documentService;
 	private final UserConversationRepository userConversationRepository;
+	
+	private final UserMapper userMapper;
+	private ConversationMapper conversationMapper;
+	private MessageMapper messageMapper;
 	
 	private final List<Request<Action>> requests = new CopyOnWriteArrayList<>();
 	
@@ -54,13 +57,23 @@ public class MessagingService {
 	private Long sseTimeout;
 	
 	@Autowired
-	public MessagingService(MessageService messageService, ConversationService conversationService, UserService userService, ImageService imageService, DocumentService documentService, UserConversationRepository userConversationRepository) {
+	public MessagingService(MessageService messageService, ConversationService conversationService, ImageService imageService, DocumentService documentService, UserConversationRepository userConversationRepository, UserMapper userMapper) {
 		this.messageService = messageService;
 		this.conversationService = conversationService;
-		this.userService = userService;
 		this.imageService = imageService;
 		this.documentService = documentService;
 		this.userConversationRepository = userConversationRepository;
+		this.userMapper = userMapper;
+	}
+	
+	@Autowired
+	public void setConversationMapper(ConversationMapper conversationMapper) {
+		this.conversationMapper = conversationMapper;
+	}
+	
+	@Autowired
+	public void setMessageMapper(MessageMapper messageMapper) {
+		this.messageMapper = messageMapper;
 	}
 	
 	public SseEmitter generateRequest(User user) {
@@ -86,8 +99,9 @@ public class MessagingService {
 	public void forEachRequest(Conversation conversation, Consumer<Request<Action>> consumer) {
 		new Thread(() -> requests
 				.stream()
-				.filter(r -> conversation.getUsers()
+				.filter(r -> conversation.getUserConversations()
 						.stream()
+						.map(UserConversation::getUser)
 						.anyMatch(i -> i.getId().equals(r.getUser().getId())))
 				.forEach(consumer)).run();
 	}
@@ -125,7 +139,7 @@ public class MessagingService {
 				.orElseThrow(NoSuchEntityException::new);
 		userConversationRepository.save(userConversation);
 		
-		MessageDto messageDto = messageService.getFullMessage(user, message);
+		MessageDto messageDto = messageMapper.with(user).map(message);
 		
 		forEachRequest(conversation, request -> sendResponse(request, new NewMessageAction(messageDto)));
 		
@@ -161,7 +175,7 @@ public class MessagingService {
 		original = messageService.save(original);
 		
 		Conversation conversation = conversationService.get(original.getConversation().getId());
-		MessageDto messageDto = messageService.getFullMessage(user, original);
+		MessageDto messageDto = messageMapper.with(user).map(original);
 		
 		forEachRequest(conversation, request -> sendResponse(request, new MessageEditAction(messageDto)));
 		
@@ -173,19 +187,14 @@ public class MessagingService {
 		
 		messageService.read(user, conversation);
 		
-		requests
-				.stream()
-				.filter(requestEntry -> conversation.getUsers()
-						.stream()
-						.anyMatch(i -> i.getId().equals(requestEntry.getUser().getId())))
-				.forEach(request -> sendResponse(
-						request,
-						new ConversationReadAction(conversationService.get(user, conversation), userService.full(user)))
-				);
-		
 		forEachRequest(conversation, request -> sendResponse(
 				request,
-				new ConversationReadAction(conversationService.get(user, conversation), userService.full(user))
+				new ConversationReadAction(
+						conversationMapper
+								.with(user)
+								.map(conversation),
+						userMapper.map(user)
+				)
 		));
 	}
 	

@@ -2,11 +2,12 @@ package com.gmail.ivanjermakov1.messenger.messaging.controller;
 
 import com.gmail.ivanjermakov1.messenger.auth.entity.User;
 import com.gmail.ivanjermakov1.messenger.auth.service.UserService;
+import com.gmail.ivanjermakov1.messenger.core.mapper.ConversationMapper;
 import com.gmail.ivanjermakov1.messenger.exception.AuthenticationException;
-import com.gmail.ivanjermakov1.messenger.exception.NoSuchEntityException;
 import com.gmail.ivanjermakov1.messenger.messaging.dto.ConversationDto;
 import com.gmail.ivanjermakov1.messenger.messaging.service.ConversationService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,15 +16,23 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("conversation")
+@Transactional
 public class ConversationController {
 	
 	private final ConversationService conversationService;
 	private final UserService userService;
 	
+	private ConversationMapper conversationMapper;
+	
 	@Autowired
 	public ConversationController(ConversationService conversationService, UserService userService) {
 		this.conversationService = conversationService;
 		this.userService = userService;
+	}
+	
+	@Autowired
+	public void setConversationMapper(ConversationMapper conversationMapper) {
+		this.conversationMapper = conversationMapper;
 	}
 	
 	/**
@@ -39,11 +48,10 @@ public class ConversationController {
 	public ConversationDto create(@RequestHeader("Auth-Token") String token,
 	                              @RequestParam("with") String withLogin) throws AuthenticationException {
 		User user = userService.authenticate(token);
-		try {
-			return conversationService.get(user, conversationService.create(user, userService.getUser(withLogin)));
-		} catch (NoSuchEntityException e) {
-			throw new NoSuchEntityException("no such user to create conversation with");
-		}
+		
+		return conversationMapper
+				.with(user)
+				.map(conversationService.create(user, userService.getUser(withLogin)));
 	}
 	
 	/**

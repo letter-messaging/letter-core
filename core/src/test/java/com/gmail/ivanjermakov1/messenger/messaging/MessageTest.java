@@ -3,8 +3,8 @@ package com.gmail.ivanjermakov1.messenger.messaging;
 import com.gmail.ivanjermakov1.messenger.auth.dto.RegisterUserDto;
 import com.gmail.ivanjermakov1.messenger.auth.dto.UserDto;
 import com.gmail.ivanjermakov1.messenger.auth.service.UserService;
+import com.gmail.ivanjermakov1.messenger.core.mapper.UserMapper;
 import com.gmail.ivanjermakov1.messenger.exception.AuthenticationException;
-import com.gmail.ivanjermakov1.messenger.exception.InvalidFileException;
 import com.gmail.ivanjermakov1.messenger.exception.InvalidMessageException;
 import com.gmail.ivanjermakov1.messenger.exception.NoSuchEntityException;
 import com.gmail.ivanjermakov1.messenger.exception.RegistrationException;
@@ -51,15 +51,18 @@ public class MessageTest {
 	@Autowired
 	private ImageController imageController;
 	
+	@Autowired
+	private UserMapper userMapper;
+	
 	@Test
 	public void shouldSendMessageWithImage() throws RegistrationException, AuthenticationException, NoSuchEntityException, InvalidMessageException, IOException {
 		userService.register(new RegisterUserDto("Jack", "Johnson", "jackj", "password1"));
 		String user1Token = userService.authenticate("jackj", "password1");
-		UserDto user1 = userService.full(userService.authenticate(user1Token));
+		UserDto user1 = userMapper.map(userService.authenticate(user1Token));
 		
 		userService.register(new RegisterUserDto("Ron", "Richardson", "ronr", "password1"));
 		String user2Token = userService.authenticate("ronr", "password1");
-		UserDto user2 = userService.full(userService.authenticate(user2Token));
+		UserDto user2 = userMapper.map(userService.authenticate(user2Token));
 		
 		Assert.assertNotNull(user1);
 		Assert.assertNotNull(user2);

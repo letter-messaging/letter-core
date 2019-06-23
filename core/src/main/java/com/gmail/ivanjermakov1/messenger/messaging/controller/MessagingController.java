@@ -9,6 +9,7 @@ import com.gmail.ivanjermakov1.messenger.messaging.dto.MessageDto;
 import com.gmail.ivanjermakov1.messenger.messaging.dto.NewMessageDto;
 import com.gmail.ivanjermakov1.messenger.messaging.service.MessagingService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -56,6 +57,7 @@ public class MessagingController {
 	 * @throws InvalidMessageException on invalid @param newMessageDto
 	 */
 	@PostMapping("send")
+	@Transactional
 	public MessageDto sendMessage(@RequestHeader("Auth-Token") String token,
 	                              @RequestBody NewMessageDto newMessageDto) throws AuthenticationException, InvalidMessageException {
 		User user = userService.authenticate(token);
@@ -73,6 +75,7 @@ public class MessagingController {
 	 * @throws AuthenticationException on invalid @param token
 	 */
 	@PostMapping("edit")
+	@Transactional
 	public MessageDto editMessage(@RequestHeader("Auth-Token") String token,
 	                              @RequestBody EditMessageDto editMessageDto) throws AuthenticationException {
 		User user = userService.authenticate(token);

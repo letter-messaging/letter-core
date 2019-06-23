@@ -32,7 +32,7 @@ public class UserConversation {
 	@Column(name = "hidden")
 	private Boolean hidden;
 	
-	@Column(name = "last_read")
+	@Column(name = "last_read", nullable = false)
 	private LocalDateTime lastRead;
 	
 	public UserConversation() {
