@@ -10,7 +10,6 @@ export class SoundNotificationService {
 
 	notify() {
 		const notificationAudio = new Audio('assets/sound/newmsg.mp3');
-		console.log('audio play', notificationAudio.readyState);
 		let promise = notificationAudio.play();
 
 		// required due to browser policy
