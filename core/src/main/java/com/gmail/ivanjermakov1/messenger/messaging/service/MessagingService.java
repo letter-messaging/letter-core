@@ -20,7 +20,6 @@ import com.gmail.ivanjermakov1.messenger.messaging.entity.Document;
 import com.gmail.ivanjermakov1.messenger.messaging.entity.Image;
 import com.gmail.ivanjermakov1.messenger.messaging.entity.Message;
 import com.gmail.ivanjermakov1.messenger.messaging.entity.UserConversation;
-import com.gmail.ivanjermakov1.messenger.messaging.repository.UserConversationRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,7 +45,6 @@ public class MessagingService {
 	private final ConversationService conversationService;
 	private final ImageService imageService;
 	private final DocumentService documentService;
-	private final UserConversationRepository userConversationRepository;
 	private final UserService userService;
 	
 	private final UserMapper userMapper;
@@ -59,12 +57,11 @@ public class MessagingService {
 	private Long sseTimeout;
 	
 	@Autowired
-	public MessagingService(MessageService messageService, ConversationService conversationService, ImageService imageService, DocumentService documentService, UserConversationRepository userConversationRepository, UserMapper userMapper, UserService userService) {
+	public MessagingService(MessageService messageService, ConversationService conversationService, ImageService imageService, DocumentService documentService, UserMapper userMapper, UserService userService) {
 		this.messageService = messageService;
 		this.conversationService = conversationService;
 		this.imageService = imageService;
 		this.documentService = documentService;
-		this.userConversationRepository = userConversationRepository;
 		this.userMapper = userMapper;
 		this.userService = userService;
 	}
