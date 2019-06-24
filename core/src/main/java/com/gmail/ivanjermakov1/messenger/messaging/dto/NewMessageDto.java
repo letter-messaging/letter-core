@@ -1,8 +1,11 @@
 package com.gmail.ivanjermakov1.messenger.messaging.dto;
 
+import java.util.Collections;
 import java.util.List;
 
 public class NewMessageDto {
+	
+	private static final Long SYSTEM_ID = 0L;
 	
 	private Long senderId;
 	private Long conversationId;
@@ -69,6 +72,17 @@ public class NewMessageDto {
 	
 	public void setDocuments(List<NewDocumentDto> documents) {
 		this.documents = documents;
+	}
+	
+	public static NewMessageDto systemMessage(Long conversationId, String text) {
+		return new NewMessageDto(
+				SYSTEM_ID,
+				conversationId,
+				text,
+				Collections.emptyList(),
+				Collections.emptyList(),
+				Collections.emptyList()
+		);
 	}
 	
 }

@@ -15,7 +15,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -53,8 +52,8 @@ public class ConversationService {
 			conversation = conversationRepository.save(conversation);
 			
 			conversation.setUserConversations(new ArrayList<>());
-			conversation.getUserConversations().add(new UserConversation(user, conversation, false, LocalDateTime.now()));
-			conversation.getUserConversations().add(new UserConversation(with, conversation, false, LocalDateTime.now()));
+			conversation.getUserConversations().add(new UserConversation(user, conversation));
+			conversation.getUserConversations().add(new UserConversation(with, conversation));
 		}
 		
 		return conversationRepository.save(conversation);
@@ -124,7 +123,7 @@ public class ConversationService {
 		
 		self = conversationRepository.save(self);
 		
-		self.getUserConversations().add(new UserConversation(user, self, false, LocalDateTime.now()));
+		self.getUserConversations().add(new UserConversation(user, self));
 		
 		return conversationRepository.save(self);
 	}

@@ -38,11 +38,11 @@ public class UserConversation {
 	public UserConversation() {
 	}
 	
-	public UserConversation(User user, Conversation conversation, Boolean hidden, LocalDateTime lastRead) {
+	public UserConversation(User user, Conversation conversation) {
 		this.user = user;
 		this.conversation = conversation;
-		this.hidden = hidden;
-		this.lastRead = lastRead;
+		this.hidden = false;
+		this.lastRead = LocalDateTime.now();
 	}
 	
 	public Long getId() {

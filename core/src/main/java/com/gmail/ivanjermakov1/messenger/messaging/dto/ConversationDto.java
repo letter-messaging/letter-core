@@ -7,14 +7,16 @@ import java.util.List;
 public class ConversationDto {
 	
 	private Long id;
+	private String chatName;
 	private Boolean hidden;
 	private List<UserDto> users;
 	
 	public ConversationDto() {
 	}
 	
-	public ConversationDto(Long id, Boolean hidden, List<UserDto> users) {
+	public ConversationDto(Long id, String chatName, Boolean hidden, List<UserDto> users) {
 		this.id = id;
+		this.chatName = chatName;
 		this.hidden = hidden;
 		this.users = users;
 	}
@@ -25,6 +27,14 @@ public class ConversationDto {
 	
 	public void setId(Long id) {
 		this.id = id;
+	}
+	
+	public String getChatName() {
+		return chatName;
+	}
+	
+	public void setChatName(String chatName) {
+		this.chatName = chatName;
 	}
 	
 	public Boolean getHidden() {

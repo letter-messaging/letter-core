@@ -1,6 +1,7 @@
 package com.gmail.ivanjermakov1.messenger.auth.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.gmail.ivanjermakov1.messenger.messaging.dto.AvatarDto;
 
 import java.time.LocalDateTime;
 
@@ -10,7 +11,7 @@ public class UserDto {
 	private String login;
 	private String firstName;
 	private String lastName;
-	private String avatar;
+	private AvatarDto avatar;
 	
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	private LocalDateTime lastSeen;
@@ -18,7 +19,7 @@ public class UserDto {
 	public UserDto() {
 	}
 	
-	public UserDto(Long id, String login, String firstName, String lastName, String avatar, LocalDateTime lastSeen) {
+	public UserDto(Long id, String login, String firstName, String lastName, AvatarDto avatar, LocalDateTime lastSeen) {
 		this.id = id;
 		this.login = login;
 		this.firstName = firstName;
@@ -67,11 +68,11 @@ public class UserDto {
 		this.lastSeen = lastSeen;
 	}
 	
-	public String getAvatar() {
+	public AvatarDto getAvatar() {
 		return avatar;
 	}
 	
-	public void setAvatar(String avatar) {
+	public void setAvatar(AvatarDto avatar) {
 		this.avatar = avatar;
 	}
 	

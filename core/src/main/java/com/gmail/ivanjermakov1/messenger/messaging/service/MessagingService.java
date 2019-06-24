@@ -1,12 +1,12 @@
 package com.gmail.ivanjermakov1.messenger.messaging.service;
 
 import com.gmail.ivanjermakov1.messenger.auth.entity.User;
+import com.gmail.ivanjermakov1.messenger.auth.service.UserService;
 import com.gmail.ivanjermakov1.messenger.core.mapper.ConversationMapper;
 import com.gmail.ivanjermakov1.messenger.core.mapper.MessageMapper;
 import com.gmail.ivanjermakov1.messenger.core.mapper.UserMapper;
 import com.gmail.ivanjermakov1.messenger.exception.AuthenticationException;
 import com.gmail.ivanjermakov1.messenger.exception.InvalidMessageException;
-import com.gmail.ivanjermakov1.messenger.exception.NoSuchEntityException;
 import com.gmail.ivanjermakov1.messenger.messaging.dto.EditMessageDto;
 import com.gmail.ivanjermakov1.messenger.messaging.dto.MessageDto;
 import com.gmail.ivanjermakov1.messenger.messaging.dto.NewMessageDto;
@@ -31,6 +31,7 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.Consumer;
@@ -46,6 +47,7 @@ public class MessagingService {
 	private final ImageService imageService;
 	private final DocumentService documentService;
 	private final UserConversationRepository userConversationRepository;
+	private final UserService userService;
 	
 	private final UserMapper userMapper;
 	private ConversationMapper conversationMapper;
@@ -57,13 +59,14 @@ public class MessagingService {
 	private Long sseTimeout;
 	
 	@Autowired
-	public MessagingService(MessageService messageService, ConversationService conversationService, ImageService imageService, DocumentService documentService, UserConversationRepository userConversationRepository, UserMapper userMapper) {
+	public MessagingService(MessageService messageService, ConversationService conversationService, ImageService imageService, DocumentService documentService, UserConversationRepository userConversationRepository, UserMapper userMapper, UserService userService) {
 		this.messageService = messageService;
 		this.conversationService = conversationService;
 		this.imageService = imageService;
 		this.documentService = documentService;
 		this.userConversationRepository = userConversationRepository;
 		this.userMapper = userMapper;
+		this.userService = userService;
 	}
 	
 	@Autowired
@@ -135,15 +138,33 @@ public class MessagingService {
 		
 		message = messageService.save(message);
 		
-		UserConversation userConversation = userConversationRepository.findByUserAndConversation(user, conversation)
-				.orElseThrow(NoSuchEntityException::new);
-		userConversationRepository.save(userConversation);
-		
 		MessageDto messageDto = messageMapper.with(user).map(message);
 		
 		forEachRequest(conversation, request -> sendResponse(request, new NewMessageAction(messageDto)));
 		
 		return messageDto;
+	}
+	
+	public void systemMessage(NewMessageDto newMessageDto) throws InvalidMessageException {
+		Conversation conversation = conversationService.get(newMessageDto.getConversationId());
+		User system = userService.getUser(newMessageDto.getSenderId());
+		
+		Message message = new Message(
+				conversation,
+				LocalDateTime.now(),
+				newMessageDto.getText(),
+				system,
+				Collections.emptyList(),
+				Collections.emptyList(),
+				Collections.emptyList()
+		);
+		
+		if (!message.validate()) throw new InvalidMessageException("invalid message");
+		
+		message = messageService.save(message);
+		MessageDto messageDto = messageMapper.with(system).map(message);
+		
+		forEachRequest(conversation, request -> sendResponse(request, new NewMessageAction(messageDto)));
 	}
 	
 	public MessageDto processMessageEdit(User user, EditMessageDto editMessageDto) throws AuthenticationException {

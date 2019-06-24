@@ -19,10 +19,18 @@ public class Conversation {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
+	@Column(name = "chat_name")
+	private String chatName;
+	
 	@OneToMany(mappedBy = "conversation", cascade = {CascadeType.ALL}, orphanRemoval = true)
 	private List<UserConversation> userConversations;
 	
 	public Conversation() {
+	}
+	
+	public Conversation(String chatName, List<UserConversation> userConversations) {
+		this.chatName = chatName;
+		this.userConversations = userConversations;
 	}
 	
 	public Long getId() {
@@ -31,6 +39,14 @@ public class Conversation {
 	
 	public void setId(Long id) {
 		this.id = id;
+	}
+	
+	public String getChatName() {
+		return chatName;
+	}
+	
+	public void setChatName(String chatName) {
+		this.chatName = chatName;
 	}
 	
 	public List<UserConversation> getUserConversations() {

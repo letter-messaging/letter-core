@@ -64,6 +64,20 @@ public class MessageMapper implements Mapper<Message, MessageDto>, MapperBuilder
 	
 	@Override
 	public MessageDto map(Message message) {
+		if (message.getSender().getId().equals(0L)) {
+			return new MessageDto(
+					message.getId(),
+					message.getSent(),
+					message.getText(),
+					true,
+					userMapper.map(message.getSender()),
+					conversationMapper.with(user).map(message.getConversation()),
+					Collections.emptyList(),
+					Collections.emptyList(),
+					Collections.emptyList()
+			);
+		}
+		
 		UserConversation userConversation = userConversationRepository.findByUserAndConversation(user, message.getConversation())
 				.orElseThrow(() -> new NoSuchEntityException("no such user's conversation"));
 		

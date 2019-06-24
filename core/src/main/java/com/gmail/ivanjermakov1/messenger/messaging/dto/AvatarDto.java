@@ -1,10 +1,14 @@
 package com.gmail.ivanjermakov1.messenger.messaging.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import org.springframework.beans.factory.annotation.Value;
 
 import java.time.LocalDate;
 
 public class AvatarDto {
+	
+	@Value("${default.avatar.chat.path}")
+	private String defaultConversationAvatarPath;
 	
 	private Long id;
 	private String path;
