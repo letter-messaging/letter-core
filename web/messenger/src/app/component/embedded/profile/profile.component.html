@@ -12,7 +12,7 @@
 				{{fileInput.nativeElement ? fileInput.nativeElement.files[0] : ''}}
 				<img class="avatar"
 				     [src]="editView && unloadedAvatar.path ? unloadedAvatar.path :
-				      FILE_URL + currentProfile.user.avatar" alt="">
+				      FILE_URL + currentProfile.user.avatar.path" alt="">
 				<i class="upload-avatar fas fa-cloud-upload-alt" *ngIf="editView" (click)="selectAvatar()"></i>
 				<input #fileInput type="file" accept="image/*" style="display: none" (change)="onAvatarSelect()">
 			</div>

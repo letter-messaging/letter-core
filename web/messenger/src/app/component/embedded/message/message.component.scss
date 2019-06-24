@@ -179,3 +179,17 @@
 	}
 
 }
+
+.system-message {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+
+	width: 100%;
+
+	padding: 18px;
+
+	.text {
+		color: var(--grey);
+	}
+}

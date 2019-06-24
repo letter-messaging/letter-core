@@ -36,6 +36,9 @@ import {MessageEditAction} from '../../../dto/action/MessageEditAction';
 import {Pageable} from '../../../dto/Pageable';
 import {NewDocument} from '../../../dto/NewDocument';
 import {MessageImage} from '../../../dto/local/MessageImage';
+import {ChatService} from '../../../service/chat.service';
+import {NewChat} from '../../../dto/NewChat';
+import {PreviewType} from '../../../dto/enum/PreviewType';
 
 @Component({
 	selector: 'app-messaging',
@@ -55,6 +58,7 @@ export class MessagingComponent implements OnInit {
 	readonly ImageCompressionMode: typeof ImageCompressionMode = ImageCompressionMode;
 	readonly ImageService: typeof ImageService = ImageService;
 	readonly FILE_URL = FILE_URL;
+	readonly PreviewType: typeof PreviewType = PreviewType;
 
 	token: string;
 	isPolling = false;
@@ -160,6 +164,7 @@ export class MessagingComponent implements OnInit {
 	            private cookieService: CookieService,
 	            private messagingService: MessagingService,
 	            private conversationService: ConversationService,
+	            private chatService: ChatService,
 	            private soundNotificationService: SoundNotificationService,
 	            private userInfoService: UserInfoService,
 	            private backgroundUnreadService: BackgroundUnreadService,
@@ -238,6 +243,14 @@ export class MessagingComponent implements OnInit {
 	createConversation(user: User) {
 		this.conversationService.create(this.token, user.login).subscribe(conversation => {
 			this.openConversation(conversation.id);
+		});
+	}
+
+	createChat(chatName: string) {
+		let newChat = new NewChat();
+		newChat.name = chatName;
+		this.chatService.create(this.token, newChat).subscribe(chat => {
+			this.openConversation(chat.id);
 		});
 	}
 
@@ -409,7 +422,7 @@ export class MessagingComponent implements OnInit {
 		}
 
 		this.avatarService.upload(this.token, avatar).subscribe(avatarResponse => {
-			this.currentProfile.user.avatar = avatarResponse.path;
+			this.currentProfile.user.avatar = avatarResponse;
 		});
 	}
 

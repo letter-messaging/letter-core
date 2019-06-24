@@ -5,6 +5,7 @@ import {User} from '../../../../dto/User';
 import {MeProvider} from '../../../../provider/me-provider';
 import {ImageCompressionMode} from '../../../../dto/enum/ImageCompressionMode';
 import {ImageService} from '../../../../service/image.service';
+import {PreviewType} from '../../../../dto/enum/PreviewType';
 
 @Component({
 	selector: 'app-conversation-preview',
@@ -16,6 +17,7 @@ export class ConversationPreviewComponent implements OnInit {
 	readonly ImageCompressionMode: typeof ImageCompressionMode = ImageCompressionMode;
 	readonly ImageService: typeof ImageService = ImageService;
 	readonly FILE_URL = FILE_URL;
+	readonly PreviewType: typeof PreviewType = PreviewType;
 
 	@Input() preview: Preview;
 	@Input() selected: boolean;

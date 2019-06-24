@@ -2,7 +2,7 @@
 	<div class="button" (click)="visible = !visible;">
 		<div class="text">{{me.firstName}}</div>
 		<img class="avatar"
-		     [src]="ImageService.getImagePathByCompressionMode(FILE_URL + me.avatar, ImageCompressionMode.SMALL)"
+		     [src]="ImageService.getImagePathByCompressionMode(FILE_URL + me.avatar.path, ImageCompressionMode.SMALL)"
 		     alt="">
 		<!--TODO: animation-->
 		<!--TODO: fix bug with clicking on i's-->

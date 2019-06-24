@@ -9,15 +9,28 @@
 			<i class="fas fa-bars"></i>
 		</div>
 		<img class="avatar"
-		     [src]="ImageService.getImagePathByCompressionMode(FILE_URL + currentPreview.with.avatar, ImageCompressionMode.SMALL)"
-		     alt="" *ngIf="currentPreview">
-		<div class="conversation-name" *ngIf="currentPreview"
+		     *ngIf="currentPreview"
+		     [src]="ImageService.getImagePathByCompressionMode(FILE_URL + currentPreview.avatar.path, ImageCompressionMode.SMALL)"
+		     alt="">
+		<div class="conversation-name"
+		     *ngIf="currentPreview && currentPreview.type.toString() === PreviewType[PreviewType.CONVERSATION]"
 		     (click)="openProfile(currentPreview.with)">
 			{{currentPreview.with.firstName}}
 			{{currentPreview.with.lastName}}
 		</div>
-		<div class="status" *ngIf="currentPreview">
+		<div class="conversation-name"
+		     *ngIf="currentPreview && currentPreview.type.toString() === PreviewType[PreviewType.CHAT]"
+		     (click)="openProfile(currentPreview.with)">
+			{{currentPreview.conversation.chatName}}
+		</div>
+		<div class="status"
+		     *ngIf="currentPreview && currentPreview.type.toString() === PreviewType[PreviewType.CONVERSATION]">
 			{{lastSeenView(currentPreview.with.lastSeen)}}
+		</div>
+		<div class="members"
+		     *ngIf="currentPreview && currentPreview.type.toString() === PreviewType[PreviewType.CHAT]">
+			{{currentPreview.conversation.users.length + ' member' +
+		(currentPreview.conversation.users.length !== 1 ? 's' : '')}}
 		</div>
 		<div class="right">
 			<div class="search"><i class="fas fa-search"></i></div>
@@ -47,12 +60,29 @@
 				<div class="text">No conversations yet.</div>
 				<a (click)="searchText = '@'; previewSearchFocus()">Find companions.</a>
 			</div>
+			<ng-container *ngIf="previews && searchText.length !== 0">
+				<div class="create-wrapper">
+					<div class="create-chat wrapper" *ngIf="searchText.trim()[0] !== '@'"
+					     (click)="createChat(searchText.trim())">
+						<i class="fas fa-users"></i>
+						<div class="text">Create chat:<span class="name">{{searchText.trim()}}</span></div>
+						<i class="fas fa-plus right"></i>
+					</div>
+					<div class="create-channel wrapper" *ngIf="searchText.trim()[0] === '@'">
+						<i class="fas fa-bullhorn"></i>
+						<div class="text">Create channel:<span class="name">{{searchText.trim()}}</span></div>
+						<i class="fas fa-plus right"></i>
+					</div>
+				</div>
+				<div class="splitter"></div>
+			</ng-container>
 			<ng-container *ngIf="previews && searchText.trim()[0] !== '@'">
 				<app-conversation-preview
 					*ngFor="let preview of previewsOrSearchPreviews()"
 					[preview]="preview"
-					[selected]="currentPreview && preview.conversation.id == currentPreview.conversation.id"
-					[isOnline]="isOnline(preview.with.lastSeen)"
+					[selected]="currentPreview &&
+					preview.conversation.id == currentPreview.conversation.id"
+					[isOnline]=" preview.type.toString() === PreviewType[PreviewType.CONVERSATION]? isOnline(preview.with.lastSeen) : false"
 					(click)="openConversation(preview.conversation.id)">
 				</app-conversation-preview>
 				<div class="not-found" *ngIf="searchText && searchPreviews && searchPreviews.length === 0">

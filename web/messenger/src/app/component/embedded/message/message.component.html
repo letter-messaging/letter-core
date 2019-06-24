@@ -1,7 +1,7 @@
 <div class="message" [ngClass]="{'message-mine': mine, 'selected': message.selected}">
-	<div class="message-container">
+	<div class="message-container" *ngIf="message.sender.id !== 0">
 		<img class="avatar"
-		     [src]="ImageService.getImagePathByCompressionMode(FILE_URL + message.sender.avatar, ImageCompressionMode.SMALL)"
+		     [src]="ImageService.getImagePathByCompressionMode(FILE_URL + message.sender.avatar.path, ImageCompressionMode.SMALL)"
 		     alt=""
 		     *ngIf="!isForwarded" (click)="openProfile(message.sender)">
 		<div class="message-content">
@@ -42,6 +42,12 @@
 					</div>
 				</div>
 			</div>
+		</div>
+	</div>
+	<div class="system-message" *ngIf="message.sender.id === 0"
+	     (click)="$event.stopPropagation()">
+		<div class="text">
+			{{message.text}}
 		</div>
 	</div>
 </div>

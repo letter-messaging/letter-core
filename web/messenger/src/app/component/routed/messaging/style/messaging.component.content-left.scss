@@ -40,6 +40,49 @@
 
 		}
 
+		.create-wrapper {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+
+			width: 100%;
+
+			.wrapper {
+				display: flex;
+				align-items: center;
+				justify-content: flex-start;
+
+				width: 100%;
+
+				padding: 8px;
+
+				cursor: pointer;
+
+				i {
+					padding: 8px;
+					font-size: 28px;
+					color: var(--dark);
+				}
+
+				.text {
+					.name {
+						margin-left: 6px;
+
+						color: var(--special);
+						text-decoration: underline;
+					}
+				}
+
+				.right {
+					margin-left: auto;
+				}
+			}
+
+			div:hover {
+				background: var(--light);
+			}
+		}
+
 		.selected {
 			background-color: var(--grey) !important;
 

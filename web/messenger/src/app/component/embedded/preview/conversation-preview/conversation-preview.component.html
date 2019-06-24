@@ -1,9 +1,11 @@
 <div class="preview" [ngClass]="{'selected': selected}" *ngIf="preview.lastMessage">
 	<img class="avatar"
-	     [src]="ImageService.getImagePathByCompressionMode(FILE_URL + preview.with.avatar, ImageCompressionMode.SMALL)"
+	     [src]="ImageService.getImagePathByCompressionMode(FILE_URL + preview.avatar.path, ImageCompressionMode.SMALL)"
 	     alt="">
 	<div class="info">
-		<div class="text">{{preview.with.firstName}} {{preview.with.lastName}}</div>
+		<div class="text"
+		     *ngIf="!preview.conversation.chatName">{{preview.with.firstName}} {{preview.with.lastName}}</div>
+		<div class="text" *ngIf="preview.conversation.chatName">{{preview.conversation.chatName}}</div>
 		<i class="fas fa-circle" *ngIf="isOnline"></i>
 	</div>
 	<div class="message-preview">
