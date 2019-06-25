@@ -5,8 +5,6 @@ import java.util.List;
 
 public class NewMessageDto {
 	
-	private static final Long SYSTEM_ID = 0L;
-	
 	private Long senderId;
 	private Long conversationId;
 	private String text;
@@ -76,7 +74,7 @@ public class NewMessageDto {
 	
 	public static NewMessageDto systemMessage(Long conversationId, String text) {
 		return new NewMessageDto(
-				SYSTEM_ID,
+				0L,
 				conversationId,
 				text,
 				Collections.emptyList(),
