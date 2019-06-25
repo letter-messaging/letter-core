@@ -16,11 +16,11 @@ import java.util.Optional;
 
 public interface MessageRepository extends CrudRepository<Message, Long> {
 	
-	Message getById(Long messageId);
-	
-	List<Message> getAllBySenderAndConversation(User sender, Conversation conversation);
+	Optional<Message> getById(Long messageId);
 	
 	Optional<Message> getTop1ByConversationOrderBySentDesc(Conversation conversation);
+	
+	List<Message> getAllBySenderAndConversation(User sender, Conversation conversation);
 	
 	List<Message> findAllByConversation(Conversation conversation, Pageable pageable);
 	

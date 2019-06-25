@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -87,6 +88,8 @@ public class MessageService {
 		deleteMessages
 				.stream()
 				.map(dto -> messageRepository.getById(dto.getId()))
+				.filter(Optional::isPresent)
+				.map(Optional::get)
 				.filter(m -> m.getSender().getId().equals(user.getId()))
 				.forEach(this::delete);
 	}
@@ -100,7 +103,8 @@ public class MessageService {
 	}
 	
 	public Message get(Long messageId) {
-		return messageRepository.getById(messageId);
+		return messageRepository.getById(messageId)
+				.orElseThrow(() -> new NoSuchEntityException("no such message"));
 	}
 	
 	public void deleteAll(User user, Conversation conversation) {

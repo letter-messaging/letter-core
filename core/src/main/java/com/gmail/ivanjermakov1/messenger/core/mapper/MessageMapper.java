@@ -17,7 +17,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.Collections;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Component
@@ -100,12 +99,14 @@ public class MessageMapper implements Mapper<Message, MessageDto>, MapperBuilder
 		User sender = userService.getUser(message.getSender().getId());
 		messageDto.setSender(userMapper.map(sender));
 		
-		messageDto.setForwarded(Optional
-				.ofNullable(messageRepository.getById(message.getId()).getForwarded())
-				.orElse(Collections.emptyList())
-				.stream()
-				.map(m -> this.with(user).map(m))
-				.collect(Collectors.toList()));
+		messageDto.setForwarded(
+				messageRepository.getById(message.getId())
+						.map(Message::getForwarded)
+						.orElse(Collections.emptyList())
+						.stream()
+						.map(m -> this.with(user).map(m))
+						.collect(Collectors.toList())
+		);
 		
 		messageDto.setImages(Mappers.mapAll(
 				message.getImages(),

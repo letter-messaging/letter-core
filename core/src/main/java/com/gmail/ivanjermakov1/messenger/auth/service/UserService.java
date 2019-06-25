@@ -51,16 +51,13 @@ public class UserService {
 	
 	public String authenticate(String login, String password) throws AuthenticationException {
 		LOG.debug("authenticate user: @" + login);
-		User user = userRepository.findByLogin(login);
+		Optional<User> user = userRepository.findByLogin(login);
 		
-		if (user == null || !Hasher.check(password, user.getHash()))
+		if (!user.isPresent() || !Hasher.check(password, user.get().getHash()))
 			throw new AuthenticationException("wrong credentials");
 		
-		Token token = tokenRepository.findById(user.getId())
-				.orElse(null);
-		if (token == null) {
-			token = tokenRepository.save(new Token(user, TokenGenerator.generate()));
-		}
+		Token token = tokenRepository.findById(user.get().getId())
+				.orElse(tokenRepository.save(new Token(user.get(), TokenGenerator.generate())));
 		
 		return token.getToken();
 	}
@@ -74,7 +71,7 @@ public class UserService {
 		
 		LOG.debug("register user: @" + registerUserDto.getLogin());
 		
-		if (userRepository.findByLogin(registerUserDto.getLogin()) != null)
+		if (userRepository.findByLogin(registerUserDto.getLogin()).isPresent())
 			throw new RegistrationException("user already exists.");
 		
 		User user = new User(null, registerUserDto.getLogin(), Hasher.getHash(registerUserDto.getPassword()));
@@ -87,7 +84,7 @@ public class UserService {
 	}
 	
 	public User getUser(String login) {
-		return Optional.ofNullable(userRepository.findByLogin(login))
+		return userRepository.findByLogin(login)
 				.orElseThrow(() -> new NoSuchEntityException("no such user"));
 	}
 	
