@@ -81,8 +81,19 @@ public class ChatService {
 						.stream()
 						.filter(m -> chat.getUserConversations().stream().noneMatch(member -> member.getUser().getId().equals(m.getId())))
 						.map(u -> new UserConversation(u, chat))
+						.peek(uc -> {
+							try {
+								messagingService.systemMessage(NewMessageDto.systemMessage(
+										chat.getId(),
+										"User @" + user.getLogin() + " added @" + uc.getUser().getLogin() + " to chat"
+								));
+							} catch (InvalidMessageException ignored) {
+							}
+						})
 						.collect(Collectors.toList())
 		);
+		
+		conversationRepository.save(chat);
 	}
 	
 }
