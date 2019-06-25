@@ -1,0 +1,36 @@
+.profile-container {
+	.main {
+		.preview {
+			.info-container {
+				display: flex;
+				flex-direction: row !important;
+				align-items: center;
+
+				i {
+					margin: 14px;
+					font-size: 28px;
+					color: var(--grey);
+				}
+			}
+		}
+	}
+
+	.members {
+		.user-preview {
+			.remove-member {
+				grid-column: 3;
+				grid-row: 1/4;
+
+				i {
+					padding: 4px;
+				}
+			}
+
+			.remove-member:hover {
+				i {
+					color: var(--special);
+				}
+			}
+		}
+	}
+}

@@ -57,7 +57,7 @@ a {
 	}
 
 	.header-right .menu {
-		display: none;
+		display: none !important;
 	}
 
 	.mobile-left {
@@ -83,7 +83,7 @@ a {
 
 	.mobile-right {
 		.content-left {
-			display: none;
+			display: none !important;
 		}
 
 		.header-right {

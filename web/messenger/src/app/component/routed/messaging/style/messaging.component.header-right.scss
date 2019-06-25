@@ -2,44 +2,49 @@
 	display: flex;
 	align-items: center;
 
-	padding: 10px;
-
 	background: var(--dark);
 
 	border-radius: 0 2px 2px 0;
 
 	color: white;
 
-	.avatar {
-		height: 40px;
-		width: 40px;
+	.preview-info {
+		display: flex;
+		align-items: center;
 
-		object-fit: cover;
-		border-radius: 20px;
+		padding: 0 10px;
+
+		.avatar {
+			height: 40px;
+			width: 40px;
+
+			object-fit: cover;
+			border-radius: 20px;
+		}
+
+		.conversation-name {
+			font-weight: bold;
+			padding: 11.5px;
+
+			white-space: nowrap;
+		}
+
+		.status, .members {
+			font-size: 20px;
+			font-style: italic;
+
+			//fix cutoff
+			padding-right: 4px;
+
+			overflow: hidden;
+			text-overflow: ellipsis;
+			white-space: nowrap;
+		}
 	}
 
-	.conversation-name {
-		font-weight: bold;
-		padding: 11.5px;
-
-		white-space: nowrap;
-	}
-
-	.conversation-name:hover {
+	.preview-info:hover {
 		cursor: pointer;
 		background: var(--black);
-	}
-
-	.status, .members {
-		font-size: 20px;
-		font-style: italic;
-
-		//fix cutoff
-		padding-right: 4px;
-
-		overflow: hidden;
-		text-overflow: ellipsis;
-		white-space: nowrap;
 	}
 
 	.right {
@@ -50,20 +55,22 @@
 
 		background: unset;
 
-		.search {
+		.search, app-conversation-menu {
 			cursor: pointer;
 		}
 
-		i {
-			color: white;
-			font-size: 24px;
-			padding: 10px;
+		* {
+			i {
+				color: white;
+				font-size: 24px;
+				padding: 10px;
 
-			cursor: pointer;
-		}
+				cursor: pointer;
+			}
 
-		i:hover {
-			color: var(--special);
+			i:hover {
+				color: var(--special);
+			}
 		}
 
 	}

@@ -2,7 +2,7 @@
 	flex-shrink: 0;
 
 	display: grid;
-	grid-template-columns: 65px auto 40px;
+	grid-template-columns: 65px auto min-content;
 	grid-template-rows: 2.2fr 1fr 1fr;
 
 	align-items: center;
@@ -47,6 +47,21 @@
 
 		min-width: 100px;
 		max-width: 400px;
+	}
+
+	.add-to-chat {
+		grid-column: 3;
+		grid-row: 1/4;
+
+		i {
+			padding: 4px;
+		}
+	}
+
+	.add-to-chat:hover {
+		i {
+			color: var(--special);
+		}
 	}
 }
 

@@ -20,11 +20,10 @@ import {ProfileMenuComponent} from './component/embedded/menu/profile-menu/profi
 import {AttachmentsMenuComponent} from './component/embedded/menu/attachments-menu/attachments-menu.component';
 import {ConversationMenuComponent} from './component/embedded/menu/conversation-menu/conversation-menu.component';
 import {MessageSendDirective} from './directive/message-send.directive';
-import {OverlayClickDirective} from './directive/overlay-click.directive';
-import {OutsideClickDirective} from './directive/outside-click.directive';
 import {ScrollPositionDirective} from './directive/scroll-position.directive';
 import { DocumentAttachmentComponent } from './component/embedded/attachment/document-attachment/document-attachment.component';
 import { ImagePreviewComponent } from './component/embedded/image-preview/image-preview.component';
+import { ChatInfoComponent } from './component/embedded/chat-info/chat-info.component';
 
 @NgModule({
 	declarations: [
@@ -35,8 +34,6 @@ import { ImagePreviewComponent } from './component/embedded/image-preview/image-
 		MessageComponent,
 		MessageSendDirective,
 		ScrollPositionDirective,
-		OutsideClickDirective,
-		OverlayClickDirective,
 		ArraySortPipeAsc,
 		ArraySortPipeDesc,
 		ForwardedAttachmentComponent,
@@ -49,6 +46,7 @@ import { ImagePreviewComponent } from './component/embedded/image-preview/image-
 		ConversationMenuComponent,
 		DocumentAttachmentComponent,
 		ImagePreviewComponent,
+		ChatInfoComponent,
 	],
 	imports: [
 		BrowserModule,

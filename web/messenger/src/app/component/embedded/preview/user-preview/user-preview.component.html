@@ -4,4 +4,8 @@
 	     alt="">
 	<div class="info">{{user.firstName}} {{user.lastName}}</div>
 	<div class="login">@{{user.login}}</div>
+	<div class="add-to-chat" *ngIf="currentPreview.type.toString() === PreviewType[PreviewType.CHAT]"
+	     (click)="addToChatEvent.emit(user); $event.stopPropagation()">
+		<i class="fas fa-plus" title="add to current chat"></i>
+	</div>
 </div>

@@ -1,0 +1,28 @@
+<div class="profile-container">
+	<div class="header">
+		<div class="name">Chat info</div>
+		<div class="right">
+			<div class="button" (click)="close.emit()"><i class="fas fa-times"></i></div>
+		</div>
+	</div>
+	<div class="main">
+		<div class="preview">
+			<div class="info-container">
+				<i class="fas fa-users"></i>
+				<div class="name">{{chat.chatName}}</div>
+			</div>
+		</div>
+	</div>
+	<div class="members">
+		<div class="user-preview" *ngFor="let user of chat.users" (click)="openProfile.emit(user)">
+			<img class="avatar"
+			     [src]="ImageService.getImagePathByCompressionMode(FILE_URL + user.avatar.path, ImageCompressionMode.SMALL)"
+			     alt="">
+			<div class="info">{{user.firstName}} {{user.lastName}}</div>
+			<div class="login">@{{user.login}}</div>
+			<div class="remove-member">
+				<i class="fas fa-user-times"></i>
+			</div>
+		</div>
+	</div>
+</div>

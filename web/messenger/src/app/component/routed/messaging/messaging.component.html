@@ -8,32 +8,35 @@
 		<div class="menu" (click)="closeConversation(); removeForwardedAttachment(); cancelEditing()">
 			<i class="fas fa-bars"></i>
 		</div>
-		<img class="avatar"
-		     *ngIf="currentPreview"
-		     [src]="ImageService.getImagePathByCompressionMode(FILE_URL + currentPreview.avatar.path, ImageCompressionMode.SMALL)"
-		     alt="">
-		<div class="conversation-name"
-		     *ngIf="currentPreview && currentPreview.type.toString() === PreviewType[PreviewType.CONVERSATION]"
-		     (click)="openProfile(currentPreview.with)">
-			{{currentPreview.with.firstName}}
-			{{currentPreview.with.lastName}}
-		</div>
-		<div class="conversation-name"
-		     *ngIf="currentPreview && currentPreview.type.toString() === PreviewType[PreviewType.CHAT]"
-		     (click)="openProfile(currentPreview.with)">
-			{{currentPreview.conversation.chatName}}
-		</div>
-		<div class="status"
-		     *ngIf="currentPreview && currentPreview.type.toString() === PreviewType[PreviewType.CONVERSATION]">
-			{{lastSeenView(currentPreview.with.lastSeen)}}
-		</div>
-		<div class="members"
-		     *ngIf="currentPreview && currentPreview.type.toString() === PreviewType[PreviewType.CHAT]">
-			{{currentPreview.conversation.users.length + ' member' +
-		(currentPreview.conversation.users.length !== 1 ? 's' : '')}}
+		<div class="preview-info" (click)="openPreviewInfo(); $event.stopPropagation()">
+			<img class="avatar"
+			     *ngIf="currentPreview"
+			     [src]="ImageService.getImagePathByCompressionMode(FILE_URL + currentPreview.avatar.path, ImageCompressionMode.SMALL)"
+			     alt="">
+			<ng-container
+				*ngIf="currentPreview && currentPreview.type.toString() === PreviewType[PreviewType.CONVERSATION]">
+				<div class="conversation-name">
+					{{currentPreview.with.firstName}}
+					{{currentPreview.with.lastName}}
+				</div>
+				<div class="status">
+					{{lastSeenView(currentPreview.with.lastSeen)}}
+				</div>
+			</ng-container>
+			<ng-container *ngIf="currentPreview && currentPreview.type.toString() === PreviewType[PreviewType.CHAT]">
+				<div class="conversation-name">
+					{{currentPreview.conversation.chatName}}
+				</div>
+				<div class="members">
+					{{currentPreview.conversation.users.length + ' member' +
+				(currentPreview.conversation.users.length !== 1 ? 's' : '')}}
+				</div>
+			</ng-container>
 		</div>
 		<div class="right">
-			<div class="search"><i class="fas fa-search"></i></div>
+			<div class="search">
+				<i class="fas fa-search"></i>
+			</div>
 			<app-conversation-menu [currentPreview]="currentPreview"
 			                       (closeConversation)="closeConversation()">
 			</app-conversation-menu>
@@ -93,7 +96,10 @@
 			<ng-container *ngIf="previews && searchText && searchText.trim()[0] === '@'">
 				<ng-container
 					*ngFor="let user of searchUsers">
-					<app-user-preview [user]="user" (click)="createConversation(user)">
+					<app-user-preview [user]="user"
+					                  [currentPreview]="currentPreview"
+					                  (addToChatEvent)="addToChat($event)"
+					                  (click)="createConversation(user)">
 					</app-user-preview>
 				</ng-container>
 				<div class="not-found" *ngIf="searchUsers && searchUsers.length === 0">
@@ -182,15 +188,33 @@
 	</div>
 </div>
 
-<div class="overlay" *ngIf="(currentProfile && currentProfile.user) || messageImage">
-	<app-image-preview *ngIf="messageImage"
-	                   [messageImage]="messageImage"
-	                   (closeEvent)="messageImage = null"
-	                   (deleteImageEvent)="deleteImageFromMessage()"
-	                   (appOverlayClick)="messageImage = null">
-	</app-image-preview>
-	<app-profile *ngIf="currentProfile && currentProfile.user"
-	             [currentProfile]="currentProfile" [me]="me" (closeProfile)="currentProfile.user = null"
-	             (editProfile)="editProfile($event)" (appOverlayClick)="currentProfile.user = null">
+<div class="overlay" *ngIf="showChatInfo"
+     (click)="showChatInfo = false">
+	<app-chat-info
+		[chat]="currentPreview.conversation"
+		(close)="showChatInfo = false"
+		(openProfile)="openProfile($event)"
+		(click)="$event.stopPropagation()">
+	</app-chat-info>
+	<div class="bg" *ngIf="!(currentProfile && currentProfile.user)"></div>
+</div>
+<div class="overlay" *ngIf="currentProfile && currentProfile.user"
+     (click)="currentProfile.user = null">
+	<app-profile
+		[currentProfile]="currentProfile"
+		[me]="me"
+		(closeProfile)="currentProfile.user = null"
+		(editProfile)="editProfile($event)"
+		(click)="$event.stopPropagation()">
 	</app-profile>
+	<div class="bg"></div>
+</div>
+<div class="overlay" *ngIf="messageImage"
+     (click)="messageImage = null">
+	<app-image-preview
+		[messageImage]="messageImage"
+		(deleteImageEvent)="deleteImageFromMessage()"
+		(click)="$event.stopPropagation()">
+	</app-image-preview>
+	<div class="bg"></div>
 </div>

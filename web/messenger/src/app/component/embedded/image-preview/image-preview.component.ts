@@ -25,9 +25,6 @@ export class ImagePreviewComponent implements OnInit {
 	messageImage: MessageImage;
 
 	@Output()
-	closeEvent = new EventEmitter();
-
-	@Output()
 	deleteImageEvent = new EventEmitter();
 
 	images: Image[];
@@ -61,10 +58,6 @@ export class ImagePreviewComponent implements OnInit {
 		});
 		this.images = this.messageImage.message.images;
 		this.currentImageIndex = this.images.findIndex(i => i.id === this.messageImage.image.id);
-	}
-
-	close() {
-		this.closeEvent.emit();
 	}
 
 	openFullImage() {

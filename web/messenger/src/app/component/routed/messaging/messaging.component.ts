@@ -96,6 +96,8 @@ export class MessagingComponent implements OnInit {
 
 	messageImage: MessageImage = null;
 
+	showChatInfo = false;
+
 	@ViewChild('sendMessageText') sendMessageText: ElementRef;
 	@ViewChild('previewSearch') previewSearch: ElementRef;
 	@ViewChild('messageWrapper') messageWrapper: ElementRef;
@@ -110,6 +112,11 @@ export class MessagingComponent implements OnInit {
 
 			if (this.currentProfile.user) {
 				this.currentProfile.user = null;
+				return;
+			}
+
+			if (this.showChatInfo) {
+				this.showChatInfo = false;
 				return;
 			}
 
@@ -230,6 +237,7 @@ export class MessagingComponent implements OnInit {
 
 	openConversation(conversationId: number) {
 		if (this.currentPreview && this.currentPreview.conversation.id === conversationId) return;
+
 		this.router.navigate(['/im'], {queryParams: {id: conversationId}});
 		this.messages = null;
 		this.isSelectForwardTo = false;
@@ -401,6 +409,17 @@ export class MessagingComponent implements OnInit {
 		if (this.messageWrapper) this.messageWrapper.nativeElement.scrollTop = this.messageWrapper.nativeElement.scrollHeight;
 	}
 
+	openPreviewInfo() {
+		switch (+PreviewType[this.currentPreview.type]) {
+			case PreviewType.CONVERSATION:
+				this.openProfile(this.currentPreview.with);
+				break;
+			case PreviewType.CHAT:
+				this.showChatInfo = true;
+				break;
+		}
+	}
+
 	openProfile(user: User) {
 		this.userInfoService.get(this.token, user.id).subscribe(userInfo => {
 			this.currentProfile.user = user;
@@ -446,6 +465,14 @@ export class MessagingComponent implements OnInit {
 		this.imageService.delete(this.token, this.messageImage.image.id).subscribe(() => {
 			this.editingMessage = this.messageImage.message;
 			this.editMessage();
+		});
+	}
+
+	addToChat(user: User) {
+		if (this.currentPreview.type.toString() !== PreviewType[PreviewType.CHAT]) return;
+
+		this.chatService.addMember(this.token, this.currentPreview.conversation.id, user.id).subscribe(() => {
+			this.loadCurrentConversation();
 		});
 	}
 
