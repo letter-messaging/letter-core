@@ -155,17 +155,18 @@
 			</ng-container>
 		</div>
 		<div class="send-message-wrapper"
-		     *ngIf="routeConversationId && !(selectedMessages.length !== 0 && !editingMessage)">
+		     *ngIf="routeConversationId && !(selectedMessages.length !== 0 && !editingMessage) && currentPreview && !currentPreview.kicked">
 			<i class="fas fa-ban" *ngIf="editingMessage" (click)="cancelEditing()"></i>
 			<app-attachments-menu [editingMessage]="editingMessage"
 			                      (attachedImages)="attachedImages.push($event)"
 			                      (attachedDocuments)="attachedDocuments.push($event)">
 			</app-attachments-menu>
+			<!--TODO: fix textarea-->
 			<textarea #sendMessageText id="send-message-text" autofocus autosize rows="1"
 			          placeholder="Write a message..."
 			          [(ngModel)]="messageText"
 			          appMessageSend [minRows]="1" [maxRows]="10">
-      </textarea>
+            </textarea>
 			<div class="emoji">
 				<i class="fas fa-smile"></i>
 			</div>
@@ -194,6 +195,7 @@
 		[chat]="currentPreview.conversation"
 		(close)="showChatInfo = false"
 		(openProfile)="openProfile($event)"
+		(kickMember)="kickMember($event)"
 		(click)="$event.stopPropagation()">
 	</app-chat-info>
 	<div class="bg" *ngIf="!(currentProfile && currentProfile.user)"></div>

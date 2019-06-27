@@ -11,4 +11,5 @@ export class Preview {
 	lastMessage: Message;
 	avatar: Avatar;
 	unread: number;
+	kicked: boolean;
 }

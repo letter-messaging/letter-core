@@ -20,7 +20,7 @@
 			     alt="">
 			<div class="info">{{user.firstName}} {{user.lastName}}</div>
 			<div class="login">@{{user.login}}</div>
-			<div class="remove-member">
+			<div class="remove-member" (click)="kickMember.emit(user); $event.stopPropagation()">
 				<i class="fas fa-user-times"></i>
 			</div>
 		</div>

@@ -39,6 +39,7 @@ import {MessageImage} from '../../../dto/local/MessageImage';
 import {ChatService} from '../../../service/chat.service';
 import {NewChat} from '../../../dto/NewChat';
 import {PreviewType} from '../../../dto/enum/PreviewType';
+import {ConfirmService} from '../../../service/confirm.service';
 
 @Component({
 	selector: 'app-messaging',
@@ -176,7 +177,9 @@ export class MessagingComponent implements OnInit {
 	            private userInfoService: UserInfoService,
 	            private backgroundUnreadService: BackgroundUnreadService,
 	            private avatarService: AvatarService,
-	            private imageService: ImageService) {
+	            private imageService: ImageService,
+	            private confirmService: ConfirmService
+	) {
 	}
 
 	ngOnInit() {
@@ -454,11 +457,17 @@ export class MessagingComponent implements OnInit {
 	}
 
 	sendMessageTextFocus() {
-		setTimeout(() => this.sendMessageText.nativeElement.focus(), 0);
+		setTimeout(() => {
+			if (this.sendMessageText) this.sendMessageText.nativeElement.focus();
+		}, 0);
 	}
 
 	previewSearchFocus() {
-		setTimeout(() => this.previewSearch.nativeElement.focus(), 0);
+		setTimeout(() => {
+			if (this.previewSearch) {
+				this.previewSearch.nativeElement.focus();
+			}
+		}, 0);
 	}
 
 	deleteImageFromMessage() {
@@ -472,7 +481,14 @@ export class MessagingComponent implements OnInit {
 		if (this.currentPreview.type.toString() !== PreviewType[PreviewType.CHAT]) return;
 
 		this.chatService.addMember(this.token, this.currentPreview.conversation.id, user.id).subscribe(() => {
-			this.loadCurrentConversation();
+			this.loadOrUpdatePreview(this.currentPreview.conversation.id);
+		});
+	}
+
+	kickMember(user: User) {
+		this.confirmService.confirm(`${user.firstName} will be kicked from chat`);
+		this.chatService.kickMember(this.token, this.currentPreview.conversation.id, user.id).subscribe(() => {
+			this.loadOrUpdatePreview(this.currentPreview.conversation.id);
 		});
 	}
 
@@ -494,6 +510,9 @@ export class MessagingComponent implements OnInit {
 				Object.assign(existingPreview, preview);
 			} else {
 				this.previews.push(preview);
+			}
+			if (preview.conversation.id == this.routeConversationId) {
+				this.currentPreview = preview;
 			}
 		});
 	}

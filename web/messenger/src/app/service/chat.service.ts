@@ -21,8 +21,8 @@ export class ChatService {
 		});
 	}
 
-	addMember(token: string, chatId: number, memberId: number): Observable<Conversation> {
-		return this.http.get<Conversation>(API_URL + 'chat/add', {
+	addMember(token: string, chatId: number, memberId: number): Observable<void> {
+		return this.http.get<void>(API_URL + 'chat/add', {
 			headers: {
 				'Auth-Token': token
 			},
@@ -33,13 +33,25 @@ export class ChatService {
 		});
 	}
 
-	addMembers(token: string, chatId: number, memberIds: number[]) {
-		return this.http.post<Conversation>(API_URL + 'chat/add', memberIds, {
+	addMembers(token: string, chatId: number, memberIds: number[]): Observable<void> {
+		return this.http.post<void>(API_URL + 'chat/add', memberIds, {
 			headers: {
 				'Auth-Token': token
 			},
 			params: {
 				'chatId': chatId.toString(),
+			}
+		});
+	}
+
+	kickMember(token: string, chatId: number, memberId: number): Observable<void> {
+		return this.http.get<void>(API_URL + 'chat/kick', {
+			headers: {
+				'Auth-Token': token
+			},
+			params: {
+				'chatId': chatId.toString(),
+				'memberId': memberId.toString()
 			}
 		});
 	}

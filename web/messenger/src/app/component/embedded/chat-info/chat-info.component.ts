@@ -31,6 +31,9 @@ export class ChatInfoComponent implements OnInit {
 	@Output()
 	openProfile = new EventEmitter<User>();
 
+	@Output()
+	kickMember = new EventEmitter<User>();
+
 	constructor() {
 	}
 
