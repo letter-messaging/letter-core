@@ -1,6 +1,6 @@
 package com.gmail.ivanjermakov1.messenger.exception;
 
-public class InvalidMessageException extends Throwable {
+public class InvalidMessageException extends Exception {
 	
 	public InvalidMessageException() {
 	}

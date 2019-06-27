@@ -3,6 +3,7 @@ package com.gmail.ivanjermakov1.messenger.messaging.controller;
 import com.gmail.ivanjermakov1.messenger.auth.entity.User;
 import com.gmail.ivanjermakov1.messenger.auth.service.UserService;
 import com.gmail.ivanjermakov1.messenger.exception.AuthenticationException;
+import com.gmail.ivanjermakov1.messenger.exception.AuthorizationException;
 import com.gmail.ivanjermakov1.messenger.exception.InvalidMessageException;
 import com.gmail.ivanjermakov1.messenger.messaging.dto.EditMessageDto;
 import com.gmail.ivanjermakov1.messenger.messaging.dto.MessageDto;
@@ -59,7 +60,7 @@ public class MessagingController {
 	@PostMapping("send")
 	@Transactional
 	public MessageDto sendMessage(@RequestHeader("Auth-Token") String token,
-	                              @RequestBody NewMessageDto newMessageDto) throws AuthenticationException, InvalidMessageException {
+	                              @RequestBody NewMessageDto newMessageDto) throws AuthenticationException, InvalidMessageException, AuthorizationException {
 		User user = userService.authenticate(token);
 		
 		messagingService.processConversationRead(user, newMessageDto.getConversationId());

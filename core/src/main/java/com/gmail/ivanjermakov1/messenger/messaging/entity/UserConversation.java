@@ -32,8 +32,11 @@ public class UserConversation {
 	@Column(name = "hidden")
 	private Boolean hidden;
 	
-	@Column(name = "last_read", nullable = false)
+	@Column(name = "last_read")
 	private LocalDateTime lastRead;
+	
+	@Column(name = "kicked")
+	private Boolean kicked;
 	
 	public UserConversation() {
 	}
@@ -43,6 +46,7 @@ public class UserConversation {
 		this.conversation = conversation;
 		this.hidden = false;
 		this.lastRead = LocalDateTime.now();
+		this.kicked = false;
 	}
 	
 	public Long getId() {
@@ -83,6 +87,14 @@ public class UserConversation {
 	
 	public void setLastRead(LocalDateTime lastRead) {
 		this.lastRead = lastRead;
+	}
+	
+	public Boolean getKicked() {
+		return kicked;
+	}
+	
+	public void setKicked(Boolean kicked) {
+		this.kicked = kicked;
 	}
 	
 }

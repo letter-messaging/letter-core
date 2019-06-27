@@ -6,6 +6,7 @@ import com.gmail.ivanjermakov1.messenger.core.mapper.ConversationMapper;
 import com.gmail.ivanjermakov1.messenger.core.mapper.MessageMapper;
 import com.gmail.ivanjermakov1.messenger.core.mapper.UserMapper;
 import com.gmail.ivanjermakov1.messenger.exception.AuthenticationException;
+import com.gmail.ivanjermakov1.messenger.exception.AuthorizationException;
 import com.gmail.ivanjermakov1.messenger.exception.InvalidMessageException;
 import com.gmail.ivanjermakov1.messenger.messaging.dto.EditMessageDto;
 import com.gmail.ivanjermakov1.messenger.messaging.dto.MessageDto;
@@ -101,16 +102,23 @@ public class MessagingService {
 				.stream()
 				.filter(r -> conversation.getUserConversations()
 						.stream()
+						.filter(uc -> !uc.getKicked())
 						.map(UserConversation::getUser)
 						.anyMatch(i -> i.getId().equals(r.getUser().getId())))
 				.forEach(consumer)).run();
 	}
 	
-	public MessageDto processNewMessage(User user, NewMessageDto newMessageDto) throws InvalidMessageException {
+	public MessageDto processNewMessage(User user, NewMessageDto newMessageDto) throws InvalidMessageException, AuthorizationException {
+		Conversation conversation = conversationService.get(newMessageDto.getConversationId());
+		
+		if (conversation.getUserConversations()
+				.stream()
+				.filter(uc -> uc.getUser().getId().equals(user.getId()))
+				.noneMatch(uc -> uc.getKicked().equals(false)))
+			throw new AuthorizationException("no access");
+		
 		LOG.debug("process new message from @" + user.getLogin() + " to conversation @" + newMessageDto.getConversationId() +
 				"; text: " + newMessageDto.getText());
-		
-		Conversation conversation = conversationService.get(newMessageDto.getConversationId());
 		
 		Message message = new Message(
 				conversation,

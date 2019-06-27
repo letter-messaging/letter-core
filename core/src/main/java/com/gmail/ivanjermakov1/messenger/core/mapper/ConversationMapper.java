@@ -38,6 +38,7 @@ public class ConversationMapper implements Mapper<Conversation, ConversationDto>
 				userConversation.map(UserConversation::getHidden).orElse(null),
 				conversation.getUserConversations()
 						.stream()
+						.filter(uc -> uc.getKicked().equals(false))
 						.map(UserConversation::getUser)
 						.map(userMapper::map)
 						.collect(Collectors.toList())

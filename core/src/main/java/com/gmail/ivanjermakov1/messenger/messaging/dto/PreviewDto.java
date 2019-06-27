@@ -12,11 +12,12 @@ public class PreviewDto {
 	private MessageDto lastMessage;
 	private AvatarDto avatar;
 	private Integer unread;
+	private Boolean kicked;
 	
 	public PreviewDto() {
 	}
 	
-	public PreviewDto(PreviewType type, ConversationDto conversation, ChannelDto channel, UserDto with, MessageDto lastMessage, AvatarDto avatar, Integer unread) {
+	public PreviewDto(PreviewType type, ConversationDto conversation, ChannelDto channel, UserDto with, MessageDto lastMessage, AvatarDto avatar, Integer unread, Boolean kicked) {
 		this.type = type;
 		this.conversation = conversation;
 		this.channel = channel;
@@ -24,6 +25,7 @@ public class PreviewDto {
 		this.lastMessage = lastMessage;
 		this.avatar = avatar;
 		this.unread = unread;
+		this.kicked = kicked;
 	}
 	
 	public PreviewType getType() {
@@ -80,6 +82,14 @@ public class PreviewDto {
 	
 	public void setUnread(Integer unread) {
 		this.unread = unread;
+	}
+	
+	public Boolean getKicked() {
+		return kicked;
+	}
+	
+	public void setKicked(Boolean kicked) {
+		this.kicked = kicked;
 	}
 	
 }

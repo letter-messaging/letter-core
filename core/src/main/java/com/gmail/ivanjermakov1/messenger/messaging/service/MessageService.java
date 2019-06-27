@@ -3,7 +3,6 @@ package com.gmail.ivanjermakov1.messenger.messaging.service;
 import com.gmail.ivanjermakov1.messenger.auth.entity.User;
 import com.gmail.ivanjermakov1.messenger.auth.service.UserService;
 import com.gmail.ivanjermakov1.messenger.core.mapper.MessageMapper;
-import com.gmail.ivanjermakov1.messenger.exception.AuthenticationException;
 import com.gmail.ivanjermakov1.messenger.exception.NoSuchEntityException;
 import com.gmail.ivanjermakov1.messenger.messaging.dto.MessageDto;
 import com.gmail.ivanjermakov1.messenger.messaging.entity.Conversation;
@@ -12,6 +11,7 @@ import com.gmail.ivanjermakov1.messenger.messaging.entity.UserConversation;
 import com.gmail.ivanjermakov1.messenger.messaging.repository.MessageRepository;
 import com.gmail.ivanjermakov1.messenger.messaging.repository.UserConversationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -53,20 +53,22 @@ public class MessageService {
 		return messageRepository.save(message);
 	}
 	
-	public List<MessageDto> get(Long userId, Long conversationId, Pageable pageable) throws AuthenticationException {
+	public List<MessageDto> get(Long userId, Long conversationId, Pageable pageable) {
 		User user = userService.getUser(userId);
 		Conversation conversation = conversationService.get(conversationId);
+		UserConversation userConversation = userConversationRepository.findByUserAndConversation(user, conversation)
+				.orElseThrow(() -> new NoSuchEntityException("invalid conversation id"));
 		
-		if (conversation.getUserConversations()
+		List<Message> messages = messageRepository.findAllByConversationOrderBySentDesc(
+				conversation,
+				PageRequest.of(0, Integer.MAX_VALUE)
+		);
+		
+		return messages
 				.stream()
-				.map(UserConversation::getUser)
-				.noneMatch(u -> u.getId().equals(userId)))
-			throw new AuthenticationException("invalid conversation id");
-		
-		List<Message> messagesIds = messageRepository.findAllByConversation(conversation, pageable);
-		
-		return messagesIds
-				.stream()
+				.filter(m -> !(userConversation.getKicked() && userConversation.getLastRead().isBefore(m.getSent())))
+				.skip(pageable.getOffset())
+				.limit(pageable.getPageSize())
 				.map(message -> messageMapper.with(user).map(message))
 				.collect(Collectors.toList());
 	}
@@ -75,7 +77,9 @@ public class MessageService {
 		UserConversation userConversation = userConversationRepository.findByUserAndConversation(user, conversation)
 				.orElseThrow(() -> new NoSuchEntityException("no such user's conversation"));
 		
-		userConversation.setLastRead(LocalDateTime.now());
+		if (!userConversation.getKicked()) {
+			userConversation.setLastRead(LocalDateTime.now());
+		}
 	}
 	
 	/**

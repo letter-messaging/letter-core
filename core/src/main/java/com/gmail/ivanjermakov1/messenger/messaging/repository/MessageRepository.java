@@ -22,7 +22,7 @@ public interface MessageRepository extends CrudRepository<Message, Long> {
 	
 	List<Message> getAllBySenderAndConversation(User sender, Conversation conversation);
 	
-	List<Message> findAllByConversation(Conversation conversation, Pageable pageable);
+	List<Message> findAllByConversationOrderBySentDesc(Conversation conversation, Pageable pageable);
 	
 	@Query("select count(m) from Message m where m.conversation = :conversation and m.sender <> :user and m.sent > :lastRead")
 	Integer countUnread(@Param("user") User user, @Param("conversation") Conversation conversation, @Param("lastRead") LocalDateTime lastRead);

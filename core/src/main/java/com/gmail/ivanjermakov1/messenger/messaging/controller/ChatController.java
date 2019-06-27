@@ -74,12 +74,12 @@ public class ChatController {
 	 * @param chatId   chat memberId
 	 * @param memberId new member id
 	 * @throws AuthenticationException on invalid @param token
-	 * @throws AuthorizationException  if caller is not chat member
+	 * @throws NoSuchEntityException   if caller is not chat member or no such chat
 	 */
 	@GetMapping("add")
 	public void addMember(@RequestHeader("Auth-Token") String token,
 	                      @RequestParam("chatId") Long chatId,
-	                      @RequestParam("memberId") Long memberId) throws AuthenticationException, AuthorizationException {
+	                      @RequestParam("memberId") Long memberId) throws AuthenticationException, NoSuchEntityException {
 		User user = userService.authenticate(token);
 		Conversation chat = conversationRepository.findById(chatId)
 				.orElseThrow(() -> new NoSuchEntityException("no such chat"));
@@ -96,12 +96,12 @@ public class ChatController {
 	 * @param chatId    chat id
 	 * @param memberIds list of new members ids
 	 * @throws AuthenticationException on invalid @param token
-	 * @throws AuthorizationException  if caller is not chat member
+	 * @throws NoSuchEntityException   if caller is not chat member
 	 */
 	@PostMapping("add")
 	public void addMembers(@RequestHeader("Auth-Token") String token,
 	                       @RequestParam("chatId") Long chatId,
-	                       @RequestBody List<Long> memberIds) throws AuthenticationException, AuthorizationException {
+	                       @RequestBody List<Long> memberIds) throws AuthenticationException, NoSuchEntityException {
 		User user = userService.authenticate(token);
 		
 		Conversation chat = conversationRepository.findById(chatId)
@@ -113,6 +113,30 @@ public class ChatController {
 				.collect(Collectors.toList());
 		
 		chatService.addMembers(user, chat, members);
+	}
+	
+	/**
+	 * Kick member from chat.
+	 * Only chat creator can kick members. Creator cannot kick himself, {@code .hide()} method should be used to hide
+	 * conversation.
+	 *
+	 * @param token    user token
+	 * @param chatId   chat memberId
+	 * @param memberId kick member id
+	 * @throws AuthenticationException on invalid @param token
+	 * @throws AuthorizationException  if caller is not chat creator
+	 * @throws IllegalStateException   if chat creator try to kick himself
+	 */
+	@GetMapping("kick")
+	public void kickMember(@RequestHeader("Auth-Token") String token,
+	                       @RequestParam("chatId") Long chatId,
+	                       @RequestParam("memberId") Long memberId) throws AuthenticationException, AuthorizationException, IllegalStateException {
+		User user = userService.authenticate(token);
+		Conversation chat = conversationRepository.findById(chatId)
+				.orElseThrow(() -> new NoSuchEntityException("no such chat"));
+		User member = userService.getUser(memberId);
+		
+		chatService.kickMember(user, chat, member);
 	}
 	
 	/**

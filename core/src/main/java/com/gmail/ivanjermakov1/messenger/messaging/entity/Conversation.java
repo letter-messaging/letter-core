@@ -1,11 +1,15 @@
 package com.gmail.ivanjermakov1.messenger.messaging.entity;
 
+import com.gmail.ivanjermakov1.messenger.auth.entity.User;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import java.util.List;
@@ -25,12 +29,17 @@ public class Conversation {
 	@OneToMany(mappedBy = "conversation", cascade = {CascadeType.ALL}, orphanRemoval = true)
 	private List<UserConversation> userConversations;
 	
+	@ManyToOne
+	@JoinColumn(name = "creator")
+	private User creator;
+	
 	public Conversation() {
 	}
 	
-	public Conversation(String chatName, List<UserConversation> userConversations) {
+	public Conversation(String chatName, List<UserConversation> userConversations, User creator) {
 		this.chatName = chatName;
 		this.userConversations = userConversations;
+		this.creator = creator;
 	}
 	
 	public Long getId() {
@@ -55,6 +64,14 @@ public class Conversation {
 	
 	public void setUserConversations(List<UserConversation> userConversations) {
 		this.userConversations = userConversations;
+	}
+	
+	public User getCreator() {
+		return creator;
+	}
+	
+	public void setCreator(User creator) {
+		this.creator = creator;
 	}
 	
 }
