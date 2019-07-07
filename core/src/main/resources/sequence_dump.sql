@@ -1,0 +1,10 @@
+SELECT setval('avatar_id_seq', (select id from avatar order by id desc limit 1));
+SELECT setval('conversation_id_seq', (select id from conversation order by id desc limit 1));
+SELECT setval('document_id_seq', (select id from document order by id desc limit 1));
+SELECT setval('image_id_seq', (select id from image order by id desc limit 1));
+SELECT setval('message_id_seq', (select id from message order by id desc limit 1));
+SELECT setval('token_id_seq', (select id from token order by id desc limit 1));
+SELECT setval('user_conversation_id_seq', (select id from user_conversation order by id desc limit 1));
+SELECT setval('user_id_seq', (select id from "user" order by id desc limit 1));
+SELECT setval('user_info_id_seq', (select id from user_info order by id desc limit 1));
+SELECT setval('user_online_id_seq', (select id from user_online order by id desc limit 1));

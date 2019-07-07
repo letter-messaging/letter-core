@@ -30,7 +30,7 @@ public class Conversation {
 	private List<UserConversation> userConversations;
 	
 	@ManyToOne
-	@JoinColumn(name = "creator")
+	@JoinColumn(name = "creator_id")
 	private User creator;
 	
 	public Conversation() {

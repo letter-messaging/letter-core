@@ -1,9 +1,10 @@
 create table conversation
 (
-    id        bigserial not null
+    id         bigserial not null
         constraint conversation_pkey
             primary key,
-    chat_name varchar
+    chat_name  varchar,
+    creator_id bigint
 );
 
 create unique index conversation_id_uindex
@@ -17,6 +18,12 @@ create table "user"
     login varchar   not null,
     hash  varchar   not null
 );
+
+create unique index user_id_uindex
+    on "user" (id);
+
+create unique index user_login_uindex
+    on "user" (login);
 
 create table message
 (
@@ -35,12 +42,6 @@ create table message
 
 create unique index message_id_uindex
     on message (id);
-
-create unique index user_id_uindex
-    on "user" (id);
-
-create unique index user_login_uindex
-    on "user" (login);
 
 create table forwarded_message
 (
@@ -169,7 +170,8 @@ create table user_conversation
         constraint user_conversation_conversation_id_fk
             references conversation,
     hidden          boolean default false,
-    last_read       timestamp with time zone not null
+    last_read       timestamp with time zone not null,
+    kicked          boolean default false
 );
 
 create unique index user_conversation_id_uindex
