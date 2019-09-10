@@ -113,7 +113,10 @@ public class MessageService {
 	
 	public void deleteAll(User user, Conversation conversation) {
 //		TODO: optimize
-		messageRepository.getAllBySenderAndConversation(user, conversation).stream().parallel().forEach(this::delete);
+		messageRepository.getAllBySenderAndConversation(user, conversation)
+				.stream()
+				.parallel()
+				.forEach(this::delete);
 	}
 	
 	/**
