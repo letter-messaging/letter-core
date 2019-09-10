@@ -9,18 +9,30 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+/**
+ * Entity representing user token
+ */
 @Entity
 @Table(name = "token")
 public class Token {
-	
+
+	/**
+	 * Token id
+	 */
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	
+
+	/**
+	 * User, owner of this token
+	 */
 	@OneToOne
 	@JoinColumn(name = "user_id")
 	private User user;
-	
+
+	/**
+	 * Token value. Represents UUID value
+	 */
 	@Column(name = "token")
 	private String token;
 	

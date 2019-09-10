@@ -9,18 +9,31 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+/**
+ * Entity representing user
+ */
 @Entity
 @Table(name = "user", schema = "public")
 public class User {
-	
+
+	/**
+	 * User id. System account has is {@code 0}
+	 */
 	@Id
 	@Column(name = "id")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	
+
+	/**
+	 * User login. System account has login {@code @system}
+	 */
 	@Column(name = "login")
 	private String login;
-	
+
+	/**
+	 * Hashed version of user password. Hashed using {@link com.gmail.ivanjermakov1.messenger.auth.security.Hasher}
+	 * @see com.gmail.ivanjermakov1.messenger.auth.security.Hasher
+	 */
 	@JsonIgnore
 	@Column(name = "hash")
 	private String hash;

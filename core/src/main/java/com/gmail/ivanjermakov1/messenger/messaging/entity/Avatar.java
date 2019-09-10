@@ -12,64 +12,79 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import java.time.LocalDate;
 
+/**
+ * Entity representing image file of user profile picture
+ */
 @Entity
 @Table(name = "avatar")
 public class Avatar {
-	
+
+	/**
+	 * Avatar id
+	 */
 	@Id
 	@Column(name = "id")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	
+
+	/**
+	 * Avatar owner user
+	 */
 	@ManyToOne
 	@JoinColumn(name = "user_id")
 	private User user;
-	
+
+	/**
+	 * Static resource path to avatar
+	 */
 	@Column(name = "path")
 	private String path;
-	
+
+	/**
+	 * Date of avatar upload
+	 */
 	@Column(name = "uploaded")
 	private LocalDate uploaded;
-	
+
 	public Avatar() {
 	}
-	
+
 	public Avatar(User user, String path, LocalDate uploaded) {
 		this.user = user;
 		this.path = path;
 		this.uploaded = uploaded;
 	}
-	
+
 	public Long getId() {
 		return id;
 	}
-	
+
 	public void setId(Long id) {
 		this.id = id;
 	}
-	
+
 	public User getUser() {
 		return user;
 	}
-	
+
 	public void setUser(User user) {
 		this.user = user;
 	}
-	
+
 	public String getPath() {
 		return path;
 	}
-	
+
 	public void setPath(String path) {
 		this.path = path;
 	}
-	
+
 	public LocalDate getUploaded() {
 		return uploaded;
 	}
-	
+
 	public void setUploaded(LocalDate uploaded) {
 		this.uploaded = uploaded;
 	}
-	
+
 }

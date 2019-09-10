@@ -14,15 +14,21 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import java.util.List;
 
+/**
+ * Entity representing conversation
+ */
 @Entity
 @Table(name = "conversation")
 public class Conversation {
-	
+
+	/**
+	 * Conversation id
+	 */
 	@Id
 	@Column(name = "id")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	
+
 	@Column(name = "chat_name")
 	private String chatName;
 	
