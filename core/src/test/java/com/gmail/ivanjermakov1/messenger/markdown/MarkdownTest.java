@@ -21,7 +21,7 @@ public class MarkdownTest {
 	public void shouldParseBold() {
 		String html = markdownService.format("This is *Sparta*");
 		
-		Assert.assertEquals(html, "<p>This is <em>Sparta</em></p>");
+		Assert.assertEquals("<p>This is <em>Sparta</em></p>", html);
 	}
 	
 }
