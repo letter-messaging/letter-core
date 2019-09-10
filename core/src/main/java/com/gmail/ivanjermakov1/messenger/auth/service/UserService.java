@@ -74,7 +74,7 @@ public class UserService {
 		if (userRepository.findByLogin(registerUserDto.getLogin()).isPresent())
 			throw new RegistrationException("user already exists.");
 		
-		User user = new User(null, registerUserDto.getLogin(), Hasher.getHash(registerUserDto.getPassword()));
+		User user = new User(registerUserDto.getLogin(), Hasher.getHash(registerUserDto.getPassword()));
 		user = userRepository.save(user);
 		userInfoService.save(new UserInfo(user, registerUserDto.getFirstName(), registerUserDto.getLastName()));
 	}

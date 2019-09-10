@@ -28,8 +28,7 @@ public class User {
 	public User() {
 	}
 	
-	public User(Long id, String login, String hash) {
-		this.id = id;
+	public User(String login, String hash) {
 		this.login = login;
 		this.hash = hash;
 	}
