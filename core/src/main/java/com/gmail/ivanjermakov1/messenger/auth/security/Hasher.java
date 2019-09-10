@@ -7,6 +7,7 @@ import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 import java.security.SecureRandom;
 
+//TODO: use proper library for hashing
 public class Hasher {
 	
 	// The higher the number of iterations the more
