@@ -8,4 +8,4 @@ script:
   - psql -a -U postgres -c 'create database messenger;'
   - psql -a -U postgres -d messenger -f core/src/main/resources/database.sql
   - sudo mkdir /upload
-  - gradle build -i -Dfileupload.path=/upload
+  - sudo gradle build -i -Dfileupload.path=/upload
