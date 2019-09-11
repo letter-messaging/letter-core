@@ -37,6 +37,7 @@ public class FileUploadService {
 
 		String fullFilePath = uploadPlaceholder + "/" + fileType.toString().toLowerCase() + "/" + generatedFilename;
 		File file = new File(fullFilePath);
+		file.mkdirs();
 		if (file.exists()) throw new InvalidFileNameException("such file already exists");
 		multipartFile.transferTo(Paths.get(fullFilePath));
 
