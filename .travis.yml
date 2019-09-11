@@ -1,5 +1,5 @@
 language: java
-sudo: false
+sudo: true
 jdk:
   - openjdk8
 services:
@@ -7,4 +7,5 @@ services:
 script:
   - psql -a -U postgres -c 'create database messenger;'
   - psql -a -U postgres -d messenger -f core/src/main/resources/database.sql
+  - sudo mkdir /media/ivan/D/upload/
   - gradle build -i
