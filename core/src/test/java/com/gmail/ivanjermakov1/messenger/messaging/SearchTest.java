@@ -1,12 +1,10 @@
 package com.gmail.ivanjermakov1.messenger.messaging;
 
-import com.gmail.ivanjermakov1.messenger.auth.dto.RegisterUserDto;
 import com.gmail.ivanjermakov1.messenger.auth.dto.UserDto;
-import com.gmail.ivanjermakov1.messenger.auth.entity.User;
-import com.gmail.ivanjermakov1.messenger.auth.service.UserService;
 import com.gmail.ivanjermakov1.messenger.exception.AuthenticationException;
 import com.gmail.ivanjermakov1.messenger.exception.InvalidSearchFormatException;
 import com.gmail.ivanjermakov1.messenger.exception.RegistrationException;
+import com.gmail.ivanjermakov1.messenger.messaging.dto.TestingUser;
 import com.gmail.ivanjermakov1.messenger.messaging.service.SearchService;
 import org.junit.Assert;
 import org.junit.Test;
@@ -28,30 +26,24 @@ public class SearchTest {
 	private SearchService searchService;
 
 	@Autowired
-	private UserService userService;
+	private TestingService testingService;
 
 	@Test
 	public void shouldFindUserByLogin() throws RegistrationException, AuthenticationException, InvalidSearchFormatException {
-		String user1Token = registerUser("John", "Lens", "johnls");
-		User user1 = userService.authenticate(user1Token);
+		TestingUser user = testingService.registerUser("John");
 
 		List<UserDto> searchResult = searchService.searchUsers("@John", PageRequest.of(0, Integer.MAX_VALUE));
 		Assert.assertTrue(searchResult
 				.stream()
-				.anyMatch(dto -> dto.getLogin().equals(user1.getLogin()))
+				.anyMatch(dto -> dto.getLogin().equals(user.user.getLogin()))
 		);
 	}
 
 	@Test(expected = InvalidSearchFormatException.class)
 	public void shouldThrowInvalidSearchFormatException_WithInvalidSearch() throws RegistrationException, AuthenticationException, InvalidSearchFormatException {
-		registerUser("John", "Lens", "johnls");
+		TestingUser user = testingService.registerUser("John");
 
 		searchService.searchUsers("John", PageRequest.of(0, Integer.MAX_VALUE));
-	}
-
-	private String registerUser(String firstName, String lastName, String login) throws RegistrationException, AuthenticationException {
-		userService.register(new RegisterUserDto(firstName, lastName, login, "password1"));
-		return userService.authenticate(login, "password1");
 	}
 
 }

@@ -1,9 +1,6 @@
 package com.gmail.ivanjermakov1.messenger.messaging;
 
-import com.gmail.ivanjermakov1.messenger.auth.dto.RegisterUserDto;
-import com.gmail.ivanjermakov1.messenger.auth.dto.UserDto;
 import com.gmail.ivanjermakov1.messenger.auth.service.UserService;
-import com.gmail.ivanjermakov1.messenger.core.mapper.UserMapper;
 import com.gmail.ivanjermakov1.messenger.exception.AuthenticationException;
 import com.gmail.ivanjermakov1.messenger.exception.AuthorizationException;
 import com.gmail.ivanjermakov1.messenger.exception.InvalidMessageException;
@@ -15,6 +12,7 @@ import com.gmail.ivanjermakov1.messenger.messaging.controller.MessagingControlle
 import com.gmail.ivanjermakov1.messenger.messaging.dto.ConversationDto;
 import com.gmail.ivanjermakov1.messenger.messaging.dto.MessageDto;
 import com.gmail.ivanjermakov1.messenger.messaging.dto.NewMessageDto;
+import com.gmail.ivanjermakov1.messenger.messaging.dto.TestingUser;
 import com.gmail.ivanjermakov1.messenger.messaging.entity.Message;
 import com.gmail.ivanjermakov1.messenger.messaging.service.MessageService;
 import com.gmail.ivanjermakov1.messenger.messaging.util.Images;
@@ -53,25 +51,23 @@ public class MessageTest {
 	private UserService userService;
 
 	@Autowired
-	private UserMapper userMapper;
+	private TestingService testingService;
 
 	@Test
 	public void shouldSendMessage() throws RegistrationException, AuthenticationException, NoSuchEntityException, InvalidMessageException, AuthorizationException {
-		userService.register(new RegisterUserDto("Jack", "Johnson", "jackj", "password1"));
-		String user1Token = userService.authenticate("jackj", "password1");
-		UserDto user1 = userMapper.map(userService.authenticate(user1Token));
-
-		userService.register(new RegisterUserDto("Ron", "Richardson", "ronr", "password1"));
-		String user2Token = userService.authenticate("ronr", "password1");
-		UserDto user2 = userMapper.map(userService.authenticate(user2Token));
+		TestingUser user1 = testingService.registerUser("Jack");
+		TestingUser user2 = testingService.registerUser("Ron");
 
 		Assert.assertNotNull(user1);
 		Assert.assertNotNull(user2);
 
-		ConversationDto conversationDto = conversationController.create(user1Token, userService.getUser(user2.getId()).getLogin());
+		ConversationDto conversationDto = conversationController.create(
+				user1.token,
+				userService.getUser(user2.user.getId()).getLogin()
+		);
 
 		NewMessageDto message = new NewMessageDto(
-				user1.getId(),
+				user1.user.getId(),
 				conversationDto.getId(),
 				"Hello!",
 				Collections.emptyList(),
@@ -79,39 +75,34 @@ public class MessageTest {
 				Collections.emptyList()
 		);
 
-		messagingController.sendMessage(user1Token, message);
+		messagingController.sendMessage(user1.token, message);
 	}
 
 	@Test
 	public void shouldSendMessageWithImage() throws RegistrationException, AuthenticationException, NoSuchEntityException, InvalidMessageException, IOException, AuthorizationException {
-		userService.register(new RegisterUserDto("Jack", "Johnson", "jackj", "password1"));
-		String user1Token = userService.authenticate("jackj", "password1");
-		UserDto user1 = userMapper.map(userService.authenticate(user1Token));
-
-		userService.register(new RegisterUserDto("Ron", "Richardson", "ronr", "password1"));
-		String user2Token = userService.authenticate("ronr", "password1");
-		UserDto user2 = userMapper.map(userService.authenticate(user2Token));
+		TestingUser user1 = testingService.registerUser("Jack");
+		TestingUser user2 = testingService.registerUser("Ron");
 
 		Assert.assertNotNull(user1);
 		Assert.assertNotNull(user2);
 
-		ConversationDto conversationDto = conversationController.create(user1Token, userService.getUser(user2.getId()).getLogin());
+		ConversationDto conversationDto = conversationController.create(user1.token, userService.getUser(user2.user.getId()).getLogin());
 
 		NewMessageDto message = new NewMessageDto(
-				user1.getId(),
+				user1.user.getId(),
 				conversationDto.getId(),
 				"Hello!",
 				Collections.emptyList(),
 				Stream
 						.of(imageController.upload(
-								user1Token,
+								user1.token,
 								Images.multipartFileFromFile(new File("src/test/resources/test-image.jpg"))
 						))
 						.collect(Collectors.toList()),
 				Collections.emptyList()
 		);
 
-		MessageDto messageDto = messagingController.sendMessage(user1Token, message);
+		MessageDto messageDto = messagingController.sendMessage(user1.token, message);
 
 		Message received = messageService.get(messageDto.getId());
 
