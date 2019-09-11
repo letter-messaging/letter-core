@@ -4,7 +4,7 @@ plugins {
 
 //    code coverage
     id 'jacoco'
-    id 'com.github.kt3k.coveralls' version '2.6.3'
+    id 'com.github.kt3k.coveralls' version '2.8.4'
 }
 
 group 'com.gmail.ivanjermakov1'
@@ -14,13 +14,6 @@ sourceCompatibility = 1.8
 
 repositories {
     mavenCentral()
-}
-
-jacocoTestReport {
-    reports {
-        xml.enabled = true
-        html.enabled = true
-    }
 }
 
 test {
@@ -33,6 +26,17 @@ bootRun {
 
 ext {
     springVersion = '2.1.1.RELEASE'
+}
+
+jacocoTestReport {
+    reports {
+        xml.enabled = true
+        html.enabled = true
+    }
+}
+
+coveralls {
+    jacocoReportPath 'build/reports/jacoco/jacocoTestReport/jacocoTestReport.xml'
 }
 
 dependencies {

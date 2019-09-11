@@ -9,4 +9,4 @@ script:
   - psql -a -U postgres -d messenger -f core/src/main/resources/database.sql
   - gradle build -i -Dfileupload.path=$HOME/upload
 after_success:
-  - gradle jacocoTestReport coveralls
+  - ./gradlew jacocoTestReport coveralls
