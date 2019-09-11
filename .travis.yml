@@ -1,9 +1,5 @@
 language: java
 install: true
 
-os: linux
-dist: bionic
-jdk: oraclejdk8
-
 script:
   - gradle build --scan -s
