@@ -1,12 +1,6 @@
 group 'com.gmail.ivanjermakov1'
 version '0.2'
 
-apply plugin: 'java'
-
-task wrapper(type: Wrapper) {
-    gradleVersion = '3.4.1'
-}
-
 allprojects {
     repositories {
         mavenCentral()
