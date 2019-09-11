@@ -1,7 +1,10 @@
 plugins {
     id 'java'
     id 'org.springframework.boot' version '2.1.1.RELEASE'
+
+//    code coverage
     id 'jacoco'
+    id 'com.github.kt3k.coveralls' version '2.6.3'
 }
 
 group 'com.gmail.ivanjermakov1'
@@ -34,7 +37,7 @@ ext {
 
 dependencies {
     compile group: 'javax.mail', name: 'mail', version: '1.4'
-    compile ("org.springframework.boot:spring-boot-starter-web:$springVersion") {
+    compile("org.springframework.boot:spring-boot-starter-web:$springVersion") {
         exclude group: 'org.springframework.boot', module: 'spring-boot-starter-tomcat'
     }
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-jetty', version: '2.1.1.RELEASE'
