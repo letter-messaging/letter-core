@@ -24,9 +24,6 @@ public class FileUploadService {
 	@Value("${fileupload.path}")
 	private String uploadPlaceholder;
 
-	@Value("${web.static.resources.path}")
-	private String webResources;
-
 	public String upload(MultipartFile multipartFile, FileType fileType) throws IOException {
 		String generatedFilename =
 				RandomStringGenerator.generate(10) + "." + FilenameUtils.getExtension(multipartFile.getOriginalFilename());
