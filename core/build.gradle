@@ -18,6 +18,7 @@ repositories {
 
 test {
     systemProperties System.properties
+    systemProperties['user.dir'] = workingDir
 }
 
 bootRun {
@@ -30,16 +31,18 @@ ext {
 
 jacocoTestReport {
     reports {
-        xml.enabled = true // coveralls plugin depends on xml format report
+        xml.enabled = true
         html.enabled = true
     }
 }
 
-/*coveralls {
-    jacocoReportPath 'build/reports/jacoco/jacocoTestReport/jacocoTestReport.xml'
-}*/
+coveralls {
+    jacocoReportPath 'build/reports/jacoco/test/jacocoTestReport.xml'
+}
 
 dependencies {
+    testCompile group: 'org.jacoco', name: 'org.jacoco.agent', version: '0.8.4'
+
     compile group: 'javax.mail', name: 'mail', version: '1.4'
     compile("org.springframework.boot:spring-boot-starter-web:$springVersion") {
         exclude group: 'org.springframework.boot', module: 'spring-boot-starter-tomcat'
