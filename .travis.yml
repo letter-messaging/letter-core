@@ -9,6 +9,6 @@ env:
 script:
   - psql -a -U postgres -c 'create database messenger;'
   - psql -a -U postgres -d messenger -f core/src/main/resources/database.sql
-  - gradle build -Dfileupload.path=$HOME/upload
+  - gradle test -Dfileupload.path=$HOME/upload
 after_success:
   - gradle jacocoTestReport coveralls
