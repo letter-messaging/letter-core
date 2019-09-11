@@ -4,6 +4,6 @@ jdk:
 services:
   - postgresql
 script:
-  - psql -c 'create database messenger;' -U postgres
-  - psql -d messenger -f src/main/resources/database.sql
-  - gradle build -x test
+  - psql -a -U postgres -c 'create database messenger;'
+  - psql -a -U postgres -d messenger -f core/src/main/resources/database.sql
+  - gradle build
