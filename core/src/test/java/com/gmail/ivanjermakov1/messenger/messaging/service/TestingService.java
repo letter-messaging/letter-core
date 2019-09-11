@@ -1,4 +1,4 @@
-package com.gmail.ivanjermakov1.messenger.messaging;
+package com.gmail.ivanjermakov1.messenger.messaging.service;
 
 import com.gmail.ivanjermakov1.messenger.auth.dto.RegisterUserDto;
 import com.gmail.ivanjermakov1.messenger.auth.dto.UserDto;
@@ -20,7 +20,7 @@ public class TestingService {
 	@Autowired
 	private UserMapper userMapper;
 
-	TestingUser registerUser(String name) throws RegistrationException, AuthenticationException {
+	public TestingUser registerUser(String name) throws RegistrationException, AuthenticationException {
 		String password = Strings.repeat(name, 4);
 
 		RegisterUserDto registerUserDto = new RegisterUserDto(name, name, name, password);

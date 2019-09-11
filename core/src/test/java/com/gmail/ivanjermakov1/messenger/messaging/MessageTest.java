@@ -15,6 +15,7 @@ import com.gmail.ivanjermakov1.messenger.messaging.dto.NewMessageDto;
 import com.gmail.ivanjermakov1.messenger.messaging.dto.TestingUser;
 import com.gmail.ivanjermakov1.messenger.messaging.entity.Message;
 import com.gmail.ivanjermakov1.messenger.messaging.service.MessageService;
+import com.gmail.ivanjermakov1.messenger.messaging.service.TestingService;
 import com.gmail.ivanjermakov1.messenger.messaging.util.Images;
 import org.junit.Assert;
 import org.junit.Test;
@@ -96,7 +97,7 @@ public class MessageTest {
 				Stream
 						.of(imageController.upload(
 								user1.token,
-								Images.multipartFileFromFile(new File("src/test/resources/test-image.jpg"))
+								Images.multipartFileFromFile(new File("src/test/resources/test.jpg"))
 						))
 						.collect(Collectors.toList()),
 				Collections.emptyList()

@@ -6,6 +6,7 @@ import com.gmail.ivanjermakov1.messenger.exception.InvalidSearchFormatException;
 import com.gmail.ivanjermakov1.messenger.exception.RegistrationException;
 import com.gmail.ivanjermakov1.messenger.messaging.dto.TestingUser;
 import com.gmail.ivanjermakov1.messenger.messaging.service.SearchService;
+import com.gmail.ivanjermakov1.messenger.messaging.service.TestingService;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;

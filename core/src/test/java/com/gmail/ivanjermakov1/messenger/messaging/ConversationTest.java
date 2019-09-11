@@ -11,6 +11,7 @@ import com.gmail.ivanjermakov1.messenger.messaging.controller.PreviewController;
 import com.gmail.ivanjermakov1.messenger.messaging.dto.ConversationDto;
 import com.gmail.ivanjermakov1.messenger.messaging.dto.PreviewDto;
 import com.gmail.ivanjermakov1.messenger.messaging.dto.TestingUser;
+import com.gmail.ivanjermakov1.messenger.messaging.service.TestingService;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
