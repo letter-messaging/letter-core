@@ -1,6 +1,7 @@
 package com.gmail.ivanjermakov1.messenger.auth.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.gmail.ivanjermakov1.messenger.auth.service.HashService;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -31,9 +32,9 @@ public class User {
 	private String login;
 
 	/**
-	 * Hashed version of user password. Hashed using {@link com.gmail.ivanjermakov1.messenger.auth.security.Hasher}
+	 * Hashed version of user password. Hashed using {@link HashService}
 	 *
-	 * @see com.gmail.ivanjermakov1.messenger.auth.security.Hasher
+	 * @see HashService
 	 */
 	@JsonIgnore
 	@Column(name = "hash")

@@ -5,7 +5,6 @@ import com.gmail.ivanjermakov1.messenger.auth.entity.Token;
 import com.gmail.ivanjermakov1.messenger.auth.entity.User;
 import com.gmail.ivanjermakov1.messenger.auth.repository.TokenRepository;
 import com.gmail.ivanjermakov1.messenger.auth.repository.UserRepository;
-import com.gmail.ivanjermakov1.messenger.auth.security.Hasher;
 import com.gmail.ivanjermakov1.messenger.auth.security.TokenGenerator;
 import com.gmail.ivanjermakov1.messenger.exception.AuthenticationException;
 import com.gmail.ivanjermakov1.messenger.exception.NoSuchEntityException;
@@ -32,6 +31,7 @@ public class UserService {
 	private final UserRepository userRepository;
 	private final TokenRepository tokenRepository;
 	private final UserOnlineRepository userOnlineRepository;
+	private final HashService hashService;
 	private UserInfoService userInfoService;
 
 	@Value("${online.lifetime-days}")
@@ -43,17 +43,18 @@ public class UserService {
 	}
 
 	@Autowired
-	public UserService(UserRepository userRepository, TokenRepository tokenRepository, UserOnlineRepository userOnlineRepository) {
+	public UserService(UserRepository userRepository, TokenRepository tokenRepository, UserOnlineRepository userOnlineRepository, HashService hashService) {
 		this.userRepository = userRepository;
 		this.tokenRepository = tokenRepository;
 		this.userOnlineRepository = userOnlineRepository;
+		this.hashService = hashService;
 	}
 
 	public String authenticate(String login, String password) throws AuthenticationException {
 		LOG.debug("authenticate user: @" + login);
 		Optional<User> user = userRepository.findByLogin(login);
 
-		if (!user.isPresent() || !Hasher.check(password, user.get().getHash()))
+		if (!user.isPresent() || !hashService.check(password, user.get().getHash()))
 			throw new AuthenticationException("wrong credentials");
 
 		Token token = tokenRepository.findById(user.get().getId())
@@ -74,7 +75,7 @@ public class UserService {
 		if (userRepository.findByLogin(registerUserDto.getLogin()).isPresent())
 			throw new RegistrationException("user already exists.");
 
-		User user = new User(registerUserDto.getLogin(), Hasher.getHash(registerUserDto.getPassword()));
+		User user = new User(registerUserDto.getLogin(), hashService.getHash(registerUserDto.getPassword()));
 		user = userRepository.save(user);
 		userInfoService.save(new UserInfo(user, registerUserDto.getFirstName(), registerUserDto.getLastName()));
 	}

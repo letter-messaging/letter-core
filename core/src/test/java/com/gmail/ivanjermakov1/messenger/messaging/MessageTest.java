@@ -97,7 +97,7 @@ public class MessageTest {
 				Stream
 						.of(imageController.upload(
 								user1.token,
-								Images.multipartFileFromFile(new File("core/src/test/resources/test.jpg"))
+								Images.multipartFileFromFile(new File("src/test/resources/test.jpg"))
 						))
 						.collect(Collectors.toList()),
 				Collections.emptyList()
