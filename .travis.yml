@@ -1,5 +1,9 @@
 language: java
 jdk:
   - openjdk8
+services:
+  - postgresql
 script:
+  - psql -c 'create database messenger;' -U postgres
+  - psql -d messenger -f src/main/resources/database.sql
   - gradle build -x test
