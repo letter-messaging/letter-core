@@ -2,5 +2,4 @@ language: java
 jdk:
   - openjdk8
 script:
-  - gradle check
-  - gradle build
+  - gradle build -x test
