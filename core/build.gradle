@@ -3,12 +3,14 @@ plugins {
     id 'org.springframework.boot' version '2.1.1.RELEASE'
 
 //    code coverage
-    id 'jacoco'
+    id 'net.saliman.cobertura' version '2.6.1'
     id 'com.github.kt3k.coveralls' version '2.8.4'
 }
 
+cobertura.coverageFormats = ['html', 'xml']
+
 group 'com.gmail.ivanjermakov1'
-version '0.1'
+version '0.2'
 
 sourceCompatibility = 1.8
 
@@ -26,13 +28,6 @@ bootRun {
 
 ext {
     springVersion = '2.1.1.RELEASE'
-}
-
-jacocoTestReport {
-    reports {
-        xml.enabled = true
-        html.enabled = true
-    }
 }
 
 coveralls {
