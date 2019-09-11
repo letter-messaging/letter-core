@@ -1,0 +1,5 @@
+rootProject.name = 'messenger'
+
+include 'core'
+include 'web'
+include 'proxy'
