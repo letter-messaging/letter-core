@@ -4,7 +4,11 @@ jdk:
   - openjdk8
 services:
   - postgresql
+env:
+  - COVERALLS_REPO_TOKEN=Uh1nXrXY26v88y93OiP7atR5eL2z0072c
 script:
   - psql -a -U postgres -c 'create database messenger;'
   - psql -a -U postgres -d messenger -f core/src/main/resources/database.sql
-  - gradle build -i -Dfileupload.path=$HOME/upload
+  - gradle build -Dfileupload.path=$HOME/upload
+after_success:
+  - gradle cobertura coveralls -Dfileupload.path=$HOME/upload
