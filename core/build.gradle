@@ -1,6 +1,7 @@
 plugins {
     id 'java'
     id 'org.springframework.boot' version '2.1.1.RELEASE'
+    id 'jacoco'
 }
 
 group 'com.gmail.ivanjermakov1'
@@ -10,6 +11,13 @@ sourceCompatibility = 1.8
 
 repositories {
     mavenCentral()
+}
+
+jacocoTestReport {
+    reports {
+        xml.enabled = true
+        html.enabled = true
+    }
 }
 
 test {
