@@ -7,9 +7,9 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @SpringBootApplication(scanBasePackages = "com.gmail.ivanjermakov1.messenger.*")
 @EnableScheduling
 public class SpringBootConfig {
-	
+
 	public static void main(String[] args) {
 		SpringApplication.run(SpringBootConfig.class, args);
 	}
-	
+
 }

@@ -24,16 +24,16 @@ import java.io.IOException;
 @RequestMapping("image")
 @Transactional
 public class ImageController {
-	
+
 	private final UserService userService;
 	private final ImageService imageService;
-	
+
 	@Autowired
 	public ImageController(UserService userService, ImageService imageService) {
 		this.userService = userService;
 		this.imageService = imageService;
 	}
-	
+
 	/**
 	 * Upload image.
 	 *
@@ -49,10 +49,10 @@ public class ImageController {
 	public NewImageDto upload(@RequestHeader("Auth-Token") String token,
 	                          @RequestParam("image") MultipartFile image) throws AuthenticationException, IOException, InvalidFileException {
 		userService.authenticate(token);
-		
+
 		return imageService.upload(image);
 	}
-	
+
 	/**
 	 * Delete image from certain message
 	 *
@@ -65,8 +65,8 @@ public class ImageController {
 	public void delete(@RequestHeader("Auth-Token") String token,
 	                   @RequestParam("imageId") Long imageId) throws AuthenticationException, AuthorizationException {
 		User user = userService.authenticate(token);
-		
+
 		imageService.delete(user, imageId);
 	}
-	
+
 }

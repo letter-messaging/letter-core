@@ -13,37 +13,37 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class UserInfoService {
-	
+
 	private final UserInfoRepository userInfoRepository;
 	private final AvatarService avatarService;
-	
+
 	private UserMapper userMapper;
-	
+
 	@Autowired
 	public UserInfoService(UserInfoRepository userInfoRepository, AvatarService avatarService) {
 		this.userInfoRepository = userInfoRepository;
 		this.avatarService = avatarService;
 	}
-	
+
 	@Autowired
 	public void setUserMapper(UserMapper userMapper) {
 		this.userMapper = userMapper;
 	}
-	
+
 	public UserInfo getByUser(User user) {
 		return userInfoRepository.findByUser(user).orElse(null);
 	}
-	
+
 	public UserInfo save(UserInfo userInfo) {
 		return userInfoRepository.save(userInfo);
 	}
-	
+
 	public UserInfoDto edit(User user, UserInfoDto userInfoDto) throws AuthenticationException {
 		if (!userInfoDto.getUser().getId().equals(user.getId()))
 			throw new AuthenticationException("allow only to edit personal info");
-		
+
 		UserInfo userInfo = getByUser(user);
-		
+
 		userInfo.setUser(user);
 		userInfo.setFirstName(userInfoDto.getFirstName());
 		userInfo.setLastName(userInfoDto.getLastName());
@@ -58,11 +58,11 @@ public class UserInfoService {
 		userInfo.setPlaceOfEducation(userInfoDto.getPlaceOfEducation());
 		userInfo.setPlaceOfWork(userInfoDto.getPlaceOfWork());
 		userInfo.setAbout(userInfoDto.getAbout());
-		
+
 		UserInfoDto edited = Mappers.map(save(userInfo), UserInfoDto.class);
 		userInfoDto.setAvatars(Mappers.mapAll(avatarService.getAll(userInfo.getUser()), AvatarDto.class));
 		userInfoDto.setUser(userMapper.map(userInfo.getUser()));
 		return edited;
 	}
-	
+
 }

@@ -14,14 +14,14 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("register")
 @Transactional
 public class RegistrationController {
-	
+
 	private final UserService userService;
-	
+
 	@Autowired
 	public RegistrationController(UserService userService) {
 		this.userService = userService;
 	}
-	
+
 	/**
 	 * Register user.
 	 *
@@ -32,5 +32,5 @@ public class RegistrationController {
 	public void register(@RequestBody RegisterUserDto registerUserDto) throws RegistrationException {
 		userService.register(registerUserDto);
 	}
-	
+
 }

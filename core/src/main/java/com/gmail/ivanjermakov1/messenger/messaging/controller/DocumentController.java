@@ -19,16 +19,16 @@ import java.io.IOException;
 @RequestMapping("document")
 @Transactional
 public class DocumentController {
-	
+
 	private final UserService userService;
 	private final DocumentService documentService;
-	
+
 	@Autowired
 	public DocumentController(UserService userService, DocumentService documentService) {
 		this.userService = userService;
 		this.documentService = documentService;
 	}
-	
+
 	/**
 	 * Upload document.
 	 *
@@ -42,8 +42,8 @@ public class DocumentController {
 	public NewDocumentDto upload(@RequestHeader("Auth-Token") String token,
 	                             @RequestParam("document") MultipartFile document) throws AuthenticationException, IOException {
 		userService.authenticate(token);
-		
+
 		return documentService.upload(document);
 	}
-	
+
 }

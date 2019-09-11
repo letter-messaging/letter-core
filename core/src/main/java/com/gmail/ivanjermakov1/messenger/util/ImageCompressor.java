@@ -12,7 +12,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 public class ImageCompressor {
-	
+
 	/**
 	 * Code from here https://memorynotfound.com/compress-images-java-example/
 	 *
@@ -25,25 +25,25 @@ public class ImageCompressor {
 	public static void compress(String targetPath, String destinationPath, float qualityFactor) throws IOException {
 		File input = new File(targetPath);
 		BufferedImage image = ImageIO.read(input);
-		
+
 		File output = new File(destinationPath);
 		OutputStream out = new FileOutputStream(output);
-		
+
 		ImageWriter writer = ImageIO.getImageWritersByFormatName("jpg").next();
 		ImageOutputStream ios = ImageIO.createImageOutputStream(out);
 		writer.setOutput(ios);
-		
+
 		ImageWriteParam param = writer.getDefaultWriteParam();
 		if (param.canWriteCompressed()) {
 			param.setCompressionMode(ImageWriteParam.MODE_EXPLICIT);
 			param.setCompressionQuality(qualityFactor);
 		}
-		
+
 		writer.write(null, new IIOImage(image, null, null), param);
-		
+
 		out.close();
 		ios.close();
 		writer.dispose();
 	}
-	
+
 }

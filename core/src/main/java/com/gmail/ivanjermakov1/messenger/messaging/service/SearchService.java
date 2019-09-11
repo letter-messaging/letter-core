@@ -19,22 +19,22 @@ import java.util.stream.Collectors;
 //	TODO: use non strict search engine
 @Service
 public class SearchService {
-	
+
 	private final PreviewService previewService;
 	private final UserRepository userRepository;
-	
+
 	private final UserMapper userMapper;
-	
+
 	@Value("${search.result.limit}")
 	private Integer searchResultLimit;
-	
+
 	@Autowired
 	public SearchService(PreviewService previewService, UserRepository userRepository, UserMapper userMapper) {
 		this.previewService = previewService;
 		this.userRepository = userRepository;
 		this.userMapper = userMapper;
 	}
-	
+
 	public List<PreviewDto> searchConversations(User user, String search, Pageable pageable) {
 		return previewService.all(user, PageRequest.of(0, Integer.MAX_VALUE))
 				.stream()
@@ -46,14 +46,14 @@ public class SearchService {
 								p.getWith().getFirstName()))
 				.collect(Collectors.toList());
 	}
-	
+
 	public List<UserDto> searchUsers(String search, Pageable pageable) throws InvalidSearchFormatException {
 		if (search.charAt(0) != '@') throw new InvalidSearchFormatException("user search must starts with \'@\'");
-		
+
 		return userRepository.searchUsers(search, pageable)
 				.stream()
 				.map(userMapper::map)
 				.collect(Collectors.toList());
 	}
-	
+
 }

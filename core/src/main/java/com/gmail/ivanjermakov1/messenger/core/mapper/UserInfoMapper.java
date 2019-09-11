@@ -10,20 +10,20 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class UserInfoMapper implements Mapper<UserInfo, UserInfoDto> {
-	
+
 	private AvatarService avatarService;
 	private UserMapper userMapper;
-	
+
 	@Autowired
 	public void setAvatarService(AvatarService avatarService) {
 		this.avatarService = avatarService;
 	}
-	
+
 	@Autowired
 	public void setUserMapper(UserMapper userMapper) {
 		this.userMapper = userMapper;
 	}
-	
+
 	@Override
 	public UserInfoDto map(UserInfo userInfo) {
 		UserInfoDto userInfoDto = Mappers.map(userInfo, UserInfoDto.class);
@@ -31,5 +31,5 @@ public class UserInfoMapper implements Mapper<UserInfo, UserInfoDto> {
 		userInfoDto.setUser(userMapper.map(userInfo.getUser()));
 		return userInfoDto;
 	}
-	
+
 }

@@ -9,13 +9,13 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Optional;
 
 public interface TokenRepository extends CrudRepository<Token, Long> {
-	
+
 	Optional<Token> findById(Long userId);
-	
+
 	Optional<Token> findByToken(String token);
-	
+
 	@Modifying
 	@Transactional
 	void deleteAllByUser(User user);
-	
+
 }

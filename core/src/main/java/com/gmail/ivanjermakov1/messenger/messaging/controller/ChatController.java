@@ -29,14 +29,14 @@ import java.util.stream.Collectors;
 @RequestMapping("chat")
 @Transactional
 public class ChatController {
-	
+
 	private final ChatService chatService;
 	private final UserService userService;
 	private final ConversationController conversationController;
 	private final ConversationRepository conversationRepository;
-	
+
 	private ConversationMapper conversationMapper;
-	
+
 	@Autowired
 	public ChatController(UserService userService, ChatService chatService, ConversationController conversationController, ConversationRepository conversationRepository) {
 		this.userService = userService;
@@ -44,12 +44,12 @@ public class ChatController {
 		this.conversationController = conversationController;
 		this.conversationRepository = conversationRepository;
 	}
-	
+
 	@Autowired
 	public void setConversationMapper(ConversationMapper conversationMapper) {
 		this.conversationMapper = conversationMapper;
 	}
-	
+
 	/**
 	 * Create chat.
 	 *
@@ -62,10 +62,10 @@ public class ChatController {
 	public ConversationDto create(@RequestHeader("Auth-Token") String token,
 	                              @RequestBody NewChatDto chat) throws AuthenticationException {
 		User user = userService.authenticate(token);
-		
+
 		return conversationMapper.with(user).map(chatService.create(user, chat));
 	}
-	
+
 	/**
 	 * Add new member to chat.
 	 * Every member can add new member. If you need to add multiple new members, use {@code .addMembers()}
@@ -84,10 +84,10 @@ public class ChatController {
 		Conversation chat = conversationRepository.findById(chatId)
 				.orElseThrow(() -> new NoSuchEntityException("no such chat"));
 		User member = userService.getUser(memberId);
-		
+
 		chatService.addMembers(user, chat, Collections.singletonList(member));
 	}
-	
+
 	/**
 	 * Add new members to chat.
 	 * Every member can add new members.
@@ -103,18 +103,18 @@ public class ChatController {
 	                       @RequestParam("chatId") Long chatId,
 	                       @RequestBody List<Long> memberIds) throws AuthenticationException, NoSuchEntityException {
 		User user = userService.authenticate(token);
-		
+
 		Conversation chat = conversationRepository.findById(chatId)
 				.orElseThrow(() -> new NoSuchEntityException("no such chat"));
-		
+
 		List<User> members = memberIds
 				.stream()
 				.map(userService::getUser)
 				.collect(Collectors.toList());
-		
+
 		chatService.addMembers(user, chat, members);
 	}
-	
+
 	/**
 	 * Kick member from chat.
 	 * Only chat creator can kick members. Creator cannot kick himself, {@code .hide()} method should be used to hide
@@ -135,10 +135,10 @@ public class ChatController {
 		Conversation chat = conversationRepository.findById(chatId)
 				.orElseThrow(() -> new NoSuchEntityException("no such chat"));
 		User member = userService.getUser(memberId);
-		
+
 		chatService.kickMember(user, chat, member);
 	}
-	
+
 	/**
 	 * Hide chat for calling user and delete all messages sent by him.
 	 *
@@ -151,7 +151,7 @@ public class ChatController {
 	                   @RequestParam("id") Long conversationId) throws AuthenticationException {
 		conversationController.delete(token, conversationId);
 	}
-	
+
 	/**
 	 * Hide chat from calling user
 	 *
@@ -164,5 +164,5 @@ public class ChatController {
 	                 @RequestParam("id") Long conversationId) throws AuthenticationException {
 		conversationController.hide(token, conversationId);
 	}
-	
+
 }

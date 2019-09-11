@@ -22,16 +22,16 @@ import java.util.List;
 @RequestMapping("search")
 @Transactional
 public class SearchController {
-	
+
 	private final SearchService searchService;
 	private final UserService userService;
-	
+
 	@Autowired
 	public SearchController(SearchService searchService, UserService userService) {
 		this.searchService = searchService;
 		this.userService = userService;
 	}
-	
+
 	/**
 	 * TODO: describe search algorithm more detailed
 	 * Find preview by companion first or last name
@@ -48,7 +48,7 @@ public class SearchController {
 		User user = userService.authenticate(token);
 		return searchService.searchConversations(user, search, pageable);
 	}
-	
+
 	/**
 	 * Find users by their login.
 	 * Search @param search should start with '@' otherwise {@code InvalidSearchFormatException} will be thrown.
@@ -67,5 +67,5 @@ public class SearchController {
 		userService.authenticate(token);
 		return searchService.searchUsers(search, pageable);
 	}
-	
+
 }

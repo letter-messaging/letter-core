@@ -18,41 +18,41 @@ import java.nio.file.Paths;
 
 @Service
 public class FileUploadService {
-	
+
 	private final static Logger LOG = LoggerFactory.getLogger(FileUploadService.class);
-	
+
 	@Value("${fileupload.path}")
 	private String uploadPlaceholder;
-	
+
 	@Value("${web.static.resources.path}")
 	private String webResources;
-	
+
 	public String upload(MultipartFile multipartFile, FileType fileType) throws IOException {
 		String generatedFilename =
 				RandomStringGenerator.generate(10) + "." + FilenameUtils.getExtension(multipartFile.getOriginalFilename());
-		
+
 		LOG.info("uploading [" + fileType + "] \'" + multipartFile.getOriginalFilename() + "\'; size: " + multipartFile.getSize() / 1000 + "KB with name: " + generatedFilename);
-		
+
 		new File(uploadPlaceholder + "/" + fileType.toString().toLowerCase()).mkdirs();
-		
+
 		String fullFilePath = uploadPlaceholder + "/" + fileType.toString().toLowerCase() + "/" + generatedFilename;
 		File file = new File(fullFilePath);
 		if (file.exists()) throw new InvalidFileNameException("such file already exists");
 		multipartFile.transferTo(Paths.get(fullFilePath));
-		
+
 		uploadCompressedVersions(multipartFile, fullFilePath);
-		
+
 		return fileType.toString().toLowerCase() + "/" + generatedFilename;
 	}
-	
+
 	public void uploadCompressedVersions(MultipartFile multipartFile, String filePath) throws IOException {
 		String extension = "." + FilenameUtils.getExtension(filePath);
 		String fileName = FilenameUtils.getBaseName(filePath);
 		String path = FilenameUtils.getFullPath(filePath);
 //		so {path}{fileName}.{extension} is {filePath}
-		
+
 		ImageCompressor.compress(filePath, path + fileName + "_" + ImageCompressionMode.MEDIUM.getFilePathMark() + extension, .4f);
 		ImageCompressor.compress(filePath, path + fileName + "_" + ImageCompressionMode.SMALL.getFilePathMark() + extension, .1f);
 	}
-	
+
 }

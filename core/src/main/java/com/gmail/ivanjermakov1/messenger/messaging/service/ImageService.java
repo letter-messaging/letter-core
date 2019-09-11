@@ -17,34 +17,34 @@ import java.io.IOException;
 
 @Service
 public class ImageService {
-	
+
 	private final ImageRepository imageRepository;
 	private final FileUploadService fileUploadService;
-	
+
 	@Autowired
 	public ImageService(ImageRepository imageRepository, FileUploadService fileUploadService) {
 		this.imageRepository = imageRepository;
 		this.fileUploadService = fileUploadService;
 	}
-	
+
 	public void delete(Image image) {
 		imageRepository.delete(image);
 	}
-	
+
 	public NewImageDto upload(MultipartFile imageFile) throws IOException {
 		if (!Uploads.isSupportedImage(imageFile)) throw new InvalidFileException("provided file is not an image");
-		
+
 		return new NewImageDto(fileUploadService.upload(imageFile, FileType.IMAGE));
 	}
-	
+
 	public void delete(User user, Long imageId) throws AuthorizationException {
 		Image image = imageRepository.findById(imageId)
 				.orElseThrow(() -> new NoSuchEntityException("such image does not exist"));
-		
+
 		if (!image.getUser().getId().equals(user.getId()))
 			throw new AuthorizationException("user can delete only own images");
-		
+
 		delete(image);
 	}
-	
+
 }

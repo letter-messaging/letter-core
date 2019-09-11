@@ -23,16 +23,16 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyEmitter
 @RestController
 @RequestMapping("messaging")
 public class MessagingController {
-	
+
 	private final MessagingService messagingService;
 	private final UserService userService;
-	
+
 	@Autowired
 	public MessagingController(MessagingService messagingService, UserService userService) {
 		this.messagingService = messagingService;
 		this.userService = userService;
 	}
-	
+
 	/**
 	 * Subscribe on server-sent events.
 	 * Calling user will receive events invoked by his own actions.
@@ -44,10 +44,10 @@ public class MessagingController {
 	@GetMapping("listen")
 	public ResponseBodyEmitter getEvents(@RequestParam("token") String token) throws AuthenticationException {
 		User user = userService.authenticate(token);
-		
+
 		return messagingService.generateRequest(user);
 	}
-	
+
 	/**
 	 * Send message and invoke {@code com.gmail.ivanjermakov1.messenger.messaging.dto.action.MessageEditAction}.
 	 *
@@ -62,11 +62,11 @@ public class MessagingController {
 	public MessageDto sendMessage(@RequestHeader("Auth-Token") String token,
 	                              @RequestBody NewMessageDto newMessageDto) throws AuthenticationException, InvalidMessageException, AuthorizationException {
 		User user = userService.authenticate(token);
-		
+
 		messagingService.processConversationRead(user, newMessageDto.getConversationId());
 		return messagingService.processNewMessage(user, newMessageDto);
 	}
-	
+
 	/**
 	 * Edit message.
 	 *
@@ -80,8 +80,8 @@ public class MessagingController {
 	public MessageDto editMessage(@RequestHeader("Auth-Token") String token,
 	                              @RequestBody EditMessageDto editMessageDto) throws AuthenticationException {
 		User user = userService.authenticate(token);
-		
+
 		return messagingService.processMessageEdit(user, editMessageDto);
 	}
-	
+
 }

@@ -9,14 +9,14 @@ import java.security.SecureRandom;
 
 //TODO: use proper library for hashing
 public class Hasher {
-	
+
 	// The higher the number of iterations the more
 	// expensive computing the hash is for us and
 	// also for an attacker.
 	private static final int iterations = 20 * 1000;
 	private static final int saltLen = 32;
 	private static final int desiredKeyLen = 256;
-	
+
 	/**
 	 * Computes a salted PBKDF2 hash of given plaintext password
 	 * suitable for storing in a database.
@@ -33,7 +33,7 @@ public class Hasher {
 		}
 		return null;
 	}
-	
+
 	/**
 	 * Checks whether given plaintext password corresponds
 	 * to a stored salted hash of the password.
@@ -50,7 +50,7 @@ public class Hasher {
 			return false;
 		}
 	}
-	
+
 	/**
 	 * Hashing using PBKDF2 from Sun, an alternative is https://github.com/wg/scrypt
 	 * cf. http://www.unlimitednovelty.com/2012/03/dont-use-bcrypt.html
@@ -64,5 +64,5 @@ public class Hasher {
 		);
 		return Base64.encodeBase64String(key.getEncoded());
 	}
-	
+
 }

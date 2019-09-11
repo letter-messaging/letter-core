@@ -17,17 +17,17 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("auth")
 @Transactional
 public class AuthenticationController {
-	
+
 	private final UserService userService;
-	
+
 	private final UserMapper userMapper;
-	
+
 	@Autowired
 	public AuthenticationController(UserService userService, UserMapper userMapper) {
 		this.userService = userService;
 		this.userMapper = userMapper;
 	}
-	
+
 	/**
 	 * Authenticate user by its credentials.
 	 *
@@ -40,7 +40,7 @@ public class AuthenticationController {
 	public String authenticate(@RequestParam("login") String login, @RequestParam("password") String password) throws AuthenticationException {
 		return userService.authenticate(login, password);
 	}
-	
+
 	/**
 	 * Validate user token. During validation user appears online.
 	 *
@@ -54,7 +54,7 @@ public class AuthenticationController {
 		userService.appearOnline(user);
 		return userMapper.map(user);
 	}
-	
+
 	/**
 	 * Logout current user from everywhere by removing all his tokens. To login user is forced to authenticate again.
 	 *
@@ -64,8 +64,8 @@ public class AuthenticationController {
 	@GetMapping("logout")
 	public void logout(@RequestHeader("Auth-Token") String token) throws AuthenticationException {
 		User user = userService.authenticate(token);
-		
+
 		userService.logout(user);
 	}
-	
+
 }

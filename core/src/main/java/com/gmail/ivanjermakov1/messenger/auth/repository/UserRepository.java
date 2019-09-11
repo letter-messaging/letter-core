@@ -10,16 +10,16 @@ import java.util.List;
 import java.util.Optional;
 
 public interface UserRepository extends CrudRepository<User, Long> {
-	
+
 	Optional<User> findByLogin(String login);
-	
+
 	Optional<User> findById(Long id);
-	
+
 	@Query("select u from User u where u.id <> 0 and lower(u.login) like lower(:search)")
 	List<User> searchUsersQuery(@Param("search") String search, Pageable pageable);
-	
+
 	default List<User> searchUsers(String search, Pageable pageable) {
 		return this.searchUsersQuery(search.substring(1) + "%", pageable);
 	}
-	
+
 }

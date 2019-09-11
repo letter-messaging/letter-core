@@ -39,24 +39,24 @@ import java.util.stream.Collectors;
 
 @Service
 public class MessagingService {
-	
+
 	private final static Logger LOG = LoggerFactory.getLogger(MessagingService.class);
-	
+
 	private final MessageService messageService;
 	private final ConversationService conversationService;
 	private final ImageService imageService;
 	private final DocumentService documentService;
 	private final UserService userService;
-	
+
 	private final UserMapper userMapper;
 	private ConversationMapper conversationMapper;
 	private MessageMapper messageMapper;
-	
+
 	private final List<Request<Action>> requests = new CopyOnWriteArrayList<>();
-	
+
 	@Value("${sse.timeout}")
 	private Long sseTimeout;
-	
+
 	@Autowired
 	public MessagingService(MessageService messageService, ConversationService conversationService, ImageService imageService, DocumentService documentService, UserMapper userMapper, UserService userService) {
 		this.messageService = messageService;
@@ -66,17 +66,17 @@ public class MessagingService {
 		this.userMapper = userMapper;
 		this.userService = userService;
 	}
-	
+
 	@Autowired
 	public void setConversationMapper(ConversationMapper conversationMapper) {
 		this.conversationMapper = conversationMapper;
 	}
-	
+
 	@Autowired
 	public void setMessageMapper(MessageMapper messageMapper) {
 		this.messageMapper = messageMapper;
 	}
-	
+
 	public SseEmitter generateRequest(User user) {
 		SseEmitter emitter = new SseEmitter(sseTimeout);
 		Request<Action> request = new Request<>(user, emitter);
@@ -84,7 +84,7 @@ public class MessagingService {
 		requests.add(request);
 		return emitter;
 	}
-	
+
 	public void sendResponse(Request<Action> request, Action action) {
 		LOG.debug("sending response to @" + request.getUser().getLogin() + "; type: " + action.getType());
 		try {
@@ -96,7 +96,7 @@ public class MessagingService {
 			requests.remove(request);
 		}
 	}
-	
+
 	public void forEachRequest(Conversation conversation, Consumer<Request<Action>> consumer) {
 		new Thread(() -> requests
 				.stream()
@@ -107,19 +107,19 @@ public class MessagingService {
 						.anyMatch(i -> i.getId().equals(r.getUser().getId())))
 				.forEach(consumer)).run();
 	}
-	
+
 	public MessageDto processNewMessage(User user, NewMessageDto newMessageDto) throws InvalidMessageException, AuthorizationException {
 		Conversation conversation = conversationService.get(newMessageDto.getConversationId());
-		
+
 		if (conversation.getUserConversations()
 				.stream()
 				.filter(uc -> uc.getUser().getId().equals(user.getId()))
 				.noneMatch(uc -> uc.getKicked().equals(false)))
 			throw new AuthorizationException("no access");
-		
+
 		LOG.debug("process new message from @" + user.getLogin() + " to conversation @" + newMessageDto.getConversationId() +
 				"; text: " + newMessageDto.getText());
-		
+
 		Message message = new Message(
 				conversation,
 				LocalDateTime.now(),
@@ -138,22 +138,22 @@ public class MessagingService {
 						.map(d -> new Document(user, d.getPath(), LocalDate.now()))
 						.collect(Collectors.toList())
 		);
-		
+
 		if (!message.validate()) throw new InvalidMessageException("invalid message");
-		
+
 		message = messageService.save(message);
-		
+
 		MessageDto messageDto = messageMapper.with(user).map(message);
-		
+
 		forEachRequest(conversation, request -> sendResponse(request, new NewMessageAction(messageDto)));
-		
+
 		return messageDto;
 	}
-	
+
 	public void systemMessage(NewMessageDto newMessageDto) throws InvalidMessageException {
 		Conversation conversation = conversationService.get(newMessageDto.getConversationId());
 		User system = userService.getUser(newMessageDto.getSenderId());
-		
+
 		Message message = new Message(
 				conversation,
 				LocalDateTime.now(),
@@ -163,56 +163,56 @@ public class MessagingService {
 				Collections.emptyList(),
 				Collections.emptyList()
 		);
-		
+
 		if (!message.validate()) throw new InvalidMessageException("invalid message");
-		
+
 		message = messageService.save(message);
 		MessageDto messageDto = messageMapper.with(system).map(message);
-		
+
 		forEachRequest(conversation, request -> sendResponse(request, new NewMessageAction(messageDto)));
 	}
-	
+
 	public MessageDto processMessageEdit(User user, EditMessageDto editMessageDto) throws AuthenticationException {
 		LOG.debug("process message edit @" + editMessageDto.getId() + "; text: " + editMessageDto.getText());
-		
+
 		Message original = messageService.get(editMessageDto.getId());
-		
+
 		if (original == null || !original.getSender().getId().equals(user.getId()))
 			throw new AuthenticationException("user can edit only own messages");
-		
+
 		original.setText(editMessageDto.getText());
 		if (editMessageDto.getForwarded() != null && editMessageDto.getForwarded().isEmpty())
 			messageService.deleteForwarded(original);
-		
+
 		original.getImages()
 				.stream()
 				.filter(i -> editMessageDto.getImages()
 						.stream()
 						.noneMatch(ei -> ei.getId().equals(i.getId())))
 				.forEach(imageService::delete);
-		
+
 		original.getDocuments()
 				.stream()
 				.filter(d -> editMessageDto.getDocuments()
 						.stream()
 						.noneMatch(ed -> ed.getId().equals(d.getId())))
 				.forEach(documentService::delete);
-		
+
 		original = messageService.save(original);
-		
+
 		Conversation conversation = conversationService.get(original.getConversation().getId());
 		MessageDto messageDto = messageMapper.with(user).map(original);
-		
+
 		forEachRequest(conversation, request -> sendResponse(request, new MessageEditAction(messageDto)));
-		
+
 		return messageDto;
 	}
-	
+
 	public void processConversationRead(User user, Long conversationId) {
 		Conversation conversation = conversationService.get(conversationId);
-		
+
 		messageService.read(user, conversation);
-		
+
 		forEachRequest(conversation, request -> sendResponse(
 				request,
 				new ConversationReadAction(
@@ -223,5 +223,5 @@ public class MessagingService {
 				)
 		));
 	}
-	
+
 }

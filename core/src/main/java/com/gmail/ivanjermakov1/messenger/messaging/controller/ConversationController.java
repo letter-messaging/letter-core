@@ -18,23 +18,23 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("conversation")
 @Transactional
 public class ConversationController {
-	
+
 	private final ConversationService conversationService;
 	private final UserService userService;
-	
+
 	private ConversationMapper conversationMapper;
-	
+
 	@Autowired
 	public ConversationController(ConversationService conversationService, UserService userService) {
 		this.conversationService = conversationService;
 		this.userService = userService;
 	}
-	
+
 	@Autowired
 	public void setConversationMapper(ConversationMapper conversationMapper) {
 		this.conversationMapper = conversationMapper;
 	}
-	
+
 	/**
 	 * Create conversation with specified user.
 	 * If specified @param withLogin is user himself then "self-conversation" is created.
@@ -48,12 +48,12 @@ public class ConversationController {
 	public ConversationDto create(@RequestHeader("Auth-Token") String token,
 	                              @RequestParam("with") String withLogin) throws AuthenticationException {
 		User user = userService.authenticate(token);
-		
+
 		return conversationMapper
 				.with(user)
 				.map(conversationService.create(user, userService.getUser(withLogin)));
 	}
-	
+
 	/**
 	 * Hide conversation for calling user and delete all messages sent by him.
 	 *
@@ -65,10 +65,10 @@ public class ConversationController {
 	public void delete(@RequestHeader("Auth-Token") String token,
 	                   @RequestParam("id") Long conversationId) throws AuthenticationException {
 		User user = userService.authenticate(token);
-		
+
 		conversationService.delete(user, conversationService.get(conversationId));
 	}
-	
+
 	/**
 	 * Hide conversation from calling user
 	 *
@@ -80,8 +80,8 @@ public class ConversationController {
 	public void hide(@RequestHeader("Auth-Token") String token,
 	                 @RequestParam("id") Long conversationId) throws AuthenticationException {
 		User user = userService.authenticate(token);
-		
+
 		conversationService.hide(user, conversationService.get(conversationId));
 	}
-	
+
 }

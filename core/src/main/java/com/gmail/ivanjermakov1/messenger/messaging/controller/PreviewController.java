@@ -22,18 +22,18 @@ import java.util.List;
 @RequestMapping("preview")
 @Transactional
 public class PreviewController {
-	
+
 	private final UserService userService;
 	private final PreviewService previewService;
 	private final ConversationService conversationService;
-	
+
 	@Autowired
 	public PreviewController(PreviewService previewService, UserService userService, ConversationService conversationService) {
 		this.previewService = previewService;
 		this.userService = userService;
 		this.conversationService = conversationService;
 	}
-	
+
 	/**
 	 * List previews.
 	 *
@@ -45,10 +45,10 @@ public class PreviewController {
 	public List<PreviewDto> all(@RequestHeader("Auth-Token") String token,
 	                            Pageable pageable) throws AuthenticationException {
 		User user = userService.authenticate(token);
-		
+
 		return previewService.all(user, pageable);
 	}
-	
+
 	/**
 	 * Get specified conversation.
 	 *
@@ -62,11 +62,11 @@ public class PreviewController {
 	                      @RequestParam("conversationId") Long conversationId) throws AuthenticationException {
 		User user = userService.authenticate(token);
 		Conversation conversation = conversationService.get(conversationId);
-		
+
 		PreviewDto preview = previewService.getPreview(user, conversation);
 		conversationService.show(user, conversation);
-		
+
 		return preview;
 	}
-	
+
 }

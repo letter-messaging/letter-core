@@ -23,19 +23,19 @@ import java.util.stream.Collectors;
 
 @Service
 public class ChatService {
-	
+
 	private final static Logger LOG = LoggerFactory.getLogger(ConversationService.class);
 	private final ConversationRepository conversationRepository;
 	private final UserRepository userRepository;
 	private final MessagingService messagingService;
-	
+
 	@Autowired
 	public ChatService(ConversationRepository conversationRepository, UserRepository userRepository, MessagingService messagingService) {
 		this.conversationRepository = conversationRepository;
 		this.userRepository = userRepository;
 		this.messagingService = messagingService;
 	}
-	
+
 	public Conversation create(User user, NewChatDto newChat) {
 		Conversation conversation = new Conversation(
 				newChat.getName(),
@@ -43,12 +43,12 @@ public class ChatService {
 				user
 		);
 		conversationRepository.save(conversation);
-		
+
 		conversation.getUserConversations().add(new UserConversation(
 				user,
 				conversation
 		));
-		
+
 		if (newChat.getUserIds() != null && !newChat.getUserIds().isEmpty()) {
 			conversation.getUserConversations().addAll(
 					newChat.getUserIds()
@@ -61,9 +61,9 @@ public class ChatService {
 							.collect(Collectors.toList())
 			);
 		}
-		
+
 		Conversation chat = conversationRepository.save(conversation);
-		
+
 		try {
 			messagingService.systemMessage(NewMessageDto.systemMessage(
 					chat.getId(),
@@ -71,14 +71,14 @@ public class ChatService {
 			));
 		} catch (InvalidMessageException ignored) {
 		}
-		
+
 		return chat;
 	}
-	
+
 	public void addMembers(User user, Conversation chat, List<User> members) throws NoSuchEntityException {
 		if (chat.getUserConversations().stream().noneMatch(uc -> uc.getUser().getId().equals(user.getId())))
 			throw new NoSuchEntityException("only chat members can add new ones");
-		
+
 		chat.getUserConversations().addAll(
 				members
 						.stream()
@@ -98,13 +98,13 @@ public class ChatService {
 						})
 						.collect(Collectors.toList())
 		);
-		
+
 		chat.getUserConversations()
 				.stream()
 				.filter(uc -> members.stream().anyMatch(u -> u.getId().equals(uc.getUser().getId())))
 				.forEach(uc -> {
 					uc.setKicked(false);
-					
+
 					try {
 						messagingService.systemMessage(NewMessageDto.systemMessage(
 								chat.getId(),
@@ -113,22 +113,22 @@ public class ChatService {
 					} catch (InvalidMessageException ignored) {
 					}
 				});
-		
+
 		conversationRepository.save(chat);
 	}
-	
+
 	public void kickMember(User user, Conversation chat, User member) throws AuthorizationException, IllegalStateException {
 		if (!user.getId().equals(chat.getCreator().getId()))
 			throw new AuthorizationException("only chat creator can kick members");
 		if (user.getId().equals(member.getId()))
 			throw new IllegalStateException("chat creator cannot be kicked");
-		
+
 		UserConversation userConversation = chat.getUserConversations()
 				.stream()
 				.filter(uc -> uc.getUser().getId().equals(member.getId()))
 				.findFirst()
 				.orElseThrow(() -> new NoSuchEntityException("no such member to kick"));
-		
+
 		try {
 			messagingService.systemMessage(NewMessageDto.systemMessage(
 					chat.getId(),
@@ -136,11 +136,11 @@ public class ChatService {
 			));
 		} catch (InvalidMessageException ignored) {
 		}
-		
+
 		userConversation.setLastRead(LocalDateTime.now());
 		userConversation.setKicked(true);
-		
+
 		conversationRepository.save(chat);
 	}
-	
+
 }

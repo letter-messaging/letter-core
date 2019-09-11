@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class Logs {
-	
+
 	public static String collectionSizeList(Collection... collections) {
 		List<Collection> c = Arrays.asList(collections);
 		return c
@@ -14,5 +14,5 @@ public class Logs {
 				.map(collection -> String.valueOf(collection.size()))
 				.collect(Collectors.toList()).toString();
 	}
-	
+
 }

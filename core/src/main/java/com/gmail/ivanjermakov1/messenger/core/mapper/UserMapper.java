@@ -16,35 +16,35 @@ import java.util.Optional;
 
 @Component
 public class UserMapper implements Mapper<User, UserDto> {
-	
+
 	@Value("${default.avatar.conversation.path}")
 	private String defaultAvatarConversationPath;
-	
+
 	private UserInfoService userInfoService;
 	private UserOnlineRepository userOnlineRepository;
 	private AvatarService avatarService;
 	private AvatarMapper avatarMapper;
-	
+
 	@Autowired
 	public void setUserInfoService(UserInfoService userInfoService) {
 		this.userInfoService = userInfoService;
 	}
-	
+
 	@Autowired
 	public void setUserOnlineRepository(UserOnlineRepository userOnlineRepository) {
 		this.userOnlineRepository = userOnlineRepository;
 	}
-	
+
 	@Autowired
 	public void setAvatarService(AvatarService avatarService) {
 		this.avatarService = avatarService;
 	}
-	
+
 	@Autowired
 	public void setAvatarMapper(AvatarMapper avatarMapper) {
 		this.avatarMapper = avatarMapper;
 	}
-	
+
 	@Override
 	public UserDto map(User user) {
 		UserInfo userInfo = userInfoService.getByUser(user);
@@ -59,5 +59,5 @@ public class UserMapper implements Mapper<User, UserDto> {
 				Optional.ofNullable(userOnline).map(UserOnline::getSeen).orElse(null)
 		);
 	}
-	
+
 }

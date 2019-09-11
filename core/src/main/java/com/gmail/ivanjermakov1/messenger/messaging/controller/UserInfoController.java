@@ -20,23 +20,23 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("info")
 @Transactional
 public class UserInfoController {
-	
+
 	private final UserService userService;
 	private final UserInfoService userInfoService;
-	
+
 	private UserInfoMapper userInfoMapper;
-	
+
 	@Autowired
 	public UserInfoController(UserService userService, UserInfoService userInfoService) {
 		this.userService = userService;
 		this.userInfoService = userInfoService;
 	}
-	
+
 	@Autowired
 	public void setUserInfoMapper(UserInfoMapper userInfoMapper) {
 		this.userInfoMapper = userInfoMapper;
 	}
-	
+
 	/**
 	 * Get user info.
 	 *
@@ -49,10 +49,10 @@ public class UserInfoController {
 	public UserInfoDto get(@RequestHeader("Auth-Token") String token,
 	                       @RequestParam("userId") Long userId) throws AuthenticationException {
 		User user = userService.authenticate(token);
-		
+
 		return userInfoMapper.map(userInfoService.getByUser(userService.getUser(userId)));
 	}
-	
+
 	/**
 	 * Edit user info.
 	 * It is allowed to edit fields with null.
@@ -66,8 +66,8 @@ public class UserInfoController {
 	public UserInfoDto edit(@RequestHeader("Auth-Token") String token,
 	                        @RequestBody UserInfoDto userInfoDto) throws AuthenticationException {
 		User user = userService.authenticate(token);
-		
+
 		return userInfoService.edit(user, userInfoDto);
 	}
-	
+
 }

@@ -7,10 +7,10 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class AvatarMapper implements Mapper<Avatar, AvatarDto> {
-	
+
 	@Override
 	public AvatarDto map(Avatar avatar) {
 		return Mappers.map(avatar, AvatarDto.class);
 	}
-	
+
 }

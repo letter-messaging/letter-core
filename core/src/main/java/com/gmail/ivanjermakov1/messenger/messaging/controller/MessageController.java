@@ -25,18 +25,18 @@ import java.util.List;
 @RequestMapping("message")
 @Transactional
 public class MessageController {
-	
+
 	private final UserService userService;
 	private final MessageService messageService;
 	private final MessagingService messagingService;
-	
+
 	@Autowired
 	public MessageController(UserService userService, MessageService messageService, MessagingService messagingService) {
 		this.userService = userService;
 		this.messageService = messageService;
 		this.messagingService = messagingService;
 	}
-	
+
 	/**
 	 * Get list of messages.
 	 *
@@ -54,7 +54,7 @@ public class MessageController {
 		messagingService.processConversationRead(user, conversationId);
 		return messageService.get(user.getId(), conversationId, pageable);
 	}
-	
+
 	/**
 	 * Delete list of messages.
 	 * It is possible to delete only user-self messages. If in list are messages from another user they will be ignored.
@@ -69,5 +69,5 @@ public class MessageController {
 		User user = userService.authenticate(token);
 		messageService.delete(user, deleteMessages);
 	}
-	
+
 }

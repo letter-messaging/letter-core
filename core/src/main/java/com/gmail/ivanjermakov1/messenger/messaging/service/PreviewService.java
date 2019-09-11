@@ -20,28 +20,28 @@ import java.util.stream.Collectors;
 
 @Service
 public class PreviewService {
-	
+
 	private final ConversationService conversationService;
 	private final MessageService messageService;
-	
+
 	private final UserMapper userMapper;
 	private ConversationMapper conversationMapper;
-	
+
 	@Value("${default.avatar.chat.path}")
 	private String defaultAvatarChatPath;
-	
+
 	@Autowired
 	public PreviewService(ConversationService conversationService, UserMapper userMapper, MessageService messageService) {
 		this.conversationService = conversationService;
 		this.userMapper = userMapper;
 		this.messageService = messageService;
 	}
-	
+
 	@Autowired
 	public void setConversationMapper(ConversationMapper conversationMapper) {
 		this.conversationMapper = conversationMapper;
 	}
-	
+
 	public List<PreviewDto> all(User user, Pageable pageable) {
 		return conversationService.getConversations(user, PageRequest.of(0, Integer.MAX_VALUE))
 				.stream()
@@ -52,22 +52,22 @@ public class PreviewService {
 				.limit(pageable.getPageSize())
 				.collect(Collectors.toList());
 	}
-	
+
 	public PreviewDto getPreview(User user, Conversation conversation) {
 		PreviewDto previewDto = new PreviewDto();
-		
+
 		previewDto.setType(conversation.getChatName() == null ? PreviewType.CONVERSATION : PreviewType.CHAT);
-		
+
 		previewDto.setConversation(conversationMapper
 				.with(user)
 				.map(conversation));
-		
+
 		previewDto.setLastMessage(messageService.get(user.getId(), conversation.getId(), PageRequest.of(0, 1))
 				.stream()
 				.findFirst()
 				.orElse(null)
 		);
-		
+
 		if (previewDto.getType().equals(PreviewType.CONVERSATION)) {
 			User with = conversation.getUserConversations()
 					.stream()
@@ -77,13 +77,13 @@ public class PreviewService {
 					.orElse(user);
 			previewDto.setWith(userMapper.map(with));
 		}
-		
+
 		if (previewDto.getType().equals(PreviewType.CONVERSATION)) {
 			previewDto.setAvatar(previewDto.getWith().getAvatar());
 		} else {
 			previewDto.setAvatar(new AvatarDto(null, defaultAvatarChatPath, null));
 		}
-		
+
 		if (previewDto.getType().equals(PreviewType.CHAT)) {
 			previewDto.setKicked(
 					conversation.getUserConversations()
@@ -94,10 +94,10 @@ public class PreviewService {
 							.orElse(null)
 			);
 		}
-		
+
 		previewDto.setUnread(conversationService.unreadCount(user, conversation));
-		
+
 		return previewDto;
 	}
-	
+
 }

@@ -13,22 +13,22 @@ import java.util.stream.Collectors;
 
 @Component
 public class ConversationMapper implements Mapper<Conversation, ConversationDto>, MapperBuilder<User> {
-	
+
 	private UserConversationRepository userConversationRepository;
 	private UserMapper userMapper;
-	
+
 	private User user;
-	
+
 	@Autowired
 	public void setUserConversationRepository(UserConversationRepository userConversationRepository) {
 		this.userConversationRepository = userConversationRepository;
 	}
-	
+
 	@Autowired
 	public void setUserMapper(UserMapper userMapper) {
 		this.userMapper = userMapper;
 	}
-	
+
 	@Override
 	public ConversationDto map(Conversation conversation) {
 		Optional<UserConversation> userConversation = userConversationRepository.findByUserAndConversation(user, conversation);
@@ -44,11 +44,11 @@ public class ConversationMapper implements Mapper<Conversation, ConversationDto>
 						.collect(Collectors.toList())
 		);
 	}
-	
+
 	@Override
 	public ConversationMapper with(User user) {
 		this.user = user;
 		return this;
 	}
-	
+
 }

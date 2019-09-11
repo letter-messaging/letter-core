@@ -22,16 +22,16 @@ import java.io.IOException;
 @RequestMapping("avatar")
 @Transactional
 public class AvatarController {
-	
+
 	private final UserService userService;
 	private final AvatarService avatarService;
-	
+
 	@Autowired
 	public AvatarController(UserService userService, AvatarService avatarService) {
 		this.userService = userService;
 		this.avatarService = avatarService;
 	}
-	
+
 	/**
 	 * Upload avatar.
 	 *
@@ -47,10 +47,10 @@ public class AvatarController {
 	public AvatarDto upload(@RequestHeader("Auth-Token") String token,
 	                        @RequestParam("avatar") MultipartFile avatar) throws AuthenticationException, IOException, InvalidFileException {
 		User user = userService.authenticate(token);
-		
+
 		return avatarService.upload(user, avatar);
 	}
-	
+
 	/**
 	 * Delete avatar from current avatar and avatar list
 	 *
@@ -62,8 +62,8 @@ public class AvatarController {
 	public void delete(@RequestHeader("Auth-Token") String token,
 	                   @RequestParam("avatarId") Long avatarId) throws AuthenticationException {
 		User user = userService.authenticate(token);
-		
+
 		avatarService.delete(user, avatarId);
 	}
-	
+
 }

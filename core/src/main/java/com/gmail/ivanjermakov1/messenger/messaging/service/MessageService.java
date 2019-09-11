@@ -22,15 +22,15 @@ import java.util.stream.Collectors;
 
 @Service
 public class MessageService {
-	
+
 	private final MessageRepository messageRepository;
 	private final UserService userService;
 	private ConversationService conversationService;
 	private final ImageService imageService;
 	private final UserConversationRepository userConversationRepository;
-	
+
 	private MessageMapper messageMapper;
-	
+
 	@Autowired
 	public MessageService(MessageRepository messageRepository, UserService userService, ImageService imageService, UserConversationRepository userConversationRepository) {
 		this.messageRepository = messageRepository;
@@ -38,32 +38,32 @@ public class MessageService {
 		this.imageService = imageService;
 		this.userConversationRepository = userConversationRepository;
 	}
-	
+
 	@Autowired
 	public void setConversationService(ConversationService conversationService) {
 		this.conversationService = conversationService;
 	}
-	
+
 	@Autowired
 	public void setMessageMapper(MessageMapper messageMapper) {
 		this.messageMapper = messageMapper;
 	}
-	
+
 	public Message save(Message message) {
 		return messageRepository.save(message);
 	}
-	
+
 	public List<MessageDto> get(Long userId, Long conversationId, Pageable pageable) {
 		User user = userService.getUser(userId);
 		Conversation conversation = conversationService.get(conversationId);
 		UserConversation userConversation = userConversationRepository.findByUserAndConversation(user, conversation)
 				.orElseThrow(() -> new NoSuchEntityException("invalid conversation id"));
-		
+
 		List<Message> messages = messageRepository.findAllByConversationOrderBySentDesc(
 				conversation,
 				PageRequest.of(0, Integer.MAX_VALUE)
 		);
-		
+
 		return messages
 				.stream()
 				.filter(m -> !(userConversation.getKicked() && userConversation.getLastRead().isBefore(m.getSent())))
@@ -72,16 +72,16 @@ public class MessageService {
 				.map(message -> messageMapper.with(user).map(message))
 				.collect(Collectors.toList());
 	}
-	
+
 	public void read(User user, Conversation conversation) {
 		UserConversation userConversation = userConversationRepository.findByUserAndConversation(user, conversation)
 				.orElseThrow(() -> new NoSuchEntityException("no such user's conversation"));
-		
+
 		if (!userConversation.getKicked()) {
 			userConversation.setLastRead(LocalDateTime.now());
 		}
 	}
-	
+
 	/**
 	 * Allowed to delete only user-self messages
 	 *
@@ -97,20 +97,20 @@ public class MessageService {
 				.filter(m -> m.getSender().getId().equals(user.getId()))
 				.forEach(this::delete);
 	}
-	
+
 	public void deleteForwarded(Message message) {
 		messageRepository.deleteForwarded(message.getId());
 	}
-	
+
 	public void deleteImages(Message message) {
 		message.getImages().forEach(imageService::delete);
 	}
-	
+
 	public Message get(Long messageId) {
 		return messageRepository.getById(messageId)
 				.orElseThrow(() -> new NoSuchEntityException("no such message"));
 	}
-	
+
 	public void deleteAll(User user, Conversation conversation) {
 //		TODO: optimize
 		messageRepository.getAllBySenderAndConversation(user, conversation)
@@ -118,7 +118,7 @@ public class MessageService {
 				.parallel()
 				.forEach(this::delete);
 	}
-	
+
 	/**
 	 * Delete messages different way then just <code>.delete()</code>. Firstly deleting current message from all over
 	 * forwarded messages (including originally attached images), then deletes itself
@@ -130,5 +130,5 @@ public class MessageService {
 		deleteImages(message);
 		messageRepository.delete(message);
 	}
-	
+
 }
