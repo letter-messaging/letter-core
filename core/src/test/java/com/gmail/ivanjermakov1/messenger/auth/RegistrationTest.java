@@ -14,16 +14,16 @@ import org.springframework.transaction.annotation.Transactional;
 @RunWith(SpringRunner.class)
 @Transactional
 public class RegistrationTest {
-	
+
 	@Autowired
 	private RegistrationController registrationController;
-	
+
 	@Test
 	public void shouldRegisterUser() throws RegistrationException {
 		registrationController.register(
 				new RegisterUserDto("Jack", "Johnson", "jacksj", "secure_password123"));
 	}
-	
+
 	@Test(expected = RegistrationException.class)
 	public void shouldThrowRegistrationException_WithDuplication() throws RegistrationException {
 		registrationController.register(
@@ -31,7 +31,7 @@ public class RegistrationTest {
 		registrationController.register(
 				new RegisterUserDto("Jack", "Johnson", "jacksj", "secure_password123"));
 	}
-	
+
 	@Test
 	public void shouldNotThrowRegistrationException_WithDifferentLogin() throws RegistrationException {
 		registrationController.register(
@@ -39,7 +39,7 @@ public class RegistrationTest {
 		registrationController.register(
 				new RegisterUserDto("Jack", "Johnson", "jacksk", "secure_password123"));
 	}
-	
+
 	@Test
 	public void shouldNotThrowRegistrationException_WithDifferentName() throws RegistrationException {
 		registrationController.register(
@@ -47,7 +47,7 @@ public class RegistrationTest {
 		registrationController.register(
 				new RegisterUserDto("Jack", "Johnson", "jacksk", "secure_password13"));
 	}
-	
+
 	@Test(expected = RegistrationException.class)
 	public void shouldThrowRegistrationException_WithDifferentPassword() throws RegistrationException {
 		registrationController.register(
@@ -55,23 +55,23 @@ public class RegistrationTest {
 		registrationController.register(
 				new RegisterUserDto("Jack", "Johnson", "jacksj", "secure_password13"));
 	}
-	
+
 	@Test(expected = RegistrationException.class)
 	public void shouldThrowRegistrationException_WithBlankFirstName() throws RegistrationException {
 		registrationController.register(
 				new RegisterUserDto("", "Johnson", "jacksj", "secure_password123"));
 	}
-	
+
 	@Test(expected = RegistrationException.class)
 	public void shouldThrowRegistrationException_WithBlankLastName() throws RegistrationException {
 		registrationController.register(
 				new RegisterUserDto("Jack", "", "jacksj", "secure_password123"));
 	}
-	
+
 	@Test(expected = RegistrationException.class)
 	public void shouldThrowRegistrationException_WithBlankLogin() throws RegistrationException {
 		registrationController.register(
 				new RegisterUserDto("Jack", "Johnson", "", "secure_password123"));
 	}
-	
+
 }

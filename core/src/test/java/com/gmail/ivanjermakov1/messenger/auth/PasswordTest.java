@@ -15,26 +15,26 @@ import org.springframework.transaction.annotation.Transactional;
 @RunWith(SpringRunner.class)
 @Transactional
 public class PasswordTest {
-	
+
 	@Autowired
 	private RegistrationController registrationController;
-	
+
 	@Test(expected = InvalidPasswordException.class)
 	public void shouldThrowInvalidPasswordException_WithEmptyPassword() throws RegistrationException {
 		registrationController.register(
 				new RegisterUserDto("Jack", "Johnson", "jackj", ""));
 	}
-	
+
 	@Test(expected = InvalidPasswordException.class)
 	public void shouldThrowInvalidPasswordException_WithLessThen8Characters() throws RegistrationException {
 		registrationController.register(
 				new RegisterUserDto("Jack", "Johnson", "jackj", "1234567"));
 	}
-	
+
 	@Test(expected = InvalidPasswordException.class)
 	public void shouldThrowInvalidPasswordException_WithMoreThen32Characters() throws RegistrationException {
 		registrationController.register(
 				new RegisterUserDto("Jack", "Johnson", "jackj", "1234567812345678123456781234567812345678"));
 	}
-	
+
 }

@@ -13,15 +13,15 @@ import org.springframework.transaction.annotation.Transactional;
 @RunWith(SpringRunner.class)
 @Transactional
 public class MarkdownTest {
-	
+
 	@Autowired
 	private MarkdownService markdownService;
-	
+
 	@Test
 	public void shouldParseBold() {
 		String html = markdownService.format("This is *Sparta*");
-		
+
 		Assert.assertEquals("<p>This is <em>Sparta</em></p>", html);
 	}
-	
+
 }

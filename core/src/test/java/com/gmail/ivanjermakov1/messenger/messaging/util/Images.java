@@ -9,7 +9,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 
 public class Images {
-	
+
 	public static MultipartFile multipartFileFromFile(File file) throws IOException {
 		FileInputStream input = new FileInputStream(file);
 		return new MockMultipartFile(file.getName(),
@@ -18,5 +18,5 @@ public class Images {
 				IOUtils.toByteArray(input)
 		);
 	}
-	
+
 }
