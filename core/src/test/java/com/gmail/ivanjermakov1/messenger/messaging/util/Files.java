@@ -8,7 +8,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 
-public class Images {
+public class Files {
 
 	public static MultipartFile multipartFileFromFile(File file) throws IOException {
 		FileInputStream input = new FileInputStream(file);
