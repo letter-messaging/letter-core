@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -85,7 +86,7 @@ public class ChatController {
 				.orElseThrow(() -> new NoSuchEntityException("no such chat"));
 		User member = userService.getUser(memberId);
 
-		chatService.addMembers(user, chat, Collections.singletonList(member));
+		chatService.addMembers(user, chat, new ArrayList<>(Collections.singletonList(member)));
 	}
 
 	/**

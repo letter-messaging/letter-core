@@ -28,7 +28,7 @@ public class FileUploadService {
 		String generatedFilename =
 				RandomStringGenerator.generate(10) + "." + FilenameUtils.getExtension(multipartFile.getOriginalFilename());
 
-		LOG.info("uploading [" + fileType + "] \'" + multipartFile.getOriginalFilename() + "\'; size: " + multipartFile.getSize() / 1000 + "KB with name: " + generatedFilename);
+		LOG.info("upload [" + fileType + "] \'" + multipartFile.getOriginalFilename() + "\'; size: " + multipartFile.getSize() / 1000 + "KB with name: " + generatedFilename);
 
 		new File(uploadPlaceholder + "/" + fileType.toString().toLowerCase()).mkdirs();
 

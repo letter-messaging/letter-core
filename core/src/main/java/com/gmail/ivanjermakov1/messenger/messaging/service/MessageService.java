@@ -103,7 +103,7 @@ public class MessageService {
 	}
 
 	public void deleteImages(Message message) {
-		message.getImages().forEach(imageService::delete);
+		message.getImages().forEach(i -> imageService.delete(message.getSender(), i.getId()));
 	}
 
 	public Message get(Long messageId) {

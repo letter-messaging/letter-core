@@ -13,6 +13,11 @@ public class EditMessageDto {
 	public EditMessageDto() {
 	}
 
+	public EditMessageDto(Long id, String text) {
+		this.id = id;
+		this.text = text;
+	}
+
 	public EditMessageDto(Long id, String text, List<MessageDto> forwarded, List<ImageDto> images, List<DocumentDto> documents) {
 		this.id = id;
 		this.text = text;
