@@ -3,9 +3,6 @@ package com.gmail.ivanjermakov1.messenger.messaging;
 import com.gmail.ivanjermakov1.messenger.exception.AuthenticationException;
 import com.gmail.ivanjermakov1.messenger.exception.AuthorizationException;
 import com.gmail.ivanjermakov1.messenger.exception.RegistrationException;
-import com.gmail.ivanjermakov1.messenger.messaging.controller.ConversationController;
-import com.gmail.ivanjermakov1.messenger.messaging.controller.DocumentController;
-import com.gmail.ivanjermakov1.messenger.messaging.controller.MessagingController;
 import com.gmail.ivanjermakov1.messenger.messaging.controller.UserInfoController;
 import com.gmail.ivanjermakov1.messenger.messaging.dto.TestingUser;
 import com.gmail.ivanjermakov1.messenger.messaging.dto.UserInfoDto;
@@ -22,15 +19,6 @@ import org.springframework.transaction.annotation.Transactional;
 @RunWith(SpringRunner.class)
 @Transactional
 public class UserInfoTest {
-
-	@Autowired
-	private DocumentController documentController;
-
-	@Autowired
-	private MessagingController messagingController;
-
-	@Autowired
-	private ConversationController conversationController;
 
 	@Autowired
 	private UserInfoController userInfoController;

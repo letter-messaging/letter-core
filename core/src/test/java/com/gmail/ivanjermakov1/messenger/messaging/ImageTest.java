@@ -48,7 +48,6 @@ public class ImageTest {
 	@Autowired
 	private TestingService testingService;
 
-	//	TODO: investigate
 	@Test
 	public void shouldSendMessageWithImageAndDeleteImage() throws RegistrationException, AuthenticationException, NoSuchEntityException, InvalidMessageException, IOException, AuthorizationException {
 		TestingUser user1 = testingService.registerUser("Jack");

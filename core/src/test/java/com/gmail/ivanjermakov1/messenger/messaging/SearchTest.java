@@ -46,7 +46,7 @@ public class SearchTest {
 	}
 
 	@Test(expected = InvalidSearchFormatException.class)
-	public void shouldThrowInvalidSearchFormatException_WithInvalidSearch() throws RegistrationException, AuthenticationException, InvalidSearchFormatException {
+	public void shouldThrowException_WithInvalidSearch() throws RegistrationException, AuthenticationException, InvalidSearchFormatException {
 		TestingUser user = testingService.registerUser("John");
 
 		searchController.searchUsers(
