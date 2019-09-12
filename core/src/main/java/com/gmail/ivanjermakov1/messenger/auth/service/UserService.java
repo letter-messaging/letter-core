@@ -57,6 +57,10 @@ public class UserService {
 		if (!user.isPresent() || !hashService.check(password, user.get().getHash()))
 			throw new AuthenticationException("wrong credentials");
 
+//		even if the password matches, client won't receive @system's user token
+		if (user.get().getId().equals(0L))
+			throw new AuthenticationException("unable to authenticate @system user");
+
 		Token token = tokenRepository.findById(user.get().getId())
 				.orElse(tokenRepository.save(new Token(user.get(), TokenGenerator.generate())));
 
