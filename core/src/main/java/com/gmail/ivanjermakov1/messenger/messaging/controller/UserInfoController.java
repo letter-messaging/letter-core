@@ -4,6 +4,7 @@ import com.gmail.ivanjermakov1.messenger.auth.entity.User;
 import com.gmail.ivanjermakov1.messenger.auth.service.UserService;
 import com.gmail.ivanjermakov1.messenger.core.mapper.UserInfoMapper;
 import com.gmail.ivanjermakov1.messenger.exception.AuthenticationException;
+import com.gmail.ivanjermakov1.messenger.exception.AuthorizationException;
 import com.gmail.ivanjermakov1.messenger.messaging.dto.UserInfoDto;
 import com.gmail.ivanjermakov1.messenger.messaging.service.UserInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,11 +61,12 @@ public class UserInfoController {
 	 * @param token       user token
 	 * @param userInfoDto user info with edits
 	 * @return edited user info
-	 * @throws AuthenticationException on invalid @param token and attempting to edit other user info
+	 * @throws AuthenticationException on invalid @param token
+	 * @throws AuthorizationException  on attempting to edit other user info
 	 */
 	@PostMapping
 	public UserInfoDto edit(@RequestHeader("Auth-Token") String token,
-	                        @RequestBody UserInfoDto userInfoDto) throws AuthenticationException {
+	                        @RequestBody UserInfoDto userInfoDto) throws AuthenticationException, AuthorizationException {
 		User user = userService.authenticate(token);
 
 		return userInfoService.edit(user, userInfoDto);
