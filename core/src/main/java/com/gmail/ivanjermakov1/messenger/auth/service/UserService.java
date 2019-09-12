@@ -70,14 +70,14 @@ public class UserService {
 	public void register(RegisterUserDto registerUserDto) throws RegistrationException {
 		registerUserDto.validate();
 
-		LOG.debug("register user: @" + registerUserDto.getLogin());
+		LOG.debug("register user: @" + registerUserDto.login);
 
-		if (userRepository.findByLogin(registerUserDto.getLogin()).isPresent())
+		if (userRepository.findByLogin(registerUserDto.login).isPresent())
 			throw new RegistrationException("user already exists.");
 
-		User user = new User(registerUserDto.getLogin(), hashService.getHash(registerUserDto.getPassword()));
+		User user = new User(registerUserDto.login, hashService.getHash(registerUserDto.password));
 		user = userRepository.save(user);
-		userInfoService.save(new UserInfo(user, registerUserDto.getFirstName(), registerUserDto.getLastName()));
+		userInfoService.save(new UserInfo(user, registerUserDto.firstName, registerUserDto.lastName));
 	}
 
 	public User getUser(Long id) {

@@ -7,11 +7,11 @@ import static com.gmail.ivanjermakov1.messenger.messaging.dto.action.Action.Type
 
 public class ConversationReadAction extends Action {
 
-	private ConversationDto conversation;
-	private UserDto reader;
+	public ConversationDto conversation;
+	public UserDto reader;
 
 	public ConversationReadAction() {
-		setType(CONVERSATION_READ);
+		type = CONVERSATION_READ;
 	}
 
 	public ConversationReadAction(ConversationDto conversation, UserDto reader) {
@@ -26,14 +26,6 @@ public class ConversationReadAction extends Action {
 
 	public void setConversation(ConversationDto conversation) {
 		this.conversation = conversation;
-	}
-
-	public UserDto getReader() {
-		return reader;
-	}
-
-	public void setReader(UserDto reader) {
-		this.reader = reader;
 	}
 
 }

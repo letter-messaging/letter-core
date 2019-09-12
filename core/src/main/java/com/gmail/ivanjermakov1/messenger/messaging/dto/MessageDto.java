@@ -8,18 +8,18 @@ import java.util.List;
 
 public class MessageDto {
 
-	private Long id;
+	public Long id;
 
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-	private LocalDateTime sent;
+	public LocalDateTime sent;
 
-	private String text;
-	private Boolean read;
-	private UserDto sender;
-	private ConversationDto conversation;
-	private List<MessageDto> forwarded;
-	private List<ImageDto> images;
-	private List<DocumentDto> documents;
+	public String text;
+	public Boolean read;
+	public UserDto sender;
+	public ConversationDto conversation;
+	public List<MessageDto> forwarded;
+	public List<ImageDto> images;
+	public List<DocumentDto> documents;
 
 	public MessageDto() {
 	}
@@ -33,78 +33,6 @@ public class MessageDto {
 		this.conversation = conversation;
 		this.forwarded = forwarded;
 		this.images = images;
-		this.documents = documents;
-	}
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public LocalDateTime getSent() {
-		return sent;
-	}
-
-	public void setSent(LocalDateTime sent) {
-		this.sent = sent;
-	}
-
-	public String getText() {
-		return text;
-	}
-
-	public void setText(String text) {
-		this.text = text;
-	}
-
-	public Boolean getRead() {
-		return read;
-	}
-
-	public void setRead(Boolean read) {
-		this.read = read;
-	}
-
-	public UserDto getSender() {
-		return sender;
-	}
-
-	public void setSender(UserDto sender) {
-		this.sender = sender;
-	}
-
-	public ConversationDto getConversation() {
-		return conversation;
-	}
-
-	public void setConversation(ConversationDto conversation) {
-		this.conversation = conversation;
-	}
-
-	public List<MessageDto> getForwarded() {
-		return forwarded;
-	}
-
-	public void setForwarded(List<MessageDto> forwarded) {
-		this.forwarded = forwarded;
-	}
-
-	public List<ImageDto> getImages() {
-		return images;
-	}
-
-	public void setImages(List<ImageDto> images) {
-		this.images = images;
-	}
-
-	public List<DocumentDto> getDocuments() {
-		return documents;
-	}
-
-	public void setDocuments(List<DocumentDto> documents) {
 		this.documents = documents;
 	}
 

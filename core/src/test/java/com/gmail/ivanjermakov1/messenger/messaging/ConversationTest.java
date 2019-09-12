@@ -49,11 +49,11 @@ public class ConversationTest {
 
 		ConversationDto conversationDto = conversationController.create(
 				user1.token,
-				userService.getUser(user2.user.getId()).getLogin()
+				userService.getUser(user2.user.id).getLogin()
 		);
 
 		Assert.assertNotNull(conversationDto);
-		Assert.assertEquals(2, conversationDto.getUsers().size());
+		Assert.assertEquals(2, conversationDto.users.size());
 	}
 
 	@Test
@@ -64,11 +64,11 @@ public class ConversationTest {
 
 		ConversationDto conversationDto = conversationController.create(
 				user.token,
-				userService.getUser(user.user.getId()).getLogin()
+				userService.getUser(user.user.id).getLogin()
 		);
 
 		Assert.assertNotNull(conversationDto);
-		Assert.assertEquals(1, conversationDto.getUsers().size());
+		Assert.assertEquals(1, conversationDto.users.size());
 	}
 
 	@Test
@@ -79,15 +79,15 @@ public class ConversationTest {
 
 		ConversationDto conversationDto = conversationController.create(
 				user.token,
-				userService.getUser(user.user.getId()).getLogin()
+				userService.getUser(user.user.id).getLogin()
 		);
 
-		Assert.assertNotNull(previewController.get(user.token, conversationDto.getId()));
+		Assert.assertNotNull(previewController.get(user.token, conversationDto.id));
 
-		conversationController.delete(user.token, conversationDto.getId());
+		conversationController.delete(user.token, conversationDto.id);
 
-		PreviewDto previewDto = previewController.get(user.token, conversationDto.getId());
-		Assert.assertTrue(previewDto.getConversation().getHidden());
+		PreviewDto previewDto = previewController.get(user.token, conversationDto.id);
+		Assert.assertTrue(previewDto.conversation.hidden);
 	}
 
 }

@@ -38,7 +38,7 @@ public class ChatService {
 
 	public Conversation create(User user, NewChatDto newChat) {
 		Conversation conversation = new Conversation(
-				newChat.getName(),
+				newChat.name,
 				new ArrayList<>(),
 				user
 		);
@@ -49,9 +49,9 @@ public class ChatService {
 				conversation
 		));
 
-		if (newChat.getUserIds() != null && !newChat.getUserIds().isEmpty()) {
+		if (newChat.userIds != null && !newChat.userIds.isEmpty()) {
 			conversation.getUserConversations().addAll(
-					newChat.getUserIds()
+					newChat.userIds
 							.stream()
 							.filter(id -> !id.equals(user.getId()))
 							.map(userRepository::findById)

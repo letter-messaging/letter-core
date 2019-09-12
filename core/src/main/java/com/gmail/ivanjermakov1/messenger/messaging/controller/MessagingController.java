@@ -63,7 +63,7 @@ public class MessagingController {
 	                              @RequestBody NewMessageDto newMessageDto) throws AuthenticationException, InvalidMessageException, AuthorizationException {
 		User user = userService.authenticate(token);
 
-		messagingService.processConversationRead(user, newMessageDto.getConversationId());
+		messagingService.processConversationRead(user, newMessageDto.conversationId);
 		return messagingService.processNewMessage(user, newMessageDto);
 	}
 

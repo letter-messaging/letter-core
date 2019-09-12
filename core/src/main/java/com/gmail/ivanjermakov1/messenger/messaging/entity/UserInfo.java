@@ -1,7 +1,7 @@
 package com.gmail.ivanjermakov1.messenger.messaging.entity;
 
 import com.gmail.ivanjermakov1.messenger.auth.entity.User;
-import com.gmail.ivanjermakov1.messenger.messaging.dto.MaritalStatus;
+import com.gmail.ivanjermakov1.messenger.messaging.dto.enums.MaritalStatus;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
