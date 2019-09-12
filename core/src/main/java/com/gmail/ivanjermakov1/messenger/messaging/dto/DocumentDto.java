@@ -7,12 +7,12 @@ import java.time.LocalDate;
 
 public class DocumentDto {
 
-	private Long id;
-	private UserDto user;
-	private String path;
+	public Long id;
+	public UserDto user;
+	public String path;
 
 	@JsonFormat(pattern = "yyyy-MM-dd")
-	private LocalDate uploaded;
+	public LocalDate uploaded;
 
 	public DocumentDto() {
 	}
@@ -21,38 +21,6 @@ public class DocumentDto {
 		this.id = id;
 		this.user = user;
 		this.path = path;
-		this.uploaded = uploaded;
-	}
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public UserDto getUser() {
-		return user;
-	}
-
-	public void setUser(UserDto user) {
-		this.user = user;
-	}
-
-	public String getPath() {
-		return path;
-	}
-
-	public void setPath(String path) {
-		this.path = path;
-	}
-
-	public LocalDate getUploaded() {
-		return uploaded;
-	}
-
-	public void setUploaded(LocalDate uploaded) {
 		this.uploaded = uploaded;
 	}
 

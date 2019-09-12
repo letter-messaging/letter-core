@@ -81,42 +81,40 @@ public class MessageMapper implements Mapper<Message, MessageDto>, MapperBuilder
 				.orElseThrow(() -> new NoSuchEntityException("no such user's conversation"));
 
 		MessageDto messageDto = new MessageDto();
-		messageDto.setId(message.getId());
-		messageDto.setSent(message.getSent());
+		messageDto.id = message.getId();
+		messageDto.sent = message.getSent();
 		boolean read = userConversation.getConversation().getUserConversations()
 				.stream()
 				.filter(uc -> !uc.getUser().getId().equals(user.getId()))
 				.anyMatch(uc -> uc.getLastRead().isAfter(message.getSent()));
 		if (userConversation.getConversation().getUserConversations().size() == 1) read = true;
-		messageDto.setRead(read);
-		messageDto.setText(message.getText());
+		messageDto.read = read;
+		messageDto.text = message.getText();
 
 		Conversation conversation = conversationService.get(message.getConversation().getId());
-		messageDto.setConversation(conversationMapper
+		messageDto.conversation = conversationMapper
 				.with(message.getSender())
-				.map(conversation));
+				.map(conversation);
 
 		User sender = userService.getUser(message.getSender().getId());
-		messageDto.setSender(userMapper.map(sender));
+		messageDto.sender = userMapper.map(sender);
 
-		messageDto.setForwarded(
-				messageRepository.getById(message.getId())
-						.map(Message::getForwarded)
-						.orElse(Collections.emptyList())
-						.stream()
-						.map(m -> this.with(user).map(m))
-						.collect(Collectors.toList())
-		);
+		messageDto.forwarded = messageRepository.getById(message.getId())
+				.map(Message::getForwarded)
+				.orElse(Collections.emptyList())
+				.stream()
+				.map(m -> this.with(user).map(m))
+				.collect(Collectors.toList());
 
-		messageDto.setImages(Mappers.mapAll(
+		messageDto.images = Mappers.mapAll(
 				message.getImages(),
 				ImageDto.class
-		));
+		);
 
-		messageDto.setDocuments(Mappers.mapAll(
+		messageDto.documents = Mappers.mapAll(
 				message.getDocuments(),
 				DocumentDto.class
-		));
+		);
 
 		return messageDto;
 	}

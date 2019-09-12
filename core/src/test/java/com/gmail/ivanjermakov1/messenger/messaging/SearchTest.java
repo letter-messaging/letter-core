@@ -36,7 +36,7 @@ public class SearchTest {
 		List<UserDto> searchResult = searchService.searchUsers("@John", PageRequest.of(0, Integer.MAX_VALUE));
 		Assert.assertTrue(searchResult
 				.stream()
-				.anyMatch(dto -> dto.getLogin().equals(user.user.getLogin()))
+				.anyMatch(dto -> dto.login.equals(user.user.login))
 		);
 	}
 

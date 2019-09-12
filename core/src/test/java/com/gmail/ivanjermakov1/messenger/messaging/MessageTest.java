@@ -64,12 +64,12 @@ public class MessageTest {
 
 		ConversationDto conversationDto = conversationController.create(
 				user1.token,
-				userService.getUser(user2.user.getId()).getLogin()
+				userService.getUser(user2.user.id).getLogin()
 		);
 
 		NewMessageDto message = new NewMessageDto(
-				user1.user.getId(),
-				conversationDto.getId(),
+				user1.user.id,
+				conversationDto.id,
 				"Hello!",
 				Collections.emptyList(),
 				Collections.emptyList(),
@@ -87,11 +87,11 @@ public class MessageTest {
 		Assert.assertNotNull(user1);
 		Assert.assertNotNull(user2);
 
-		ConversationDto conversationDto = conversationController.create(user1.token, userService.getUser(user2.user.getId()).getLogin());
+		ConversationDto conversationDto = conversationController.create(user1.token, userService.getUser(user2.user.id).getLogin());
 
 		NewMessageDto message = new NewMessageDto(
-				user1.user.getId(),
-				conversationDto.getId(),
+				user1.user.id,
+				conversationDto.id,
 				"Hello!",
 				Collections.emptyList(),
 				Stream
@@ -107,7 +107,7 @@ public class MessageTest {
 
 		MessageDto messageDto = messagingController.sendMessage(user1.token, message);
 
-		Message received = messageService.get(messageDto.getId());
+		Message received = messageService.get(messageDto.id);
 
 		Assert.assertEquals(1, received.getImages().size());
 	}

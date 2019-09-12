@@ -46,8 +46,8 @@ public class PreviewService {
 		return conversationService.getConversations(user, PageRequest.of(0, Integer.MAX_VALUE))
 				.stream()
 				.map(c -> getPreview(user, c))
-				.filter(p -> p.getLastMessage() != null)
-				.sorted(Comparator.comparing(p -> p.getLastMessage().getSent(), Comparator.reverseOrder()))
+				.filter(p -> p.lastMessage != null)
+				.sorted(Comparator.comparing(p -> p.lastMessage.sent, Comparator.reverseOrder()))
 				.skip(pageable.getOffset())
 				.limit(pageable.getPageSize())
 				.collect(Collectors.toList());
@@ -56,46 +56,43 @@ public class PreviewService {
 	public PreviewDto getPreview(User user, Conversation conversation) {
 		PreviewDto previewDto = new PreviewDto();
 
-		previewDto.setType(conversation.getChatName() == null ? PreviewType.CONVERSATION : PreviewType.CHAT);
+		previewDto.type = conversation.getChatName() == null ? PreviewType.CONVERSATION : PreviewType.CHAT;
 
-		previewDto.setConversation(conversationMapper
+		previewDto.conversation = conversationMapper
 				.with(user)
-				.map(conversation));
+				.map(conversation);
 
-		previewDto.setLastMessage(messageService.get(user.getId(), conversation.getId(), PageRequest.of(0, 1))
+		previewDto.lastMessage = messageService.get(user.getId(), conversation.getId(), PageRequest.of(0, 1))
 				.stream()
 				.findFirst()
-				.orElse(null)
-		);
+				.orElse(null);
 
-		if (previewDto.getType().equals(PreviewType.CONVERSATION)) {
+		if (previewDto.type.equals(PreviewType.CONVERSATION)) {
 			User with = conversation.getUserConversations()
 					.stream()
 					.map(UserConversation::getUser)
 					.filter(u -> !u.getId().equals(user.getId()))
 					.findFirst()
 					.orElse(user);
-			previewDto.setWith(userMapper.map(with));
+			previewDto.with = userMapper.map(with);
 		}
 
-		if (previewDto.getType().equals(PreviewType.CONVERSATION)) {
-			previewDto.setAvatar(previewDto.getWith().getAvatar());
+		if (previewDto.type.equals(PreviewType.CONVERSATION)) {
+			previewDto.avatar = previewDto.with.avatar;
 		} else {
-			previewDto.setAvatar(new AvatarDto(null, defaultAvatarChatPath, null));
+			previewDto.avatar = new AvatarDto(null, defaultAvatarChatPath, null);
 		}
 
-		if (previewDto.getType().equals(PreviewType.CHAT)) {
-			previewDto.setKicked(
-					conversation.getUserConversations()
-							.stream()
-							.filter(uc -> uc.getUser().getId().equals(user.getId()))
-							.findFirst()
-							.map(UserConversation::getKicked)
-							.orElse(null)
-			);
+		if (previewDto.type.equals(PreviewType.CHAT)) {
+			previewDto.kicked = conversation.getUserConversations()
+					.stream()
+					.filter(uc -> uc.getUser().getId().equals(user.getId()))
+					.findFirst()
+					.map(UserConversation::getKicked)
+					.orElse(null);
 		}
 
-		previewDto.setUnread(conversationService.unreadCount(user, conversation));
+		previewDto.unread = conversationService.unreadCount(user, conversation);
 
 		return previewDto;
 	}

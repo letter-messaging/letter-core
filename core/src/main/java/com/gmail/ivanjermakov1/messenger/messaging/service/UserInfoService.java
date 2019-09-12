@@ -39,29 +39,29 @@ public class UserInfoService {
 	}
 
 	public UserInfoDto edit(User user, UserInfoDto userInfoDto) throws AuthenticationException {
-		if (!userInfoDto.getUser().getId().equals(user.getId()))
+		if (!userInfoDto.user.id.equals(user.getId()))
 			throw new AuthenticationException("allow only to edit personal info");
 
 		UserInfo userInfo = getByUser(user);
 
 		userInfo.setUser(user);
-		userInfo.setFirstName(userInfoDto.getFirstName());
-		userInfo.setLastName(userInfoDto.getLastName());
-		userInfo.setGender(userInfoDto.getGender());
-		userInfo.setBirthDate(userInfoDto.getBirthDate());
-		userInfo.setMaritalStatus(userInfoDto.getMaritalStatus());
-		userInfo.setCountry(userInfoDto.getCountry());
-		userInfo.setCity(userInfoDto.getCity());
-		userInfo.setLocation(userInfoDto.getLocation());
-		userInfo.setPhoneNumber(userInfoDto.getPhoneNumber());
-		userInfo.setMail(userInfoDto.getMail());
-		userInfo.setPlaceOfEducation(userInfoDto.getPlaceOfEducation());
-		userInfo.setPlaceOfWork(userInfoDto.getPlaceOfWork());
-		userInfo.setAbout(userInfoDto.getAbout());
+		userInfo.setFirstName(userInfoDto.firstName);
+		userInfo.setLastName(userInfoDto.lastName);
+		userInfo.setGender(userInfoDto.gender);
+		userInfo.setBirthDate(userInfoDto.birthDate);
+		userInfo.setMaritalStatus(userInfoDto.maritalStatus);
+		userInfo.setCountry(userInfoDto.country);
+		userInfo.setCity(userInfoDto.city);
+		userInfo.setLocation(userInfoDto.location);
+		userInfo.setPhoneNumber(userInfoDto.phoneNumber);
+		userInfo.setMail(userInfoDto.mail);
+		userInfo.setPlaceOfEducation(userInfoDto.placeOfEducation);
+		userInfo.setPlaceOfWork(userInfoDto.placeOfWork);
+		userInfo.setAbout(userInfoDto.about);
 
 		UserInfoDto edited = Mappers.map(save(userInfo), UserInfoDto.class);
-		userInfoDto.setAvatars(Mappers.mapAll(avatarService.getAll(userInfo.getUser()), AvatarDto.class));
-		userInfoDto.setUser(userMapper.map(userInfo.getUser()));
+		userInfoDto.avatars = Mappers.mapAll(avatarService.getAll(userInfo.getUser()), AvatarDto.class);
+		userInfoDto.user = userMapper.map(userInfo.getUser());
 		return edited;
 	}
 

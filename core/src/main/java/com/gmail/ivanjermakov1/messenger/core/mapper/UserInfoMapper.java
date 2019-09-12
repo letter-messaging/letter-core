@@ -27,8 +27,8 @@ public class UserInfoMapper implements Mapper<UserInfo, UserInfoDto> {
 	@Override
 	public UserInfoDto map(UserInfo userInfo) {
 		UserInfoDto userInfoDto = Mappers.map(userInfo, UserInfoDto.class);
-		userInfoDto.setAvatars(Mappers.mapAll(avatarService.getAll(userInfo.getUser()), AvatarDto.class));
-		userInfoDto.setUser(userMapper.map(userInfo.getUser()));
+		userInfoDto.avatars = Mappers.mapAll(avatarService.getAll(userInfo.getUser()), AvatarDto.class);
+		userInfoDto.user = userMapper.map(userInfo.getUser());
 		return userInfoDto;
 	}
 

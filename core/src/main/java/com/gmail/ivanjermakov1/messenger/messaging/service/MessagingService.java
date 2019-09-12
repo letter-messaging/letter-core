@@ -86,12 +86,12 @@ public class MessagingService {
 	}
 
 	public void sendResponse(Request<Action> request, Action action) {
-		LOG.debug("sending response to @" + request.getUser().getLogin() + "; type: " + action.getType());
+		LOG.debug("sending response to @" + request.user.getLogin() + "; type: " + action.type);
 		try {
 			SseEmitter.SseEventBuilder event = SseEmitter.event()
 					.data(action)
 					.reconnectTime(100);
-			request.getEmitter().send(event);
+			request.emitter.send(event);
 		} catch (IOException e) {
 			requests.remove(request);
 		}
@@ -104,12 +104,12 @@ public class MessagingService {
 						.stream()
 						.filter(uc -> !uc.getKicked())
 						.map(UserConversation::getUser)
-						.anyMatch(i -> i.getId().equals(r.getUser().getId())))
-				.forEach(consumer)).run();
+						.anyMatch(i -> i.getId().equals(r.user.getId())))
+				.forEach(consumer)).start();
 	}
 
 	public MessageDto processNewMessage(User user, NewMessageDto newMessageDto) throws InvalidMessageException, AuthorizationException {
-		Conversation conversation = conversationService.get(newMessageDto.getConversationId());
+		Conversation conversation = conversationService.get(newMessageDto.conversationId);
 
 		if (conversation.getUserConversations()
 				.stream()
@@ -117,25 +117,25 @@ public class MessagingService {
 				.noneMatch(uc -> uc.getKicked().equals(false)))
 			throw new AuthorizationException("no access");
 
-		LOG.debug("process new message from @" + user.getLogin() + " to conversation @" + newMessageDto.getConversationId() +
-				"; text: " + newMessageDto.getText());
+		LOG.debug("process new message from @" + user.getLogin() + " to conversation @" + newMessageDto.conversationId +
+				"; text: " + newMessageDto.text);
 
 		Message message = new Message(
 				conversation,
 				LocalDateTime.now(),
-				newMessageDto.getText(),
+				newMessageDto.text,
 				user,
-				newMessageDto.getForwarded()
+				newMessageDto.forwarded
 						.stream()
-						.map(dto -> messageService.get(dto.getId()))
+						.map(dto -> messageService.get(dto.id))
 						.collect(Collectors.toList()),
-				newMessageDto.getImages()
+				newMessageDto.images
 						.stream()
-						.map(i -> new Image(user, i.getPath(), LocalDate.now()))
+						.map(i -> new Image(user, i.path, LocalDate.now()))
 						.collect(Collectors.toList()),
-				newMessageDto.getDocuments()
+				newMessageDto.documents
 						.stream()
-						.map(d -> new Document(user, d.getPath(), LocalDate.now()))
+						.map(d -> new Document(user, d.path, LocalDate.now()))
 						.collect(Collectors.toList())
 		);
 
@@ -151,13 +151,13 @@ public class MessagingService {
 	}
 
 	public void systemMessage(NewMessageDto newMessageDto) throws InvalidMessageException {
-		Conversation conversation = conversationService.get(newMessageDto.getConversationId());
-		User system = userService.getUser(newMessageDto.getSenderId());
+		Conversation conversation = conversationService.get(newMessageDto.conversationId);
+		User system = userService.getUser(newMessageDto.senderId);
 
 		Message message = new Message(
 				conversation,
 				LocalDateTime.now(),
-				newMessageDto.getText(),
+				newMessageDto.text,
 				system,
 				Collections.emptyList(),
 				Collections.emptyList(),
@@ -173,29 +173,29 @@ public class MessagingService {
 	}
 
 	public MessageDto processMessageEdit(User user, EditMessageDto editMessageDto) throws AuthenticationException {
-		LOG.debug("process message edit @" + editMessageDto.getId() + "; text: " + editMessageDto.getText());
+		LOG.debug("process message edit @" + editMessageDto.id + "; text: " + editMessageDto.text);
 
-		Message original = messageService.get(editMessageDto.getId());
+		Message original = messageService.get(editMessageDto.id);
 
 		if (original == null || !original.getSender().getId().equals(user.getId()))
 			throw new AuthenticationException("user can edit only own messages");
 
-		original.setText(editMessageDto.getText());
-		if (editMessageDto.getForwarded() != null && editMessageDto.getForwarded().isEmpty())
+		original.setText(editMessageDto.text);
+		if (editMessageDto.forwarded != null && editMessageDto.forwarded.isEmpty())
 			messageService.deleteForwarded(original);
 
 		original.getImages()
 				.stream()
-				.filter(i -> editMessageDto.getImages()
+				.filter(i -> editMessageDto.images
 						.stream()
-						.noneMatch(ei -> ei.getId().equals(i.getId())))
+						.noneMatch(ei -> ei.id.equals(i.getId())))
 				.forEach(imageService::delete);
 
 		original.getDocuments()
 				.stream()
-				.filter(d -> editMessageDto.getDocuments()
+				.filter(d -> editMessageDto.documents
 						.stream()
-						.noneMatch(ed -> ed.getId().equals(d.getId())))
+						.noneMatch(ed -> ed.id.equals(d.getId())))
 				.forEach(documentService::delete);
 
 		original = messageService.save(original);

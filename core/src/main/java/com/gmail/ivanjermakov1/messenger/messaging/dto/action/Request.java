@@ -5,8 +5,8 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 public class Request<T> {
 
-	private User user;
-	private SseEmitter emitter;
+	public User user;
+	public SseEmitter emitter;
 
 	public Request() {
 	}
@@ -14,14 +14,6 @@ public class Request<T> {
 	public Request(User user, SseEmitter emitter) {
 		this.user = user;
 		this.emitter = emitter;
-	}
-
-	public User getUser() {
-		return user;
-	}
-
-	public SseEmitter getEmitter() {
-		return emitter;
 	}
 
 	@Override

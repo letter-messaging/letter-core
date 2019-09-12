@@ -38,7 +38,7 @@ public class AuthenticationTest {
 		UserDto user = authenticationController.validate(token);
 
 		Assert.assertNotNull(user);
-		Assert.assertEquals("jackj", user.getLogin());
+		Assert.assertEquals("jackj", user.login);
 	}
 
 	@Test(expected = AuthenticationException.class)
@@ -63,7 +63,7 @@ public class AuthenticationTest {
 		UserDto user = authenticationController.validate(token);
 
 		Assert.assertNotNull(user);
-		Assert.assertEquals("jackj", user.getLogin());
+		Assert.assertEquals("jackj", user.login);
 
 		authenticationController.logout(token);
 

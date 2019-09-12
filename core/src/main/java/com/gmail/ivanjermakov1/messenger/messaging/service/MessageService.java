@@ -91,7 +91,7 @@ public class MessageService {
 	public void delete(User user, List<MessageDto> deleteMessages) {
 		deleteMessages
 				.stream()
-				.map(dto -> messageRepository.getById(dto.getId()))
+				.map(dto -> messageRepository.getById(dto.id))
 				.filter(Optional::isPresent)
 				.map(Optional::get)
 				.filter(m -> m.getSender().getId().equals(user.getId()))
