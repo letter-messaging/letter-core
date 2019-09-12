@@ -8,7 +8,15 @@ import java.util.stream.Collectors;
 
 public class Mappers {
 
-	private static ModelMapper modelMapper = new ModelMapper();
+	private static ModelMapper modelMapper;
+
+	static {
+		modelMapper = new ModelMapper();
+		modelMapper
+				.getConfiguration()
+				.setFieldMatchingEnabled(true)
+				.setSkipNullEnabled(true);
+	}
 
 	public static <D, T> D map(T entity, Class<D> outClass) {
 		return modelMapper.map(entity, outClass);
