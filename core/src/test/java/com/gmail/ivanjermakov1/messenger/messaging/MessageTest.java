@@ -97,9 +97,7 @@ public class MessageTest {
 				Stream
 						.of(imageController.upload(
 								user1.token,
-								Images.multipartFileFromFile(
-										new File(System.getProperty("user.dir") + "/src/test/resources/test.jpg")
-								)
+								testingService.mockTestImage()
 						))
 						.collect(Collectors.toList()),
 				Collections.emptyList()
