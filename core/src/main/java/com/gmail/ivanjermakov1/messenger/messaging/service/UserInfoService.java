@@ -4,6 +4,7 @@ import com.gmail.ivanjermakov1.messenger.auth.entity.User;
 import com.gmail.ivanjermakov1.messenger.core.mapper.UserMapper;
 import com.gmail.ivanjermakov1.messenger.core.util.Mappers;
 import com.gmail.ivanjermakov1.messenger.exception.AuthenticationException;
+import com.gmail.ivanjermakov1.messenger.exception.AuthorizationException;
 import com.gmail.ivanjermakov1.messenger.messaging.dto.AvatarDto;
 import com.gmail.ivanjermakov1.messenger.messaging.dto.UserInfoDto;
 import com.gmail.ivanjermakov1.messenger.messaging.entity.UserInfo;
@@ -38,9 +39,9 @@ public class UserInfoService {
 		return userInfoRepository.save(userInfo);
 	}
 
-	public UserInfoDto edit(User user, UserInfoDto userInfoDto) throws AuthenticationException {
+	public UserInfoDto edit(User user, UserInfoDto userInfoDto) throws AuthorizationException {
 		if (!userInfoDto.user.id.equals(user.getId()))
-			throw new AuthenticationException("allow only to edit personal info");
+			throw new AuthorizationException("allow only to edit personal info");
 
 		UserInfo userInfo = getByUser(user);
 

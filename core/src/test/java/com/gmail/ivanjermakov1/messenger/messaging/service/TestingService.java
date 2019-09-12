@@ -7,7 +7,7 @@ import com.gmail.ivanjermakov1.messenger.core.mapper.UserMapper;
 import com.gmail.ivanjermakov1.messenger.exception.AuthenticationException;
 import com.gmail.ivanjermakov1.messenger.exception.RegistrationException;
 import com.gmail.ivanjermakov1.messenger.messaging.dto.TestingUser;
-import com.gmail.ivanjermakov1.messenger.messaging.util.Images;
+import com.gmail.ivanjermakov1.messenger.messaging.util.Files;
 import com.google.common.base.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -53,8 +53,14 @@ public class TestingService {
 	}
 
 	public MultipartFile mockTestImage() throws IOException {
-		return Images.multipartFileFromFile(
+		return Files.multipartFileFromFile(
 				new File(System.getProperty("user.dir") + "/src/test/resources/test.jpg")
+		);
+	}
+
+	public MultipartFile mockTestFile() throws IOException {
+		return Files.multipartFileFromFile(
+				new File(System.getProperty("user.dir") + "/src/test/resources/test.doc")
 		);
 	}
 

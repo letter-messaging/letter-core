@@ -20,19 +20,19 @@ public class PasswordTest {
 	private RegistrationController registrationController;
 
 	@Test(expected = InvalidPasswordException.class)
-	public void shouldThrowInvalidPasswordException_WithEmptyPassword() throws RegistrationException {
+	public void shouldThrowException_WithEmptyPassword() throws RegistrationException {
 		registrationController.register(
 				new RegisterUserDto("Jack", "Johnson", "jackj", ""));
 	}
 
 	@Test(expected = InvalidPasswordException.class)
-	public void shouldThrowInvalidPasswordException_WithLessThen8Characters() throws RegistrationException {
+	public void shouldThrowException_WithLessThen8Characters() throws RegistrationException {
 		registrationController.register(
 				new RegisterUserDto("Jack", "Johnson", "jackj", "1234567"));
 	}
 
 	@Test(expected = InvalidPasswordException.class)
-	public void shouldThrowInvalidPasswordException_WithMoreThen32Characters() throws RegistrationException {
+	public void shouldThrowException_WithMoreThen32Characters() throws RegistrationException {
 		registrationController.register(
 				new RegisterUserDto("Jack", "Johnson", "jackj", "1234567812345678123456781234567812345678"));
 	}

@@ -6,15 +6,13 @@ import com.gmail.ivanjermakov1.messenger.exception.InvalidMessageException;
 import com.gmail.ivanjermakov1.messenger.exception.NoSuchEntityException;
 import com.gmail.ivanjermakov1.messenger.exception.RegistrationException;
 import com.gmail.ivanjermakov1.messenger.messaging.controller.ConversationController;
-import com.gmail.ivanjermakov1.messenger.messaging.controller.ImageController;
+import com.gmail.ivanjermakov1.messenger.messaging.controller.DocumentController;
 import com.gmail.ivanjermakov1.messenger.messaging.controller.MessagingController;
 import com.gmail.ivanjermakov1.messenger.messaging.dto.ConversationDto;
 import com.gmail.ivanjermakov1.messenger.messaging.dto.MessageDto;
-import com.gmail.ivanjermakov1.messenger.messaging.dto.NewImageDto;
+import com.gmail.ivanjermakov1.messenger.messaging.dto.NewDocumentDto;
 import com.gmail.ivanjermakov1.messenger.messaging.dto.NewMessageDto;
 import com.gmail.ivanjermakov1.messenger.messaging.dto.TestingUser;
-import com.gmail.ivanjermakov1.messenger.messaging.entity.Message;
-import com.gmail.ivanjermakov1.messenger.messaging.service.MessageService;
 import com.gmail.ivanjermakov1.messenger.messaging.service.TestingService;
 import org.junit.Assert;
 import org.junit.Test;
@@ -31,13 +29,10 @@ import java.util.Collections;
 @SpringBootTest
 @RunWith(SpringRunner.class)
 @Transactional
-public class ImageTest {
+public class DocumentTest {
 
 	@Autowired
-	private ImageController imageController;
-
-	@Autowired
-	private MessageService messageService;
+	private DocumentController documentController;
 
 	@Autowired
 	private MessagingController messagingController;
@@ -49,7 +44,7 @@ public class ImageTest {
 	private TestingService testingService;
 
 	@Test
-	public void shouldSendMessageWithImageAndDeleteImage() throws RegistrationException, AuthenticationException, NoSuchEntityException, InvalidMessageException, IOException, AuthorizationException {
+	public void shouldSendMessageWithDocument() throws RegistrationException, AuthenticationException, NoSuchEntityException, InvalidMessageException, IOException, AuthorizationException {
 		TestingUser user1 = testingService.registerUser("Jack");
 		TestingUser user2 = testingService.registerUser("Ron");
 
@@ -58,7 +53,7 @@ public class ImageTest {
 				user2.user.login
 		);
 
-		NewImageDto image = imageController.upload(
+		NewDocumentDto document = documentController.upload(
 				user1.token,
 				testingService.mockTestImage()
 		);
@@ -68,28 +63,14 @@ public class ImageTest {
 				conversationDto.id,
 				"Hello!",
 				new ArrayList<>(),
-				new ArrayList<>(Collections.singletonList(image)),
-				new ArrayList<>()
+				new ArrayList<>(),
+				new ArrayList<>(Collections.singletonList(document))
 		);
 
 		MessageDto messageDto = messagingController.sendMessage(user1.token, newMessage);
 
 		Assert.assertNotNull(messageDto);
-		Assert.assertEquals(1, messageDto.images.size());
-
-		imageController.delete(
-				user1.token,
-				messageDto.images
-						.stream()
-						.findFirst()
-						.orElseThrow(NoSuchEntityException::new)
-						.id
-		);
-
-		Message messageWithoutImage = messageService.get(messageDto.id);
-
-		Assert.assertNotNull(messageWithoutImage);
-		Assert.assertTrue(messageWithoutImage.getImages().isEmpty());
+		Assert.assertEquals(1, messageDto.documents.size());
 	}
 
 }

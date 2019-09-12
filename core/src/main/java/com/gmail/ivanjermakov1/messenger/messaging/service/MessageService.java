@@ -49,10 +49,6 @@ public class MessageService {
 		this.messageMapper = messageMapper;
 	}
 
-	public Message save(Message message) {
-		return messageRepository.save(message);
-	}
-
 	public List<MessageDto> get(Long userId, Long conversationId, Pageable pageable) {
 		User user = userService.getUser(userId);
 		Conversation conversation = conversationService.get(conversationId);

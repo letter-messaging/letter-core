@@ -6,8 +6,10 @@ import com.gmail.ivanjermakov1.messenger.exception.InvalidFileException;
 import com.gmail.ivanjermakov1.messenger.exception.NoSuchEntityException;
 import com.gmail.ivanjermakov1.messenger.messaging.dto.NewImageDto;
 import com.gmail.ivanjermakov1.messenger.messaging.entity.Image;
+import com.gmail.ivanjermakov1.messenger.messaging.entity.Message;
 import com.gmail.ivanjermakov1.messenger.messaging.enums.FileType;
 import com.gmail.ivanjermakov1.messenger.messaging.repository.ImageRepository;
+import com.gmail.ivanjermakov1.messenger.messaging.repository.MessageRepository;
 import com.gmail.ivanjermakov1.messenger.util.Uploads;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,12 +21,14 @@ import java.io.IOException;
 public class ImageService {
 
 	private final ImageRepository imageRepository;
+	private final MessageRepository messageRepository;
 	private final FileUploadService fileUploadService;
 
 	@Autowired
-	public ImageService(ImageRepository imageRepository, FileUploadService fileUploadService) {
+	public ImageService(ImageRepository imageRepository, FileUploadService fileUploadService, MessageRepository messageRepository) {
 		this.imageRepository = imageRepository;
 		this.fileUploadService = fileUploadService;
+		this.messageRepository = messageRepository;
 	}
 
 	public NewImageDto upload(MultipartFile imageFile) throws IOException {
@@ -39,6 +43,13 @@ public class ImageService {
 
 		if (!image.getUser().getId().equals(user.getId()))
 			throw new AuthorizationException("user can delete only own images");
+
+//		also remove image from messages
+		Message message = image.getMessage();
+		if (message != null) {
+			message.getImages().removeIf(i -> i.getId().equals(imageId));
+		}
+		messageRepository.save(message);
 
 		imageRepository.delete(image);
 	}

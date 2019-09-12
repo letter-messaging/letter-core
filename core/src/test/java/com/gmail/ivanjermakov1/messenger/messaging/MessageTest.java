@@ -1,4 +1,4 @@
-package com.gmail.ivanjermakov1.messenger.messaging.util;
+package com.gmail.ivanjermakov1.messenger.messaging;
 
 import com.gmail.ivanjermakov1.messenger.exception.AuthenticationException;
 import com.gmail.ivanjermakov1.messenger.exception.AuthorizationException;
@@ -43,7 +43,6 @@ public class MessageTest {
 	private TestingService testingService;
 
 	private TestingUser user1;
-	private TestingUser user2;
 	private ConversationDto conversationDto;
 	private MessageDto message1;
 	private MessageDto message2;
@@ -51,7 +50,7 @@ public class MessageTest {
 	@Before
 	public void before() throws RegistrationException, AuthenticationException, AuthorizationException, InvalidMessageException {
 		user1 = testingService.registerUser("Jack");
-		user2 = testingService.registerUser("Ron");
+		TestingUser user2 = testingService.registerUser("Ron");
 
 		conversationDto = conversationController.create(
 				user1.token,

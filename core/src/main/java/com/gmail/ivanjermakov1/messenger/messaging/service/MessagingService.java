@@ -21,6 +21,7 @@ import com.gmail.ivanjermakov1.messenger.messaging.entity.Document;
 import com.gmail.ivanjermakov1.messenger.messaging.entity.Image;
 import com.gmail.ivanjermakov1.messenger.messaging.entity.Message;
 import com.gmail.ivanjermakov1.messenger.messaging.entity.UserConversation;
+import com.gmail.ivanjermakov1.messenger.messaging.repository.MessageRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +32,7 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -48,6 +50,8 @@ public class MessagingService {
 	private final DocumentService documentService;
 	private final UserService userService;
 
+	private final MessageRepository messageRepository;
+
 	private final UserMapper userMapper;
 	private ConversationMapper conversationMapper;
 	private MessageMapper messageMapper;
@@ -58,13 +62,14 @@ public class MessagingService {
 	private Long sseTimeout;
 
 	@Autowired
-	public MessagingService(MessageService messageService, ConversationService conversationService, ImageService imageService, DocumentService documentService, UserMapper userMapper, UserService userService) {
+	public MessagingService(MessageService messageService, ConversationService conversationService, ImageService imageService, DocumentService documentService, UserMapper userMapper, UserService userService, MessageRepository messageRepository) {
 		this.messageService = messageService;
 		this.conversationService = conversationService;
 		this.imageService = imageService;
 		this.documentService = documentService;
 		this.userMapper = userMapper;
 		this.userService = userService;
+		this.messageRepository = messageRepository;
 	}
 
 	@Autowired
@@ -129,19 +134,21 @@ public class MessagingService {
 						.stream()
 						.map(dto -> messageService.get(dto.id))
 						.collect(Collectors.toList()),
-				newMessageDto.images
-						.stream()
-						.map(i -> new Image(user, i.path, LocalDate.now()))
-						.collect(Collectors.toList()),
+				new ArrayList<>(),
 				newMessageDto.documents
 						.stream()
 						.map(d -> new Document(user, d.path, LocalDate.now()))
 						.collect(Collectors.toList())
 		);
 
+		message.setImages(newMessageDto.images
+				.stream()
+				.map(i -> new Image(user, message, i.path, LocalDate.now()))
+				.collect(Collectors.toList()));
+
 		if (!message.validate()) throw new InvalidMessageException("invalid message");
 
-		message = messageService.save(message);
+		messageRepository.save(message);
 
 		MessageDto messageDto = messageMapper.with(user).map(message);
 
@@ -166,7 +173,7 @@ public class MessagingService {
 
 		if (!message.validate()) throw new InvalidMessageException("invalid message");
 
-		message = messageService.save(message);
+		message = messageRepository.save(message);
 		MessageDto messageDto = messageMapper.with(system).map(message);
 
 		forEachRequest(conversation, request -> sendResponse(request, new NewMessageAction(messageDto)));
@@ -198,7 +205,7 @@ public class MessagingService {
 						.noneMatch(ed -> ed.id.equals(d.getId())))
 				.forEach(documentService::delete);
 
-		original = messageService.save(original);
+		original = messageRepository.save(original);
 
 		Conversation conversation = conversationService.get(original.getConversation().getId());
 		MessageDto messageDto = messageMapper.with(user).map(original);
