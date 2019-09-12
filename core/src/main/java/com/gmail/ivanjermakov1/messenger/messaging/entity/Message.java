@@ -75,8 +75,7 @@ public class Message {
 	/**
 	 * List of images, attached to current message
 	 */
-	@OneToMany(cascade = {CascadeType.ALL}, orphanRemoval = true)
-	@JoinColumn(name = "message_id", nullable = false)
+	@OneToMany(mappedBy = "message", cascade = {CascadeType.ALL}, orphanRemoval = true)
 	private List<Image> images;
 
 	/**
