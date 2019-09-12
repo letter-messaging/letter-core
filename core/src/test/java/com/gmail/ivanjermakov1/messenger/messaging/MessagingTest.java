@@ -1,0 +1,102 @@
+package com.gmail.ivanjermakov1.messenger.messaging;
+
+import com.gmail.ivanjermakov1.messenger.exception.AuthenticationException;
+import com.gmail.ivanjermakov1.messenger.exception.AuthorizationException;
+import com.gmail.ivanjermakov1.messenger.exception.InvalidMessageException;
+import com.gmail.ivanjermakov1.messenger.exception.NoSuchEntityException;
+import com.gmail.ivanjermakov1.messenger.exception.RegistrationException;
+import com.gmail.ivanjermakov1.messenger.messaging.controller.ConversationController;
+import com.gmail.ivanjermakov1.messenger.messaging.controller.MessagingController;
+import com.gmail.ivanjermakov1.messenger.messaging.dto.ConversationDto;
+import com.gmail.ivanjermakov1.messenger.messaging.dto.EditMessageDto;
+import com.gmail.ivanjermakov1.messenger.messaging.dto.MessageDto;
+import com.gmail.ivanjermakov1.messenger.messaging.dto.NewMessageDto;
+import com.gmail.ivanjermakov1.messenger.messaging.dto.TestingUser;
+import com.gmail.ivanjermakov1.messenger.messaging.entity.Message;
+import com.gmail.ivanjermakov1.messenger.messaging.service.MessageService;
+import com.gmail.ivanjermakov1.messenger.messaging.service.TestingService;
+import org.junit.Assert;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.transaction.annotation.Transactional;
+
+@SpringBootTest
+@RunWith(SpringRunner.class)
+@Transactional
+public class MessagingTest {
+
+	@Autowired
+	private MessageService messageService;
+
+	@Autowired
+	private MessagingController messagingController;
+
+	@Autowired
+	private ConversationController conversationController;
+
+	@Autowired
+	private TestingService testingService;
+
+	@Test
+	public void shouldSendMessage() throws RegistrationException, AuthenticationException, NoSuchEntityException, InvalidMessageException, AuthorizationException {
+		TestingUser user1 = testingService.registerUser("Jack");
+		TestingUser user2 = testingService.registerUser("Ron");
+
+		ConversationDto conversationDto = conversationController.create(
+				user1.token,
+				user2.user.login
+		);
+
+		NewMessageDto message = new NewMessageDto(
+				user1.user.id,
+				conversationDto.id,
+				"Hello!"
+		);
+
+		MessageDto messageDto = messagingController.sendMessage(user1.token, message);
+
+		Assert.assertNotNull(messageDto);
+		Assert.assertNotNull(messageDto.id);
+	}
+
+	@Test
+	public void shouldEditMessage() throws RegistrationException, AuthenticationException, AuthorizationException, InvalidMessageException {
+		TestingUser user1 = testingService.registerUser("Jack");
+		TestingUser user2 = testingService.registerUser("Ron");
+
+		ConversationDto conversationDto = conversationController.create(
+				user1.token,
+				user2.user.login
+		);
+
+		NewMessageDto newMessage = new NewMessageDto(
+				user1.user.id,
+				conversationDto.id,
+				"Hello!"
+		);
+
+		MessageDto message = messagingController.sendMessage(user1.token, newMessage);
+
+		MessageDto editMessage = messagingController.editMessage(
+				user1.token,
+				new EditMessageDto(
+						message.id,
+						"Edit"
+				)
+		);
+
+		Assert.assertNotNull(editMessage);
+		Assert.assertEquals(message.id, editMessage.id);
+		Assert.assertEquals("Edit", editMessage.text);
+
+		Message receivedEditMessage = messageService.get(message.id);
+
+		Assert.assertNotNull(receivedEditMessage);
+		Assert.assertEquals(editMessage.id, receivedEditMessage.getId());
+		Assert.assertEquals(editMessage.text, receivedEditMessage.getText());
+	}
+
+}

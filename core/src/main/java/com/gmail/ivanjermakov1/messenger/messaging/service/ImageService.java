@@ -27,10 +27,6 @@ public class ImageService {
 		this.fileUploadService = fileUploadService;
 	}
 
-	public void delete(Image image) {
-		imageRepository.delete(image);
-	}
-
 	public NewImageDto upload(MultipartFile imageFile) throws IOException {
 		if (!Uploads.isSupportedImage(imageFile)) throw new InvalidFileException("provided file is not an image");
 
@@ -44,7 +40,7 @@ public class ImageService {
 		if (!image.getUser().getId().equals(user.getId()))
 			throw new AuthorizationException("user can delete only own images");
 
-		delete(image);
+		imageRepository.delete(image);
 	}
 
 }

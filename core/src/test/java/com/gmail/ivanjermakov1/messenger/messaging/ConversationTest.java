@@ -1,6 +1,5 @@
 package com.gmail.ivanjermakov1.messenger.messaging;
 
-import com.gmail.ivanjermakov1.messenger.auth.service.UserService;
 import com.gmail.ivanjermakov1.messenger.exception.AuthenticationException;
 import com.gmail.ivanjermakov1.messenger.exception.AuthorizationException;
 import com.gmail.ivanjermakov1.messenger.exception.InvalidMessageException;
@@ -31,9 +30,6 @@ public class ConversationTest {
 	private ConversationController conversationController;
 
 	@Autowired
-	private UserService userService;
-
-	@Autowired
 	private PreviewController previewController;
 
 	@Autowired
@@ -44,12 +40,9 @@ public class ConversationTest {
 		TestingUser user1 = testingService.registerUser("Jack");
 		TestingUser user2 = testingService.registerUser("Ron");
 
-		Assert.assertNotNull(user1);
-		Assert.assertNotNull(user2);
-
 		ConversationDto conversationDto = conversationController.create(
 				user1.token,
-				userService.getUser(user2.user.id).getLogin()
+				user2.user.login
 		);
 
 		Assert.assertNotNull(conversationDto);
@@ -60,11 +53,9 @@ public class ConversationTest {
 	public void shouldCreateSelfConversation() throws RegistrationException, AuthenticationException, NoSuchEntityException, InvalidMessageException, IOException, AuthorizationException {
 		TestingUser user = testingService.registerUser("Jack");
 
-		Assert.assertNotNull(user);
-
 		ConversationDto conversationDto = conversationController.create(
 				user.token,
-				userService.getUser(user.user.id).getLogin()
+				user.user.login
 		);
 
 		Assert.assertNotNull(conversationDto);
@@ -73,20 +64,34 @@ public class ConversationTest {
 
 	@Test
 	public void shouldDeleteConversation() throws RegistrationException, AuthenticationException {
-		TestingUser user = testingService.registerUser("Jack");
-
-		Assert.assertNotNull(user);
+		TestingUser user1 = testingService.registerUser("Jack");
+		TestingUser user2 = testingService.registerUser("Ron");
 
 		ConversationDto conversationDto = conversationController.create(
-				user.token,
-				userService.getUser(user.user.id).getLogin()
+				user1.token,
+				user2.user.login
 		);
 
-		Assert.assertNotNull(previewController.get(user.token, conversationDto.id));
 
-		conversationController.delete(user.token, conversationDto.id);
+		conversationController.delete(user1.token, conversationDto.id);
 
-		PreviewDto previewDto = previewController.get(user.token, conversationDto.id);
+		PreviewDto previewDto = previewController.get(user1.token, conversationDto.id);
+		Assert.assertTrue(previewDto.conversation.hidden);
+	}
+
+	@Test
+	public void shouldHideConversation() throws RegistrationException, AuthenticationException {
+		TestingUser user1 = testingService.registerUser("Jack");
+		TestingUser user2 = testingService.registerUser("Ron");
+
+		ConversationDto conversationDto = conversationController.create(
+				user1.token,
+				user2.user.login
+		);
+
+		conversationController.hide(user1.token, conversationDto.id);
+
+		PreviewDto previewDto = previewController.get(user1.token, conversationDto.id);
 		Assert.assertTrue(previewDto.conversation.hidden);
 	}
 

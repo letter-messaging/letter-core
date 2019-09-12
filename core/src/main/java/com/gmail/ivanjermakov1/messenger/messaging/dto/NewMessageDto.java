@@ -1,5 +1,6 @@
 package com.gmail.ivanjermakov1.messenger.messaging.dto;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -13,6 +14,17 @@ public class NewMessageDto {
 	public List<NewDocumentDto> documents;
 
 	public NewMessageDto() {
+	}
+
+	public NewMessageDto(Long senderId, Long conversationId, String text) {
+		this(
+				senderId,
+				conversationId,
+				text,
+				new ArrayList<>(),
+				new ArrayList<>(),
+				new ArrayList<>()
+		);
 	}
 
 	public NewMessageDto(Long senderId, Long conversationId, String text, List<MessageDto> forwarded, List<NewImageDto> images, List<NewDocumentDto> documents) {

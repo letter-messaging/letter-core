@@ -172,7 +172,7 @@ public class MessagingService {
 		forEachRequest(conversation, request -> sendResponse(request, new NewMessageAction(messageDto)));
 	}
 
-	public MessageDto processMessageEdit(User user, EditMessageDto editMessageDto) throws AuthenticationException {
+	public MessageDto processMessageEdit(User user, EditMessageDto editMessageDto) throws AuthenticationException, AuthorizationException {
 		LOG.debug("process message edit @" + editMessageDto.id + "; text: " + editMessageDto.text);
 
 		Message original = messageService.get(editMessageDto.id);
@@ -189,7 +189,7 @@ public class MessagingService {
 				.filter(i -> editMessageDto.images
 						.stream()
 						.noneMatch(ei -> ei.id.equals(i.getId())))
-				.forEach(imageService::delete);
+				.forEach(i -> imageService.delete(user, i.getId()));
 
 		original.getDocuments()
 				.stream()
