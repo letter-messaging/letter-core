@@ -178,8 +178,8 @@ create unique index user_conversation_id_uindex
     on user_conversation (id);
 
 INSERT INTO public."user" (id, login, hash)
-VALUES (0, 'system', '9ORQk/lZ9xIqQRHYpKUnFIPoAz31kj0xCz47u8FHE7k=$/5l1c6S8EZGjrFaJoMXpI0fGSHisgBj3lv9Ldiejou0=')
+VALUES (0, 'system', '9ORQk/lZ9xIqQRHYpKUnFIPoAz31kj0xCz47u8FHE7k=$/5l1c6S8EZGjrFaJoMXpI0fGSHisgBj3lv9Ldiejou0=');
 
 INSERT INTO public.user_info (id, user_id, first_name, last_name, gender, birth_date, marital_status, country, city,
                               location, phone_number, mail, place_of_education, place_of_work, about)
-VALUES (0, 0, 'system', '', null, null, null, null, null, null, null, null, null, null, null)
+VALUES (0, 0, 'system', '', null, null, null, null, null, null, null, null, null, null, null);
