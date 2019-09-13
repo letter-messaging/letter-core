@@ -55,7 +55,7 @@ public class ChatController {
 	 * Create chat.
 	 *
 	 * @param token user token
-	 * @param chat  chat instance to create
+	 * @param chat  chat instance to create. Creator id is not required.
 	 * @return created chat
 	 * @throws AuthenticationException on invalid @param token
 	 */

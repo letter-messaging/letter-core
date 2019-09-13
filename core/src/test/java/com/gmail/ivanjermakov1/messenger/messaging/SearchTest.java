@@ -2,9 +2,16 @@ package com.gmail.ivanjermakov1.messenger.messaging;
 
 import com.gmail.ivanjermakov1.messenger.auth.dto.UserDto;
 import com.gmail.ivanjermakov1.messenger.exception.AuthenticationException;
+import com.gmail.ivanjermakov1.messenger.exception.InvalidMessageException;
 import com.gmail.ivanjermakov1.messenger.exception.InvalidSearchFormatException;
+import com.gmail.ivanjermakov1.messenger.exception.NoSuchEntityException;
 import com.gmail.ivanjermakov1.messenger.exception.RegistrationException;
+import com.gmail.ivanjermakov1.messenger.messaging.controller.ConversationController;
+import com.gmail.ivanjermakov1.messenger.messaging.controller.MessagingController;
 import com.gmail.ivanjermakov1.messenger.messaging.controller.SearchController;
+import com.gmail.ivanjermakov1.messenger.messaging.dto.ConversationDto;
+import com.gmail.ivanjermakov1.messenger.messaging.dto.NewMessageDto;
+import com.gmail.ivanjermakov1.messenger.messaging.dto.PreviewDto;
 import com.gmail.ivanjermakov1.messenger.messaging.dto.TestingUser;
 import com.gmail.ivanjermakov1.messenger.messaging.service.TestingService;
 import org.junit.Assert;
@@ -25,6 +32,12 @@ public class SearchTest {
 
 	@Autowired
 	private SearchController searchController;
+
+	@Autowired
+	private ConversationController conversationController;
+
+	@Autowired
+	private MessagingController messagingController;
 
 	@Autowired
 	private TestingService testingService;
@@ -53,6 +66,42 @@ public class SearchTest {
 				user.token,
 				"John",
 				PageRequest.of(0, Integer.MAX_VALUE)
+		);
+	}
+
+	@Test
+	public void shouldFindConversationByFirstName() throws RegistrationException, AuthenticationException, InvalidMessageException {
+		TestingUser user1 = testingService.registerUser("Jack");
+		TestingUser user2 = testingService.registerUser("Ron");
+
+		ConversationDto conversationDto = conversationController.create(
+				user1.token,
+				user2.user.login
+		);
+
+		NewMessageDto message = new NewMessageDto(
+				user1.user.id,
+				conversationDto.id,
+				"Hello!"
+		);
+
+//		message is required for conversation to be visible through previewController.all()
+		messagingController.sendMessage(user1.token, message);
+
+		List<PreviewDto> previews = searchController.searchConversations(
+				user1.token,
+				user2.user.lastName,
+				PageRequest.of(0, Integer.MAX_VALUE)
+		);
+
+		Assert.assertEquals(1, previews.size());
+		Assert.assertEquals(
+				conversationDto.id,
+				previews
+						.stream()
+						.findFirst()
+						.orElseThrow(NoSuchEntityException::new)
+						.conversation.id
 		);
 	}
 
