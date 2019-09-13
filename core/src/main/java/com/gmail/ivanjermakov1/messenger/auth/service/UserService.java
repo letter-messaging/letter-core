@@ -54,21 +54,21 @@ public class UserService {
 		LOG.debug("authenticate user: @" + login);
 		Optional<User> user = userRepository.findByLogin(login);
 
-		if (!user.isPresent() || !hashService.check(password, user.get().getHash()))
+		if (!user.isPresent() || !hashService.check(password, user.get().hash))
 			throw new AuthenticationException("wrong credentials");
 
 //		even if the password matches, client won't receive @system's user token
-		if (user.get().getId().equals(0L))
+		if (user.get().id.equals(0L))
 			throw new AuthenticationException("unable to authenticate @system user");
 
-		Token token = tokenRepository.findById(user.get().getId())
+		Token token = tokenRepository.findById(user.get().id)
 				.orElse(tokenRepository.save(new Token(user.get(), TokenGenerator.generate())));
 
-		return token.getToken();
+		return token.token;
 	}
 
 	public User authenticate(String token) throws AuthenticationException {
-		return tokenRepository.findByToken(token).orElseThrow(() -> new AuthenticationException("invalid token")).getUser();
+		return tokenRepository.findByToken(token).orElseThrow(() -> new AuthenticationException("invalid token")).user;
 	}
 
 	public void register(RegisterUserDto registerUserDto) throws RegistrationException {
@@ -94,12 +94,12 @@ public class UserService {
 	}
 
 	public void appearOnline(User user) {
-		LOG.debug("user @" + user.getLogin() + " is now online");
+		LOG.debug("user @" + user.login + " is now online");
 		userOnlineRepository.save(new UserOnline(user, LocalDateTime.now()));
 	}
 
 	public void logout(User user) {
-		LOG.debug("user @" + user.getLogin() + " is logout from everywhere");
+		LOG.debug("user @" + user.login + " is logout from everywhere");
 
 		tokenRepository.deleteAllByUser(user);
 	}

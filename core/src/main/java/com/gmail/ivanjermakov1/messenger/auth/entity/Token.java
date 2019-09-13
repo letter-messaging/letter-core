@@ -1,5 +1,7 @@
 package com.gmail.ivanjermakov1.messenger.auth.entity;
 
+import javax.persistence.Access;
+import javax.persistence.AccessType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -13,6 +15,7 @@ import javax.persistence.Table;
  * Entity representing user token
  */
 @Entity
+@Access(AccessType.FIELD)
 @Table(name = "token")
 public class Token {
 
@@ -21,50 +24,26 @@ public class Token {
 	 */
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+	public Long id;
 
 	/**
 	 * User, owner of this token
 	 */
 	@OneToOne
 	@JoinColumn(name = "user_id")
-	private User user;
+	public User user;
 
 	/**
 	 * Token value. Represents UUID value
 	 */
 	@Column(name = "token")
-	private String token;
+	public String token;
 
 	public Token() {
 	}
 
 	public Token(User user, String token) {
 		this.user = user;
-		this.token = token;
-	}
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public User getUser() {
-		return user;
-	}
-
-	public void setUser(User user) {
-		this.user = user;
-	}
-
-	public String getToken() {
-		return token;
-	}
-
-	public void setToken(String token) {
 		this.token = token;
 	}
 

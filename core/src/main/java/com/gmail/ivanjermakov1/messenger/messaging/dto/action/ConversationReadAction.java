@@ -20,12 +20,4 @@ public class ConversationReadAction extends Action {
 		this.reader = reader;
 	}
 
-	public ConversationDto getConversation() {
-		return conversation;
-	}
-
-	public void setConversation(ConversationDto conversation) {
-		this.conversation = conversation;
-	}
-
 }

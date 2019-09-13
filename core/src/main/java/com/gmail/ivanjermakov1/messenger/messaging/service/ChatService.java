@@ -44,16 +44,16 @@ public class ChatService {
 		);
 		conversationRepository.save(conversation);
 
-		conversation.getUserConversations().add(new UserConversation(
+		conversation.userConversations.add(new UserConversation(
 				user,
 				conversation
 		));
 
 		if (newChat.userIds != null && !newChat.userIds.isEmpty()) {
-			conversation.getUserConversations().addAll(
+			conversation.userConversations.addAll(
 					newChat.userIds
 							.stream()
-							.filter(id -> !id.equals(user.getId()))
+							.filter(id -> !id.equals(user.id))
 							.map(userRepository::findById)
 							.filter(Optional::isPresent)
 							.map(Optional::get)
@@ -66,8 +66,8 @@ public class ChatService {
 
 		try {
 			messagingService.systemMessage(NewMessageDto.systemMessage(
-					chat.getId(),
-					"User @" + user.getLogin() + " created chat"
+					chat.id,
+					"User @" + user.login + " created chat"
 			));
 		} catch (InvalidMessageException ignored) {
 		}
@@ -76,22 +76,22 @@ public class ChatService {
 	}
 
 	public void addMembers(User user, Conversation chat, List<User> members) throws NoSuchEntityException {
-		if (chat.getUserConversations().stream().noneMatch(uc -> uc.getUser().getId().equals(user.getId())))
+		if (chat.userConversations.stream().noneMatch(uc -> uc.user.id.equals(user.id)))
 			throw new NoSuchEntityException("only chat members can add new ones");
 
-		chat.getUserConversations().addAll(
+		chat.userConversations.addAll(
 				members
 						.stream()
-						.filter(u -> chat.getUserConversations()
+						.filter(u -> chat.userConversations
 								.stream()
-								.noneMatch(uc -> uc.getUser().getId().equals(u.getId()))
+								.noneMatch(uc -> uc.user.id.equals(u.id))
 						)
 						.map(u -> new UserConversation(u, chat))
 						.peek(uc -> {
 							try {
 								messagingService.systemMessage(NewMessageDto.systemMessage(
-										chat.getId(),
-										"User @" + user.getLogin() + " added @" + uc.getUser().getLogin() + " to chat"
+										chat.id,
+										"User @" + user.login + " added @" + uc.user.login + " to chat"
 								));
 							} catch (InvalidMessageException ignored) {
 							}
@@ -99,16 +99,16 @@ public class ChatService {
 						.collect(Collectors.toList())
 		);
 
-		chat.getUserConversations()
+		chat.userConversations
 				.stream()
-				.filter(uc -> members.stream().anyMatch(u -> u.getId().equals(uc.getUser().getId())))
+				.filter(uc -> members.stream().anyMatch(u -> u.id.equals(uc.user.id)))
 				.forEach(uc -> {
-					uc.setKicked(false);
+					uc.kicked = false;
 
 					try {
 						messagingService.systemMessage(NewMessageDto.systemMessage(
-								chat.getId(),
-								"User @" + user.getLogin() + " returned @" + uc.getUser().getLogin() + " to chat"
+								chat.id,
+								"User @" + user.login + " returned @" + uc.user.login + " to chat"
 						));
 					} catch (InvalidMessageException ignored) {
 					}
@@ -119,27 +119,27 @@ public class ChatService {
 
 	//	TODO: change kicking logic to support leaving (non-creator users can "kick" themselves)
 	public void kickMember(User user, Conversation chat, User member) throws AuthorizationException, IllegalStateException {
-		if (!user.getId().equals(chat.getCreator().getId()))
+		if (!user.id.equals(chat.creator.id))
 			throw new AuthorizationException("only chat creator can kick members");
-		if (user.getId().equals(member.getId()))
+		if (user.id.equals(member.id))
 			throw new IllegalStateException("chat creator cannot be kicked");
 
-		UserConversation userConversation = chat.getUserConversations()
+		UserConversation userConversation = chat.userConversations
 				.stream()
-				.filter(uc -> uc.getUser().getId().equals(member.getId()))
+				.filter(uc -> uc.user.id.equals(member.id))
 				.findFirst()
 				.orElseThrow(() -> new NoSuchEntityException("no such member to kick"));
 
 		try {
 			messagingService.systemMessage(NewMessageDto.systemMessage(
-					chat.getId(),
-					"User @" + user.getLogin() + " kicked @" + member.getLogin() + " from chat"
+					chat.id,
+					"User @" + user.id + " kicked @" + member.id + " from chat"
 			));
 		} catch (InvalidMessageException ignored) {
 		}
 
-		userConversation.setLastRead(LocalDateTime.now());
-		userConversation.setKicked(true);
+		userConversation.lastRead = LocalDateTime.now();
+		userConversation.kicked = true;
 
 		conversationRepository.save(chat);
 	}

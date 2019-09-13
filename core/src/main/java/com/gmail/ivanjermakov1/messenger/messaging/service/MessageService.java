@@ -62,7 +62,7 @@ public class MessageService {
 
 		return messages
 				.stream()
-				.filter(m -> !(userConversation.getKicked() && userConversation.getLastRead().isBefore(m.getSent())))
+				.filter(m -> !(userConversation.kicked && userConversation.lastRead.isBefore(m.sent)))
 				.skip(pageable.getOffset())
 				.limit(pageable.getPageSize())
 				.map(message -> messageMapper.with(user).map(message))
@@ -73,8 +73,8 @@ public class MessageService {
 		UserConversation userConversation = userConversationRepository.findByUserAndConversation(user, conversation)
 				.orElseThrow(() -> new NoSuchEntityException("no such user's conversation"));
 
-		if (!userConversation.getKicked()) {
-			userConversation.setLastRead(LocalDateTime.now());
+		if (!userConversation.kicked) {
+			userConversation.lastRead = LocalDateTime.now();
 		}
 	}
 
@@ -90,16 +90,16 @@ public class MessageService {
 				.map(dto -> messageRepository.getById(dto.id))
 				.filter(Optional::isPresent)
 				.map(Optional::get)
-				.filter(m -> m.getSender().getId().equals(user.getId()))
+				.filter(m -> m.sender.id.equals(user.id))
 				.forEach(this::delete);
 	}
 
 	public void deleteForwarded(Message message) {
-		messageRepository.deleteForwarded(message.getId());
+		messageRepository.deleteForwarded(message.id);
 	}
 
 	public void deleteImages(Message message) {
-		message.getImages().forEach(i -> imageService.delete(message.getSender(), i.getId()));
+		message.images.forEach(i -> imageService.delete(message.sender, i.id));
 	}
 
 	public Message get(Long messageId) {
@@ -122,7 +122,7 @@ public class MessageService {
 	 * @param message message that will be deleted
 	 */
 	public void delete(Message message) {
-		messageRepository.deleteFromForwarded(message.getId());
+		messageRepository.deleteFromForwarded(message.id);
 		deleteImages(message);
 		messageRepository.delete(message);
 	}

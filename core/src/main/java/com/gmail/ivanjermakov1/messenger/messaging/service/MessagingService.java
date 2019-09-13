@@ -20,7 +20,6 @@ import com.gmail.ivanjermakov1.messenger.messaging.entity.Conversation;
 import com.gmail.ivanjermakov1.messenger.messaging.entity.Document;
 import com.gmail.ivanjermakov1.messenger.messaging.entity.Image;
 import com.gmail.ivanjermakov1.messenger.messaging.entity.Message;
-import com.gmail.ivanjermakov1.messenger.messaging.entity.UserConversation;
 import com.gmail.ivanjermakov1.messenger.messaging.repository.MessageRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -91,7 +90,7 @@ public class MessagingService {
 	}
 
 	public void sendResponse(Request<Action> request, Action action) {
-		LOG.debug("sending response to @" + request.user.getLogin() + "; type: " + action.type);
+		LOG.debug("sending response to @" + request.user.login + "; type: " + action.type);
 		try {
 			SseEmitter.SseEventBuilder event = SseEmitter.event()
 					.data(action)
@@ -105,24 +104,24 @@ public class MessagingService {
 	public void forEachRequest(Conversation conversation, Consumer<Request<Action>> consumer) {
 		new Thread(() -> requests
 				.stream()
-				.filter(r -> conversation.getUserConversations()
+				.filter(r -> conversation.userConversations
 						.stream()
-						.filter(uc -> !uc.getKicked())
-						.map(UserConversation::getUser)
-						.anyMatch(i -> i.getId().equals(r.user.getId())))
+						.filter(uc -> !uc.kicked)
+						.map(uc -> uc.user)
+						.anyMatch(i -> i.id.equals(r.user.id)))
 				.forEach(consumer)).start();
 	}
 
 	public MessageDto processNewMessage(User user, NewMessageDto newMessageDto) throws InvalidMessageException, AuthorizationException {
 		Conversation conversation = conversationService.get(newMessageDto.conversationId);
 
-		if (conversation.getUserConversations()
+		if (conversation.userConversations
 				.stream()
-				.filter(uc -> uc.getUser().getId().equals(user.getId()))
-				.noneMatch(uc -> uc.getKicked().equals(false)))
+				.filter(uc -> uc.user.id.equals(user.id))
+				.noneMatch(uc -> uc.kicked.equals(false)))
 			throw new AuthorizationException("no access");
 
-		LOG.debug("process new message from @" + user.getLogin() + " to conversation @" + newMessageDto.conversationId +
+		LOG.debug("process new message from @" + user.login + " to conversation @" + newMessageDto.conversationId +
 				"; text: " + newMessageDto.text);
 
 		Message message = new Message(
@@ -141,10 +140,10 @@ public class MessagingService {
 						.collect(Collectors.toList())
 		);
 
-		message.setImages(newMessageDto.images
+		message.images = newMessageDto.images
 				.stream()
 				.map(i -> new Image(user, message, i.path, LocalDate.now()))
-				.collect(Collectors.toList()));
+				.collect(Collectors.toList());
 
 		if (!message.validate()) throw new InvalidMessageException("invalid message");
 
@@ -184,30 +183,30 @@ public class MessagingService {
 
 		Message original = messageService.get(editMessageDto.id);
 
-		if (original == null || !original.getSender().getId().equals(user.getId()))
+		if (original == null || !original.sender.id.equals(user.id))
 			throw new AuthenticationException("user can edit only own messages");
 
-		original.setText(editMessageDto.text);
+		original.text = editMessageDto.text;
 		if (editMessageDto.forwarded != null && editMessageDto.forwarded.isEmpty())
 			messageService.deleteForwarded(original);
 
-		original.getImages()
+		original.images
 				.stream()
 				.filter(i -> editMessageDto.images
 						.stream()
-						.noneMatch(ei -> ei.id.equals(i.getId())))
-				.forEach(i -> imageService.delete(user, i.getId()));
+						.noneMatch(ei -> ei.id.equals(i.id)))
+				.forEach(i -> imageService.delete(user, i.id));
 
-		original.getDocuments()
+		original.documents
 				.stream()
 				.filter(d -> editMessageDto.documents
 						.stream()
-						.noneMatch(ed -> ed.id.equals(d.getId())))
+						.noneMatch(ed -> ed.id.equals(d.id)))
 				.forEach(documentService::delete);
 
 		original = messageRepository.save(original);
 
-		Conversation conversation = conversationService.get(original.getConversation().getId());
+		Conversation conversation = conversationService.get(original.conversation.id);
 		MessageDto messageDto = messageMapper.with(user).map(original);
 
 		forEachRequest(conversation, request -> sendResponse(request, new MessageEditAction(messageDto)));

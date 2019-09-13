@@ -41,13 +41,13 @@ public class ImageService {
 		Image image = imageRepository.findById(imageId)
 				.orElseThrow(() -> new NoSuchEntityException("such image does not exist"));
 
-		if (!image.getUser().getId().equals(user.getId()))
+		if (!image.user.id.equals(user.id))
 			throw new AuthorizationException("user can delete only own images");
 
 //		also remove image from messages
-		Message message = image.getMessage();
+		Message message = image.message;
 		if (message != null) {
-			message.getImages().removeIf(i -> i.getId().equals(imageId));
+			message.images.removeIf(i -> i.id.equals(imageId));
 		}
 		messageRepository.save(message);
 

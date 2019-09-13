@@ -33,13 +33,13 @@ public class ConversationMapper implements Mapper<Conversation, ConversationDto>
 	public ConversationDto map(Conversation conversation) {
 		Optional<UserConversation> userConversation = userConversationRepository.findByUserAndConversation(user, conversation);
 		return new ConversationDto(
-				conversation.getId(),
-				conversation.getChatName(),
-				userConversation.map(UserConversation::getHidden).orElse(null),
-				conversation.getUserConversations()
+				conversation.id,
+				conversation.chatName,
+				userConversation.map(uc -> uc.hidden).orElse(null),
+				conversation.userConversations
 						.stream()
-						.filter(uc -> uc.getKicked().equals(false))
-						.map(UserConversation::getUser)
+						.filter(uc -> uc.kicked.equals(false))
+						.map(uc -> uc.user)
 						.map(userMapper::map)
 						.collect(Collectors.toList())
 		);

@@ -95,8 +95,8 @@ public class MessagingTest {
 		Message receivedEditMessage = messageService.get(message.id);
 
 		Assert.assertNotNull(receivedEditMessage);
-		Assert.assertEquals(editMessage.id, receivedEditMessage.getId());
-		Assert.assertEquals(editMessage.text, receivedEditMessage.getText());
+		Assert.assertEquals(editMessage.id, receivedEditMessage.id);
+		Assert.assertEquals(editMessage.text, receivedEditMessage.text);
 	}
 
 }

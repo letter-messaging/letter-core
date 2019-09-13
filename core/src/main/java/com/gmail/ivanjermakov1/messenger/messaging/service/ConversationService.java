@@ -40,9 +40,9 @@ public class ConversationService {
 	}
 
 	public Conversation create(User user, User with) {
-		LOG.debug("create conversation between: @" + user.getLogin() + " and @" + with.getLogin());
+		LOG.debug("create conversation between: @" + user.login + " and @" + with.login);
 
-		if (user.getId().equals(with.getId())) return create(user);
+		if (user.id.equals(with.id)) return create(user);
 
 		Conversation conversation = new Conversation();
 		try {
@@ -51,9 +51,9 @@ public class ConversationService {
 		} catch (NoSuchEntityException e) {
 			conversation = conversationRepository.save(conversation);
 
-			conversation.setUserConversations(new ArrayList<>());
-			conversation.getUserConversations().add(new UserConversation(user, conversation));
-			conversation.getUserConversations().add(new UserConversation(with, conversation));
+			conversation.userConversations = new ArrayList<>();
+			conversation.userConversations.add(new UserConversation(user, conversation));
+			conversation.userConversations.add(new UserConversation(with, conversation));
 		}
 
 		return conversationRepository.save(conversation);
@@ -68,7 +68,7 @@ public class ConversationService {
 	 * @throws AuthenticationException when interrogator has no permission to delete defined conversation
 	 */
 	public void delete(User user, Conversation conversation) throws AuthenticationException {
-		if (conversation.getUserConversations().stream().noneMatch(uc -> uc.getUser().getId().equals(user.getId())))
+		if (conversation.userConversations.stream().noneMatch(uc -> uc.user.id.equals(user.id)))
 			throw new AuthenticationException("you can delete only conversations you are member within");
 
 		messageService.deleteAll(user, conversation);
@@ -80,7 +80,7 @@ public class ConversationService {
 	}
 
 	public List<Conversation> getConversations(User user, Pageable pageable) {
-		return conversationRepository.getConversations(user.getId(), pageable);
+		return conversationRepository.getConversations(user.id, pageable);
 	}
 
 	public void hide(User user, Conversation conversation) {
@@ -95,35 +95,35 @@ public class ConversationService {
 		UserConversation userConversation = userConversationRepository.findByUserAndConversation(user, conversation)
 				.orElseThrow(NoSuchEntityException::new);
 
-		userConversation.setHidden(hidden);
+		userConversation.hidden = hidden;
 		userConversationRepository.save(userConversation);
 	}
 
 	private Conversation conversationWith(User user1, User user2) {
-		return conversationRepository.getConversations(user1.getId(), PageRequest.of(0, Integer.MAX_VALUE))
+		return conversationRepository.getConversations(user1.id, PageRequest.of(0, Integer.MAX_VALUE))
 				.stream()
-				.filter(c -> c.getUserConversations()
+				.filter(c -> c.userConversations
 						.stream()
-						.map(UserConversation::getUser)
-						.anyMatch(u -> u.getId().equals(user2.getId())) &&
-						c.getUserConversations().size() == 2)
+						.map(uc -> uc.user)
+						.anyMatch(u -> u.id.equals(user2.id)) &&
+						c.userConversations.size() == 2)
 				.findFirst().orElseThrow(() -> new NoSuchEntityException("no such conversation"));
 	}
 
 	private Conversation create(User user) {
-		Conversation self = conversationRepository.getConversations(user.getId(), PageRequest.of(0, Integer.MAX_VALUE))
+		Conversation self = conversationRepository.getConversations(user.id, PageRequest.of(0, Integer.MAX_VALUE))
 				.stream()
-				.filter(c -> c.getUserConversations().size() == 1)
+				.filter(c -> c.userConversations.size() == 1)
 				.findFirst().orElse(null);
 
 		if (self != null) return self;
 
 		self = new Conversation();
-		self.setUserConversations(new ArrayList<>());
+		self.userConversations = new ArrayList<>();
 
 		self = conversationRepository.save(self);
 
-		self.getUserConversations().add(new UserConversation(user, self));
+		self.userConversations.add(new UserConversation(user, self));
 
 		return conversationRepository.save(self);
 	}
@@ -133,7 +133,7 @@ public class ConversationService {
 				user,
 				conversation,
 				userConversationRepository.findByUserAndConversation(user, conversation)
-						.orElseThrow(NoSuchEntityException::new).getLastRead()
+						.orElseThrow(NoSuchEntityException::new).lastRead
 		);
 	}
 

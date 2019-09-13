@@ -89,7 +89,7 @@ public class ImageTest {
 		Message messageWithoutImage = messageService.get(messageDto.id);
 
 		Assert.assertNotNull(messageWithoutImage);
-		Assert.assertTrue(messageWithoutImage.getImages().isEmpty());
+		Assert.assertTrue(messageWithoutImage.images.isEmpty());
 	}
 
 }

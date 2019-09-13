@@ -40,21 +40,21 @@ public class AvatarService {
 	}
 
 	public Optional<Avatar> getCurrent(User user) {
-		return avatarRepository.getByUserId(user.getId())
+		return avatarRepository.getByUserId(user.id)
 				.stream()
-				.max(Comparator.comparing(Avatar::getUploaded));
+				.max(Comparator.comparing(a -> a.uploaded));
 	}
 
 	//	TODO: delete physical file from file system
 	public void delete(User user, Long avatarId) {
-		if (avatarRepository.getByUserId(user.getId()).stream().noneMatch(a -> a.getId().equals(avatarId)))
+		if (avatarRepository.getByUserId(user.id).stream().noneMatch(a -> a.id.equals(avatarId)))
 			throw new NoSuchEntityException("invalid avatar id");
 
 		avatarRepository.deleteAvatarById(avatarId);
 	}
 
 	public List<Avatar> getAll(User user) {
-		return new ArrayList<>(avatarRepository.getByUserId(user.getId()));
+		return new ArrayList<>(avatarRepository.getByUserId(user.id));
 	}
 
 	public AvatarDto upload(User user, MultipartFile avatarFile) throws IOException {

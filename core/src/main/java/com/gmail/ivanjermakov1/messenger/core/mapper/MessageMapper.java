@@ -63,56 +63,56 @@ public class MessageMapper implements Mapper<Message, MessageDto>, MapperBuilder
 
 	@Override
 	public MessageDto map(Message message) {
-		if (message.getSender().getId().equals(0L)) {
+		if (message.sender.id.equals(0L)) {
 			return new MessageDto(
-					message.getId(),
-					message.getSent(),
-					message.getText(),
+					message.id,
+					message.sent,
+					message.text,
 					true,
-					userMapper.map(message.getSender()),
-					conversationMapper.with(user).map(message.getConversation()),
+					userMapper.map(message.sender),
+					conversationMapper.with(user).map(message.conversation),
 					Collections.emptyList(),
 					Collections.emptyList(),
 					Collections.emptyList()
 			);
 		}
 
-		UserConversation userConversation = userConversationRepository.findByUserAndConversation(user, message.getConversation())
+		UserConversation userConversation = userConversationRepository.findByUserAndConversation(user, message.conversation)
 				.orElseThrow(() -> new NoSuchEntityException("no such user's conversation"));
 
 		MessageDto messageDto = new MessageDto();
-		messageDto.id = message.getId();
-		messageDto.sent = message.getSent();
-		boolean read = userConversation.getConversation().getUserConversations()
+		messageDto.id = message.id;
+		messageDto.sent = message.sent;
+		boolean read = userConversation.conversation.userConversations
 				.stream()
-				.filter(uc -> !uc.getUser().getId().equals(user.getId()))
-				.anyMatch(uc -> uc.getLastRead().isAfter(message.getSent()));
-		if (userConversation.getConversation().getUserConversations().size() == 1) read = true;
+				.filter(uc -> !uc.user.id.equals(user.id))
+				.anyMatch(uc -> uc.lastRead.isAfter(message.sent));
+		if (userConversation.conversation.userConversations.size() == 1) read = true;
 		messageDto.read = read;
-		messageDto.text = message.getText();
+		messageDto.text = message.text;
 
-		Conversation conversation = conversationService.get(message.getConversation().getId());
+		Conversation conversation = conversationService.get(message.conversation.id);
 		messageDto.conversation = conversationMapper
-				.with(message.getSender())
+				.with(message.sender)
 				.map(conversation);
 
-		User sender = userService.getUser(message.getSender().getId());
+		User sender = userService.getUser(message.sender.id);
 		messageDto.sender = userMapper.map(sender);
 
-		messageDto.forwarded = messageRepository.getById(message.getId())
-				.map(Message::getForwarded)
+		messageDto.forwarded = messageRepository.getById(message.id)
+				.map(m -> m.forwarded)
 				.orElse(Collections.emptyList())
 				.stream()
 				.map(m -> this.with(user).map(m))
 				.collect(Collectors.toList());
 
 		messageDto.images = Mappers.mapAll(
-				message.getImages(),
+				message.images,
 				ImageDto.class
 		);
 
 		messageDto.documents = Mappers.mapAll(
-				message.getDocuments(),
+				message.documents,
 				DocumentDto.class
 		);
 

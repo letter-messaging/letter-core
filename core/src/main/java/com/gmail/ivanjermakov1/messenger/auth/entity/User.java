@@ -3,6 +3,8 @@ package com.gmail.ivanjermakov1.messenger.auth.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.gmail.ivanjermakov1.messenger.auth.service.HashService;
 
+import javax.persistence.Access;
+import javax.persistence.AccessType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -14,6 +16,7 @@ import javax.persistence.Table;
  * Entity representing user
  */
 @Entity
+@Access(AccessType.FIELD)
 @Table(name = "user", schema = "public")
 public class User {
 
@@ -23,13 +26,13 @@ public class User {
 	@Id
 	@Column(name = "id")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+	public Long id;
 
 	/**
 	 * User login. System account has login {@code @system}
 	 */
 	@Column(name = "login")
-	private String login;
+	public String login;
 
 	/**
 	 * Hashed version of user password. Hashed using {@link HashService}
@@ -38,37 +41,13 @@ public class User {
 	 */
 	@JsonIgnore
 	@Column(name = "hash")
-	private String hash;
+	public String hash;
 
 	public User() {
 	}
 
 	public User(String login, String hash) {
 		this.login = login;
-		this.hash = hash;
-	}
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public String getLogin() {
-		return login;
-	}
-
-	public void setLogin(String login) {
-		this.login = login;
-	}
-
-	public String getHash() {
-		return hash;
-	}
-
-	public void setHash(String hash) {
 		this.hash = hash;
 	}
 

@@ -48,15 +48,15 @@ public class UserMapper implements Mapper<User, UserDto> {
 	@Override
 	public UserDto map(User user) {
 		UserInfo userInfo = userInfoService.getByUser(user);
-		UserOnline userOnline = userOnlineRepository.findFirstByUserIdOrderBySeenDesc(user.getId());
+		UserOnline userOnline = userOnlineRepository.findFirstByUserIdOrderBySeenDesc(user.id);
 		return new UserDto(
-				user.getId(),
-				user.getLogin(),
-				userInfo.getFirstName(),
-				userInfo.getLastName(),
+				user.id,
+				user.login,
+				userInfo.firstName,
+				userInfo.lastName,
 				avatarService.getCurrent(user).map(a -> avatarMapper.map(a))
 						.orElse(new AvatarDto(null, defaultAvatarConversationPath, null)),
-				Optional.ofNullable(userOnline).map(UserOnline::getSeen).orElse(null)
+				Optional.ofNullable(userOnline).map(uo -> uo.seen).orElse(null)
 		);
 	}
 

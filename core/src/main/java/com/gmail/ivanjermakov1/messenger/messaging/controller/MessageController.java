@@ -52,7 +52,7 @@ public class MessageController {
 	                            @PageableDefault(direction = Sort.Direction.DESC, sort = {"sent"}) Pageable pageable) throws AuthenticationException {
 		User user = userService.authenticate(token);
 		messagingService.processConversationRead(user, conversationId);
-		return messageService.get(user.getId(), conversationId, pageable);
+		return messageService.get(user.id, conversationId, pageable);
 	}
 
 	/**

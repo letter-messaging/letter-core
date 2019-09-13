@@ -7,7 +7,6 @@ import com.gmail.ivanjermakov1.messenger.messaging.dto.AvatarDto;
 import com.gmail.ivanjermakov1.messenger.messaging.dto.PreviewDto;
 import com.gmail.ivanjermakov1.messenger.messaging.dto.enums.PreviewType;
 import com.gmail.ivanjermakov1.messenger.messaging.entity.Conversation;
-import com.gmail.ivanjermakov1.messenger.messaging.entity.UserConversation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
@@ -56,22 +55,22 @@ public class PreviewService {
 	public PreviewDto getPreview(User user, Conversation conversation) {
 		PreviewDto previewDto = new PreviewDto();
 
-		previewDto.type = conversation.getChatName() == null ? PreviewType.CONVERSATION : PreviewType.CHAT;
+		previewDto.type = conversation.chatName == null ? PreviewType.CONVERSATION : PreviewType.CHAT;
 
 		previewDto.conversation = conversationMapper
 				.with(user)
 				.map(conversation);
 
-		previewDto.lastMessage = messageService.get(user.getId(), conversation.getId(), PageRequest.of(0, 1))
+		previewDto.lastMessage = messageService.get(user.id, conversation.id, PageRequest.of(0, 1))
 				.stream()
 				.findFirst()
 				.orElse(null);
 
 		if (previewDto.type.equals(PreviewType.CONVERSATION)) {
-			User with = conversation.getUserConversations()
+			User with = conversation.userConversations
 					.stream()
-					.map(UserConversation::getUser)
-					.filter(u -> !u.getId().equals(user.getId()))
+					.map(uc -> uc.user)
+					.filter(u -> !u.id.equals(user.id))
 					.findFirst()
 					.orElse(user);
 			previewDto.with = userMapper.map(with);
@@ -84,11 +83,11 @@ public class PreviewService {
 		}
 
 		if (previewDto.type.equals(PreviewType.CHAT)) {
-			previewDto.kicked = conversation.getUserConversations()
+			previewDto.kicked = conversation.userConversations
 					.stream()
-					.filter(uc -> uc.getUser().getId().equals(user.getId()))
+					.filter(uc -> uc.user.id.equals(user.id))
 					.findFirst()
-					.map(UserConversation::getKicked)
+					.map(uc -> uc.kicked)
 					.orElse(null);
 		}
 

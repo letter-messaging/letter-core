@@ -2,6 +2,8 @@ package com.gmail.ivanjermakov1.messenger.messaging.entity;
 
 import com.gmail.ivanjermakov1.messenger.auth.entity.User;
 
+import javax.persistence.Access;
+import javax.persistence.AccessType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -16,6 +18,7 @@ import java.time.LocalDateTime;
  * Entity representing user state in certain conversation
  */
 @Entity
+@Access(AccessType.FIELD)
 @Table(name = "user_conversation")
 public class UserConversation {
 
@@ -25,39 +28,39 @@ public class UserConversation {
 	@Id
 	@Column(name = "id")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+	public Long id;
 
 	/**
 	 * User itself
 	 */
 	@ManyToOne
 	@JoinColumn(name = "user_id")
-	private User user;
+	public User user;
 
 	/**
 	 * Conversation related to user
 	 */
 	@ManyToOne
 	@JoinColumn(name = "conversation_id")
-	private Conversation conversation;
+	public Conversation conversation;
 
 	/**
 	 * Whether conversation is hidden for this user
 	 */
 	@Column(name = "hidden")
-	private Boolean hidden;
+	public Boolean hidden;
 
 	/**
 	 * Timestamp of last conversation read by this user
 	 */
 	@Column(name = "last_read")
-	private LocalDateTime lastRead;
+	public LocalDateTime lastRead;
 
 	/**
 	 * Whether user is kicked from this conversation. Make sense only when conversation has type of CHAT
 	 */
 	@Column(name = "kicked")
-	private Boolean kicked;
+	public Boolean kicked;
 
 	public UserConversation() {
 	}
@@ -68,54 +71,6 @@ public class UserConversation {
 		this.hidden = false;
 		this.lastRead = LocalDateTime.now();
 		this.kicked = false;
-	}
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public User getUser() {
-		return user;
-	}
-
-	public void setUser(User user) {
-		this.user = user;
-	}
-
-	public Conversation getConversation() {
-		return conversation;
-	}
-
-	public void setConversation(Conversation conversation) {
-		this.conversation = conversation;
-	}
-
-	public Boolean getHidden() {
-		return hidden;
-	}
-
-	public void setHidden(Boolean hidden) {
-		this.hidden = hidden;
-	}
-
-	public LocalDateTime getLastRead() {
-		return lastRead;
-	}
-
-	public void setLastRead(LocalDateTime lastRead) {
-		this.lastRead = lastRead;
-	}
-
-	public Boolean getKicked() {
-		return kicked;
-	}
-
-	public void setKicked(Boolean kicked) {
-		this.kicked = kicked;
 	}
 
 }

@@ -38,7 +38,7 @@ public class DocumentService {
 		Document document = documentRepository.findById(documentId)
 				.orElseThrow(() -> new NoSuchEntityException("such document does not exist"));
 
-		if (!document.getUser().getId().equals(user.getId()))
+		if (!document.user.id.equals(user.id))
 			throw new AuthorizationException("user can delete only own documents");
 
 		documentRepository.delete(document);

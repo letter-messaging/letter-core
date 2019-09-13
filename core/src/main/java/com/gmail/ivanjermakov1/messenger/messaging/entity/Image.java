@@ -2,6 +2,8 @@ package com.gmail.ivanjermakov1.messenger.messaging.entity;
 
 import com.gmail.ivanjermakov1.messenger.auth.entity.User;
 
+import javax.persistence.Access;
+import javax.persistence.AccessType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -16,6 +18,7 @@ import java.time.LocalDate;
  * Entity representing image attached to a certain message
  */
 @Entity
+@Access(AccessType.FIELD)
 @Table(name = "image")
 public class Image {
 
@@ -25,30 +28,30 @@ public class Image {
 	@Id
 	@Column(name = "id")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+	public Long id;
 
 	/**
 	 * Owner user of an image
 	 */
 	@ManyToOne
 	@JoinColumn(name = "user_id")
-	private User user;
+	public User user;
 
 	@ManyToOne
 	@JoinColumn(name = "message_id")
-	private Message message;
+	public Message message;
 
 	/**
 	 * Static resource path to an image
 	 */
 	@Column(name = "path")
-	private String path;
+	public String path;
 
 	/**
 	 * Date of an image upload
 	 */
 	@Column(name = "uploaded")
-	private LocalDate uploaded;
+	public LocalDate uploaded;
 
 	public Image() {
 	}
@@ -57,46 +60,6 @@ public class Image {
 		this.user = user;
 		this.message = message;
 		this.path = path;
-		this.uploaded = uploaded;
-	}
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public User getUser() {
-		return user;
-	}
-
-	public void setUser(User user) {
-		this.user = user;
-	}
-
-	public Message getMessage() {
-		return message;
-	}
-
-	public void setMessage(Message message) {
-		this.message = message;
-	}
-
-	public String getPath() {
-		return path;
-	}
-
-	public void setPath(String path) {
-		this.path = path;
-	}
-
-	public LocalDate getUploaded() {
-		return uploaded;
-	}
-
-	public void setUploaded(LocalDate uploaded) {
 		this.uploaded = uploaded;
 	}
 
