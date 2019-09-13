@@ -117,6 +117,7 @@ public class ChatService {
 		conversationRepository.save(chat);
 	}
 
+	//	TODO: change kicking logic to support leaving (non-creator users can "kick" themselves)
 	public void kickMember(User user, Conversation chat, User member) throws AuthorizationException, IllegalStateException {
 		if (!user.getId().equals(chat.getCreator().getId()))
 			throw new AuthorizationException("only chat creator can kick members");
