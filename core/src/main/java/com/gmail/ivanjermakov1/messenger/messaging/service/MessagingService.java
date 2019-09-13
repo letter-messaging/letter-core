@@ -26,9 +26,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
-import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -81,24 +79,18 @@ public class MessagingService {
 		this.messageMapper = messageMapper;
 	}
 
-	public SseEmitter generateRequest(User user) {
-		SseEmitter emitter = new SseEmitter(sseTimeout);
-		Request<Action> request = new Request<>(user, emitter);
-		emitter.onTimeout(() -> requests.remove(request));
+	public void connect(Request<Action> request) {
+		request.listener.onCancel(() -> {
+			requests.removeIf(request::equals);
+			LOG.info("REMOVE DISCONNECTED!");
+		});
+
 		requests.add(request);
-		return emitter;
 	}
 
 	public void sendResponse(Request<Action> request, Action action) {
 		LOG.debug("sending response to @" + request.user.login + "; type: " + action.type);
-		try {
-			SseEmitter.SseEventBuilder event = SseEmitter.event()
-					.data(action)
-					.reconnectTime(100);
-			request.emitter.send(event);
-		} catch (IOException e) {
-			requests.remove(request);
-		}
+		request.listener.next(action);
 	}
 
 	public void forEachRequest(Conversation conversation, Consumer<Request<Action>> consumer) {

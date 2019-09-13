@@ -8,6 +8,8 @@ import com.gmail.ivanjermakov1.messenger.exception.InvalidMessageException;
 import com.gmail.ivanjermakov1.messenger.messaging.dto.EditMessageDto;
 import com.gmail.ivanjermakov1.messenger.messaging.dto.MessageDto;
 import com.gmail.ivanjermakov1.messenger.messaging.dto.NewMessageDto;
+import com.gmail.ivanjermakov1.messenger.messaging.dto.action.Action;
+import com.gmail.ivanjermakov1.messenger.messaging.dto.action.Request;
 import com.gmail.ivanjermakov1.messenger.messaging.service.MessagingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,7 +20,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyEmitter;
+import reactor.core.publisher.Flux;
 
 @RestController
 @RequestMapping("messaging")
@@ -38,14 +40,14 @@ public class MessagingController {
 	 * Calling user will receive events invoked by his own actions.
 	 *
 	 * @param token user token
-	 * @return event aka. {@code com.gmail.ivanjermakov1.messenger.messaging.dto.action.Action} entity
+	 * @return event stream of {@link com.gmail.ivanjermakov1.messenger.messaging.dto.action.Action}s
 	 * @throws AuthenticationException on invalid @param token
 	 */
 	@GetMapping("listen")
-	public ResponseBodyEmitter getEvents(@RequestParam("token") String token) throws AuthenticationException {
+	public Flux<Action> getEvents(@RequestParam("token") String token) throws AuthenticationException {
 		User user = userService.authenticate(token);
 
-		return messagingService.generateRequest(user);
+		return Flux.create(sink -> messagingService.connect(new Request<>(user, sink)));
 	}
 
 	/**

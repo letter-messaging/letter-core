@@ -1,19 +1,16 @@
 package com.gmail.ivanjermakov1.messenger.messaging.dto.action;
 
 import com.gmail.ivanjermakov1.messenger.auth.entity.User;
-import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
+import reactor.core.publisher.FluxSink;
 
 public class Request<T> {
 
 	public User user;
-	public SseEmitter emitter;
+	public FluxSink<T> listener;
 
-	public Request() {
-	}
-
-	public Request(User user, SseEmitter emitter) {
+	public Request(User user, FluxSink<T> listener) {
 		this.user = user;
-		this.emitter = emitter;
+		this.listener = listener;
 	}
 
 	@Override
@@ -22,7 +19,7 @@ public class Request<T> {
 		if (o == null || getClass() != o.getClass()) return false;
 		Request<?> request = (Request<?>) o;
 		return user.equals(request.user) &&
-				emitter.equals(request.emitter);
+				listener.equals(request.listener);
 	}
 
 }
