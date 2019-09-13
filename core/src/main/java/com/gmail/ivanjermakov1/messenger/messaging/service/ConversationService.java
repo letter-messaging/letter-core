@@ -76,7 +76,8 @@ public class ConversationService {
 	}
 
 	public Conversation get(Long conversationId) {
-		return conversationRepository.findById(conversationId).orElseThrow(() -> new NoSuchEntityException("no such conversation"));
+		return conversationRepository.findById(conversationId)
+				.orElseThrow(() -> new NoSuchEntityException("no such conversation"));
 	}
 
 	public List<Conversation> getConversations(User user, Pageable pageable) {
@@ -107,7 +108,8 @@ public class ConversationService {
 						.map(uc -> uc.user)
 						.anyMatch(u -> u.id.equals(user2.id)) &&
 						c.userConversations.size() == 2)
-				.findFirst().orElseThrow(() -> new NoSuchEntityException("no such conversation"));
+				.findFirst()
+				.orElseThrow(() -> new NoSuchEntityException("no such conversation"));
 	}
 
 	private Conversation create(User user) {

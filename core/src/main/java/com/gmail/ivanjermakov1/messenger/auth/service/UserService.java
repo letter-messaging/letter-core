@@ -68,7 +68,8 @@ public class UserService {
 	}
 
 	public User authenticate(String token) throws AuthenticationException {
-		return tokenRepository.findByToken(token).orElseThrow(() -> new AuthenticationException("invalid token")).user;
+		return tokenRepository.findByToken(token)
+				.orElseThrow(() -> new AuthenticationException("invalid token")).user;
 	}
 
 	public void register(RegisterUserDto registerUserDto) throws RegistrationException {
@@ -85,7 +86,8 @@ public class UserService {
 	}
 
 	public User getUser(Long id) {
-		return userRepository.findById(id).orElseThrow(() -> new NoSuchEntityException("no such user"));
+		return userRepository.findById(id)
+				.orElseThrow(() -> new NoSuchEntityException("no such user"));
 	}
 
 	public User getUser(String login) {
