@@ -26,7 +26,7 @@ bootRun {
 }
 
 ext {
-    springVersion = '2.1.1.RELEASE'
+    springVersion = '2.1.8.RELEASE'
 }
 
 jacocoTestReport {
@@ -41,12 +41,14 @@ coveralls {
 }
 
 dependencies {
-    testCompile group: 'org.jacoco', name: 'org.jacoco.agent', version: '0.8.4'
+    compile "org.jetbrains:annotations:16.0.2"
 
     compile("org.springframework.boot:spring-boot-starter-web:$springVersion") {
         exclude group: 'org.springframework.boot', module: 'spring-boot-starter-tomcat'
     }
-    compile "org.springframework.boot:spring-boot-starter-webflux:$springVersion"
+    compile("org.springframework.boot:spring-boot-starter-webflux:$springVersion") {
+        exclude group: 'org.springframework.boot', module: 'spring-boot-starter-reactor-netty'
+    }
     compile "org.springframework.boot:spring-boot-starter-jetty:$springVersion"
     compile "org.springframework.boot:spring-boot-starter-data-jpa:$springVersion"
     compile "org.springframework.boot:spring-boot-starter-mail:$springVersion"
@@ -63,4 +65,6 @@ dependencies {
     compile "com.twilio.sdk:twilio:7.35.1"
 
     testCompile "org.springframework.boot:spring-boot-starter-test:$springVersion"
+    testCompile "io.projectreactor:reactor-test:3.1.0.RELEASE"
+    testCompile "org.jacoco:org.jacoco.agent:0.8.4"
 }
