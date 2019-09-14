@@ -44,6 +44,7 @@ public class ConversationController {
 	 * @return created conversation
 	 * @throws AuthenticationException on invalid token
 	 */
+//	TODO: use withId instead of withLogin to be more consistent
 	@GetMapping("create")
 	public ConversationDto create(@RequestHeader("Auth-Token") String token,
 	                              @RequestParam("with") String withLogin) throws AuthenticationException {

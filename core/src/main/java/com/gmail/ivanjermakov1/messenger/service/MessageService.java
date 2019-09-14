@@ -93,10 +93,6 @@ public class MessageService {
 				.forEach(this::delete);
 	}
 
-	public void deleteForwarded(Message message) {
-		messageRepository.deleteForwarded(message.id);
-	}
-
 	public void deleteImages(Message message) {
 		message.images.forEach(i -> imageService.delete(message.sender, i.id));
 	}

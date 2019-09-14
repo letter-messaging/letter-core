@@ -35,6 +35,7 @@ public class SearchService {
 		this.userMapper = userMapper;
 	}
 
+	//	TODO: optimize
 	public List<PreviewDto> searchConversations(User user, String search, Pageable pageable) {
 		return previewService.all(user, PageRequest.of(0, Integer.MAX_VALUE))
 				.stream()

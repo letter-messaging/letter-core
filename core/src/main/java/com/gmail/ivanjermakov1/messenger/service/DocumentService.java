@@ -25,10 +25,6 @@ public class DocumentService {
 		this.documentRepository = documentRepository;
 	}
 
-	public void delete(Document document) {
-		documentRepository.delete(document);
-	}
-
 	//	TODO: store original document name
 	public NewDocumentDto upload(MultipartFile documentFile) throws IOException {
 		return new NewDocumentDto(fileUploadService.upload(documentFile, FileType.DOCUMENT));

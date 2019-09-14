@@ -92,7 +92,16 @@ public class ConversationService {
 		setHidden(user, conversation, false);
 	}
 
-	public void setHidden(User user, Conversation conversation, boolean hidden) {
+	public Integer unreadCount(User user, Conversation conversation) {
+		return messageRepository.countUnread(
+				user,
+				conversation,
+				userConversationRepository.findByUserAndConversation(user, conversation)
+						.orElseThrow(NoSuchEntityException::new).lastRead
+		);
+	}
+
+	private void setHidden(User user, Conversation conversation, boolean hidden) {
 		UserConversation userConversation = userConversationRepository.findByUserAndConversation(user, conversation)
 				.orElseThrow(NoSuchEntityException::new);
 
@@ -128,15 +137,6 @@ public class ConversationService {
 		self.userConversations.add(new UserConversation(user, self));
 
 		return conversationRepository.save(self);
-	}
-
-	public Integer unreadCount(User user, Conversation conversation) {
-		return messageRepository.countUnread(
-				user,
-				conversation,
-				userConversationRepository.findByUserAndConversation(user, conversation)
-						.orElseThrow(NoSuchEntityException::new).lastRead
-		);
 	}
 
 }

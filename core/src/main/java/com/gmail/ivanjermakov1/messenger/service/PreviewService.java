@@ -52,6 +52,7 @@ public class PreviewService {
 				.collect(Collectors.toList());
 	}
 
+	//	TODO: refactor to preview mapper
 	public PreviewDto getPreview(User user, Conversation conversation) {
 		PreviewDto previewDto = new PreviewDto();
 

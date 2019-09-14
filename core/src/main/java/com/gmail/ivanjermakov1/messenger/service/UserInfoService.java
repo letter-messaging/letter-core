@@ -5,6 +5,7 @@ import com.gmail.ivanjermakov1.messenger.dto.UserInfoDto;
 import com.gmail.ivanjermakov1.messenger.entity.User;
 import com.gmail.ivanjermakov1.messenger.entity.UserInfo;
 import com.gmail.ivanjermakov1.messenger.exception.AuthorizationException;
+import com.gmail.ivanjermakov1.messenger.exception.NoSuchEntityException;
 import com.gmail.ivanjermakov1.messenger.mapper.UserMapper;
 import com.gmail.ivanjermakov1.messenger.repository.UserInfoRepository;
 import com.gmail.ivanjermakov1.messenger.util.Mappers;
@@ -30,19 +31,12 @@ public class UserInfoService {
 		this.userMapper = userMapper;
 	}
 
-	public UserInfo getByUser(User user) {
-		return userInfoRepository.findByUser(user).orElse(null);
-	}
-
-	public UserInfo save(UserInfo userInfo) {
-		return userInfoRepository.save(userInfo);
-	}
-
 	public UserInfoDto edit(User user, UserInfoDto userInfoDto) throws AuthorizationException {
 		if (!userInfoDto.user.id.equals(user.id))
 			throw new AuthorizationException("allow only to edit personal info");
 
-		UserInfo userInfo = getByUser(user);
+		UserInfo userInfo = userInfoRepository.findByUser(user)
+				.orElseThrow(() -> new NoSuchEntityException("no such user info"));
 
 		userInfo.user = user;
 		userInfo.firstName = userInfoDto.firstName;
@@ -59,7 +53,7 @@ public class UserInfoService {
 		userInfo.placeOfWork = userInfoDto.placeOfWork;
 		userInfo.about = userInfoDto.about;
 
-		UserInfoDto edited = Mappers.map(save(userInfo), UserInfoDto.class);
+		UserInfoDto edited = Mappers.map(userInfoRepository.save(userInfo), UserInfoDto.class);
 		userInfoDto.avatars = Mappers.mapAll(avatarService.getAll(userInfo.user), AvatarDto.class);
 		userInfoDto.user = userMapper.map(userInfo.user);
 		return edited;

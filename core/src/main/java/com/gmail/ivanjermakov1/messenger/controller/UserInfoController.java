@@ -51,7 +51,7 @@ public class UserInfoController {
 	                       @RequestParam("userId") Long userId) throws AuthenticationException {
 		User user = userService.authenticate(token);
 
-		return userInfoMapper.map(userInfoService.getByUser(userService.getUser(userId)));
+		return userInfoMapper.map(userService.getUser(userId).userInfo);
 	}
 
 	/**

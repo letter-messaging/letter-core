@@ -31,15 +31,9 @@ public class UserService {
 	private final TokenRepository tokenRepository;
 	private final UserOnlineRepository userOnlineRepository;
 	private final HashService hashService;
-	private UserInfoService userInfoService;
 
 	@Value("${online.lifetime-days}")
 	public Integer onlineLifetimeDays;
-
-	@Autowired
-	public void setUserInfoService(UserInfoService userInfoService) {
-		this.userInfoService = userInfoService;
-	}
 
 	@Autowired
 	public UserService(UserRepository userRepository, TokenRepository tokenRepository, UserOnlineRepository userOnlineRepository, HashService hashService) {

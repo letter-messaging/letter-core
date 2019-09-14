@@ -19,6 +19,7 @@ import com.gmail.ivanjermakov1.messenger.exception.InvalidMessageException;
 import com.gmail.ivanjermakov1.messenger.mapper.ConversationMapper;
 import com.gmail.ivanjermakov1.messenger.mapper.MessageMapper;
 import com.gmail.ivanjermakov1.messenger.mapper.UserMapper;
+import com.gmail.ivanjermakov1.messenger.repository.DocumentRepository;
 import com.gmail.ivanjermakov1.messenger.repository.MessageRepository;
 import com.gmail.ivanjermakov1.messenger.util.Threads;
 import org.slf4j.Logger;
@@ -44,10 +45,10 @@ public class MessagingService {
 	private final MessageService messageService;
 	private final ConversationService conversationService;
 	private final ImageService imageService;
-	private final DocumentService documentService;
 	private final UserService userService;
 
 	private final MessageRepository messageRepository;
+	private final DocumentRepository documentRepository;
 
 	private final UserMapper userMapper;
 	private ConversationMapper conversationMapper;
@@ -59,14 +60,14 @@ public class MessagingService {
 	private Long sseTimeout;
 
 	@Autowired
-	public MessagingService(MessageService messageService, ConversationService conversationService, ImageService imageService, DocumentService documentService, UserMapper userMapper, UserService userService, MessageRepository messageRepository) {
+	public MessagingService(MessageService messageService, ConversationService conversationService, ImageService imageService, DocumentService documentService, UserMapper userMapper, UserService userService, MessageRepository messageRepository, DocumentRepository documentRepository) {
 		this.messageService = messageService;
 		this.conversationService = conversationService;
 		this.imageService = imageService;
-		this.documentService = documentService;
 		this.userMapper = userMapper;
 		this.userService = userService;
 		this.messageRepository = messageRepository;
+		this.documentRepository = documentRepository;
 	}
 
 	@Autowired
@@ -153,7 +154,7 @@ public class MessagingService {
 
 		original.text = editMessageDto.text;
 		if (editMessageDto.forwarded != null && editMessageDto.forwarded.isEmpty())
-			messageService.deleteForwarded(original);
+			messageRepository.deleteForwarded(original.id);
 
 		original.images
 				.stream()
@@ -167,7 +168,7 @@ public class MessagingService {
 				.filter(d -> editMessageDto.documents
 						.stream()
 						.noneMatch(ed -> ed.id.equals(d.id)))
-				.forEach(documentService::delete);
+				.forEach(documentRepository::delete);
 
 		original = messageRepository.save(original);
 
