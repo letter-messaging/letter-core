@@ -51,7 +51,7 @@ public class MessagingController {
 	}
 
 	/**
-	 * Send message and invoke {@code com.gmail.ivanjermakov1.messenger.messaging.dto.action.MessageEditAction}.
+	 * Send message and invoke {@code com.gmail.ivanjermakov1.messenger.dto.action.MessageEditAction}.
 	 *
 	 * @param token         user token
 	 * @param newMessageDto new message
