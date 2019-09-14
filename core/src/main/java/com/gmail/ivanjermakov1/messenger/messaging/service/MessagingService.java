@@ -5,6 +5,7 @@ import com.gmail.ivanjermakov1.messenger.auth.service.UserService;
 import com.gmail.ivanjermakov1.messenger.core.mapper.ConversationMapper;
 import com.gmail.ivanjermakov1.messenger.core.mapper.MessageMapper;
 import com.gmail.ivanjermakov1.messenger.core.mapper.UserMapper;
+import com.gmail.ivanjermakov1.messenger.core.util.Threads;
 import com.gmail.ivanjermakov1.messenger.exception.AuthenticationException;
 import com.gmail.ivanjermakov1.messenger.exception.AuthorizationException;
 import com.gmail.ivanjermakov1.messenger.exception.InvalidMessageException;
@@ -80,28 +81,23 @@ public class MessagingService {
 	}
 
 	public void connect(Request<Action> request) {
-		request.listener.onCancel(() -> {
-			requests.removeIf(request::equals);
-			LOG.info("REMOVE DISCONNECTED!");
-		});
-
 		requests.add(request);
+		Threads.timeout(
+				() -> {
+					LOG.debug("expired request of user @" + request.user.id);
+					if (requests.remove(request)) {
+						LOG.debug("clear expired request of user @" + request.user.id);
+					} else {
+						LOG.debug("not found expired request of user @" + request.user.id);
+					}
+					LOG.debug("requests payload size: " + requests.size());
+				},
+				sseTimeout
+		);
 	}
 
-	public void sendResponse(Request<Action> request, Action action) {
-		LOG.debug("sending response to @" + request.user.login + "; type: " + action.type);
-		request.listener.next(action);
-	}
-
-	public void forEachRequest(Conversation conversation, Consumer<Request<Action>> consumer) {
-		new Thread(() -> requests
-				.stream()
-				.filter(r -> conversation.userConversations
-						.stream()
-						.filter(uc -> !uc.kicked)
-						.map(uc -> uc.user)
-						.anyMatch(i -> i.id.equals(r.user.id)))
-				.forEach(consumer)).start();
+	public void disconnect(Request<Action> request) {
+		requests.remove(request);
 	}
 
 	public MessageDto processNewMessage(User user, NewMessageDto newMessageDto) throws InvalidMessageException, AuthorizationException {
@@ -146,28 +142,6 @@ public class MessagingService {
 		forEachRequest(conversation, request -> sendResponse(request, new NewMessageAction(messageDto)));
 
 		return messageDto;
-	}
-
-	public void systemMessage(NewMessageDto newMessageDto) throws InvalidMessageException {
-		Conversation conversation = conversationService.get(newMessageDto.conversationId);
-		User system = userService.getUser(newMessageDto.senderId);
-
-		Message message = new Message(
-				conversation,
-				LocalDateTime.now(),
-				newMessageDto.text,
-				system,
-				Collections.emptyList(),
-				Collections.emptyList(),
-				Collections.emptyList()
-		);
-
-		if (!message.validate()) throw new InvalidMessageException("invalid message");
-
-		message = messageRepository.save(message);
-		MessageDto messageDto = messageMapper.with(system).map(message);
-
-		forEachRequest(conversation, request -> sendResponse(request, new NewMessageAction(messageDto)));
 	}
 
 	public MessageDto processMessageEdit(User user, EditMessageDto editMessageDto) throws AuthenticationException, AuthorizationException {
@@ -220,6 +194,44 @@ public class MessagingService {
 						userMapper.map(user)
 				)
 		));
+	}
+
+	public void systemMessage(NewMessageDto newMessageDto) throws InvalidMessageException {
+		Conversation conversation = conversationService.get(newMessageDto.conversationId);
+		User system = userService.getUser(newMessageDto.senderId);
+
+		Message message = new Message(
+				conversation,
+				LocalDateTime.now(),
+				newMessageDto.text,
+				system,
+				Collections.emptyList(),
+				Collections.emptyList(),
+				Collections.emptyList()
+		);
+
+		if (!message.validate()) throw new InvalidMessageException("invalid message");
+
+		message = messageRepository.save(message);
+		MessageDto messageDto = messageMapper.with(system).map(message);
+
+		forEachRequest(conversation, request -> sendResponse(request, new NewMessageAction(messageDto)));
+	}
+
+	private void forEachRequest(Conversation conversation, Consumer<Request<Action>> consumer) {
+		new Thread(() -> requests
+				.stream()
+				.filter(r -> conversation.userConversations
+						.stream()
+						.filter(uc -> !uc.kicked)
+						.map(uc -> uc.user)
+						.anyMatch(i -> i.id.equals(r.user.id)))
+				.forEach(consumer)).start();
+	}
+
+	private void sendResponse(Request<Action> request, Action action) {
+		LOG.debug("sending response to @" + request.user.login + "; type: " + action.type);
+		request.listener.next(action);
 	}
 
 }
