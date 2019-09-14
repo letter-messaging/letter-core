@@ -81,8 +81,9 @@ public class UserService {
 			throw new RegistrationException("user already exists.");
 
 		User user = new User(registerUserDto.login, hashService.getHash(registerUserDto.password));
-		user = userRepository.save(user);
-		userInfoService.save(new UserInfo(user, registerUserDto.firstName, registerUserDto.lastName));
+		userRepository.save(user);
+		user.userInfo = new UserInfo(user, registerUserDto.firstName, registerUserDto.lastName);
+		userRepository.save(user);
 	}
 
 	public User getUser(Long id) {

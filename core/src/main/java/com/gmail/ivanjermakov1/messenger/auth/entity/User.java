@@ -2,14 +2,17 @@ package com.gmail.ivanjermakov1.messenger.auth.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.gmail.ivanjermakov1.messenger.auth.service.HashService;
+import com.gmail.ivanjermakov1.messenger.messaging.entity.UserInfo;
 
 import javax.persistence.Access;
 import javax.persistence.AccessType;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 /**
@@ -34,6 +37,9 @@ public class User {
 	@Column(name = "login")
 	public String login;
 
+	@OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+	public UserInfo userInfo;
+
 	/**
 	 * Hashed version of user password. Hashed using {@link HashService}
 	 *
@@ -42,6 +48,7 @@ public class User {
 	@JsonIgnore
 	@Column(name = "hash")
 	public String hash;
+
 
 	public User() {
 	}
