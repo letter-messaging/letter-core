@@ -12,6 +12,8 @@ import com.gmail.ivanjermakov1.messenger.messaging.dto.EditMessageDto;
 import com.gmail.ivanjermakov1.messenger.messaging.dto.MessageDto;
 import com.gmail.ivanjermakov1.messenger.messaging.dto.NewMessageDto;
 import com.gmail.ivanjermakov1.messenger.messaging.dto.TestingUser;
+import com.gmail.ivanjermakov1.messenger.messaging.dto.action.Action;
+import com.gmail.ivanjermakov1.messenger.messaging.dto.action.NewMessageAction;
 import com.gmail.ivanjermakov1.messenger.messaging.entity.Message;
 import com.gmail.ivanjermakov1.messenger.messaging.service.MessageService;
 import com.gmail.ivanjermakov1.messenger.messaging.service.TestingService;
@@ -22,6 +24,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
+import reactor.core.publisher.Flux;
+import reactor.test.StepVerifier;
+
+import java.time.Duration;
 
 @SpringBootTest
 @RunWith(SpringRunner.class)
@@ -97,6 +103,40 @@ public class MessagingTest {
 		Assert.assertNotNull(receivedEditMessage);
 		Assert.assertEquals(editMessage.id, receivedEditMessage.id);
 		Assert.assertEquals(editMessage.text, receivedEditMessage.text);
+	}
+
+	@Test
+	public void shouldReceiveMessage() throws RegistrationException, AuthenticationException, InvalidMessageException {
+		TestingUser user1 = testingService.registerUser("Jack");
+		TestingUser user2 = testingService.registerUser("Ron");
+
+		ConversationDto conversationDto = conversationController.create(
+				user1.token,
+				user2.user.login
+		);
+
+		Flux<Action> events = messagingController.getEvents(
+				user1.token
+		);
+
+		NewMessageDto message = new NewMessageDto(
+				user1.user.id,
+				conversationDto.id,
+				"Hello!"
+		);
+
+		new Thread(() -> StepVerifier
+				.create(events)
+				.expectNextMatches(a -> ((NewMessageAction) a).message.text.equals(message.text))
+				.thenCancel()
+//				if event will never emit - exception will be thrown after 1 second, without duration param in this case
+//				thread will suspend forever
+				.verify(Duration.ofSeconds(1))
+		).start();
+
+		MessageDto messageDto = messagingController.sendMessage(user1.token, message);
+		Assert.assertNotNull(messageDto);
+		Assert.assertNotNull(messageDto.id);
 	}
 
 }
