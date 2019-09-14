@@ -1,4 +1,4 @@
-package com.gmail.ivanjermakov1.messenger.messaging;
+package com.gmail.ivanjermakov1.messenger.test;
 
 import com.gmail.ivanjermakov1.messenger.controller.ConversationController;
 import com.gmail.ivanjermakov1.messenger.controller.MessagingController;
@@ -14,8 +14,8 @@ import com.gmail.ivanjermakov1.messenger.exception.AuthorizationException;
 import com.gmail.ivanjermakov1.messenger.exception.InvalidMessageException;
 import com.gmail.ivanjermakov1.messenger.exception.NoSuchEntityException;
 import com.gmail.ivanjermakov1.messenger.exception.RegistrationException;
-import com.gmail.ivanjermakov1.messenger.messaging.dto.TestingUser;
-import com.gmail.ivanjermakov1.messenger.messaging.service.TestingService;
+import com.gmail.ivanjermakov1.messenger.dto.TestingUser;
+import com.gmail.ivanjermakov1.messenger.service.TestingService;
 import com.gmail.ivanjermakov1.messenger.service.MessageService;
 import org.junit.Assert;
 import org.junit.Test;

@@ -1,11 +1,11 @@
-package com.gmail.ivanjermakov1.messenger.messaging;
+package com.gmail.ivanjermakov1.messenger.test;
 
 import com.gmail.ivanjermakov1.messenger.controller.AvatarController;
 import com.gmail.ivanjermakov1.messenger.dto.AvatarDto;
 import com.gmail.ivanjermakov1.messenger.exception.AuthenticationException;
 import com.gmail.ivanjermakov1.messenger.exception.RegistrationException;
-import com.gmail.ivanjermakov1.messenger.messaging.dto.TestingUser;
-import com.gmail.ivanjermakov1.messenger.messaging.service.TestingService;
+import com.gmail.ivanjermakov1.messenger.dto.TestingUser;
+import com.gmail.ivanjermakov1.messenger.service.TestingService;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;

@@ -1,4 +1,4 @@
-package com.gmail.ivanjermakov1.messenger.auth;
+package com.gmail.ivanjermakov1.messenger.test;
 
 import com.gmail.ivanjermakov1.messenger.controller.AuthenticationController;
 import com.gmail.ivanjermakov1.messenger.controller.RegistrationController;

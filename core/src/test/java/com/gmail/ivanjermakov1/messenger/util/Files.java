@@ -1,4 +1,4 @@
-package com.gmail.ivanjermakov1.messenger.messaging.util;
+package com.gmail.ivanjermakov1.messenger.util;
 
 import org.apache.commons.io.IOUtils;
 import org.springframework.mock.web.MockMultipartFile;

@@ -1,13 +1,12 @@
-package com.gmail.ivanjermakov1.messenger.messaging.service;
+package com.gmail.ivanjermakov1.messenger.service;
 
 import com.gmail.ivanjermakov1.messenger.dto.RegisterUserDto;
 import com.gmail.ivanjermakov1.messenger.dto.UserDto;
 import com.gmail.ivanjermakov1.messenger.exception.AuthenticationException;
 import com.gmail.ivanjermakov1.messenger.exception.RegistrationException;
 import com.gmail.ivanjermakov1.messenger.mapper.UserMapper;
-import com.gmail.ivanjermakov1.messenger.messaging.dto.TestingUser;
-import com.gmail.ivanjermakov1.messenger.messaging.util.Files;
-import com.gmail.ivanjermakov1.messenger.service.UserService;
+import com.gmail.ivanjermakov1.messenger.dto.TestingUser;
+import com.gmail.ivanjermakov1.messenger.util.Files;
 import com.google.common.base.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

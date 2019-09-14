@@ -1,6 +1,7 @@
-package com.gmail.ivanjermakov1.messenger.auth;
+package com.gmail.ivanjermakov1.messenger.test;
 
-import com.gmail.ivanjermakov1.messenger.service.UserService;
+import com.gmail.ivanjermakov1.messenger.service.MarkdownService;
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,14 +12,16 @@ import org.springframework.transaction.annotation.Transactional;
 @SpringBootTest
 @RunWith(SpringRunner.class)
 @Transactional
-public class UserTest {
+public class MarkdownTest {
 
 	@Autowired
-	private UserService userService;
+	private MarkdownService markdownService;
 
 	@Test
-	public void shouldDeleteOnlineRecords() {
-		userService.deleteOnline();
+	public void shouldParseBold() {
+		String html = markdownService.format("This is *Sparta*");
+
+		Assert.assertEquals("<p>This is <em>Sparta</em></p>", html);
 	}
 
 }

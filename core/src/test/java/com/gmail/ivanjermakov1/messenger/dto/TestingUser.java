@@ -1,6 +1,4 @@
-package com.gmail.ivanjermakov1.messenger.messaging.dto;
-
-import com.gmail.ivanjermakov1.messenger.dto.UserDto;
+package com.gmail.ivanjermakov1.messenger.dto;
 
 public class TestingUser {
 
