@@ -1,17 +1,17 @@
 package com.gmail.ivanjermakov1.messenger.messaging;
 
+import com.gmail.ivanjermakov1.messenger.controller.ConversationController;
+import com.gmail.ivanjermakov1.messenger.controller.DocumentController;
+import com.gmail.ivanjermakov1.messenger.controller.MessagingController;
+import com.gmail.ivanjermakov1.messenger.dto.ConversationDto;
+import com.gmail.ivanjermakov1.messenger.dto.MessageDto;
+import com.gmail.ivanjermakov1.messenger.dto.NewDocumentDto;
+import com.gmail.ivanjermakov1.messenger.dto.NewMessageDto;
 import com.gmail.ivanjermakov1.messenger.exception.AuthenticationException;
 import com.gmail.ivanjermakov1.messenger.exception.AuthorizationException;
 import com.gmail.ivanjermakov1.messenger.exception.InvalidMessageException;
 import com.gmail.ivanjermakov1.messenger.exception.NoSuchEntityException;
 import com.gmail.ivanjermakov1.messenger.exception.RegistrationException;
-import com.gmail.ivanjermakov1.messenger.messaging.controller.ConversationController;
-import com.gmail.ivanjermakov1.messenger.messaging.controller.DocumentController;
-import com.gmail.ivanjermakov1.messenger.messaging.controller.MessagingController;
-import com.gmail.ivanjermakov1.messenger.messaging.dto.ConversationDto;
-import com.gmail.ivanjermakov1.messenger.messaging.dto.MessageDto;
-import com.gmail.ivanjermakov1.messenger.messaging.dto.NewDocumentDto;
-import com.gmail.ivanjermakov1.messenger.messaging.dto.NewMessageDto;
 import com.gmail.ivanjermakov1.messenger.messaging.dto.TestingUser;
 import com.gmail.ivanjermakov1.messenger.messaging.service.TestingService;
 import org.junit.Assert;

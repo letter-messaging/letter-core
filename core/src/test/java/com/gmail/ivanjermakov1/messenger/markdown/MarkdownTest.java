@@ -1,6 +1,6 @@
 package com.gmail.ivanjermakov1.messenger.markdown;
 
-import com.gmail.ivanjermakov1.messenger.markdown.service.MarkdownService;
+import com.gmail.ivanjermakov1.messenger.service.MarkdownService;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;

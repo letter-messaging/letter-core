@@ -1,9 +1,9 @@
 package com.gmail.ivanjermakov1.messenger.auth;
 
-import com.gmail.ivanjermakov1.messenger.auth.controller.AuthenticationController;
-import com.gmail.ivanjermakov1.messenger.auth.controller.RegistrationController;
-import com.gmail.ivanjermakov1.messenger.auth.dto.RegisterUserDto;
-import com.gmail.ivanjermakov1.messenger.auth.dto.UserDto;
+import com.gmail.ivanjermakov1.messenger.controller.AuthenticationController;
+import com.gmail.ivanjermakov1.messenger.controller.RegistrationController;
+import com.gmail.ivanjermakov1.messenger.dto.RegisterUserDto;
+import com.gmail.ivanjermakov1.messenger.dto.UserDto;
 import com.gmail.ivanjermakov1.messenger.exception.AuthenticationException;
 import com.gmail.ivanjermakov1.messenger.exception.RegistrationException;
 import org.junit.Assert;

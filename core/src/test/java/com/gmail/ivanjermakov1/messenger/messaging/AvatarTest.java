@@ -1,9 +1,9 @@
 package com.gmail.ivanjermakov1.messenger.messaging;
 
+import com.gmail.ivanjermakov1.messenger.controller.AvatarController;
+import com.gmail.ivanjermakov1.messenger.dto.AvatarDto;
 import com.gmail.ivanjermakov1.messenger.exception.AuthenticationException;
 import com.gmail.ivanjermakov1.messenger.exception.RegistrationException;
-import com.gmail.ivanjermakov1.messenger.messaging.controller.AvatarController;
-import com.gmail.ivanjermakov1.messenger.messaging.dto.AvatarDto;
 import com.gmail.ivanjermakov1.messenger.messaging.dto.TestingUser;
 import com.gmail.ivanjermakov1.messenger.messaging.service.TestingService;
 import org.junit.Assert;
