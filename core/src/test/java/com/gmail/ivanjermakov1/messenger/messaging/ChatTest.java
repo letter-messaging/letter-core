@@ -3,6 +3,7 @@ package com.gmail.ivanjermakov1.messenger.messaging;
 import com.gmail.ivanjermakov1.messenger.exception.AuthenticationException;
 import com.gmail.ivanjermakov1.messenger.exception.AuthorizationException;
 import com.gmail.ivanjermakov1.messenger.exception.InvalidMessageException;
+import com.gmail.ivanjermakov1.messenger.exception.NoSuchEntityException;
 import com.gmail.ivanjermakov1.messenger.exception.RegistrationException;
 import com.gmail.ivanjermakov1.messenger.messaging.controller.ChatController;
 import com.gmail.ivanjermakov1.messenger.messaging.controller.MessagingController;
@@ -107,6 +108,25 @@ public class ChatTest {
 		Assert.assertEquals(3, conversation.users.size());
 	}
 
+	@Test(expected = NoSuchEntityException.class)
+	public void shouldThrowException_WhenNoSuchMemberAddingMember() throws AuthenticationException {
+		chatController.addMember(
+				user1.token,
+				chat.id,
+				-1L
+		);
+	}
+
+	@Test(expected = NoSuchEntityException.class)
+	public void shouldThrowException_WhenNoSuchChatAddingMember() throws AuthenticationException, RegistrationException {
+		TestingUser user3 = testingService.registerUser("John");
+
+		chatController.addMember(
+				user1.token,
+				-1L,
+				user3.user.id
+		);
+	}
 
 	@Test
 	public void shouldAddMembers() throws RegistrationException, AuthenticationException {
@@ -130,6 +150,26 @@ public class ChatTest {
 		Assert.assertEquals(4, conversation.users.size());
 	}
 
+	@Test(expected = NoSuchEntityException.class)
+	public void shouldThrowException_WhenNoSuchMemberAddingMembers() throws AuthenticationException {
+		chatController.addMembers(
+				user1.token,
+				chat.id,
+				new ArrayList<>(Collections.singletonList(-1L))
+		);
+	}
+
+	@Test(expected = NoSuchEntityException.class)
+	public void shouldThrowException_WhenNoSuchChatAddingMembers() throws AuthenticationException, RegistrationException {
+		TestingUser user3 = testingService.registerUser("John");
+
+		chatController.addMembers(
+				user1.token,
+				-1L,
+				new ArrayList<>(Collections.singletonList(user3.user.id))
+		);
+	}
+
 	@Test
 	public void shouldKickMember() throws AuthenticationException {
 		chatController.kickMember(
@@ -144,6 +184,17 @@ public class ChatTest {
 		).conversation;
 
 		Assert.assertEquals(1, conversation.users.size());
+	}
+
+	@Test(expected = NoSuchEntityException.class)
+	public void shouldThrowException_WhenNoSuchChatKickingMember() throws AuthenticationException, RegistrationException {
+		TestingUser user3 = testingService.registerUser("John");
+
+		chatController.kickMember(
+				user1.token,
+				-1L,
+				user3.user.id
+		);
 	}
 
 	@Test
