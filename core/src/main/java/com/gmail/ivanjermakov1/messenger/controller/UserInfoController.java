@@ -2,7 +2,6 @@ package com.gmail.ivanjermakov1.messenger.controller;
 
 import com.gmail.ivanjermakov1.messenger.dto.UserInfoDto;
 import com.gmail.ivanjermakov1.messenger.entity.User;
-import com.gmail.ivanjermakov1.messenger.exception.AuthenticationException;
 import com.gmail.ivanjermakov1.messenger.exception.AuthorizationException;
 import com.gmail.ivanjermakov1.messenger.mapper.UserInfoMapper;
 import com.gmail.ivanjermakov1.messenger.service.UserInfoService;
@@ -44,11 +43,10 @@ public class UserInfoController {
 	 * @param user   authenticated user. automatically maps, when {@literal Auth-Token} parameter present
 	 * @param userId user id to get user info of
 	 * @return user info
-	 * @throws AuthenticationException on invalid @param token
 	 */
 	@GetMapping
 	public UserInfoDto get(@ModelAttribute User user,
-	                       @RequestParam("userId") Long userId) throws AuthenticationException {
+	                       @RequestParam("userId") Long userId) {
 		return userInfoMapper.map(userService.getUser(userId).userInfo);
 	}
 
@@ -59,12 +57,11 @@ public class UserInfoController {
 	 * @param user        authenticated user. automatically maps, when {@literal Auth-Token} parameter present
 	 * @param userInfoDto user info with edits
 	 * @return edited user info
-	 * @throws AuthenticationException on invalid @param token
-	 * @throws AuthorizationException  on attempting to edit other user info
+	 * @throws AuthorizationException on attempting to edit other user info
 	 */
 	@PostMapping
 	public UserInfoDto edit(@ModelAttribute User user,
-	                        @RequestBody UserInfoDto userInfoDto) throws AuthenticationException, AuthorizationException {
+	                        @RequestBody UserInfoDto userInfoDto) throws AuthorizationException {
 		return userInfoService.edit(user, userInfoDto);
 	}
 

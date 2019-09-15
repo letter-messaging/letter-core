@@ -7,7 +7,6 @@ import com.gmail.ivanjermakov1.messenger.dto.PreviewDto;
 import com.gmail.ivanjermakov1.messenger.dto.TestingUser;
 import com.gmail.ivanjermakov1.messenger.exception.AuthenticationException;
 import com.gmail.ivanjermakov1.messenger.exception.AuthorizationException;
-import com.gmail.ivanjermakov1.messenger.exception.InvalidMessageException;
 import com.gmail.ivanjermakov1.messenger.exception.NoSuchEntityException;
 import com.gmail.ivanjermakov1.messenger.exception.RegistrationException;
 import com.gmail.ivanjermakov1.messenger.service.TestingService;
@@ -18,8 +17,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.io.IOException;
 
 @SpringBootTest
 @RunWith(SpringRunner.class)
@@ -36,7 +33,7 @@ public class ConversationTest {
 	private TestingService testingService;
 
 	@Test
-	public void shouldCreateConversation() throws RegistrationException, AuthenticationException, NoSuchEntityException, InvalidMessageException, AuthorizationException {
+	public void shouldCreateConversation() throws RegistrationException, AuthenticationException, NoSuchEntityException, AuthorizationException {
 		TestingUser user1 = testingService.registerUser("Jack");
 		TestingUser user2 = testingService.registerUser("Ron");
 
@@ -50,7 +47,7 @@ public class ConversationTest {
 	}
 
 	@Test
-	public void shouldCreateSelfConversation() throws RegistrationException, AuthenticationException, NoSuchEntityException, InvalidMessageException, IOException, AuthorizationException {
+	public void shouldCreateSelfConversation() throws RegistrationException, AuthenticationException, NoSuchEntityException, AuthorizationException {
 		TestingUser user = testingService.registerUser("Jack");
 
 		ConversationDto conversationDto = conversationController.create(

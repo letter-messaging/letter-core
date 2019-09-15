@@ -3,7 +3,6 @@ package com.gmail.ivanjermakov1.messenger.controller;
 import com.gmail.ivanjermakov1.messenger.dto.PreviewDto;
 import com.gmail.ivanjermakov1.messenger.entity.Conversation;
 import com.gmail.ivanjermakov1.messenger.entity.User;
-import com.gmail.ivanjermakov1.messenger.exception.AuthenticationException;
 import com.gmail.ivanjermakov1.messenger.service.ConversationService;
 import com.gmail.ivanjermakov1.messenger.service.PreviewService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,11 +35,10 @@ public class PreviewController {
 	 *
 	 * @param user authenticated user. automatically maps, when {@literal Auth-Token} parameter present
 	 * @return list of previews
-	 * @throws AuthenticationException on invalid @param token
 	 */
 	@GetMapping("all")
 	public List<PreviewDto> all(@ModelAttribute User user,
-	                            Pageable pageable) throws AuthenticationException {
+	                            Pageable pageable) {
 		return previewService.all(user, pageable);
 	}
 
@@ -50,11 +48,10 @@ public class PreviewController {
 	 * @param user           authenticated user. automatically maps, when {@literal Auth-Token} parameter present
 	 * @param conversationId conversation id
 	 * @return conversation
-	 * @throws AuthenticationException on invalid @param token
 	 */
 	@GetMapping("get")
 	public PreviewDto get(@ModelAttribute User user,
-	                      @RequestParam("conversationId") Long conversationId) throws AuthenticationException {
+	                      @RequestParam("conversationId") Long conversationId) {
 		Conversation conversation = conversationService.get(conversationId);
 
 		PreviewDto preview = previewService.getPreview(user, conversation);

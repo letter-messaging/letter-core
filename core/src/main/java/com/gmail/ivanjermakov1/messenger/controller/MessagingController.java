@@ -56,13 +56,12 @@ public class MessagingController {
 	 * @param user          authenticated user. automatically maps, when {@literal Auth-Token} parameter present
 	 * @param newMessageDto new message
 	 * @return sent message
-	 * @throws AuthenticationException on invalid @param token
 	 * @throws InvalidMessageException on invalid @param newMessageDto
 	 */
 	@PostMapping("send")
 	@Transactional
 	public MessageDto sendMessage(@ModelAttribute User user,
-	                              @RequestBody NewMessageDto newMessageDto) throws AuthenticationException, InvalidMessageException, AuthorizationException {
+	                              @RequestBody NewMessageDto newMessageDto) throws InvalidMessageException, AuthorizationException {
 		messagingService.processConversationRead(user, newMessageDto.conversationId);
 		return messagingService.processNewMessage(user, newMessageDto);
 	}

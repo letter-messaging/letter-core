@@ -57,11 +57,10 @@ public class ChatController {
 	 * @param user authenticated user. automatically maps, when {@literal Auth-Token} parameter present
 	 * @param chat chat instance to create. Creator id is not required.
 	 * @return created chat
-	 * @throws AuthenticationException on invalid @param token
 	 */
 	@PostMapping("create")
 	public ConversationDto create(@ModelAttribute User user,
-	                              @RequestBody NewChatDto chat) throws AuthenticationException {
+	                              @RequestBody NewChatDto chat) {
 		return conversationMapper.with(user).map(chatService.create(user, chat));
 	}
 
@@ -72,13 +71,12 @@ public class ChatController {
 	 * @param user     authenticated user. automatically maps, when {@literal Auth-Token} parameter present
 	 * @param chatId   chat memberId
 	 * @param memberId new member id
-	 * @throws AuthenticationException on invalid @param token
-	 * @throws NoSuchEntityException   if caller is not chat member or no such chat
+	 * @throws NoSuchEntityException if caller is not chat member or no such chat
 	 */
 	@GetMapping("add")
 	public void addMember(@ModelAttribute User user,
 	                      @RequestParam("chatId") Long chatId,
-	                      @RequestParam("memberId") Long memberId) throws AuthenticationException, NoSuchEntityException {
+	                      @RequestParam("memberId") Long memberId) throws NoSuchEntityException {
 		Conversation chat = conversationRepository.findById(chatId)
 				.orElseThrow(() -> new NoSuchEntityException("no such chat"));
 		User member = userService.getUser(memberId);
@@ -93,13 +91,12 @@ public class ChatController {
 	 * @param user      authenticated user. automatically maps, when {@literal Auth-Token} parameter present
 	 * @param chatId    chat id
 	 * @param memberIds list of new members ids
-	 * @throws AuthenticationException on invalid @param token
-	 * @throws NoSuchEntityException   if caller is not chat member
+	 * @throws NoSuchEntityException if caller is not chat member
 	 */
 	@PostMapping("add")
 	public void addMembers(@ModelAttribute User user,
 	                       @RequestParam("chatId") Long chatId,
-	                       @RequestBody List<Long> memberIds) throws AuthenticationException, NoSuchEntityException {
+	                       @RequestBody List<Long> memberIds) throws NoSuchEntityException {
 		Conversation chat = conversationRepository.findById(chatId)
 				.orElseThrow(() -> new NoSuchEntityException("no such chat"));
 
@@ -119,14 +116,13 @@ public class ChatController {
 	 * @param user     authenticated user. automatically maps, when {@literal Auth-Token} parameter present
 	 * @param chatId   chat memberId
 	 * @param memberId kick member id
-	 * @throws AuthenticationException on invalid @param token
-	 * @throws AuthorizationException  if caller is not chat creator
-	 * @throws IllegalStateException   if chat creator try to kick himself
+	 * @throws AuthorizationException if caller is not chat creator
+	 * @throws IllegalStateException  if chat creator try to kick himself
 	 */
 	@GetMapping("kick")
 	public void kickMember(@ModelAttribute User user,
 	                       @RequestParam("chatId") Long chatId,
-	                       @RequestParam("memberId") Long memberId) throws AuthenticationException, AuthorizationException, IllegalStateException {
+	                       @RequestParam("memberId") Long memberId) throws AuthorizationException, IllegalStateException {
 		Conversation chat = conversationRepository.findById(chatId)
 				.orElseThrow(() -> new NoSuchEntityException("no such chat"));
 		User member = userService.getUser(memberId);
@@ -152,11 +148,10 @@ public class ChatController {
 	 *
 	 * @param user           authenticated user. automatically maps, when {@literal Auth-Token} parameter present
 	 * @param conversationId id of conversation to hide
-	 * @throws AuthenticationException on invalid @param token
 	 */
 	@GetMapping("hide")
 	public void hide(@ModelAttribute User user,
-	                 @RequestParam("id") Long conversationId) throws AuthenticationException {
+	                 @RequestParam("id") Long conversationId) {
 		conversationController.hide(user, conversationId);
 	}
 

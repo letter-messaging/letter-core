@@ -2,7 +2,6 @@ package com.gmail.ivanjermakov1.messenger.controller;
 
 import com.gmail.ivanjermakov1.messenger.dto.MessageDto;
 import com.gmail.ivanjermakov1.messenger.entity.User;
-import com.gmail.ivanjermakov1.messenger.exception.AuthenticationException;
 import com.gmail.ivanjermakov1.messenger.service.MessageService;
 import com.gmail.ivanjermakov1.messenger.service.MessagingService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,12 +40,11 @@ public class MessageController {
 	 * @param conversationId conversation id to get messages within
 	 * @param pageable       pageable
 	 * @return list of messages. Return empty list on empty conversation
-	 * @throws AuthenticationException on invalid @param token
 	 */
 	@GetMapping("get")
 	public List<MessageDto> get(@ModelAttribute User user,
 	                            @RequestParam("conversationId") Long conversationId,
-	                            @PageableDefault(direction = Sort.Direction.DESC, sort = {"sent"}) Pageable pageable) throws AuthenticationException {
+	                            @PageableDefault(direction = Sort.Direction.DESC, sort = {"sent"}) Pageable pageable) {
 		messagingService.processConversationRead(user, conversationId);
 		return messageService.get(user.id, conversationId, pageable);
 	}
@@ -57,11 +55,10 @@ public class MessageController {
 	 *
 	 * @param user           authenticated user. automatically maps, when {@literal Auth-Token} parameter present
 	 * @param deleteMessages list of messages to delete
-	 * @throws AuthenticationException on invalid @param token
 	 */
 	@PostMapping("delete")
 	public void delete(@ModelAttribute User user,
-	                   @RequestBody List<MessageDto> deleteMessages) throws AuthenticationException {
+	                   @RequestBody List<MessageDto> deleteMessages) {
 		messageService.delete(user, deleteMessages);
 	}
 

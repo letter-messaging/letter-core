@@ -62,10 +62,9 @@ public class AuthenticationController {
 	 * Logout current user from everywhere by removing all his tokens. To login user is forced to authenticate again.
 	 *
 	 * @param user authenticated user. automatically maps, when {@literal Auth-Token} parameter present
-	 * @throws AuthenticationException when token is invalid
 	 */
 	@GetMapping("logout")
-	public void logout(@ModelAttribute User user) throws AuthenticationException {
+	public void logout(@ModelAttribute User user) {
 		userService.logout(user);
 	}
 

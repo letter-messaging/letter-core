@@ -2,7 +2,6 @@ package com.gmail.ivanjermakov1.messenger.controller;
 
 import com.gmail.ivanjermakov1.messenger.dto.NewImageDto;
 import com.gmail.ivanjermakov1.messenger.entity.User;
-import com.gmail.ivanjermakov1.messenger.exception.AuthenticationException;
 import com.gmail.ivanjermakov1.messenger.exception.AuthorizationException;
 import com.gmail.ivanjermakov1.messenger.exception.InvalidFileException;
 import com.gmail.ivanjermakov1.messenger.exception.NoSuchEntityException;
@@ -37,14 +36,13 @@ public class ImageController {
 	 * @param user  authenticated user. automatically maps, when {@literal Auth-Token} parameter present
 	 * @param image multipart image file
 	 * @return uploaded image
-	 * @throws AuthenticationException on invalid @param token
-	 * @throws IOException             on server file system error
-	 * @throws InvalidFileException    on upload of invalid file (mostly caused by invalid file extension or file size
-	 *                                 specified in @value {@code spring.servlet.multipart.max-file-size})
+	 * @throws IOException          on server file system error
+	 * @throws InvalidFileException on upload of invalid file (mostly caused by invalid file extension or file size
+	 *                              specified in @value {@code spring.servlet.multipart.max-file-size})
 	 */
 	@PostMapping("upload")
 	public NewImageDto upload(@ModelAttribute User user,
-	                          @RequestParam("image") MultipartFile image) throws AuthenticationException, IOException, InvalidFileException {
+	                          @RequestParam("image") MultipartFile image) throws IOException, InvalidFileException {
 		return imageService.upload(image);
 	}
 
@@ -53,12 +51,11 @@ public class ImageController {
 	 *
 	 * @param user    authenticated user. automatically maps, when {@literal Auth-Token} parameter present
 	 * @param imageId image id to delete
-	 * @throws AuthenticationException on invalid token
-	 * @throws NoSuchEntityException   on invalid avatar id
+	 * @throws NoSuchEntityException on invalid avatar id
 	 */
 	@GetMapping("delete")
 	public void delete(@ModelAttribute User user,
-	                   @RequestParam("imageId") Long imageId) throws AuthenticationException, AuthorizationException {
+	                   @RequestParam("imageId") Long imageId) throws AuthorizationException {
 		imageService.delete(user, imageId);
 	}
 

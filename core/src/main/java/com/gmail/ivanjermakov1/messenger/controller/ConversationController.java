@@ -42,12 +42,11 @@ public class ConversationController {
 	 * @param user      authenticated user. automatically maps, when {@literal Auth-Token} parameter present
 	 * @param withLogin login of user to create conversation with
 	 * @return created conversation
-	 * @throws AuthenticationException on invalid token
 	 */
 //	TODO: use withId instead of withLogin to be more consistent
 	@GetMapping("create")
 	public ConversationDto create(@ModelAttribute User user,
-	                              @RequestParam("with") String withLogin) throws AuthenticationException {
+	                              @RequestParam("with") String withLogin) {
 		return conversationMapper
 				.with(user)
 				.map(conversationService.create(user, userService.getUser(withLogin)));
@@ -71,11 +70,10 @@ public class ConversationController {
 	 *
 	 * @param user           authenticated user. automatically maps, when {@literal Auth-Token} parameter present
 	 * @param conversationId id of conversation to hide
-	 * @throws AuthenticationException on invalid @param token
 	 */
 	@GetMapping("hide")
 	public void hide(@ModelAttribute User user,
-	                 @RequestParam("id") Long conversationId) throws AuthenticationException {
+	                 @RequestParam("id") Long conversationId) {
 		conversationService.hide(user, conversationService.get(conversationId));
 	}
 
