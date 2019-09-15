@@ -34,9 +34,9 @@ public class AvatarController {
 	 * @param user   authenticated user. automatically maps, when {@literal Auth-Token} parameter present
 	 * @param avatar multipart file to be uploaded
 	 * @return uploaded avatar
-	 * @throws IOException          on server file system error
+	 * @throws IOException            on server file system error
 	 * @throws InvalidEntityException on upload of invalid file (mostly caused by invalid file extension or file size
-	 *                              specified in @value {@code spring.servlet.multipart.max-file-size})
+	 *                                specified in @value {@code spring.servlet.multipart.max-file-size})
 	 */
 	@PostMapping("upload")
 	public AvatarDto upload(@ModelAttribute User user,
