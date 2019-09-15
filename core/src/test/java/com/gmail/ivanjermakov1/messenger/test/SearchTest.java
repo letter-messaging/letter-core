@@ -1,7 +1,6 @@
 package com.gmail.ivanjermakov1.messenger.test;
 
 import com.gmail.ivanjermakov1.messenger.controller.ConversationController;
-import com.gmail.ivanjermakov1.messenger.controller.InvalidSearchFormatException;
 import com.gmail.ivanjermakov1.messenger.controller.MessagingController;
 import com.gmail.ivanjermakov1.messenger.controller.SearchController;
 import com.gmail.ivanjermakov1.messenger.dto.ConversationDto;
@@ -10,6 +9,7 @@ import com.gmail.ivanjermakov1.messenger.dto.PreviewDto;
 import com.gmail.ivanjermakov1.messenger.dto.TestingUser;
 import com.gmail.ivanjermakov1.messenger.dto.UserDto;
 import com.gmail.ivanjermakov1.messenger.exception.AuthenticationException;
+import com.gmail.ivanjermakov1.messenger.exception.InvalidSearchFormatException;
 import com.gmail.ivanjermakov1.messenger.exception.NoSuchEntityException;
 import com.gmail.ivanjermakov1.messenger.exception.RegistrationException;
 import com.gmail.ivanjermakov1.messenger.service.TestingService;

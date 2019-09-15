@@ -4,6 +4,7 @@ import com.gmail.ivanjermakov1.messenger.controller.RegistrationController;
 import com.gmail.ivanjermakov1.messenger.dto.RegisterUserDto;
 import com.gmail.ivanjermakov1.messenger.exception.InvalidEntityException;
 import com.gmail.ivanjermakov1.messenger.exception.RegistrationException;
+import com.google.common.base.Strings;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,13 +29,13 @@ public class PasswordTest {
 	@Test(expected = InvalidEntityException.class)
 	public void shouldThrowException_WithLessThen8Characters() throws RegistrationException {
 		registrationController.register(
-				new RegisterUserDto("Jack", "Johnson", "jackj", "1234567"));
+				new RegisterUserDto("Jack", "Johnson", "jackj", Strings.repeat("1", 7)));
 	}
 
 	@Test(expected = InvalidEntityException.class)
 	public void shouldThrowException_WithMoreThen32Characters() throws RegistrationException {
 		registrationController.register(
-				new RegisterUserDto("Jack", "Johnson", "jackj", "1234567812345678123456781234567812345678"));
+				new RegisterUserDto("Jack", "Johnson", "jackj", Strings.repeat("1", 33)));
 	}
 
 }

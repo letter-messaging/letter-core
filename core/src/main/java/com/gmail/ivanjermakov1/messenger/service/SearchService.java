@@ -1,9 +1,9 @@
 package com.gmail.ivanjermakov1.messenger.service;
 
-import com.gmail.ivanjermakov1.messenger.controller.InvalidSearchFormatException;
 import com.gmail.ivanjermakov1.messenger.dto.PreviewDto;
 import com.gmail.ivanjermakov1.messenger.dto.UserDto;
 import com.gmail.ivanjermakov1.messenger.entity.User;
+import com.gmail.ivanjermakov1.messenger.exception.InvalidSearchFormatException;
 import com.gmail.ivanjermakov1.messenger.mapper.UserMapper;
 import com.gmail.ivanjermakov1.messenger.repository.UserRepository;
 import com.gmail.ivanjermakov1.messenger.util.Strings;

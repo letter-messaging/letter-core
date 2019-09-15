@@ -1,4 +1,4 @@
-package com.gmail.ivanjermakov1.messenger.controller;
+package com.gmail.ivanjermakov1.messenger.exception;
 
 public class InvalidSearchFormatException extends Exception {
 
