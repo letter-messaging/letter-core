@@ -22,6 +22,7 @@ import java.util.List;
 public class ConversationService {
 
 	private final static Logger LOG = LoggerFactory.getLogger(ConversationService.class);
+
 	private final ConversationRepository conversationRepository;
 	private final MessageRepository messageRepository;
 	private final UserConversationRepository userConversationRepository;

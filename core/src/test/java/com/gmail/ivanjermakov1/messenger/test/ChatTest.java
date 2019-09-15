@@ -7,12 +7,12 @@ import com.gmail.ivanjermakov1.messenger.dto.ConversationDto;
 import com.gmail.ivanjermakov1.messenger.dto.MessageDto;
 import com.gmail.ivanjermakov1.messenger.dto.NewChatDto;
 import com.gmail.ivanjermakov1.messenger.dto.NewMessageDto;
+import com.gmail.ivanjermakov1.messenger.dto.TestingUser;
 import com.gmail.ivanjermakov1.messenger.exception.AuthenticationException;
 import com.gmail.ivanjermakov1.messenger.exception.AuthorizationException;
 import com.gmail.ivanjermakov1.messenger.exception.InvalidMessageException;
 import com.gmail.ivanjermakov1.messenger.exception.NoSuchEntityException;
 import com.gmail.ivanjermakov1.messenger.exception.RegistrationException;
-import com.gmail.ivanjermakov1.messenger.dto.TestingUser;
 import com.gmail.ivanjermakov1.messenger.service.TestingService;
 import org.junit.Assert;
 import org.junit.Before;
@@ -58,7 +58,7 @@ public class ChatTest {
 		user2 = testingService.registerUser("Ron");
 
 		chat = chatController.create(
-				user1.token,
+				user1.user,
 				new NewChatDto(
 						"chat",
 						new ArrayList<>(Collections.singletonList(user2.user.id))
@@ -66,7 +66,7 @@ public class ChatTest {
 		);
 
 		message1 = messagingController.sendMessage(
-				user1.token,
+				user1.user,
 				new NewMessageDto(
 						user1.user.id,
 						chat.id,
@@ -75,7 +75,7 @@ public class ChatTest {
 		);
 
 		message2 = messagingController.sendMessage(
-				user2.token,
+				user2.user,
 				new NewMessageDto(
 						user2.user.id,
 						chat.id,
@@ -95,13 +95,13 @@ public class ChatTest {
 		TestingUser user3 = testingService.registerUser("John");
 
 		chatController.addMember(
-				user1.token,
+				user1.user,
 				chat.id,
 				user3.user.id
 		);
 
 		ConversationDto conversation = previewController.get(
-				user1.token,
+				user1.user,
 				chat.id
 		).conversation;
 
@@ -111,7 +111,7 @@ public class ChatTest {
 	@Test(expected = NoSuchEntityException.class)
 	public void shouldThrowException_WhenNoSuchMemberAddingMember() throws AuthenticationException {
 		chatController.addMember(
-				user1.token,
+				user1.user,
 				chat.id,
 				-1L
 		);
@@ -122,7 +122,7 @@ public class ChatTest {
 		TestingUser user3 = testingService.registerUser("John");
 
 		chatController.addMember(
-				user1.token,
+				user1.user,
 				-1L,
 				user3.user.id
 		);
@@ -134,7 +134,7 @@ public class ChatTest {
 		TestingUser user4 = testingService.registerUser("Bob");
 
 		chatController.addMembers(
-				user1.token,
+				user1.user,
 				chat.id,
 				Stream
 						.of(user3, user4)
@@ -143,7 +143,7 @@ public class ChatTest {
 		);
 
 		ConversationDto conversation = previewController.get(
-				user1.token,
+				user1.user,
 				chat.id
 		).conversation;
 
@@ -153,7 +153,7 @@ public class ChatTest {
 	@Test(expected = NoSuchEntityException.class)
 	public void shouldThrowException_WhenNoSuchMemberAddingMembers() throws AuthenticationException {
 		chatController.addMembers(
-				user1.token,
+				user1.user,
 				chat.id,
 				new ArrayList<>(Collections.singletonList(-1L))
 		);
@@ -164,7 +164,7 @@ public class ChatTest {
 		TestingUser user3 = testingService.registerUser("John");
 
 		chatController.addMembers(
-				user1.token,
+				user1.user,
 				-1L,
 				new ArrayList<>(Collections.singletonList(user3.user.id))
 		);
@@ -173,13 +173,13 @@ public class ChatTest {
 	@Test
 	public void shouldKickMember() throws AuthenticationException {
 		chatController.kickMember(
-				user1.token,
+				user1.user,
 				chat.id,
 				user2.user.id
 		);
 
 		ConversationDto conversation = previewController.get(
-				user1.token,
+				user1.user,
 				chat.id
 		).conversation;
 
@@ -191,7 +191,7 @@ public class ChatTest {
 		TestingUser user3 = testingService.registerUser("John");
 
 		chatController.kickMember(
-				user1.token,
+				user1.user,
 				-1L,
 				user3.user.id
 		);
@@ -200,12 +200,12 @@ public class ChatTest {
 	@Test
 	public void shouldHideChat() throws AuthenticationException {
 		chatController.hide(
-				user1.token,
+				user1.user,
 				chat.id
 		);
 
 		ConversationDto conversationForUser1 = previewController.get(
-				user1.token,
+				user1.user,
 				chat.id
 		).conversation;
 
@@ -213,7 +213,7 @@ public class ChatTest {
 		Assert.assertTrue(conversationForUser1.hidden);
 
 		ConversationDto conversationForUser2 = previewController.get(
-				user2.token,
+				user2.user,
 				chat.id
 		).conversation;
 
@@ -226,12 +226,12 @@ public class ChatTest {
 	@Test
 	public void shouldDeleteChat() throws AuthenticationException {
 		chatController.delete(
-				user1.token,
+				user1.user,
 				chat.id
 		);
 
 		ConversationDto conversationForUser1 = previewController.get(
-				user1.token,
+				user1.user,
 				chat.id
 		).conversation;
 
@@ -239,7 +239,7 @@ public class ChatTest {
 		Assert.assertTrue(conversationForUser1.hidden);
 
 		ConversationDto conversationForUser2 = previewController.get(
-				user2.token,
+				user2.user,
 				chat.id
 		).conversation;
 

@@ -8,6 +8,7 @@ import com.gmail.ivanjermakov1.messenger.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -44,13 +45,15 @@ public class AuthenticationController {
 	/**
 	 * Validate user token. During validation user appears online.
 	 *
+	 * @param user  authenticated user. automatically maps, when {@literal Auth-Token} parameter present
 	 * @param token user token
 	 * @return user
 	 * @throws AuthenticationException on invalid token
 	 */
 	@GetMapping("validate")
-	public UserDto validate(@RequestHeader("Auth-Token") String token) throws AuthenticationException {
-		User user = userService.authenticate(token);
+	public UserDto validate(@ModelAttribute User user,
+	                        @RequestHeader("Auth-Token") String token) throws AuthenticationException {
+		userService.authenticate(token);
 		userService.appearOnline(user);
 		return userMapper.map(user);
 	}
@@ -58,13 +61,11 @@ public class AuthenticationController {
 	/**
 	 * Logout current user from everywhere by removing all his tokens. To login user is forced to authenticate again.
 	 *
-	 * @param token token of user
+	 * @param user authenticated user. automatically maps, when {@literal Auth-Token} parameter present
 	 * @throws AuthenticationException when token is invalid
 	 */
 	@GetMapping("logout")
-	public void logout(@RequestHeader("Auth-Token") String token) throws AuthenticationException {
-		User user = userService.authenticate(token);
-
+	public void logout(@ModelAttribute User user) throws AuthenticationException {
 		userService.logout(user);
 	}
 

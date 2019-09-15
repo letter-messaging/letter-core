@@ -4,8 +4,10 @@ import com.gmail.ivanjermakov1.messenger.controller.AuthenticationController;
 import com.gmail.ivanjermakov1.messenger.controller.RegistrationController;
 import com.gmail.ivanjermakov1.messenger.dto.RegisterUserDto;
 import com.gmail.ivanjermakov1.messenger.dto.UserDto;
+import com.gmail.ivanjermakov1.messenger.entity.User;
 import com.gmail.ivanjermakov1.messenger.exception.AuthenticationException;
 import com.gmail.ivanjermakov1.messenger.exception.RegistrationException;
+import com.gmail.ivanjermakov1.messenger.service.UserService;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -23,6 +25,9 @@ public class AuthenticationTest {
 	private AuthenticationController authenticationController;
 
 	@Autowired
+	private UserService userService;
+
+	@Autowired
 	private RegistrationController registrationController;
 
 	@Test
@@ -35,7 +40,10 @@ public class AuthenticationTest {
 
 		Assert.assertNotNull(token);
 
-		UserDto user = authenticationController.validate(token);
+		UserDto user = authenticationController.validate(
+				userService.authenticate(token),
+				token
+		);
 
 		Assert.assertNotNull(user);
 		Assert.assertEquals("jackj", user.login);
@@ -60,14 +68,16 @@ public class AuthenticationTest {
 
 		Assert.assertNotNull(token);
 
-		UserDto user = authenticationController.validate(token);
+		User user = userService.authenticate(token);
 
-		Assert.assertNotNull(user);
-		Assert.assertEquals("jackj", user.login);
+		UserDto userDto = authenticationController.validate(user, token);
 
-		authenticationController.logout(token);
+		Assert.assertNotNull(userDto);
+		Assert.assertEquals("jackj", userDto.login);
 
-		authenticationController.validate(token);
+		authenticationController.logout(user);
+
+		authenticationController.validate(user, token);
 	}
 
 }

@@ -6,13 +6,13 @@ import com.gmail.ivanjermakov1.messenger.controller.SearchController;
 import com.gmail.ivanjermakov1.messenger.dto.ConversationDto;
 import com.gmail.ivanjermakov1.messenger.dto.NewMessageDto;
 import com.gmail.ivanjermakov1.messenger.dto.PreviewDto;
+import com.gmail.ivanjermakov1.messenger.dto.TestingUser;
 import com.gmail.ivanjermakov1.messenger.dto.UserDto;
 import com.gmail.ivanjermakov1.messenger.exception.AuthenticationException;
 import com.gmail.ivanjermakov1.messenger.exception.InvalidMessageException;
 import com.gmail.ivanjermakov1.messenger.exception.InvalidSearchFormatException;
 import com.gmail.ivanjermakov1.messenger.exception.NoSuchEntityException;
 import com.gmail.ivanjermakov1.messenger.exception.RegistrationException;
-import com.gmail.ivanjermakov1.messenger.dto.TestingUser;
 import com.gmail.ivanjermakov1.messenger.service.TestingService;
 import org.junit.Assert;
 import org.junit.Test;
@@ -47,7 +47,7 @@ public class SearchTest {
 		TestingUser user = testingService.registerUser("John");
 
 		List<UserDto> searchResult = searchController.searchUsers(
-				user.token,
+				user.user,
 				"@John",
 				PageRequest.of(0, Integer.MAX_VALUE)
 		);
@@ -63,7 +63,7 @@ public class SearchTest {
 		TestingUser user = testingService.registerUser("John");
 
 		searchController.searchUsers(
-				user.token,
+				user.user,
 				"John",
 				PageRequest.of(0, Integer.MAX_VALUE)
 		);
@@ -75,7 +75,7 @@ public class SearchTest {
 		TestingUser user2 = testingService.registerUser("Ron");
 
 		ConversationDto conversationDto = conversationController.create(
-				user1.token,
+				user1.user,
 				user2.user.login
 		);
 
@@ -86,11 +86,11 @@ public class SearchTest {
 		);
 
 //		message is required for conversation to be visible through previewController.all()
-		messagingController.sendMessage(user1.token, message);
+		messagingController.sendMessage(user1.user, message);
 
 		List<PreviewDto> previews = searchController.searchConversations(
-				user1.token,
-				user2.user.lastName,
+				user1.user,
+				user2.userDto.lastName,
 				PageRequest.of(0, Integer.MAX_VALUE)
 		);
 

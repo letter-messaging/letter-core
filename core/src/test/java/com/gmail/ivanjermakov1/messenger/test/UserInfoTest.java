@@ -1,11 +1,11 @@
 package com.gmail.ivanjermakov1.messenger.test;
 
 import com.gmail.ivanjermakov1.messenger.controller.UserInfoController;
+import com.gmail.ivanjermakov1.messenger.dto.TestingUser;
 import com.gmail.ivanjermakov1.messenger.dto.UserInfoDto;
 import com.gmail.ivanjermakov1.messenger.exception.AuthenticationException;
 import com.gmail.ivanjermakov1.messenger.exception.AuthorizationException;
 import com.gmail.ivanjermakov1.messenger.exception.RegistrationException;
-import com.gmail.ivanjermakov1.messenger.dto.TestingUser;
 import com.gmail.ivanjermakov1.messenger.service.TestingService;
 import org.junit.Assert;
 import org.junit.Test;
@@ -31,12 +31,12 @@ public class UserInfoTest {
 		TestingUser user = testingService.registerUser("Jack");
 
 		UserInfoDto userInfo = userInfoController.get(
-				user.token,
+				user.user,
 				user.user.id
 		);
 
 		Assert.assertNotNull(userInfo);
-		Assert.assertEquals(userInfo.firstName, user.user.firstName);
+		Assert.assertEquals(userInfo.firstName, user.userDto.firstName);
 	}
 
 	@Test
@@ -45,12 +45,12 @@ public class UserInfoTest {
 		TestingUser user2 = testingService.registerUser("Ron");
 
 		UserInfoDto user2Info = userInfoController.get(
-				user1.token,
+				user1.user,
 				user2.user.id
 		);
 
 		Assert.assertNotNull(user2Info);
-		Assert.assertEquals(user2Info.firstName, user2.user.firstName);
+		Assert.assertEquals(user2Info.firstName, user2.userDto.firstName);
 	}
 
 	@Test
@@ -58,14 +58,14 @@ public class UserInfoTest {
 		TestingUser user = testingService.registerUser("Jack");
 
 		UserInfoDto userInfo = userInfoController.get(
-				user.token,
+				user.user,
 				user.user.id
 		);
 
 		userInfo.firstName = "John";
 
 		UserInfoDto editedUserInfo = userInfoController.edit(
-				user.token,
+				user.user,
 				userInfo
 		);
 
@@ -79,14 +79,14 @@ public class UserInfoTest {
 		TestingUser user2 = testingService.registerUser("Ron");
 
 		UserInfoDto user2Info = userInfoController.get(
-				user1.token,
+				user1.user,
 				user2.user.id
 		);
 
 		user2Info.firstName = "John";
 
 		userInfoController.edit(
-				user1.token,
+				user1.user,
 				user2Info
 		);
 	}

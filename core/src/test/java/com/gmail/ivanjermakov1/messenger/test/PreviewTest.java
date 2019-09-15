@@ -6,11 +6,11 @@ import com.gmail.ivanjermakov1.messenger.controller.PreviewController;
 import com.gmail.ivanjermakov1.messenger.dto.ConversationDto;
 import com.gmail.ivanjermakov1.messenger.dto.NewMessageDto;
 import com.gmail.ivanjermakov1.messenger.dto.PreviewDto;
+import com.gmail.ivanjermakov1.messenger.dto.TestingUser;
 import com.gmail.ivanjermakov1.messenger.exception.AuthenticationException;
 import com.gmail.ivanjermakov1.messenger.exception.AuthorizationException;
 import com.gmail.ivanjermakov1.messenger.exception.InvalidMessageException;
 import com.gmail.ivanjermakov1.messenger.exception.RegistrationException;
-import com.gmail.ivanjermakov1.messenger.dto.TestingUser;
 import com.gmail.ivanjermakov1.messenger.service.TestingService;
 import org.junit.Assert;
 import org.junit.Test;
@@ -46,13 +46,13 @@ public class PreviewTest {
 		TestingUser user2 = testingService.registerUser("Ron");
 
 		ConversationDto conversation = conversationController.create(
-				user1.token,
+				user1.user,
 				user2.user.login
 		);
 
 //		message is required for conversation to be visible through previewController.all()
 		messagingController.sendMessage(
-				user1.token,
+				user1.user,
 				new NewMessageDto(
 						user1.user.id,
 						conversation.id,
@@ -60,7 +60,7 @@ public class PreviewTest {
 				)
 		);
 
-		List<PreviewDto> previews = previewController.all(user1.token, PageRequest.of(0, 1));
+		List<PreviewDto> previews = previewController.all(user1.user, PageRequest.of(0, 1));
 		Assert.assertEquals(1, previews.size());
 	}
 
@@ -68,7 +68,7 @@ public class PreviewTest {
 	public void shouldGetNoConversations() throws RegistrationException, AuthenticationException {
 		TestingUser user1 = testingService.registerUser("Jack");
 
-		List<PreviewDto> previews = previewController.all(user1.token, PageRequest.of(0, 1));
+		List<PreviewDto> previews = previewController.all(user1.user, PageRequest.of(0, 1));
 		Assert.assertTrue(previews.isEmpty());
 	}
 

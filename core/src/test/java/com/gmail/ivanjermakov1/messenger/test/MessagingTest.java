@@ -6,6 +6,7 @@ import com.gmail.ivanjermakov1.messenger.dto.ConversationDto;
 import com.gmail.ivanjermakov1.messenger.dto.EditMessageDto;
 import com.gmail.ivanjermakov1.messenger.dto.MessageDto;
 import com.gmail.ivanjermakov1.messenger.dto.NewMessageDto;
+import com.gmail.ivanjermakov1.messenger.dto.TestingUser;
 import com.gmail.ivanjermakov1.messenger.dto.action.Action;
 import com.gmail.ivanjermakov1.messenger.dto.action.NewMessageAction;
 import com.gmail.ivanjermakov1.messenger.entity.Message;
@@ -14,9 +15,8 @@ import com.gmail.ivanjermakov1.messenger.exception.AuthorizationException;
 import com.gmail.ivanjermakov1.messenger.exception.InvalidMessageException;
 import com.gmail.ivanjermakov1.messenger.exception.NoSuchEntityException;
 import com.gmail.ivanjermakov1.messenger.exception.RegistrationException;
-import com.gmail.ivanjermakov1.messenger.dto.TestingUser;
-import com.gmail.ivanjermakov1.messenger.service.TestingService;
 import com.gmail.ivanjermakov1.messenger.service.MessageService;
+import com.gmail.ivanjermakov1.messenger.service.TestingService;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -52,7 +52,7 @@ public class MessagingTest {
 		TestingUser user2 = testingService.registerUser("Ron");
 
 		ConversationDto conversationDto = conversationController.create(
-				user1.token,
+				user1.user,
 				user2.user.login
 		);
 
@@ -62,7 +62,7 @@ public class MessagingTest {
 				"Hello!"
 		);
 
-		MessageDto messageDto = messagingController.sendMessage(user1.token, message);
+		MessageDto messageDto = messagingController.sendMessage(user1.user, message);
 
 		Assert.assertNotNull(messageDto);
 		Assert.assertNotNull(messageDto.id);
@@ -74,7 +74,7 @@ public class MessagingTest {
 		TestingUser user2 = testingService.registerUser("Ron");
 
 		ConversationDto conversationDto = conversationController.create(
-				user1.token,
+				user1.user,
 				user2.user.login
 		);
 
@@ -84,10 +84,10 @@ public class MessagingTest {
 				"Hello!"
 		);
 
-		MessageDto message = messagingController.sendMessage(user1.token, newMessage);
+		MessageDto message = messagingController.sendMessage(user1.user, newMessage);
 
 		MessageDto editMessage = messagingController.editMessage(
-				user1.token,
+				user1.user,
 				new EditMessageDto(
 						message.id,
 						"Edit"
@@ -111,7 +111,7 @@ public class MessagingTest {
 		TestingUser user2 = testingService.registerUser("Ron");
 
 		ConversationDto conversationDto = conversationController.create(
-				user1.token,
+				user1.user,
 				user2.user.login
 		);
 
@@ -134,7 +134,7 @@ public class MessagingTest {
 				.verify(Duration.ofSeconds(1))
 		).start();
 
-		MessageDto messageDto = messagingController.sendMessage(user1.token, message);
+		MessageDto messageDto = messagingController.sendMessage(user1.user, message);
 		Assert.assertNotNull(messageDto);
 		Assert.assertNotNull(messageDto.id);
 	}

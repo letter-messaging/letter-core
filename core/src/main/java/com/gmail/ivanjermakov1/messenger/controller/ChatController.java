@@ -14,9 +14,9 @@ import com.gmail.ivanjermakov1.messenger.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -54,16 +54,14 @@ public class ChatController {
 	/**
 	 * Create chat.
 	 *
-	 * @param token user token
-	 * @param chat  chat instance to create. Creator id is not required.
+	 * @param user authenticated user. automatically maps, when {@literal Auth-Token} parameter present
+	 * @param chat chat instance to create. Creator id is not required.
 	 * @return created chat
 	 * @throws AuthenticationException on invalid @param token
 	 */
 	@PostMapping("create")
-	public ConversationDto create(@RequestHeader("Auth-Token") String token,
+	public ConversationDto create(@ModelAttribute User user,
 	                              @RequestBody NewChatDto chat) throws AuthenticationException {
-		User user = userService.authenticate(token);
-
 		return conversationMapper.with(user).map(chatService.create(user, chat));
 	}
 
@@ -71,17 +69,16 @@ public class ChatController {
 	 * Add new member to chat.
 	 * Every member can add new member. If you need to add multiple new members, use {@code .addMembers()}
 	 *
-	 * @param token    user token
+	 * @param user     authenticated user. automatically maps, when {@literal Auth-Token} parameter present
 	 * @param chatId   chat memberId
 	 * @param memberId new member id
 	 * @throws AuthenticationException on invalid @param token
 	 * @throws NoSuchEntityException   if caller is not chat member or no such chat
 	 */
 	@GetMapping("add")
-	public void addMember(@RequestHeader("Auth-Token") String token,
+	public void addMember(@ModelAttribute User user,
 	                      @RequestParam("chatId") Long chatId,
 	                      @RequestParam("memberId") Long memberId) throws AuthenticationException, NoSuchEntityException {
-		User user = userService.authenticate(token);
 		Conversation chat = conversationRepository.findById(chatId)
 				.orElseThrow(() -> new NoSuchEntityException("no such chat"));
 		User member = userService.getUser(memberId);
@@ -93,18 +90,16 @@ public class ChatController {
 	 * Add new members to chat.
 	 * Every member can add new members.
 	 *
-	 * @param token     user token
+	 * @param user      authenticated user. automatically maps, when {@literal Auth-Token} parameter present
 	 * @param chatId    chat id
 	 * @param memberIds list of new members ids
 	 * @throws AuthenticationException on invalid @param token
 	 * @throws NoSuchEntityException   if caller is not chat member
 	 */
 	@PostMapping("add")
-	public void addMembers(@RequestHeader("Auth-Token") String token,
+	public void addMembers(@ModelAttribute User user,
 	                       @RequestParam("chatId") Long chatId,
 	                       @RequestBody List<Long> memberIds) throws AuthenticationException, NoSuchEntityException {
-		User user = userService.authenticate(token);
-
 		Conversation chat = conversationRepository.findById(chatId)
 				.orElseThrow(() -> new NoSuchEntityException("no such chat"));
 
@@ -121,7 +116,7 @@ public class ChatController {
 	 * Only chat creator can kick members. Creator cannot kick himself, {@code .hide()} method should be used to hide
 	 * conversation.
 	 *
-	 * @param token    user token
+	 * @param user     authenticated user. automatically maps, when {@literal Auth-Token} parameter present
 	 * @param chatId   chat memberId
 	 * @param memberId kick member id
 	 * @throws AuthenticationException on invalid @param token
@@ -129,10 +124,9 @@ public class ChatController {
 	 * @throws IllegalStateException   if chat creator try to kick himself
 	 */
 	@GetMapping("kick")
-	public void kickMember(@RequestHeader("Auth-Token") String token,
+	public void kickMember(@ModelAttribute User user,
 	                       @RequestParam("chatId") Long chatId,
 	                       @RequestParam("memberId") Long memberId) throws AuthenticationException, AuthorizationException, IllegalStateException {
-		User user = userService.authenticate(token);
 		Conversation chat = conversationRepository.findById(chatId)
 				.orElseThrow(() -> new NoSuchEntityException("no such chat"));
 		User member = userService.getUser(memberId);
@@ -143,27 +137,27 @@ public class ChatController {
 	/**
 	 * Hide chat for calling user and delete all messages sent by him.
 	 *
-	 * @param token          calling user token
+	 * @param user           authenticated user. automatically maps, when {@literal Auth-Token} parameter present
 	 * @param conversationId id of conversation to delete
 	 * @throws AuthenticationException on invalid @param token
 	 */
 	@GetMapping("delete")
-	public void delete(@RequestHeader("Auth-Token") String token,
+	public void delete(@ModelAttribute User user,
 	                   @RequestParam("id") Long conversationId) throws AuthenticationException {
-		conversationController.delete(token, conversationId);
+		conversationController.delete(user, conversationId);
 	}
 
 	/**
 	 * Hide chat from calling user
 	 *
-	 * @param token          calling user token
+	 * @param user           authenticated user. automatically maps, when {@literal Auth-Token} parameter present
 	 * @param conversationId id of conversation to hide
 	 * @throws AuthenticationException on invalid @param token
 	 */
 	@GetMapping("hide")
-	public void hide(@RequestHeader("Auth-Token") String token,
+	public void hide(@ModelAttribute User user,
 	                 @RequestParam("id") Long conversationId) throws AuthenticationException {
-		conversationController.hide(token, conversationId);
+		conversationController.hide(user, conversationId);
 	}
 
 }

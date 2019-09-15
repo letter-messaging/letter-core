@@ -6,11 +6,11 @@ import com.gmail.ivanjermakov1.messenger.controller.MessagingController;
 import com.gmail.ivanjermakov1.messenger.dto.ConversationDto;
 import com.gmail.ivanjermakov1.messenger.dto.MessageDto;
 import com.gmail.ivanjermakov1.messenger.dto.NewMessageDto;
+import com.gmail.ivanjermakov1.messenger.dto.TestingUser;
 import com.gmail.ivanjermakov1.messenger.exception.AuthenticationException;
 import com.gmail.ivanjermakov1.messenger.exception.AuthorizationException;
 import com.gmail.ivanjermakov1.messenger.exception.InvalidMessageException;
 import com.gmail.ivanjermakov1.messenger.exception.RegistrationException;
-import com.gmail.ivanjermakov1.messenger.dto.TestingUser;
 import com.gmail.ivanjermakov1.messenger.service.TestingService;
 import org.junit.Assert;
 import org.junit.Before;
@@ -53,12 +53,12 @@ public class MessageTest {
 		TestingUser user2 = testingService.registerUser("Ron");
 
 		conversationDto = conversationController.create(
-				user1.token,
+				user1.user,
 				user2.user.login
 		);
 
 		message1 = messagingController.sendMessage(
-				user1.token,
+				user1.user,
 				new NewMessageDto(
 						user1.user.id,
 						conversationDto.id,
@@ -67,7 +67,7 @@ public class MessageTest {
 		);
 
 		message2 = messagingController.sendMessage(
-				user1.token,
+				user1.user,
 				new NewMessageDto(
 						user1.user.id,
 						conversationDto.id,
@@ -79,7 +79,7 @@ public class MessageTest {
 	@Test
 	public void shouldGetAllMessagesFromConversation() throws AuthenticationException {
 		List<MessageDto> messages = messageController.get(
-				user1.token,
+				user1.user,
 				conversationDto.id,
 				PageRequest.of(0, Integer.MAX_VALUE)
 		);
@@ -90,12 +90,12 @@ public class MessageTest {
 	@Test
 	public void shouldDeleteAllMessagesFromConversation() throws AuthenticationException {
 		messageController.delete(
-				user1.token,
+				user1.user,
 				Arrays.asList(message1, message2)
 		);
 
 		List<MessageDto> messages = messageController.get(
-				user1.token,
+				user1.user,
 				conversationDto.id,
 				PageRequest.of(0, Integer.MAX_VALUE)
 		);

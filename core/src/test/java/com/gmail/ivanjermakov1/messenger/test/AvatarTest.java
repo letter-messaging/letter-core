@@ -2,9 +2,9 @@ package com.gmail.ivanjermakov1.messenger.test;
 
 import com.gmail.ivanjermakov1.messenger.controller.AvatarController;
 import com.gmail.ivanjermakov1.messenger.dto.AvatarDto;
+import com.gmail.ivanjermakov1.messenger.dto.TestingUser;
 import com.gmail.ivanjermakov1.messenger.exception.AuthenticationException;
 import com.gmail.ivanjermakov1.messenger.exception.RegistrationException;
-import com.gmail.ivanjermakov1.messenger.dto.TestingUser;
 import com.gmail.ivanjermakov1.messenger.service.TestingService;
 import org.junit.Assert;
 import org.junit.Test;
@@ -35,7 +35,7 @@ public class AvatarTest {
 		MultipartFile file = testingService.mockTestImage();
 
 		AvatarDto avatar = avatarController.upload(
-				user.token,
+				user.user,
 				file
 		);
 
@@ -45,8 +45,8 @@ public class AvatarTest {
 		TestingUser userWithAvatar = testingService.getUser("Jack");
 
 		Assert.assertNotNull(userWithAvatar);
-		Assert.assertNotNull(userWithAvatar.user.avatar);
-		Assert.assertEquals(avatar.id, userWithAvatar.user.avatar.id);
+		Assert.assertNotNull(userWithAvatar.userDto.avatar);
+		Assert.assertEquals(avatar.id, userWithAvatar.userDto.avatar.id);
 	}
 
 	@Test
@@ -54,17 +54,17 @@ public class AvatarTest {
 		TestingUser user = testingService.registerUser("Jack");
 
 		AvatarDto avatar = avatarController.upload(
-				user.token,
+				user.user,
 				testingService.mockTestImage()
 		);
 
-		avatarController.delete(user.token, avatar.id);
+		avatarController.delete(user.user, avatar.id);
 
 		TestingUser userWithoutAvatar = testingService.getUser("Jack");
 
 		Assert.assertNotNull(userWithoutAvatar);
-		Assert.assertNotNull(userWithoutAvatar.user.avatar);
-		Assert.assertNull(userWithoutAvatar.user.avatar.id);
+		Assert.assertNotNull(userWithoutAvatar.userDto.avatar);
+		Assert.assertNull(userWithoutAvatar.userDto.avatar.id);
 	}
 
 }

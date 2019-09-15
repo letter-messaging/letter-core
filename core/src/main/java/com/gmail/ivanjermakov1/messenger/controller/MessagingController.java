@@ -14,9 +14,9 @@ import com.gmail.ivanjermakov1.messenger.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -53,7 +53,7 @@ public class MessagingController {
 	/**
 	 * Send message and invoke {@code com.gmail.ivanjermakov1.messenger.dto.action.MessageEditAction}.
 	 *
-	 * @param token         user token
+	 * @param user          authenticated user. automatically maps, when {@literal Auth-Token} parameter present
 	 * @param newMessageDto new message
 	 * @return sent message
 	 * @throws AuthenticationException on invalid @param token
@@ -61,10 +61,8 @@ public class MessagingController {
 	 */
 	@PostMapping("send")
 	@Transactional
-	public MessageDto sendMessage(@RequestHeader("Auth-Token") String token,
+	public MessageDto sendMessage(@ModelAttribute User user,
 	                              @RequestBody NewMessageDto newMessageDto) throws AuthenticationException, InvalidMessageException, AuthorizationException {
-		User user = userService.authenticate(token);
-
 		messagingService.processConversationRead(user, newMessageDto.conversationId);
 		return messagingService.processNewMessage(user, newMessageDto);
 	}
@@ -72,17 +70,15 @@ public class MessagingController {
 	/**
 	 * Edit message.
 	 *
-	 * @param token          user token
+	 * @param user           authenticated user. automatically maps, when {@literal Auth-Token} parameter present
 	 * @param editMessageDto editing message
 	 * @return edited message
 	 * @throws AuthenticationException on invalid @param token
 	 */
 	@PostMapping("edit")
 	@Transactional
-	public MessageDto editMessage(@RequestHeader("Auth-Token") String token,
+	public MessageDto editMessage(@ModelAttribute User user,
 	                              @RequestBody EditMessageDto editMessageDto) throws AuthenticationException {
-		User user = userService.authenticate(token);
-
 		return messagingService.processMessageEdit(user, editMessageDto);
 	}
 

@@ -5,12 +5,11 @@ import com.gmail.ivanjermakov1.messenger.entity.User;
 import com.gmail.ivanjermakov1.messenger.exception.AuthenticationException;
 import com.gmail.ivanjermakov1.messenger.exception.InvalidFileException;
 import com.gmail.ivanjermakov1.messenger.service.AvatarService;
-import com.gmail.ivanjermakov1.messenger.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -23,19 +22,17 @@ import java.io.IOException;
 @Transactional
 public class AvatarController {
 
-	private final UserService userService;
 	private final AvatarService avatarService;
 
 	@Autowired
-	public AvatarController(UserService userService, AvatarService avatarService) {
-		this.userService = userService;
+	public AvatarController(AvatarService avatarService) {
 		this.avatarService = avatarService;
 	}
 
 	/**
 	 * Upload avatar.
 	 *
-	 * @param token  user token
+	 * @param user   authenticated user. automatically maps, when {@literal Auth-Token} parameter present
 	 * @param avatar multipart file to be uploaded
 	 * @return uploaded avatar
 	 * @throws AuthenticationException on invalid token
@@ -44,25 +41,21 @@ public class AvatarController {
 	 *                                 specified in @value {@code spring.servlet.multipart.max-file-size})
 	 */
 	@PostMapping("upload")
-	public AvatarDto upload(@RequestHeader("Auth-Token") String token,
+	public AvatarDto upload(@ModelAttribute User user,
 	                        @RequestParam("avatar") MultipartFile avatar) throws AuthenticationException, IOException, InvalidFileException {
-		User user = userService.authenticate(token);
-
 		return avatarService.upload(user, avatar);
 	}
 
 	/**
 	 * Delete avatar from current avatar and avatar list
 	 *
-	 * @param token    user token
+	 * @param user     authenticated user. automatically maps, when {@literal Auth-Token} parameter present
 	 * @param avatarId avatar id to delete
 	 * @throws AuthenticationException on invalid token
 	 */
 	@GetMapping("delete")
-	public void delete(@RequestHeader("Auth-Token") String token,
+	public void delete(@ModelAttribute User user,
 	                   @RequestParam("avatarId") Long avatarId) throws AuthenticationException {
-		User user = userService.authenticate(token);
-
 		avatarService.delete(user, avatarId);
 	}
 

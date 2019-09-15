@@ -4,12 +4,12 @@ import com.gmail.ivanjermakov1.messenger.controller.ConversationController;
 import com.gmail.ivanjermakov1.messenger.controller.PreviewController;
 import com.gmail.ivanjermakov1.messenger.dto.ConversationDto;
 import com.gmail.ivanjermakov1.messenger.dto.PreviewDto;
+import com.gmail.ivanjermakov1.messenger.dto.TestingUser;
 import com.gmail.ivanjermakov1.messenger.exception.AuthenticationException;
 import com.gmail.ivanjermakov1.messenger.exception.AuthorizationException;
 import com.gmail.ivanjermakov1.messenger.exception.InvalidMessageException;
 import com.gmail.ivanjermakov1.messenger.exception.NoSuchEntityException;
 import com.gmail.ivanjermakov1.messenger.exception.RegistrationException;
-import com.gmail.ivanjermakov1.messenger.dto.TestingUser;
 import com.gmail.ivanjermakov1.messenger.service.TestingService;
 import org.junit.Assert;
 import org.junit.Test;
@@ -41,7 +41,7 @@ public class ConversationTest {
 		TestingUser user2 = testingService.registerUser("Ron");
 
 		ConversationDto conversationDto = conversationController.create(
-				user1.token,
+				user1.user,
 				user2.user.login
 		);
 
@@ -54,7 +54,7 @@ public class ConversationTest {
 		TestingUser user = testingService.registerUser("Jack");
 
 		ConversationDto conversationDto = conversationController.create(
-				user.token,
+				user.user,
 				user.user.login
 		);
 
@@ -68,14 +68,14 @@ public class ConversationTest {
 		TestingUser user2 = testingService.registerUser("Ron");
 
 		ConversationDto conversationDto = conversationController.create(
-				user1.token,
+				user1.user,
 				user2.user.login
 		);
 
 
-		conversationController.delete(user1.token, conversationDto.id);
+		conversationController.delete(user1.user, conversationDto.id);
 
-		PreviewDto previewDto = previewController.get(user1.token, conversationDto.id);
+		PreviewDto previewDto = previewController.get(user1.user, conversationDto.id);
 		Assert.assertTrue(previewDto.conversation.hidden);
 	}
 
@@ -85,13 +85,13 @@ public class ConversationTest {
 		TestingUser user2 = testingService.registerUser("Ron");
 
 		ConversationDto conversationDto = conversationController.create(
-				user1.token,
+				user1.user,
 				user2.user.login
 		);
 
-		conversationController.hide(user1.token, conversationDto.id);
+		conversationController.hide(user1.user, conversationDto.id);
 
-		PreviewDto previewDto = previewController.get(user1.token, conversationDto.id);
+		PreviewDto previewDto = previewController.get(user1.user, conversationDto.id);
 		Assert.assertTrue(previewDto.conversation.hidden);
 	}
 

@@ -6,12 +6,11 @@ import com.gmail.ivanjermakov1.messenger.entity.User;
 import com.gmail.ivanjermakov1.messenger.exception.AuthenticationException;
 import com.gmail.ivanjermakov1.messenger.service.ConversationService;
 import com.gmail.ivanjermakov1.messenger.service.PreviewService;
-import com.gmail.ivanjermakov1.messenger.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -23,44 +22,39 @@ import java.util.List;
 @Transactional
 public class PreviewController {
 
-	private final UserService userService;
 	private final PreviewService previewService;
 	private final ConversationService conversationService;
 
 	@Autowired
-	public PreviewController(PreviewService previewService, UserService userService, ConversationService conversationService) {
+	public PreviewController(PreviewService previewService, ConversationService conversationService) {
 		this.previewService = previewService;
-		this.userService = userService;
 		this.conversationService = conversationService;
 	}
 
 	/**
 	 * List previews.
 	 *
-	 * @param token user token
+	 * @param user authenticated user. automatically maps, when {@literal Auth-Token} parameter present
 	 * @return list of previews
 	 * @throws AuthenticationException on invalid @param token
 	 */
 	@GetMapping("all")
-	public List<PreviewDto> all(@RequestHeader("Auth-Token") String token,
+	public List<PreviewDto> all(@ModelAttribute User user,
 	                            Pageable pageable) throws AuthenticationException {
-		User user = userService.authenticate(token);
-
 		return previewService.all(user, pageable);
 	}
 
 	/**
 	 * Get specified conversation.
 	 *
-	 * @param token          user token
+	 * @param user           authenticated user. automatically maps, when {@literal Auth-Token} parameter present
 	 * @param conversationId conversation id
 	 * @return conversation
 	 * @throws AuthenticationException on invalid @param token
 	 */
 	@GetMapping("get")
-	public PreviewDto get(@RequestHeader("Auth-Token") String token,
+	public PreviewDto get(@ModelAttribute User user,
 	                      @RequestParam("conversationId") Long conversationId) throws AuthenticationException {
-		User user = userService.authenticate(token);
 		Conversation conversation = conversationService.get(conversationId);
 
 		PreviewDto preview = previewService.getPreview(user, conversation);

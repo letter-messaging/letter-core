@@ -9,7 +9,7 @@ import com.gmail.ivanjermakov1.messenger.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -39,17 +39,15 @@ public class ConversationController {
 	 * Create conversation with specified user.
 	 * If specified @param withLogin is user himself then "self-conversation" is created.
 	 *
-	 * @param token     user token
+	 * @param user      authenticated user. automatically maps, when {@literal Auth-Token} parameter present
 	 * @param withLogin login of user to create conversation with
 	 * @return created conversation
 	 * @throws AuthenticationException on invalid token
 	 */
 //	TODO: use withId instead of withLogin to be more consistent
 	@GetMapping("create")
-	public ConversationDto create(@RequestHeader("Auth-Token") String token,
+	public ConversationDto create(@ModelAttribute User user,
 	                              @RequestParam("with") String withLogin) throws AuthenticationException {
-		User user = userService.authenticate(token);
-
 		return conversationMapper
 				.with(user)
 				.map(conversationService.create(user, userService.getUser(withLogin)));
@@ -58,30 +56,26 @@ public class ConversationController {
 	/**
 	 * Hide conversation for calling user and delete all messages sent by him.
 	 *
-	 * @param token          calling user token
+	 * @param user           authenticated user. automatically maps, when {@literal Auth-Token} parameter present
 	 * @param conversationId id of conversation to delete
 	 * @throws AuthenticationException on invalid @param token
 	 */
 	@GetMapping("delete")
-	public void delete(@RequestHeader("Auth-Token") String token,
+	public void delete(@ModelAttribute User user,
 	                   @RequestParam("id") Long conversationId) throws AuthenticationException {
-		User user = userService.authenticate(token);
-
 		conversationService.delete(user, conversationService.get(conversationId));
 	}
 
 	/**
 	 * Hide conversation from calling user
 	 *
-	 * @param token          calling user token
+	 * @param user           authenticated user. automatically maps, when {@literal Auth-Token} parameter present
 	 * @param conversationId id of conversation to hide
 	 * @throws AuthenticationException on invalid @param token
 	 */
 	@GetMapping("hide")
-	public void hide(@RequestHeader("Auth-Token") String token,
+	public void hide(@ModelAttribute User user,
 	                 @RequestParam("id") Long conversationId) throws AuthenticationException {
-		User user = userService.authenticate(token);
-
 		conversationService.hide(user, conversationService.get(conversationId));
 	}
 

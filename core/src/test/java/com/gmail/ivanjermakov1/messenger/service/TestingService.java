@@ -1,11 +1,12 @@
 package com.gmail.ivanjermakov1.messenger.service;
 
 import com.gmail.ivanjermakov1.messenger.dto.RegisterUserDto;
+import com.gmail.ivanjermakov1.messenger.dto.TestingUser;
 import com.gmail.ivanjermakov1.messenger.dto.UserDto;
+import com.gmail.ivanjermakov1.messenger.entity.User;
 import com.gmail.ivanjermakov1.messenger.exception.AuthenticationException;
 import com.gmail.ivanjermakov1.messenger.exception.RegistrationException;
 import com.gmail.ivanjermakov1.messenger.mapper.UserMapper;
-import com.gmail.ivanjermakov1.messenger.dto.TestingUser;
 import com.gmail.ivanjermakov1.messenger.util.Files;
 import com.google.common.base.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,10 +32,12 @@ public class TestingService {
 
 		userService.register(registerUserDto);
 		String userToken = userService.authenticate(name, password);
-		UserDto user = userMapper.map(userService.authenticate(userToken));
+		User user = userService.authenticate(userToken);
+		UserDto userDto = userMapper.map(user);
 
 		return new TestingUser(
 				user,
+				userDto,
 				userToken
 		);
 	}
@@ -43,10 +46,12 @@ public class TestingService {
 		String password = Strings.repeat(name, 4);
 
 		String userToken = userService.authenticate(name, password);
-		UserDto user = userMapper.map(userService.authenticate(userToken));
+		User user = userService.authenticate(userToken);
+		UserDto userDto = userMapper.map(user);
 
 		return new TestingUser(
 				user,
+				userDto,
 				userToken
 		);
 	}

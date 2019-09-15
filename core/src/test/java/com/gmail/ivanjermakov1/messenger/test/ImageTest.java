@@ -7,15 +7,15 @@ import com.gmail.ivanjermakov1.messenger.dto.ConversationDto;
 import com.gmail.ivanjermakov1.messenger.dto.MessageDto;
 import com.gmail.ivanjermakov1.messenger.dto.NewImageDto;
 import com.gmail.ivanjermakov1.messenger.dto.NewMessageDto;
+import com.gmail.ivanjermakov1.messenger.dto.TestingUser;
 import com.gmail.ivanjermakov1.messenger.entity.Message;
 import com.gmail.ivanjermakov1.messenger.exception.AuthenticationException;
 import com.gmail.ivanjermakov1.messenger.exception.AuthorizationException;
 import com.gmail.ivanjermakov1.messenger.exception.InvalidMessageException;
 import com.gmail.ivanjermakov1.messenger.exception.NoSuchEntityException;
 import com.gmail.ivanjermakov1.messenger.exception.RegistrationException;
-import com.gmail.ivanjermakov1.messenger.dto.TestingUser;
-import com.gmail.ivanjermakov1.messenger.service.TestingService;
 import com.gmail.ivanjermakov1.messenger.service.MessageService;
+import com.gmail.ivanjermakov1.messenger.service.TestingService;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -54,12 +54,12 @@ public class ImageTest {
 		TestingUser user2 = testingService.registerUser("Ron");
 
 		ConversationDto conversationDto = conversationController.create(
-				user1.token,
+				user1.user,
 				user2.user.login
 		);
 
 		NewImageDto image = imageController.upload(
-				user1.token,
+				user1.user,
 				testingService.mockTestImage()
 		);
 
@@ -72,13 +72,13 @@ public class ImageTest {
 				new ArrayList<>()
 		);
 
-		MessageDto messageDto = messagingController.sendMessage(user1.token, newMessage);
+		MessageDto messageDto = messagingController.sendMessage(user1.user, newMessage);
 
 		Assert.assertNotNull(messageDto);
 		Assert.assertEquals(1, messageDto.images.size());
 
 		imageController.delete(
-				user1.token,
+				user1.user,
 				messageDto.images
 						.stream()
 						.findFirst()
