@@ -1,7 +1,7 @@
 package com.gmail.ivanjermakov1.messenger.service;
 
 import com.gmail.ivanjermakov1.messenger.dto.enums.FileType;
-import com.gmail.ivanjermakov1.messenger.exception.InvalidFileNameException;
+import com.gmail.ivanjermakov1.messenger.exception.InvalidEntityException;
 import com.gmail.ivanjermakov1.messenger.security.RandomStringGenerator;
 import com.gmail.ivanjermakov1.messenger.util.ImageCompressionMode;
 import com.gmail.ivanjermakov1.messenger.util.ImageCompressor;
@@ -34,7 +34,7 @@ public class FileUploadService {
 
 		String fullFilePath = uploadPlaceholder + "/" + fileType.toString().toLowerCase() + "/" + generatedFilename;
 		File file = new File(fullFilePath);
-		if (file.exists()) throw new InvalidFileNameException("such file already exists");
+		if (file.exists()) throw new InvalidEntityException("such file already exists");
 		multipartFile.transferTo(Paths.get(fullFilePath));
 
 		uploadCompressedVersions(multipartFile, fullFilePath);

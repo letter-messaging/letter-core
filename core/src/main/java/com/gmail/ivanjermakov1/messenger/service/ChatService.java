@@ -6,7 +6,6 @@ import com.gmail.ivanjermakov1.messenger.entity.Conversation;
 import com.gmail.ivanjermakov1.messenger.entity.User;
 import com.gmail.ivanjermakov1.messenger.entity.UserConversation;
 import com.gmail.ivanjermakov1.messenger.exception.AuthorizationException;
-import com.gmail.ivanjermakov1.messenger.exception.InvalidMessageException;
 import com.gmail.ivanjermakov1.messenger.exception.NoSuchEntityException;
 import com.gmail.ivanjermakov1.messenger.repository.ConversationRepository;
 import com.gmail.ivanjermakov1.messenger.repository.UserRepository;
@@ -64,13 +63,10 @@ public class ChatService {
 
 		Conversation chat = conversationRepository.save(conversation);
 
-		try {
-			messagingService.systemMessage(NewMessageDto.systemMessage(
-					chat.id,
-					"User @" + user.login + " created chat"
-			));
-		} catch (InvalidMessageException ignored) {
-		}
+		messagingService.systemMessage(NewMessageDto.systemMessage(
+				chat.id,
+				"User @" + user.login + " created chat"
+		));
 
 		return chat;
 	}
@@ -88,13 +84,10 @@ public class ChatService {
 						)
 						.map(u -> new UserConversation(u, chat))
 						.peek(uc -> {
-							try {
-								messagingService.systemMessage(NewMessageDto.systemMessage(
-										chat.id,
-										"User @" + user.login + " added @" + uc.user.login + " to chat"
-								));
-							} catch (InvalidMessageException ignored) {
-							}
+							messagingService.systemMessage(NewMessageDto.systemMessage(
+									chat.id,
+									"User @" + user.login + " added @" + uc.user.login + " to chat"
+							));
 						})
 						.collect(Collectors.toList())
 		);
@@ -105,13 +98,10 @@ public class ChatService {
 				.forEach(uc -> {
 					uc.kicked = false;
 
-					try {
-						messagingService.systemMessage(NewMessageDto.systemMessage(
-								chat.id,
-								"User @" + user.login + " returned @" + uc.user.login + " to chat"
-						));
-					} catch (InvalidMessageException ignored) {
-					}
+					messagingService.systemMessage(NewMessageDto.systemMessage(
+							chat.id,
+							"User @" + user.login + " returned @" + uc.user.login + " to chat"
+					));
 				});
 
 		conversationRepository.save(chat);
@@ -130,13 +120,10 @@ public class ChatService {
 				.findFirst()
 				.orElseThrow(() -> new NoSuchEntityException("no such member to kick"));
 
-		try {
-			messagingService.systemMessage(NewMessageDto.systemMessage(
-					chat.id,
-					"User @" + user.id + " kicked @" + member.id + " from chat"
-			));
-		} catch (InvalidMessageException ignored) {
-		}
+		messagingService.systemMessage(NewMessageDto.systemMessage(
+				chat.id,
+				"User @" + user.id + " kicked @" + member.id + " from chat"
+		));
 
 		userConversation.lastRead = LocalDateTime.now();
 		userConversation.kicked = true;

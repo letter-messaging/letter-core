@@ -6,7 +6,7 @@ import com.gmail.ivanjermakov1.messenger.entity.Image;
 import com.gmail.ivanjermakov1.messenger.entity.Message;
 import com.gmail.ivanjermakov1.messenger.entity.User;
 import com.gmail.ivanjermakov1.messenger.exception.AuthorizationException;
-import com.gmail.ivanjermakov1.messenger.exception.InvalidFileException;
+import com.gmail.ivanjermakov1.messenger.exception.InvalidEntityException;
 import com.gmail.ivanjermakov1.messenger.exception.NoSuchEntityException;
 import com.gmail.ivanjermakov1.messenger.repository.ImageRepository;
 import com.gmail.ivanjermakov1.messenger.repository.MessageRepository;
@@ -32,7 +32,7 @@ public class ImageService {
 	}
 
 	public NewImageDto upload(MultipartFile imageFile) throws IOException {
-		if (!Uploads.isSupportedImage(imageFile)) throw new InvalidFileException("provided file is not an image");
+		if (!Uploads.isSupportedImage(imageFile)) throw new InvalidEntityException("provided file is not an image");
 
 		return new NewImageDto(fileUploadService.upload(imageFile, FileType.IMAGE));
 	}

@@ -3,7 +3,7 @@ package com.gmail.ivanjermakov1.messenger.controller;
 import com.gmail.ivanjermakov1.messenger.dto.NewImageDto;
 import com.gmail.ivanjermakov1.messenger.entity.User;
 import com.gmail.ivanjermakov1.messenger.exception.AuthorizationException;
-import com.gmail.ivanjermakov1.messenger.exception.InvalidFileException;
+import com.gmail.ivanjermakov1.messenger.exception.InvalidEntityException;
 import com.gmail.ivanjermakov1.messenger.exception.NoSuchEntityException;
 import com.gmail.ivanjermakov1.messenger.service.ImageService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,7 +42,7 @@ public class ImageController {
 	 */
 	@PostMapping("upload")
 	public NewImageDto upload(@ModelAttribute User user,
-	                          @RequestParam("image") MultipartFile image) throws IOException, InvalidFileException {
+	                          @RequestParam("image") MultipartFile image) throws IOException, InvalidEntityException {
 		return imageService.upload(image);
 	}
 

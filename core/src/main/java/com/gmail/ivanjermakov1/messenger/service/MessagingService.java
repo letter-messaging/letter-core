@@ -15,7 +15,7 @@ import com.gmail.ivanjermakov1.messenger.entity.Message;
 import com.gmail.ivanjermakov1.messenger.entity.User;
 import com.gmail.ivanjermakov1.messenger.exception.AuthenticationException;
 import com.gmail.ivanjermakov1.messenger.exception.AuthorizationException;
-import com.gmail.ivanjermakov1.messenger.exception.InvalidMessageException;
+import com.gmail.ivanjermakov1.messenger.exception.InvalidEntityException;
 import com.gmail.ivanjermakov1.messenger.mapper.ConversationMapper;
 import com.gmail.ivanjermakov1.messenger.mapper.MessageMapper;
 import com.gmail.ivanjermakov1.messenger.mapper.UserMapper;
@@ -100,7 +100,7 @@ public class MessagingService {
 		requests.remove(request);
 	}
 
-	public MessageDto processNewMessage(User user, NewMessageDto newMessageDto) throws InvalidMessageException, AuthorizationException {
+	public MessageDto processNewMessage(User user, NewMessageDto newMessageDto) throws InvalidEntityException, AuthorizationException {
 		Conversation conversation = conversationService.get(newMessageDto.conversationId);
 
 		if (conversation.userConversations
@@ -133,7 +133,7 @@ public class MessagingService {
 				.map(i -> new Image(user, message, i.path, LocalDate.now()))
 				.collect(Collectors.toList());
 
-		if (!message.validate()) throw new InvalidMessageException("invalid message");
+		if (!message.validate()) throw new InvalidEntityException("invalid message");
 
 		messageRepository.save(message);
 
@@ -196,7 +196,7 @@ public class MessagingService {
 		));
 	}
 
-	public void systemMessage(NewMessageDto newMessageDto) throws InvalidMessageException {
+	public void systemMessage(NewMessageDto newMessageDto) throws InvalidEntityException {
 		Conversation conversation = conversationService.get(newMessageDto.conversationId);
 		User system = userService.getUser(newMessageDto.senderId);
 
@@ -210,7 +210,7 @@ public class MessagingService {
 				Collections.emptyList()
 		);
 
-		if (!message.validate()) throw new InvalidMessageException("invalid message");
+		if (!message.validate()) throw new InvalidEntityException("invalid message");
 
 		message = messageRepository.save(message);
 		MessageDto messageDto = messageMapper.with(system).map(message);

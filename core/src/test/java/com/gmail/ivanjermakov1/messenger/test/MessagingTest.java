@@ -12,7 +12,6 @@ import com.gmail.ivanjermakov1.messenger.dto.action.NewMessageAction;
 import com.gmail.ivanjermakov1.messenger.entity.Message;
 import com.gmail.ivanjermakov1.messenger.exception.AuthenticationException;
 import com.gmail.ivanjermakov1.messenger.exception.AuthorizationException;
-import com.gmail.ivanjermakov1.messenger.exception.InvalidMessageException;
 import com.gmail.ivanjermakov1.messenger.exception.NoSuchEntityException;
 import com.gmail.ivanjermakov1.messenger.exception.RegistrationException;
 import com.gmail.ivanjermakov1.messenger.service.MessageService;
@@ -47,7 +46,7 @@ public class MessagingTest {
 	private TestingService testingService;
 
 	@Test
-	public void shouldSendMessage() throws RegistrationException, AuthenticationException, NoSuchEntityException, InvalidMessageException, AuthorizationException {
+	public void shouldSendMessage() throws RegistrationException, AuthenticationException, NoSuchEntityException, AuthorizationException {
 		TestingUser user1 = testingService.registerUser("Jack");
 		TestingUser user2 = testingService.registerUser("Ron");
 
@@ -69,7 +68,7 @@ public class MessagingTest {
 	}
 
 	@Test
-	public void shouldEditMessage() throws RegistrationException, AuthenticationException, AuthorizationException, InvalidMessageException {
+	public void shouldEditMessage() throws RegistrationException, AuthenticationException, AuthorizationException {
 		TestingUser user1 = testingService.registerUser("Jack");
 		TestingUser user2 = testingService.registerUser("Ron");
 
@@ -106,7 +105,7 @@ public class MessagingTest {
 	}
 
 	@Test
-	public void shouldReceiveMessage() throws RegistrationException, AuthenticationException, InvalidMessageException {
+	public void shouldReceiveMessage() throws RegistrationException, AuthenticationException {
 		TestingUser user1 = testingService.registerUser("Jack");
 		TestingUser user2 = testingService.registerUser("Ron");
 

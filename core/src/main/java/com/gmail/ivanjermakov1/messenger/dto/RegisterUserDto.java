@@ -1,6 +1,6 @@
 package com.gmail.ivanjermakov1.messenger.dto;
 
-import com.gmail.ivanjermakov1.messenger.exception.InvalidPasswordException;
+import com.gmail.ivanjermakov1.messenger.exception.InvalidEntityException;
 import com.gmail.ivanjermakov1.messenger.exception.RegistrationException;
 
 public class RegisterUserDto {
@@ -20,7 +20,7 @@ public class RegisterUserDto {
 		this.password = password;
 	}
 
-	public void validate() throws RegistrationException {
+	public void validate() throws RegistrationException, InvalidEntityException {
 		if (firstName == null || lastName == null || login == null || password == null)
 			throw new RegistrationException("fields cannot be blank.");
 
@@ -35,9 +35,9 @@ public class RegisterUserDto {
 		validatePassword(password);
 	}
 
-	private void validatePassword(String password) throws InvalidPasswordException {
+	private void validatePassword(String password) throws InvalidEntityException {
 		if (password.length() < 8 || password.length() > 32)
-			throw new InvalidPasswordException("password must be between 8 and 32 characters long.");
+			throw new InvalidEntityException("password must be between 8 and 32 characters long.");
 	}
 
 }

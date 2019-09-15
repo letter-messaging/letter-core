@@ -2,7 +2,7 @@ package com.gmail.ivanjermakov1.messenger.controller;
 
 import com.gmail.ivanjermakov1.messenger.dto.AvatarDto;
 import com.gmail.ivanjermakov1.messenger.entity.User;
-import com.gmail.ivanjermakov1.messenger.exception.InvalidFileException;
+import com.gmail.ivanjermakov1.messenger.exception.InvalidEntityException;
 import com.gmail.ivanjermakov1.messenger.service.AvatarService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,12 +35,12 @@ public class AvatarController {
 	 * @param avatar multipart file to be uploaded
 	 * @return uploaded avatar
 	 * @throws IOException          on server file system error
-	 * @throws InvalidFileException on upload of invalid file (mostly caused by invalid file extension or file size
+	 * @throws InvalidEntityException on upload of invalid file (mostly caused by invalid file extension or file size
 	 *                              specified in @value {@code spring.servlet.multipart.max-file-size})
 	 */
 	@PostMapping("upload")
 	public AvatarDto upload(@ModelAttribute User user,
-	                        @RequestParam("avatar") MultipartFile avatar) throws IOException, InvalidFileException {
+	                        @RequestParam("avatar") MultipartFile avatar) throws IOException, InvalidEntityException {
 		return avatarService.upload(user, avatar);
 	}
 

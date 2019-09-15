@@ -8,7 +8,7 @@ import com.gmail.ivanjermakov1.messenger.dto.action.Request;
 import com.gmail.ivanjermakov1.messenger.entity.User;
 import com.gmail.ivanjermakov1.messenger.exception.AuthenticationException;
 import com.gmail.ivanjermakov1.messenger.exception.AuthorizationException;
-import com.gmail.ivanjermakov1.messenger.exception.InvalidMessageException;
+import com.gmail.ivanjermakov1.messenger.exception.InvalidEntityException;
 import com.gmail.ivanjermakov1.messenger.service.MessagingService;
 import com.gmail.ivanjermakov1.messenger.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,12 +56,12 @@ public class MessagingController {
 	 * @param user          authenticated user. automatically maps, when {@literal Auth-Token} parameter present
 	 * @param newMessageDto new message
 	 * @return sent message
-	 * @throws InvalidMessageException on invalid @param newMessageDto
+	 * @throws InvalidEntityException on invalid @param newMessageDto
 	 */
 	@PostMapping("send")
 	@Transactional
 	public MessageDto sendMessage(@ModelAttribute User user,
-	                              @RequestBody NewMessageDto newMessageDto) throws InvalidMessageException, AuthorizationException {
+	                              @RequestBody NewMessageDto newMessageDto) throws InvalidEntityException, AuthorizationException {
 		messagingService.processConversationRead(user, newMessageDto.conversationId);
 		return messagingService.processNewMessage(user, newMessageDto);
 	}

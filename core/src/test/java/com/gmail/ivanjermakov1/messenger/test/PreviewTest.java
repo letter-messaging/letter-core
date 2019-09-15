@@ -9,7 +9,6 @@ import com.gmail.ivanjermakov1.messenger.dto.PreviewDto;
 import com.gmail.ivanjermakov1.messenger.dto.TestingUser;
 import com.gmail.ivanjermakov1.messenger.exception.AuthenticationException;
 import com.gmail.ivanjermakov1.messenger.exception.AuthorizationException;
-import com.gmail.ivanjermakov1.messenger.exception.InvalidMessageException;
 import com.gmail.ivanjermakov1.messenger.exception.RegistrationException;
 import com.gmail.ivanjermakov1.messenger.service.TestingService;
 import org.junit.Assert;
@@ -41,7 +40,7 @@ public class PreviewTest {
 	private TestingService testingService;
 
 	@Test
-	public void shouldGet1Conversation() throws RegistrationException, AuthenticationException, AuthorizationException, InvalidMessageException {
+	public void shouldGet1Conversation() throws RegistrationException, AuthenticationException, AuthorizationException {
 		TestingUser user1 = testingService.registerUser("Jack");
 		TestingUser user2 = testingService.registerUser("Ron");
 
