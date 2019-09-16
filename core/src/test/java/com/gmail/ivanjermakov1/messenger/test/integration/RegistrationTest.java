@@ -1,4 +1,4 @@
-package com.gmail.ivanjermakov1.messenger.test;
+package com.gmail.ivanjermakov1.messenger.test.integration;
 
 import com.gmail.ivanjermakov1.messenger.controller.RegistrationController;
 import com.gmail.ivanjermakov1.messenger.dto.RegisterUserDto;

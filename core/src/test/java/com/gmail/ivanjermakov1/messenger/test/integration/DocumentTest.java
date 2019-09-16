@@ -1,11 +1,11 @@
-package com.gmail.ivanjermakov1.messenger.test;
+package com.gmail.ivanjermakov1.messenger.test.integration;
 
 import com.gmail.ivanjermakov1.messenger.controller.ConversationController;
-import com.gmail.ivanjermakov1.messenger.controller.ImageController;
+import com.gmail.ivanjermakov1.messenger.controller.DocumentController;
 import com.gmail.ivanjermakov1.messenger.controller.MessagingController;
 import com.gmail.ivanjermakov1.messenger.dto.ConversationDto;
 import com.gmail.ivanjermakov1.messenger.dto.MessageDto;
-import com.gmail.ivanjermakov1.messenger.dto.NewImageDto;
+import com.gmail.ivanjermakov1.messenger.dto.NewDocumentDto;
 import com.gmail.ivanjermakov1.messenger.dto.NewMessageDto;
 import com.gmail.ivanjermakov1.messenger.dto.TestingUser;
 import com.gmail.ivanjermakov1.messenger.entity.Message;
@@ -30,10 +30,10 @@ import java.util.Collections;
 @SpringBootTest
 @RunWith(SpringRunner.class)
 @Transactional
-public class ImageTest {
+public class DocumentTest {
 
 	@Autowired
-	private ImageController imageController;
+	private DocumentController documentController;
 
 	@Autowired
 	private MessagingController messagingController;
@@ -48,7 +48,7 @@ public class ImageTest {
 	private TestingService testingService;
 
 	@Test
-	public void shouldSendMessageWithImageAndDeleteImage() throws RegistrationException, AuthenticationException, NoSuchEntityException, IOException, AuthorizationException {
+	public void shouldSendMessageWithDocumentAndDeleteDocument() throws RegistrationException, AuthenticationException, NoSuchEntityException, IOException, AuthorizationException {
 		TestingUser user1 = testingService.registerUser("Jack");
 		TestingUser user2 = testingService.registerUser("Ron");
 
@@ -57,7 +57,7 @@ public class ImageTest {
 				user2.user.login
 		);
 
-		NewImageDto image = imageController.upload(
+		NewDocumentDto document = documentController.upload(
 				user1.user,
 				testingService.mockTestImage()
 		);
@@ -67,18 +67,18 @@ public class ImageTest {
 				conversationDto.id,
 				"Hello!",
 				new ArrayList<>(),
-				new ArrayList<>(Collections.singletonList(image)),
-				new ArrayList<>()
+				new ArrayList<>(),
+				new ArrayList<>(Collections.singletonList(document))
 		);
 
 		MessageDto messageDto = messagingController.sendMessage(user1.user, newMessage);
 
 		Assert.assertNotNull(messageDto);
-		Assert.assertEquals(1, messageDto.images.size());
+		Assert.assertEquals(1, messageDto.documents.size());
 
-		imageController.delete(
+		documentController.delete(
 				user1.user,
-				messageDto.images
+				messageDto.documents
 						.stream()
 						.findFirst()
 						.orElseThrow(NoSuchEntityException::new)
