@@ -36,13 +36,13 @@ public class ImageTest {
 	private ImageController imageController;
 
 	@Autowired
-	private MessageService messageService;
-
-	@Autowired
 	private MessagingController messagingController;
 
 	@Autowired
 	private ConversationController conversationController;
+
+	@Autowired
+	private MessageService messageService;
 
 	@Autowired
 	private TestingService testingService;

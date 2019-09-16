@@ -2,9 +2,12 @@ package com.gmail.ivanjermakov1.messenger.controller;
 
 import com.gmail.ivanjermakov1.messenger.dto.NewDocumentDto;
 import com.gmail.ivanjermakov1.messenger.entity.User;
+import com.gmail.ivanjermakov1.messenger.exception.AuthorizationException;
+import com.gmail.ivanjermakov1.messenger.exception.NoSuchEntityException;
 import com.gmail.ivanjermakov1.messenger.service.DocumentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -40,6 +43,18 @@ public class DocumentController {
 		return documentService.upload(document);
 	}
 
-//	TODO: delete
+	/**
+	 * Delete document from certain message
+	 *
+	 * @param user       authenticated user. automatically maps, when {@literal Auth-Token} parameter present
+	 * @param documentId document id to delete
+	 * @throws NoSuchEntityException  on invalid document id
+	 * @throws AuthorizationException if user is not an a sender of a message document attached to
+	 */
+	@GetMapping("delete")
+	public void delete(@ModelAttribute User user,
+	                   @RequestParam("documentId") Long documentId) throws AuthorizationException, NoSuchEntityException {
+		documentService.delete(user, documentId);
+	}
 
 }

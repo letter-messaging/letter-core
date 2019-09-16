@@ -36,9 +36,9 @@ public class ImageController {
 	 * @param user  authenticated user. automatically maps, when {@literal Auth-Token} parameter present
 	 * @param image multipart image file
 	 * @return uploaded image
-	 * @throws IOException          on server file system error
-	 * @throws InvalidFileException on upload of invalid file (mostly caused by invalid file extension or file size
-	 *                              specified in @value {@code spring.servlet.multipart.max-file-size})
+	 * @throws IOException            on server file system error
+	 * @throws InvalidEntityException on upload of invalid file (mostly caused by invalid file extension or file size
+	 *                                specified in @value {@code spring.servlet.multipart.max-file-size})
 	 */
 	@PostMapping("upload")
 	public NewImageDto upload(@ModelAttribute User user,
@@ -51,11 +51,12 @@ public class ImageController {
 	 *
 	 * @param user    authenticated user. automatically maps, when {@literal Auth-Token} parameter present
 	 * @param imageId image id to delete
-	 * @throws NoSuchEntityException on invalid avatar id
+	 * @throws NoSuchEntityException  on invalid image id
+	 * @throws AuthorizationException if user is not an a sender of a message image attached to
 	 */
 	@GetMapping("delete")
 	public void delete(@ModelAttribute User user,
-	                   @RequestParam("imageId") Long imageId) throws AuthorizationException {
+	                   @RequestParam("imageId") Long imageId) throws AuthorizationException, NoSuchEntityException {
 		imageService.delete(user, imageId);
 	}
 

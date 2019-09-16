@@ -8,10 +8,12 @@ import com.gmail.ivanjermakov1.messenger.dto.MessageDto;
 import com.gmail.ivanjermakov1.messenger.dto.NewDocumentDto;
 import com.gmail.ivanjermakov1.messenger.dto.NewMessageDto;
 import com.gmail.ivanjermakov1.messenger.dto.TestingUser;
+import com.gmail.ivanjermakov1.messenger.entity.Message;
 import com.gmail.ivanjermakov1.messenger.exception.AuthenticationException;
 import com.gmail.ivanjermakov1.messenger.exception.AuthorizationException;
 import com.gmail.ivanjermakov1.messenger.exception.NoSuchEntityException;
 import com.gmail.ivanjermakov1.messenger.exception.RegistrationException;
+import com.gmail.ivanjermakov1.messenger.service.MessageService;
 import com.gmail.ivanjermakov1.messenger.service.TestingService;
 import org.junit.Assert;
 import org.junit.Test;
@@ -40,10 +42,13 @@ public class DocumentTest {
 	private ConversationController conversationController;
 
 	@Autowired
+	private MessageService messageService;
+
+	@Autowired
 	private TestingService testingService;
 
 	@Test
-	public void shouldSendMessageWithDocument() throws RegistrationException, AuthenticationException, NoSuchEntityException, IOException, AuthorizationException {
+	public void shouldSendMessageWithDocumentAndDeleteDocument() throws RegistrationException, AuthenticationException, NoSuchEntityException, IOException, AuthorizationException {
 		TestingUser user1 = testingService.registerUser("Jack");
 		TestingUser user2 = testingService.registerUser("Ron");
 
@@ -70,6 +75,20 @@ public class DocumentTest {
 
 		Assert.assertNotNull(messageDto);
 		Assert.assertEquals(1, messageDto.documents.size());
+
+		documentController.delete(
+				user1.user,
+				messageDto.documents
+						.stream()
+						.findFirst()
+						.orElseThrow(NoSuchEntityException::new)
+						.id
+		);
+
+		Message messageWithoutImage = messageService.get(messageDto.id);
+
+		Assert.assertNotNull(messageWithoutImage);
+		Assert.assertTrue(messageWithoutImage.images.isEmpty());
 	}
 
 }
