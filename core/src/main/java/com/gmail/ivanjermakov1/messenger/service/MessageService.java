@@ -9,6 +9,7 @@ import com.gmail.ivanjermakov1.messenger.exception.NoSuchEntityException;
 import com.gmail.ivanjermakov1.messenger.mapper.MessageMapper;
 import com.gmail.ivanjermakov1.messenger.repository.MessageRepository;
 import com.gmail.ivanjermakov1.messenger.repository.UserConversationRepository;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -48,7 +49,7 @@ public class MessageService {
 		this.messageMapper = messageMapper;
 	}
 
-	public List<MessageDto> get(Long userId, Long conversationId, Pageable pageable) {
+	public List<MessageDto> get(@NotNull Long userId, @NotNull Long conversationId, Pageable pageable) {
 		User user = userService.getUser(userId);
 		Conversation conversation = conversationService.get(conversationId);
 		UserConversation userConversation = userConversationRepository.findByUserAndConversation(user, conversation)

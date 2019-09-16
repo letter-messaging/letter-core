@@ -30,6 +30,12 @@ public class UserInfoDto {
 	public UserInfoDto() {
 	}
 
+	public UserInfoDto(UserDto user, String firstName, String lastName) {
+		this.user = user;
+		this.firstName = firstName;
+		this.lastName = lastName;
+	}
+
 	public UserInfoDto(UserDto user, String firstName, String lastName, Boolean gender, LocalDate birthDate, MaritalStatus maritalStatus, String country, String city, String location, String phoneNumber, String mail, String placeOfEducation, String placeOfWork, String about, List<AvatarDto> avatars) {
 		this.user = user;
 		this.firstName = firstName;
