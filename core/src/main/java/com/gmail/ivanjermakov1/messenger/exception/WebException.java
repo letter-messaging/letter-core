@@ -14,7 +14,7 @@ public class WebException {
 	public String message;
 	public String path;
 
-	public WebException(int status, String error, String message, String path) {
+	public WebException(Integer status, String error, String message, String path) {
 		this.status = status;
 		this.error = error;
 		this.message = message;

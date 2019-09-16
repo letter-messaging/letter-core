@@ -1,6 +1,7 @@
 package com.gmail.ivanjermakov1.messenger.security;
 
 import org.apache.commons.text.CharacterPredicates;
+import org.jetbrains.annotations.NotNull;
 
 public class RandomStringGenerator {
 
@@ -10,7 +11,8 @@ public class RandomStringGenerator {
 					.filteredBy(CharacterPredicates.LETTERS, CharacterPredicates.DIGITS)
 					.build();
 
-	public static String generate(int length) {
+	@NotNull
+	public static String generate(@NotNull Integer length) {
 		return randomStringGenerator.generate(length);
 	}
 
