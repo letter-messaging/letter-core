@@ -11,7 +11,6 @@ import javax.servlet.http.HttpServletRequest;
 /**
  * Authentication controller advice configuration
  */
-//TODO: error handling
 @ControllerAdvice
 public class AuthenticationControllerAdvice {
 
