@@ -14,6 +14,7 @@ public interface AuthenticationController {
 	 * @return user authentication token
 	 * @throws AuthenticationException on invalid credentials
 	 */
+//	TODO: use AuthUserDto
 	String authenticate(String login, String password) throws AuthenticationException;
 
 	/**
