@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import javax.servlet.http.HttpServletRequest;
 
 @ControllerAdvice
-class DefaultExceptionHandler {
+public class DefaultExceptionHandler {
 
 	private final static Logger LOG = LoggerFactory.getLogger(ConversationService.class);
 
@@ -33,25 +33,14 @@ class DefaultExceptionHandler {
 				.build();
 	}
 
+	@ExceptionHandler({AuthenticationException.class, AuthorizationException.class})
 	@ResponseStatus(HttpStatus.UNAUTHORIZED)
-	@ExceptionHandler(AuthenticationException.class)
 	@ResponseBody
 	public WebException handleAuthenticationException(HttpServletRequest req, Exception e) {
 		return WebException.builder()
 				.status(HttpStatus.UNAUTHORIZED)
 				.message(e.getMessage())
 				.path(req.getRequestURI())
-				.build();
-	}
-
-	@ExceptionHandler(AuthorizationException.class)
-	@ResponseStatus(HttpStatus.UNAUTHORIZED)
-	@ResponseBody
-	public WebException handleAuthorizationException(HttpServletRequest req, Exception e) {
-		return WebException.builder()
-				.status(HttpStatus.UNAUTHORIZED)
-				.exception(e)
-				.request(req)
 				.build();
 	}
 
