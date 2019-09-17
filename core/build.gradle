@@ -43,13 +43,8 @@ coveralls {
 dependencies {
     compile "org.jetbrains:annotations:16.0.2"
 
-    compile("org.springframework.boot:spring-boot-starter-web:$springVersion") {
-        exclude group: 'org.springframework.boot', module: 'spring-boot-starter-tomcat'
-    }
-    compile("org.springframework.boot:spring-boot-starter-webflux:$springVersion") {
-        exclude group: 'org.springframework.boot', module: 'spring-boot-starter-reactor-netty'
-    }
-    compile "org.springframework.boot:spring-boot-starter-jetty:$springVersion"
+    compile "org.springframework.boot:spring-boot-starter-web:$springVersion"
+    compile "org.springframework.boot:spring-boot-starter-webflux:$springVersion"
     compile "org.springframework.boot:spring-boot-starter-data-jpa:$springVersion"
     compile "org.springframework.boot:spring-boot-starter-mail:$springVersion"
 
