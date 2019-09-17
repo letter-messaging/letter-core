@@ -2,54 +2,14 @@ package com.gmail.ivanjermakov1.messenger.controller;
 
 import com.gmail.ivanjermakov1.messenger.dto.ConversationDto;
 import com.gmail.ivanjermakov1.messenger.dto.NewChatDto;
-import com.gmail.ivanjermakov1.messenger.entity.Conversation;
 import com.gmail.ivanjermakov1.messenger.entity.User;
 import com.gmail.ivanjermakov1.messenger.exception.AuthenticationException;
 import com.gmail.ivanjermakov1.messenger.exception.AuthorizationException;
 import com.gmail.ivanjermakov1.messenger.exception.NoSuchEntityException;
-import com.gmail.ivanjermakov1.messenger.mapper.ConversationMapper;
-import com.gmail.ivanjermakov1.messenger.repository.ConversationRepository;
-import com.gmail.ivanjermakov1.messenger.service.ChatService;
-import com.gmail.ivanjermakov1.messenger.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
-@RestController
-@RequestMapping("chat")
-@Transactional
-public class ChatController {
-
-	private final ChatService chatService;
-	private final UserService userService;
-	private final ConversationController conversationController;
-	private final ConversationRepository conversationRepository;
-
-	private ConversationMapper conversationMapper;
-
-	@Autowired
-	public ChatController(UserService userService, ChatService chatService, ConversationController conversationController, ConversationRepository conversationRepository) {
-		this.userService = userService;
-		this.chatService = chatService;
-		this.conversationController = conversationController;
-		this.conversationRepository = conversationRepository;
-	}
-
-	@Autowired
-	public void setConversationMapper(ConversationMapper conversationMapper) {
-		this.conversationMapper = conversationMapper;
-	}
+public interface ChatController {
 
 	/**
 	 * Create chat.
@@ -58,11 +18,7 @@ public class ChatController {
 	 * @param chat chat instance to create. Creator id is not required.
 	 * @return created chat
 	 */
-	@PostMapping("create")
-	public ConversationDto create(@ModelAttribute User user,
-	                              @RequestBody NewChatDto chat) {
-		return conversationMapper.with(user).map(chatService.create(user, chat));
-	}
+	ConversationDto create(User user, NewChatDto chat);
 
 	/**
 	 * Add new member to chat.
@@ -73,16 +29,7 @@ public class ChatController {
 	 * @param memberId new member id
 	 * @throws NoSuchEntityException if caller is not chat member or no such chat
 	 */
-	@GetMapping("add")
-	public void addMember(@ModelAttribute User user,
-	                      @RequestParam("chatId") Long chatId,
-	                      @RequestParam("memberId") Long memberId) throws NoSuchEntityException {
-		Conversation chat = conversationRepository.findById(chatId)
-				.orElseThrow(() -> new NoSuchEntityException("no such chat"));
-		User member = userService.getUser(memberId);
-
-		chatService.addMembers(user, chat, new ArrayList<>(Collections.singletonList(member)));
-	}
+	void addMember(User user, Long chatId, Long memberId);
 
 	/**
 	 * Add new members to chat.
@@ -93,20 +40,7 @@ public class ChatController {
 	 * @param memberIds list of new members ids
 	 * @throws NoSuchEntityException if caller is not chat member
 	 */
-	@PostMapping("add")
-	public void addMembers(@ModelAttribute User user,
-	                       @RequestParam("chatId") Long chatId,
-	                       @RequestBody List<Long> memberIds) throws NoSuchEntityException {
-		Conversation chat = conversationRepository.findById(chatId)
-				.orElseThrow(() -> new NoSuchEntityException("no such chat"));
-
-		List<User> members = memberIds
-				.stream()
-				.map(userService::getUser)
-				.collect(Collectors.toList());
-
-		chatService.addMembers(user, chat, members);
-	}
+	void addMembers(User user, Long chatId, List<Long> memberIds);
 
 	/**
 	 * Kick member from chat.
@@ -119,16 +53,7 @@ public class ChatController {
 	 * @throws AuthorizationException if caller is not chat creator
 	 * @throws IllegalStateException  if chat creator try to kick himself
 	 */
-	@GetMapping("kick")
-	public void kickMember(@ModelAttribute User user,
-	                       @RequestParam("chatId") Long chatId,
-	                       @RequestParam("memberId") Long memberId) throws AuthorizationException, IllegalStateException {
-		Conversation chat = conversationRepository.findById(chatId)
-				.orElseThrow(() -> new NoSuchEntityException("no such chat"));
-		User member = userService.getUser(memberId);
-
-		chatService.kickMember(user, chat, member);
-	}
+	void kickMember(User user, Long chatId, Long memberId);
 
 	/**
 	 * Hide chat for calling user and delete all messages sent by him.
@@ -137,22 +62,14 @@ public class ChatController {
 	 * @param conversationId id of conversation to delete
 	 * @throws AuthenticationException on invalid @param token
 	 */
-	@GetMapping("delete")
-	public void delete(@ModelAttribute User user,
-	                   @RequestParam("id") Long conversationId) throws AuthenticationException {
-		conversationController.delete(user, conversationId);
-	}
+	void delete(User user, Long conversationId) throws AuthenticationException;
 
 	/**
 	 * Hide chat from calling user
 	 *
-	 * @param user           authenticated user. automatically maps, when {@literal Auth-Token} parameter present
-	 * @param conversationId id of conversation to hide
+	 * @param user authenticated user. automatically maps, when {@literal Auth-Token} parameter present
+	 * @param id   id of conversation to hide
 	 */
-	@GetMapping("hide")
-	public void hide(@ModelAttribute User user,
-	                 @RequestParam("id") Long conversationId) {
-		conversationController.hide(user, conversationId);
-	}
+	void hide(User user, Long id);
 
 }

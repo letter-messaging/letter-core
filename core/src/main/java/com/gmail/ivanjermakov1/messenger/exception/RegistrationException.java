@@ -1,6 +1,6 @@
 package com.gmail.ivanjermakov1.messenger.exception;
 
-public class RegistrationException extends Exception {
+public class RegistrationException extends RuntimeException {
 
 	public RegistrationException() {
 	}

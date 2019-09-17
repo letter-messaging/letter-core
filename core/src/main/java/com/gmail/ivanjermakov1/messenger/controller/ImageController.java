@@ -5,30 +5,11 @@ import com.gmail.ivanjermakov1.messenger.entity.User;
 import com.gmail.ivanjermakov1.messenger.exception.AuthorizationException;
 import com.gmail.ivanjermakov1.messenger.exception.InvalidEntityException;
 import com.gmail.ivanjermakov1.messenger.exception.NoSuchEntityException;
-import com.gmail.ivanjermakov1.messenger.service.ImageService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 
-@RestController
-@RequestMapping("image")
-@Transactional
-public class ImageController {
-
-	private final ImageService imageService;
-
-	@Autowired
-	public ImageController(ImageService imageService) {
-		this.imageService = imageService;
-	}
+public interface ImageController {
 
 	/**
 	 * Upload image.
@@ -40,11 +21,7 @@ public class ImageController {
 	 * @throws InvalidEntityException on upload of invalid file (mostly caused by invalid file extension or file size
 	 *                                specified in @value {@code spring.servlet.multipart.max-file-size})
 	 */
-	@PostMapping("upload")
-	public NewImageDto upload(@ModelAttribute User user,
-	                          @RequestParam("image") MultipartFile image) throws IOException, InvalidEntityException {
-		return imageService.upload(image);
-	}
+	NewImageDto upload(User user, MultipartFile image) throws IOException;
 
 	/**
 	 * Delete image from certain message
@@ -54,10 +31,6 @@ public class ImageController {
 	 * @throws NoSuchEntityException  on invalid image id
 	 * @throws AuthorizationException if user is not an a sender of a message image attached to
 	 */
-	@GetMapping("delete")
-	public void delete(@ModelAttribute User user,
-	                   @RequestParam("imageId") Long imageId) throws AuthorizationException, NoSuchEntityException {
-		imageService.delete(user, imageId);
-	}
+	void delete(User user, Long imageId);
 
 }

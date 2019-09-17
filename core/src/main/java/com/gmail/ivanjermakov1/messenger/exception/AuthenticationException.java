@@ -1,6 +1,6 @@
 package com.gmail.ivanjermakov1.messenger.exception;
 
-public class AuthenticationException extends Exception {
+public class AuthenticationException extends RuntimeException {
 
 	public AuthenticationException() {
 	}

@@ -4,29 +4,11 @@ import com.gmail.ivanjermakov1.messenger.dto.PreviewDto;
 import com.gmail.ivanjermakov1.messenger.dto.UserDto;
 import com.gmail.ivanjermakov1.messenger.entity.User;
 import com.gmail.ivanjermakov1.messenger.exception.InvalidSearchFormatException;
-import com.gmail.ivanjermakov1.messenger.service.SearchService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-@RestController
-@RequestMapping("search")
-@Transactional
-public class SearchController {
-
-	private final SearchService searchService;
-
-	@Autowired
-	public SearchController(SearchService searchService) {
-		this.searchService = searchService;
-	}
+public interface SearchController {
 
 	/**
 	 * TODO: describe search algorithm more detailed
@@ -36,12 +18,7 @@ public class SearchController {
 	 * @param search search query
 	 * @return list of found previews
 	 */
-	@GetMapping("conversations")
-	public List<PreviewDto> searchConversations(@ModelAttribute User user,
-	                                            @RequestParam("search") String search,
-	                                            Pageable pageable) {
-		return searchService.searchConversations(user, search, pageable);
-	}
+	List<PreviewDto> searchConversations(User user, String search, Pageable pageable);
 
 	/**
 	 * Find users by their login.
@@ -53,11 +30,6 @@ public class SearchController {
 	 * @return list of found users
 	 * @throws InvalidSearchFormatException on invalid @param query
 	 */
-	@GetMapping("users")
-	public List<UserDto> searchUsers(@ModelAttribute User user,
-	                                 @RequestParam("search") String search,
-	                                 Pageable pageable) throws InvalidSearchFormatException {
-		return searchService.searchUsers(search, pageable);
-	}
+	List<UserDto> searchUsers(User user, String search, Pageable pageable);
 
 }
