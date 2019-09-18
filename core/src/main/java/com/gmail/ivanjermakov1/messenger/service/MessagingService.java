@@ -86,6 +86,7 @@ public class MessagingService {
 				() -> {
 					LOG.debug("expired request of user @" + request.user.id);
 					if (requests.remove(request)) {
+						request.listener.complete();
 						LOG.debug("clear expired request of user @" + request.user.id);
 					} else {
 						LOG.debug("not found expired request of user @" + request.user.id);
