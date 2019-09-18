@@ -24,7 +24,13 @@ public class DefaultExceptionHandler {
 	@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
 	@ResponseBody
 	public WebException handleAnyException(HttpServletRequest req, Exception e) {
-		LOG.debug("handle " + e.getClass().getName() + " with message: " + e.getMessage());
+		LOG.debug(
+				"handle " + e.getClass().getName() + (
+						e.getMessage() != null
+								? " with message: " + e.getMessage()
+								: ""
+				)
+		);
 
 		return WebException.builder()
 				.status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -39,8 +45,8 @@ public class DefaultExceptionHandler {
 	public WebException handleAuthenticationException(HttpServletRequest req, Exception e) {
 		return WebException.builder()
 				.status(HttpStatus.UNAUTHORIZED)
-				.message(e.getMessage())
-				.path(req.getRequestURI())
+				.exception(e)
+				.request(req)
 				.build();
 	}
 
