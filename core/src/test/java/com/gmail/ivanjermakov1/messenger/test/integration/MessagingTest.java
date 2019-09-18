@@ -21,6 +21,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Flux;
@@ -30,6 +31,7 @@ import java.time.Duration;
 
 @SpringBootTest
 @RunWith(SpringRunner.class)
+@TestPropertySource(locations = "classpath:test.properties")
 @Transactional
 public class MessagingTest {
 
@@ -136,6 +138,20 @@ public class MessagingTest {
 		MessageDto messageDto = messagingController.sendMessage(user1.user, message);
 		Assert.assertNotNull(messageDto);
 		Assert.assertNotNull(messageDto.id);
+	}
+
+	@Test
+	public void shouldCloseSseConnection() {
+		TestingUser user1 = testingService.registerUser("Jack");
+
+		Flux<Action> events = messagingController.getEvents(
+				user1.token
+		);
+
+		StepVerifier
+				.create(events)
+				.expectComplete()
+				.verify(Duration.ofMillis(100L));
 	}
 
 }
