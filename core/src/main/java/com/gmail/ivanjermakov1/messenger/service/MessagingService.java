@@ -22,6 +22,7 @@ import com.gmail.ivanjermakov1.messenger.mapper.UserMapper;
 import com.gmail.ivanjermakov1.messenger.repository.DocumentRepository;
 import com.gmail.ivanjermakov1.messenger.repository.MessageRepository;
 import com.gmail.ivanjermakov1.messenger.util.Threads;
+import com.gmail.ivanjermakov1.messenger.validator.MessageValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,13 +55,15 @@ public class MessagingService {
 	private ConversationMapper conversationMapper;
 	private MessageMapper messageMapper;
 
+	private final MessageValidator messageValidator;
+
 	private final List<Request<Action>> requests = new CopyOnWriteArrayList<>();
 
 	@Value("${sse.timeout}")
 	private Long sseTimeout;
 
 	@Autowired
-	public MessagingService(MessageService messageService, ConversationService conversationService, ImageService imageService, DocumentService documentService, UserMapper userMapper, UserService userService, MessageRepository messageRepository, DocumentRepository documentRepository) {
+	public MessagingService(MessageService messageService, ConversationService conversationService, ImageService imageService, DocumentService documentService, UserMapper userMapper, UserService userService, MessageRepository messageRepository, DocumentRepository documentRepository, MessageValidator messageValidator) {
 		this.messageService = messageService;
 		this.conversationService = conversationService;
 		this.imageService = imageService;
@@ -68,6 +71,7 @@ public class MessagingService {
 		this.userService = userService;
 		this.messageRepository = messageRepository;
 		this.documentRepository = documentRepository;
+		this.messageValidator = messageValidator;
 	}
 
 	@Autowired
@@ -134,7 +138,7 @@ public class MessagingService {
 				.map(i -> new Image(user, message, i.path, LocalDate.now()))
 				.collect(Collectors.toList());
 
-		if (!message.validate()) throw new InvalidEntityException("invalid message");
+		messageValidator.throwInvalid(message);
 
 		messageRepository.save(message);
 
@@ -211,7 +215,7 @@ public class MessagingService {
 				Collections.emptyList()
 		);
 
-		if (!message.validate()) throw new InvalidEntityException("invalid message");
+		messageValidator.throwInvalid(message);
 
 		message = messageRepository.save(message);
 		MessageDto messageDto = messageMapper.with(system).map(message);

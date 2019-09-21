@@ -66,8 +66,6 @@ public class UserService {
 	}
 
 	public void register(RegisterUserDto registerUserDto) throws RegistrationException {
-		registerUserDto.validate();
-
 		LOG.debug("register user: @" + registerUserDto.login);
 
 		if (userRepository.findByLogin(registerUserDto.login).isPresent())

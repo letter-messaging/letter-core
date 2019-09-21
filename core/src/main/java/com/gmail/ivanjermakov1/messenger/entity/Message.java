@@ -1,7 +1,6 @@
 package com.gmail.ivanjermakov1.messenger.entity;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.gmail.ivanjermakov1.messenger.util.Objects;
 
 import javax.persistence.Access;
 import javax.persistence.AccessType;
@@ -98,18 +97,6 @@ public class Message {
 		this.forwarded = forwarded;
 		this.images = images;
 		this.documents = documents;
-	}
-
-	//	TODO: refactor
-	public boolean validate() {
-		if (sender == null || sender.id == null) return false;
-		if (conversation == null || conversation.id == null) return false;
-
-		if (text.trim().isEmpty()) {
-			return !Objects.isNullOrEmpty(forwarded) || !Objects.isNullOrEmpty(images) || !Objects.isNullOrEmpty(documents);
-		}
-
-		return true;
 	}
 
 }
