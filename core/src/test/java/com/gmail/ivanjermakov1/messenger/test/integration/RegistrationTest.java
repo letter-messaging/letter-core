@@ -2,6 +2,7 @@ package com.gmail.ivanjermakov1.messenger.test.integration;
 
 import com.gmail.ivanjermakov1.messenger.controller.RegistrationController;
 import com.gmail.ivanjermakov1.messenger.dto.RegisterUserDto;
+import com.gmail.ivanjermakov1.messenger.exception.InvalidEntityException;
 import com.gmail.ivanjermakov1.messenger.exception.RegistrationException;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -25,15 +26,23 @@ public class RegistrationTest {
 	}
 
 	@Test(expected = RegistrationException.class)
-	public void shouldThrowException_WithDuplication() throws RegistrationException {
+	public void shouldThrowException_WithDuplication() {
 		registrationController.register(
 				new RegisterUserDto("Jack", "Johnson", "jacksj", "secure_password123"));
 		registrationController.register(
 				new RegisterUserDto("Jack", "Johnson", "jacksj", "secure_password123"));
 	}
 
+	@Test(expected = RegistrationException.class)
+	public void shouldThrowException_WithDifferentPassword() {
+		registrationController.register(
+				new RegisterUserDto("Jack", "Johnson", "jacksj", "secure_password123"));
+		registrationController.register(
+				new RegisterUserDto("Jack", "Johnson", "jacksj", "secure_password13"));
+	}
+
 	@Test
-	public void shouldNotThrowException_WithDifferentLogin() throws RegistrationException {
+	public void shouldNotThrowException_WithDifferentLogin() {
 		registrationController.register(
 				new RegisterUserDto("Jack", "Johnson", "jacksj", "secure_password123"));
 		registrationController.register(
@@ -41,35 +50,27 @@ public class RegistrationTest {
 	}
 
 	@Test
-	public void shouldNotThrowException_WithDifferentName() throws RegistrationException {
+	public void shouldNotThrowException_WithDifferentName() {
 		registrationController.register(
 				new RegisterUserDto("Jackj", "Johnsond", "jacksj", "secure_password123"));
 		registrationController.register(
 				new RegisterUserDto("Jack", "Johnson", "jacksk", "secure_password13"));
 	}
 
-	@Test(expected = RegistrationException.class)
-	public void shouldThrowException_WithDifferentPassword() throws RegistrationException {
-		registrationController.register(
-				new RegisterUserDto("Jack", "Johnson", "jacksj", "secure_password123"));
-		registrationController.register(
-				new RegisterUserDto("Jack", "Johnson", "jacksj", "secure_password13"));
-	}
-
-	@Test(expected = RegistrationException.class)
-	public void shouldThrowException_WithBlankFirstName() throws RegistrationException {
+	@Test(expected = InvalidEntityException.class)
+	public void shouldThrowException_WithBlankFirstName() {
 		registrationController.register(
 				new RegisterUserDto("", "Johnson", "jacksj", "secure_password123"));
 	}
 
-	@Test(expected = RegistrationException.class)
-	public void shouldThrowException_WithBlankLastName() throws RegistrationException {
+	@Test(expected = InvalidEntityException.class)
+	public void shouldThrowException_WithBlankLastName() {
 		registrationController.register(
 				new RegisterUserDto("Jack", "", "jacksj", "secure_password123"));
 	}
 
-	@Test(expected = RegistrationException.class)
-	public void shouldThrowException_WithBlankLogin() throws RegistrationException {
+	@Test(expected = InvalidEntityException.class)
+	public void shouldThrowException_WithBlankLogin() {
 		registrationController.register(
 				new RegisterUserDto("Jack", "Johnson", "", "secure_password123"));
 	}
