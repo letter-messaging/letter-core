@@ -9,6 +9,7 @@ import com.gmail.ivanjermakov1.messenger.dto.PreviewDto;
 import com.gmail.ivanjermakov1.messenger.dto.TestingUser;
 import com.gmail.ivanjermakov1.messenger.dto.UserDto;
 import com.gmail.ivanjermakov1.messenger.exception.AuthenticationException;
+import com.gmail.ivanjermakov1.messenger.exception.InvalidEntityException;
 import com.gmail.ivanjermakov1.messenger.exception.InvalidSearchFormatException;
 import com.gmail.ivanjermakov1.messenger.exception.NoSuchEntityException;
 import com.gmail.ivanjermakov1.messenger.exception.RegistrationException;
@@ -58,7 +59,7 @@ public class SearchTest {
 	}
 
 	@Test(expected = InvalidSearchFormatException.class)
-	public void shouldThrowException_WithInvalidSearch() throws RegistrationException, AuthenticationException, InvalidSearchFormatException {
+	public void shouldThrowException_WithInvalidUserSearch() throws RegistrationException, AuthenticationException, InvalidSearchFormatException {
 		TestingUser user = testingService.registerUser("John");
 
 		searchController.searchUsers(
@@ -68,8 +69,8 @@ public class SearchTest {
 		);
 	}
 
-	@Test
-	public void shouldFindConversationByFirstName() throws RegistrationException, AuthenticationException {
+	@Test(expected = InvalidEntityException.class)
+	public void shouldFindConversation() throws RegistrationException, AuthenticationException {
 		TestingUser user1 = testingService.registerUser("Jack");
 		TestingUser user2 = testingService.registerUser("Ron");
 
@@ -84,7 +85,7 @@ public class SearchTest {
 				"Hello!"
 		);
 
-//		message is required for conversation to be visible through previewController.all()
+//		at least one message is required for conversation to be visible
 		messagingController.sendMessage(user1.user, message);
 
 		List<PreviewDto> previews = searchController.searchConversations(
@@ -102,6 +103,57 @@ public class SearchTest {
 						.orElseThrow(NoSuchEntityException::new)
 						.conversation.id
 		);
+
+		Assert.assertEquals(
+				1,
+				searchController
+						.searchConversations(
+								user1.user,
+								"ron",
+								PageRequest.of(0, Integer.MAX_VALUE)
+						)
+						.size()
+		);
+
+		Assert.assertEquals(
+				1,
+				searchController
+						.searchConversations(
+								user1.user,
+								"ro",
+								PageRequest.of(0, Integer.MAX_VALUE)
+						)
+						.size()
+		);
+
+		Assert.assertEquals(
+				1,
+				searchController
+						.searchConversations(
+								user1.user,
+								"ron",
+								PageRequest.of(0, Integer.MAX_VALUE)
+						)
+						.size()
+		);
+
+		Assert.assertEquals(
+				0,
+				searchController
+						.searchConversations(
+								user1.user,
+								"abcdef",
+								PageRequest.of(0, Integer.MAX_VALUE)
+						)
+						.size()
+		);
+
+		searchController
+				.searchConversations(
+						user1.user,
+						"",
+						PageRequest.of(0, Integer.MAX_VALUE)
+				);
 	}
 
 }
