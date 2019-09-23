@@ -9,6 +9,7 @@ import com.gmail.ivanjermakov1.messenger.dto.UserDto;
 import com.gmail.ivanjermakov1.messenger.entity.User;
 import com.gmail.ivanjermakov1.messenger.exception.InvalidEntityException;
 import com.gmail.ivanjermakov1.messenger.exception.InvalidSearchFormatException;
+import com.gmail.ivanjermakov1.messenger.mapper.PreviewMapper;
 import com.gmail.ivanjermakov1.messenger.mapper.UserMapper;
 import com.gmail.ivanjermakov1.messenger.repository.ConversationRepository;
 import com.gmail.ivanjermakov1.messenger.repository.UserRepository;
@@ -23,22 +24,22 @@ import java.util.stream.Collectors;
 @Service
 public class SearchService {
 
-	private final PreviewService previewService;
 
 	private final UserRepository userRepository;
 	private final ConversationRepository conversationRepository;
 
 	private final UserMapper userMapper;
+	private final PreviewMapper previewMapper;
 
 	@Value("${search.result.limit}")
 	private Integer searchResultLimit;
 
 	@Autowired
-	public SearchService(UserRepository userRepository, UserMapper userMapper, ConversationRepository conversationRepository, PreviewService previewService) {
+	public SearchService(UserRepository userRepository, UserMapper userMapper, ConversationRepository conversationRepository, PreviewMapper previewMapper) {
 		this.userRepository = userRepository;
 		this.userMapper = userMapper;
 		this.conversationRepository = conversationRepository;
-		this.previewService = previewService;
+		this.previewMapper = previewMapper;
 	}
 
 	public List<PreviewDto> searchConversations(User user, String search, Pageable pageable) throws InvalidEntityException {
@@ -56,7 +57,7 @@ public class SearchService {
 				.stream()
 				.skip(pageable.getOffset())
 				.limit(pageable.getPageSize())
-				.map(c -> previewService.getPreview(user, c))
+				.map(c -> previewMapper.with(user).map(c))
 				.collect(Collectors.toList());
 	}
 

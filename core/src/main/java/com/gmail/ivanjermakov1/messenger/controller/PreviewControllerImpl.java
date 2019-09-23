@@ -3,6 +3,7 @@ package com.gmail.ivanjermakov1.messenger.controller;
 import com.gmail.ivanjermakov1.messenger.dto.PreviewDto;
 import com.gmail.ivanjermakov1.messenger.entity.Conversation;
 import com.gmail.ivanjermakov1.messenger.entity.User;
+import com.gmail.ivanjermakov1.messenger.mapper.PreviewMapper;
 import com.gmail.ivanjermakov1.messenger.service.ConversationService;
 import com.gmail.ivanjermakov1.messenger.service.PreviewService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,10 +25,13 @@ public class PreviewControllerImpl implements PreviewController {
 	private final PreviewService previewService;
 	private final ConversationService conversationService;
 
+	private final PreviewMapper previewMapper;
+
 	@Autowired
-	public PreviewControllerImpl(PreviewService previewService, ConversationService conversationService) {
+	public PreviewControllerImpl(PreviewService previewService, ConversationService conversationService, PreviewMapper previewMapper) {
 		this.previewService = previewService;
 		this.conversationService = conversationService;
+		this.previewMapper = previewMapper;
 	}
 
 	@Override
@@ -43,7 +47,7 @@ public class PreviewControllerImpl implements PreviewController {
 	                      @RequestParam("conversationId") Long conversationId) {
 		Conversation conversation = conversationService.get(conversationId);
 
-		PreviewDto preview = previewService.getPreview(user, conversation);
+		PreviewDto preview = previewMapper.with(user).map(conversation);
 		conversationService.show(user, conversation);
 
 		return preview;
