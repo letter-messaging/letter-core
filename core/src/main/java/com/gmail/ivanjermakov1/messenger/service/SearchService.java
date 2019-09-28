@@ -1,7 +1,6 @@
 package com.gmail.ivanjermakov1.messenger.service;
 
 import com.github.ivanjermakov.jtrue.core.Validator;
-import com.github.ivanjermakov.jtrue.exception.InvalidObjectException;
 import com.github.ivanjermakov.jtrue.predicate.NotBlank;
 import com.github.ivanjermakov.jtrue.predicate.NotNull;
 import com.gmail.ivanjermakov1.messenger.dto.PreviewDto;
@@ -43,15 +42,10 @@ public class SearchService {
 	}
 
 	public List<PreviewDto> searchConversations(User user, String search, Pageable pageable) throws InvalidEntityException {
-		try {
-			new Validator<String>()
-					.rule(new NotNull<>(), "search query cannot be null")
-					.rule(new NotBlank(), "search query cannot be blank")
-					.throwInvalid(search);
-		} catch (InvalidObjectException e) {
-			throw new InvalidEntityException(e.getMessage());
-		} catch (Throwable ignored) {
-		}
+		new Validator<String>()
+				.rule(new NotNull<>(), "search query cannot be null")
+				.rule(new NotBlank(), "search query cannot be blank")
+				.throwInvalid(search, m -> new InvalidEntityException(m));
 
 		return conversationRepository.findConversationsBySearchQuery(user.id, search)
 				.stream()

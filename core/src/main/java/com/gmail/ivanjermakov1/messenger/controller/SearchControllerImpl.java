@@ -3,6 +3,7 @@ package com.gmail.ivanjermakov1.messenger.controller;
 import com.gmail.ivanjermakov1.messenger.dto.PreviewDto;
 import com.gmail.ivanjermakov1.messenger.dto.UserDto;
 import com.gmail.ivanjermakov1.messenger.entity.User;
+import com.gmail.ivanjermakov1.messenger.exception.InvalidEntityException;
 import com.gmail.ivanjermakov1.messenger.exception.InvalidSearchFormatException;
 import com.gmail.ivanjermakov1.messenger.service.SearchService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +33,7 @@ public class SearchControllerImpl implements SearchController {
 	@GetMapping("conversations")
 	public List<PreviewDto> searchConversations(@ModelAttribute User user,
 	                                            @RequestParam("search") String search,
-	                                            Pageable pageable) {
+	                                            Pageable pageable) throws InvalidEntityException {
 		return searchService.searchConversations(user, search, pageable);
 	}
 
