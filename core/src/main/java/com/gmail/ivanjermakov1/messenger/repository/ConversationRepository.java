@@ -14,11 +14,11 @@ public interface ConversationRepository extends CrudRepository<Conversation, Lon
 	List<Conversation> getConversations(@Param("id") Long userId, Pageable pageable);
 
 	/**
-	 * TODO: docs
+	 * Find conversations by search query.
 	 *
-	 * @param userId
-	 * @param search
-	 * @return
+	 * @param userId user id
+	 * @param search search query
+	 * @return found conversations
 	 */
 	@Query(value = "select c.id, c.chat_name, c.creator_id\n" +
 			"from conversation c\n" +

@@ -11,8 +11,8 @@ import java.util.List;
 public interface SearchController {
 
 	/**
-	 * TODO: describe search algorithm more detailed
-	 * Find preview by companion first or last name
+	 * Find preview by companion login or first or last name, presented partially or fully in search query parameter
+	 *
 	 *
 	 * @param user   authenticated user. automatically maps, when {@literal Auth-Token} parameter present
 	 * @param search search query
