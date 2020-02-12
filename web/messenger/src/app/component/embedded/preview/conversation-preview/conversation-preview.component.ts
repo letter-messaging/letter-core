@@ -8,28 +8,28 @@ import {ImageService} from '../../../../service/image.service';
 import {PreviewType} from '../../../../dto/enum/PreviewType';
 
 @Component({
-	selector: 'app-conversation-preview',
-	templateUrl: './conversation-preview.component.html',
-	styleUrls: ['./conversation-preview.component.scss']
+    selector: 'app-conversation-preview',
+    templateUrl: './conversation-preview.component.html',
+    styleUrls: ['./conversation-preview.component.scss']
 })
 export class ConversationPreviewComponent implements OnInit {
 
-	readonly ImageCompressionMode: typeof ImageCompressionMode = ImageCompressionMode;
-	readonly ImageService: typeof ImageService = ImageService;
-	readonly FILE_URL = FILE_URL;
-	readonly PreviewType: typeof PreviewType = PreviewType;
+    readonly ImageCompressionMode: typeof ImageCompressionMode = ImageCompressionMode;
+    readonly ImageService: typeof ImageService = ImageService;
+    readonly FILE_URL = FILE_URL;
+    readonly PreviewType: typeof PreviewType = PreviewType;
 
-	@Input() preview: Preview;
-	@Input() selected: boolean;
-	@Input() isOnline: boolean;
+    @Input() preview: Preview;
+    @Input() selected: boolean;
+    @Input() isOnline: boolean;
 
-	me: User;
+    me: User;
 
-	constructor(private meProvider: MeProvider) {
-	}
+    constructor(private meProvider: MeProvider) {
+    }
 
-	ngOnInit() {
-		this.meProvider.oMe.subscribe(me => this.me = me);
-	}
+    ngOnInit() {
+        this.meProvider.oMe.subscribe(me => this.me = me);
+    }
 
 }

@@ -4,28 +4,28 @@ import {RegisterUser} from '../../../dto/RegisterUser';
 import {RegisterService} from '../../../service/register.service';
 
 @Component({
-	selector: 'app-register',
-	templateUrl: './register.component.html',
-	styleUrls: ['./register.component.scss', './../auth/auth.component.scss']
+    selector: 'app-register',
+    templateUrl: './register.component.html',
+    styleUrls: ['./register.component.scss', './../auth/auth.component.scss']
 })
 export class RegisterComponent implements OnInit {
 
-	registerUser: RegisterUser = new RegisterUser();
-	passwordConfirmation = '';
+    registerUser: RegisterUser = new RegisterUser();
+    passwordConfirmation = '';
 
-	constructor(private router: Router,
-	            private registerService: RegisterService) {
-	}
+    constructor(private router: Router,
+                private registerService: RegisterService) {
+    }
 
-	ngOnInit() {
-	}
+    ngOnInit() {
+    }
 
-	register() {
-		if (this.registerUser.password === this.passwordConfirmation) {
-			this.registerService.register(this.registerUser).subscribe(() => {
-				this.router.navigate(['/auth']);
-			}, error => {
-			});
-		}
-	}
+    register() {
+        if (this.registerUser.password === this.passwordConfirmation) {
+            this.registerService.register(this.registerUser).subscribe(() => {
+                this.router.navigate(['/auth']);
+            }, error => {
+            });
+        }
+    }
 }

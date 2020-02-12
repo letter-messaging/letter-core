@@ -21,42 +21,42 @@ import {AttachmentsMenuComponent} from './component/embedded/menu/attachments-me
 import {ConversationMenuComponent} from './component/embedded/menu/conversation-menu/conversation-menu.component';
 import {MessageSendDirective} from './directive/message-send.directive';
 import {ScrollPositionDirective} from './directive/scroll-position.directive';
-import { DocumentAttachmentComponent } from './component/embedded/attachment/document-attachment/document-attachment.component';
-import { ImagePreviewComponent } from './component/embedded/image-preview/image-preview.component';
-import { ChatInfoComponent } from './component/embedded/chat-info/chat-info.component';
+import {DocumentAttachmentComponent} from './component/embedded/attachment/document-attachment/document-attachment.component';
+import {ImagePreviewComponent} from './component/embedded/image-preview/image-preview.component';
+import {ChatInfoComponent} from './component/embedded/chat-info/chat-info.component';
 
 @NgModule({
-	declarations: [
-		AppComponent,
-		AuthComponent,
-		RegisterComponent,
-		MessagingComponent,
-		MessageComponent,
-		MessageSendDirective,
-		ScrollPositionDirective,
-		ArraySortPipeAsc,
-		ArraySortPipeDesc,
-		ForwardedAttachmentComponent,
-		ProfileComponent,
-		ImageAttachmentComponent,
-		ConversationPreviewComponent,
-		UserPreviewComponent,
-		ProfileMenuComponent,
-		AttachmentsMenuComponent,
-		ConversationMenuComponent,
-		DocumentAttachmentComponent,
-		ImagePreviewComponent,
-		ChatInfoComponent,
-	],
-	imports: [
-		BrowserModule,
-		AppRoutingModule,
-		FormsModule,
-		HttpClientModule,
-		AutosizeModule
-	],
-	providers: [],
-	bootstrap: [AppComponent]
+    declarations: [
+        AppComponent,
+        AuthComponent,
+        RegisterComponent,
+        MessagingComponent,
+        MessageComponent,
+        MessageSendDirective,
+        ScrollPositionDirective,
+        ArraySortPipeAsc,
+        ArraySortPipeDesc,
+        ForwardedAttachmentComponent,
+        ProfileComponent,
+        ImageAttachmentComponent,
+        ConversationPreviewComponent,
+        UserPreviewComponent,
+        ProfileMenuComponent,
+        AttachmentsMenuComponent,
+        ConversationMenuComponent,
+        DocumentAttachmentComponent,
+        ImagePreviewComponent,
+        ChatInfoComponent,
+    ],
+    imports: [
+        BrowserModule,
+        AppRoutingModule,
+        FormsModule,
+        HttpClientModule,
+        AutosizeModule
+    ],
+    providers: [],
+    bootstrap: [AppComponent]
 })
 export class AppModule {
 }

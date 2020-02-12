@@ -1,3 +1,3 @@
 export class NewDocument {
-	path: string;
+    path: string;
 }

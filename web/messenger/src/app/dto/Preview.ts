@@ -5,11 +5,11 @@ import {PreviewType} from './enum/PreviewType';
 import {Avatar} from './Avatar';
 
 export class Preview {
-	type: PreviewType;
-	conversation: Conversation;
-	with: User;
-	lastMessage: Message;
-	avatar: Avatar;
-	unread: number;
-	kicked: boolean;
+    type: PreviewType;
+    conversation: Conversation;
+    with: User;
+    lastMessage: Message;
+    avatar: Avatar;
+    unread: number;
+    kicked: boolean;
 }

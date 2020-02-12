@@ -1,120 +1,120 @@
 .header-right {
+  display: flex;
+  align-items: center;
+
+  background: var(--dark);
+
+  border-radius: 0 2px 2px 0;
+
+  color: white;
+
+  .preview-info {
 	display: flex;
 	align-items: center;
 
-	background: var(--dark);
+	padding: 0 10px;
 
-	border-radius: 0 2px 2px 0;
+	.avatar {
+	  height: 40px;
+	  width: 40px;
 
-	color: white;
-
-	.preview-info {
-		display: flex;
-		align-items: center;
-
-		padding: 0 10px;
-
-		.avatar {
-			height: 40px;
-			width: 40px;
-
-			object-fit: cover;
-			border-radius: 20px;
-		}
-
-		.conversation-name {
-			font-weight: bold;
-			padding: 11.5px;
-
-			white-space: nowrap;
-		}
-
-		.status, .members {
-			font-size: 20px;
-			font-style: italic;
-
-			//fix cutoff
-			padding-right: 4px;
-
-			overflow: hidden;
-			text-overflow: ellipsis;
-			white-space: nowrap;
-		}
+	  object-fit: cover;
+	  border-radius: 20px;
 	}
 
-	.preview-info:hover {
-		cursor: pointer;
-		background: var(--black);
+	.conversation-name {
+	  font-weight: bold;
+	  padding: 11.5px;
+
+	  white-space: nowrap;
 	}
 
-	.right {
-		display: flex;
-		align-items: center;
+	.status, .members {
+	  font-size: 20px;
+	  font-style: italic;
 
-		margin-left: auto;
+	  //fix cutoff
+	  padding-right: 4px;
 
-		background: unset;
+	  overflow: hidden;
+	  text-overflow: ellipsis;
+	  white-space: nowrap;
+	}
+  }
 
-		.search, app-conversation-menu {
-			cursor: pointer;
-		}
+  .preview-info:hover {
+	cursor: pointer;
+	background: var(--black);
+  }
 
-		* {
-			i {
-				color: white;
-				font-size: 24px;
-				padding: 10px;
+  .right {
+	display: flex;
+	align-items: center;
 
-				cursor: pointer;
-			}
+	margin-left: auto;
 
-			i:hover {
-				color: var(--special);
-			}
-		}
+	background: unset;
 
+	.search, app-conversation-menu {
+	  cursor: pointer;
 	}
 
-	.menu {
-		display: none;
-		align-items: center;
-
-		padding: 2px;
-
-		height: 100%;
+	* {
+	  i {
+		color: white;
+		font-size: 24px;
+		padding: 10px;
 
 		cursor: pointer;
+	  }
 
-		i {
-			font-size: 32px;
-			color: white;
-		}
-
-		i:hover {
-			color: var(--special);
-		}
-
+	  i:hover {
+		color: var(--special);
+	  }
 	}
 
-	.logout {
-		display: grid;
-		align-items: center;
+  }
 
-		padding: 2px;
+  .menu {
+	display: none;
+	align-items: center;
 
-		height: 100%;
+	padding: 2px;
 
-		cursor: pointer;
+	height: 100%;
 
-		i {
-			font-size: 32px;
-			color: white;
-		}
+	cursor: pointer;
 
-		i:hover {
-			color: var(--special);
-		}
-
+	i {
+	  font-size: 32px;
+	  color: white;
 	}
+
+	i:hover {
+	  color: var(--special);
+	}
+
+  }
+
+  .logout {
+	display: grid;
+	align-items: center;
+
+	padding: 2px;
+
+	height: 100%;
+
+	cursor: pointer;
+
+	i {
+	  font-size: 32px;
+	  color: white;
+	}
+
+	i:hover {
+	  color: var(--special);
+	}
+
+  }
 
 }

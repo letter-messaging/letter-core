@@ -1,4 +1,4 @@
 export class NewChat {
-	name: string;
-	memberIds: number[];
+    name: string;
+    memberIds: number[];
 }

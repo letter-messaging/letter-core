@@ -1,195 +1,195 @@
 .message {
-	display: flex;
-	align-self: center;
-	flex-shrink: 0;
-	flex-direction: row;
+  display: flex;
+  align-self: center;
+  flex-shrink: 0;
+  flex-direction: row;
 
-	border-radius: 4px;
+  border-radius: 4px;
 
-	width: 100%;
-	min-height: 10px;
+  width: 100%;
+  min-height: 10px;
 
-	.avatar {
-		width: 50px;
-		height: 50px;
+  .avatar {
+	width: 50px;
+	height: 50px;
 
-		margin: 8px;
+	margin: 8px;
 
-		cursor: pointer;
+	cursor: pointer;
 
-		object-fit: cover;
-		border-radius: 25px;
-	}
+	object-fit: cover;
+	border-radius: 25px;
+  }
 
-	.from {
-		color: white;
+  .from {
+	color: white;
 
-		font-size: 16px;
-		font-weight: bold;
+	font-size: 16px;
+	font-weight: bold;
 
-		grid-row: 1;
-	}
+	grid-row: 1;
+  }
 
-	.text {
-		grid-row: 2;
+  .text {
+	grid-row: 2;
 
-		color: white;
+	color: white;
 
-		/*preserving line brakes*/
-		white-space: pre-wrap;
-		word-break: break-word;
-	}
+	/*preserving line brakes*/
+	white-space: pre-wrap;
+	word-break: break-word;
+  }
 
 }
 
 .message-container {
-	display: flex;
+  display: flex;
 
-	max-width: 800px;
+  max-width: 800px;
 
-	padding: 5px;
-	margin: 2px;
+  padding: 5px;
+  margin: 2px;
 }
 
 .selected {
-	width: 100%;
-	background: rgba(0, 0, 0, 0.05);
+  width: 100%;
+  background: rgba(0, 0, 0, 0.05);
 }
 
 .message-content {
+  display: flex;
+  flex-direction: column;
+
+  padding: 4px;
+
+  background: var(--grey);
+
+  cursor: pointer;
+
+  border-radius: 10px 10px 10px 0;
+
+  .info {
+	display: flex;
+	align-items: center;
+	justify-content: flex-end;
+
+	grid-column: 2;
+	grid-row: 4;
+
+	.sent {
+	  color: white;
+
+	  font-size: 12px;
+	}
+
+	.status {
+	  color: var(--special) !important;
+
+	  display: grid;
+
+	  div {
+		display: grid;
+		margin-top: 2px;
+	  }
+
+	  i {
+		font-size: 14px;
+		padding: 4px;
+
+		color: var(--special);
+	  }
+
+	}
+
+  }
+
+  .images-wrapper {
+	display: grid;
+	grid-template-columns: repeat(3, auto);
+
+	.image {
+	  width: 200px;
+	  height: 200px;
+	  object-fit: cover;
+
+	  margin: 1px;
+	}
+  }
+
+  .documents-wrapper {
 	display: flex;
 	flex-direction: column;
+	justify-content: center;
+	align-items: flex-start;
 
-	padding: 4px;
+	.document {
+	  display: flex;
+	  align-items: center;
 
-	background: var(--grey);
+	  margin: 4px 1px 0 1px;
 
-	cursor: pointer;
+	  i {
+		font-size: 28px;
+		width: 28px;
+		text-align: center;
 
-	border-radius: 10px 10px 10px 0;
+		padding: 8px;
 
-	.info {
-		display: flex;
-		align-items: center;
-		justify-content: flex-end;
+		color: var(--bright);
 
-		grid-column: 2;
-		grid-row: 4;
+		background: var(--dark);
+		border-radius: 4px;
+	  }
 
-		.sent {
-			color: white;
-
-			font-size: 12px;
-		}
-
-		.status {
-			color: var(--special) !important;
-
-			display: grid;
-
-			div {
-				display: grid;
-				margin-top: 2px;
-			}
-
-			i {
-				font-size: 14px;
-				padding: 4px;
-
-				color: var(--special);
-			}
-
-		}
-
+	  .text {
+		padding: 4px;
+	  }
 	}
 
-	.images-wrapper {
-		display: grid;
-		grid-template-columns: repeat(3, auto);
+	.document:hover {
+	  i {
+		color: var(--special);
+	  }
 
-		.image {
-			width: 200px;
-			height: 200px;
-			object-fit: cover;
-
-			margin: 1px;
-		}
+	  .text {
+		color: var(--special);
+	  }
 	}
-
-	.documents-wrapper {
-		display: flex;
-		flex-direction: column;
-		justify-content: center;
-		align-items: flex-start;
-
-		.document {
-			display: flex;
-			align-items: center;
-
-			margin: 4px 1px 0 1px;
-
-			i {
-				font-size: 28px;
-				width: 28px;
-				text-align: center;
-
-				padding: 8px;
-
-				color: var(--bright);
-
-				background: var(--dark);
-				border-radius: 4px;
-			}
-
-			.text {
-				padding: 4px;
-			}
-		}
-
-		.document:hover {
-			i {
-				color: var(--special);
-			}
-
-			.text {
-				color: var(--special);
-			}
-		}
-	}
+  }
 
 
 }
 
 .message-mine {
+  flex-direction: row-reverse;
+
+  .message-container {
 	flex-direction: row-reverse;
+  }
 
-	.message-container {
-		flex-direction: row-reverse;
-	}
+  .message-content {
+	background: var(--grey);
 
-	.message-content {
-		background: var(--grey);
+	border-radius: 10px 10px 0 10px;
+  }
 
-		border-radius: 10px 10px 0 10px;
-	}
-
-	.info {
-		grid-column: 1;
-		justify-content: flex-start;
-	}
+  .info {
+	grid-column: 1;
+	justify-content: flex-start;
+  }
 
 }
 
 .system-message {
-	display: flex;
-	align-items: center;
-	justify-content: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
-	width: 100%;
+  width: 100%;
 
-	padding: 4px;
+  padding: 4px;
 
-	.text {
-		color: var(--grey);
-	}
+  .text {
+	color: var(--grey);
+  }
 }

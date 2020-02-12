@@ -10,56 +10,56 @@ import {MessageImage} from '../../../dto/local/MessageImage';
 
 
 @Component({
-	selector: 'app-message',
-	templateUrl: './message.component.html',
-	styleUrls: [
-		'./message.component.scss',
-		'./message.component.forwarded.scss'
-	]
+    selector: 'app-message',
+    templateUrl: './message.component.html',
+    styleUrls: [
+        './message.component.scss',
+        './message.component.forwarded.scss'
+    ]
 })
 export class MessageComponent implements OnInit {
 
-	readonly ImageCompressionMode: typeof ImageCompressionMode = ImageCompressionMode;
-	readonly ImageService: typeof ImageService = ImageService;
-	readonly FILE_URL = FILE_URL;
+    readonly ImageCompressionMode: typeof ImageCompressionMode = ImageCompressionMode;
+    readonly ImageService: typeof ImageService = ImageService;
+    readonly FILE_URL = FILE_URL;
 
-	@Input()
-	message: Message;
+    @Input()
+    message: Message;
 
-	@Input()
-	isForwarded: boolean;
+    @Input()
+    isForwarded: boolean;
 
-	@Input()
-	me: User;
+    @Input()
+    me: User;
 
-	@Output()
-	openProfileEvent = new EventEmitter<User>();
+    @Output()
+    openProfileEvent = new EventEmitter<User>();
 
-	@Output()
-	openImageEvent = new EventEmitter<MessageImage>();
+    @Output()
+    openImageEvent = new EventEmitter<MessageImage>();
 
-	mine: boolean;
+    mine: boolean;
 
-	constructor() {
-	}
+    constructor() {
+    }
 
-	ngOnInit() {
-		this.mine = this.message.sender.id === this.me.id;
-	}
+    ngOnInit() {
+        this.mine = this.message.sender.id === this.me.id;
+    }
 
-	openProfile(user: User): void {
-		this.openProfileEvent.emit(user);
-	}
+    openProfile(user: User): void {
+        this.openProfileEvent.emit(user);
+    }
 
-	openDocument(document: Document) {
-		window.open(FILE_URL + document.path, '_blank');
-	}
+    openDocument(document: Document) {
+        window.open(FILE_URL + document.path, '_blank');
+    }
 
-	openImage(image: Image) {
-		let messageImage = new MessageImage();
-		messageImage.image = image;
-		messageImage.message = this.message;
+    openImage(image: Image) {
+        let messageImage = new MessageImage();
+        messageImage.image = image;
+        messageImage.message = this.message;
 
-		this.openImageEvent.emit(messageImage);
-	}
+        this.openImageEvent.emit(messageImage);
+    }
 }

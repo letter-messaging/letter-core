@@ -7,37 +7,37 @@ import {PreviewType} from '../../../dto/enum/PreviewType';
 import {User} from '../../../dto/User';
 
 @Component({
-	selector: 'app-chat-info',
-	templateUrl: './chat-info.component.html',
-	styleUrls: [
-		'./chat-info.component.scss',
-		'./../profile/profile.component.scss',
-		'./../preview/user-preview/user-preview.component.scss'
-	]
+    selector: 'app-chat-info',
+    templateUrl: './chat-info.component.html',
+    styleUrls: [
+        './chat-info.component.scss',
+        './../profile/profile.component.scss',
+        './../preview/user-preview/user-preview.component.scss'
+    ]
 })
 export class ChatInfoComponent implements OnInit {
 
-	readonly ImageCompressionMode: typeof ImageCompressionMode = ImageCompressionMode;
-	readonly ImageService: typeof ImageService = ImageService;
-	readonly FILE_URL = FILE_URL;
-	readonly PreviewType: typeof PreviewType = PreviewType;
+    readonly ImageCompressionMode: typeof ImageCompressionMode = ImageCompressionMode;
+    readonly ImageService: typeof ImageService = ImageService;
+    readonly FILE_URL = FILE_URL;
+    readonly PreviewType: typeof PreviewType = PreviewType;
 
-	@Input()
-	chat: Conversation;
+    @Input()
+    chat: Conversation;
 
-	@Output()
-	close = new EventEmitter();
+    @Output()
+    close = new EventEmitter();
 
-	@Output()
-	openProfile = new EventEmitter<User>();
+    @Output()
+    openProfile = new EventEmitter<User>();
 
-	@Output()
-	kickMember = new EventEmitter<User>();
+    @Output()
+    kickMember = new EventEmitter<User>();
 
-	constructor() {
-	}
+    constructor() {
+    }
 
-	ngOnInit() {
-	}
+    ngOnInit() {
+    }
 
 }

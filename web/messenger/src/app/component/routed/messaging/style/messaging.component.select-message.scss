@@ -1,53 +1,53 @@
 .selected-messages-menu {
-	display: flex;
-	flex-shrink: 0;
-	align-items: center;
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
 
-	height: 50px;
+  height: 50px;
+
+  padding: 4px;
+
+  background: white;
+
+  border-top: 2px solid var(--bright);
+  border-radius: 2px;
+
+  .button {
+	min-width: 0;
 
 	padding: 4px;
 
-	background: white;
+	text-align: center;
 
-	border-top: 2px solid var(--bright);
-	border-radius: 2px;
+	cursor: pointer;
 
-	.button {
-		min-width: 0;
+	color: white;
 
-		padding: 4px;
+	border-radius: 5px;
 
-		text-align: center;
-
-		cursor: pointer;
-
-		color: white;
-
-		border-radius: 5px;
-
-		i:hover {
-			color: var(--special);
-		}
-
+	i:hover {
+	  color: var(--special);
 	}
 
-	.text-button {
-		margin: 4px 8px;
-		padding: 4px;
+  }
 
-		cursor: pointer;
-	}
+  .text-button {
+	margin: 4px 8px;
+	padding: 4px;
 
-	.text-button:hover {
-		color: var(--special);
-	}
+	cursor: pointer;
+  }
 
-	.right {
-		margin-left: auto;
+  .text-button:hover {
+	color: var(--special);
+  }
 
-		display: flex;
-		align-items: center;
-	}
+  .right {
+	margin-left: auto;
+
+	display: flex;
+	align-items: center;
+  }
 
 }
 

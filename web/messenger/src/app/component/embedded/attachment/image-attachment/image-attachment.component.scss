@@ -1,25 +1,25 @@
 .image-attachment {
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 
-	.splitter {
-		height: 40px;
-	}
+  .splitter {
+	height: 40px;
+  }
 
-	.image {
-		width: 44px;
-		height: 44px;
-		object-fit: cover;
+  .image {
+	width: 44px;
+	height: 44px;
+	object-fit: cover;
 
-		border-radius: 4px;
+	border-radius: 4px;
 
-		margin-right: 5px;
-	}
+	margin-right: 5px;
+  }
 
 }
 
 .image-attachment-wrapper {
-	display: flex;
-	align-items: center;
+  display: flex;
+  align-items: center;
 }

@@ -5,30 +5,30 @@ import {ImageService} from '../../../../service/image.service';
 import {FILE_URL} from '../../../../../../globals';
 
 @Component({
-	selector: 'app-image-attachment',
-	templateUrl: './image-attachment.component.html',
-	styleUrls: [
-		'./image-attachment.component.scss',
-		'./../attachment.scss',
-	]
+    selector: 'app-image-attachment',
+    templateUrl: './image-attachment.component.html',
+    styleUrls: [
+        './image-attachment.component.scss',
+        './../attachment.scss',
+    ]
 })
 export class ImageAttachmentComponent implements OnInit {
 
-	readonly ImageCompressionMode: typeof ImageCompressionMode = ImageCompressionMode;
-	readonly ImageService: typeof ImageService = ImageService;
-	readonly FILE_URL = FILE_URL;
+    readonly ImageCompressionMode: typeof ImageCompressionMode = ImageCompressionMode;
+    readonly ImageService: typeof ImageService = ImageService;
+    readonly FILE_URL = FILE_URL;
 
-	@Input() image: NewImage;
-	@Output() removeImageAttachment = new EventEmitter();
+    @Input() image: NewImage;
+    @Output() removeImageAttachment = new EventEmitter();
 
-	constructor() {
-	}
+    constructor() {
+    }
 
-	ngOnInit() {
-	}
+    ngOnInit() {
+    }
 
-	remove() {
-		this.removeImageAttachment.next();
-	}
+    remove() {
+        this.removeImageAttachment.next();
+    }
 
 }

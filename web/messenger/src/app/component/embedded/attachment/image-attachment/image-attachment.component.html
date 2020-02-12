@@ -3,8 +3,8 @@
 		<div class="splitter"></div>
 		<!--TODO: use loading image if uploaded image haven't been loaded yet-->
 		<img
-			[src]="ImageService.getImagePathByCompressionMode(FILE_URL + image.path, ImageCompressionMode.SMALL)"
-			class="image" alt="">
+				[src]="ImageService.getImagePathByCompressionMode(FILE_URL + image.path, ImageCompressionMode.SMALL)"
+				class="image" alt="">
 		<div class="text">Attached image</div>
 	</div>
 	<i class="fas fa-times" (click)="remove()"></i>
