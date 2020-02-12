@@ -12,7 +12,7 @@ export class DocumentService {
 	constructor(private http: HttpClient) {
 	}
 
-	upload(token: string, file): Observable<NewImage> {
+	upload(token: string, file: File): Observable<NewImage> {
 		const formData = new FormData();
 		formData.append('document', file);
 
