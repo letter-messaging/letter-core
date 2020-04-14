@@ -1,8 +1,3 @@
-# messenger
+# letter-core
 
-[![Build Status](https://img.shields.io/travis/ivanjermakov/messenger/master)](https://travis-ci.com/ivanjermakov/messenger)
-[![Coverage Status](https://img.shields.io/coveralls/github/ivanjermakov/messenger/master)](https://coveralls.io/github/ivanjermakov/messenger?branch=master)
-[![GitHub release](https://img.shields.io/github/release/ivanjermakov/messenger.svg)](https://github.com/ivanjermakov/messenger/releases)
-[![Hits-of-Code](https://hitsofcode.com/github/ivanjermakov/messenger)](https://hitsofcode.com/view/github/ivanjermakov/messenger)
-
-Just a messenger.
+Letter messenger backend application
