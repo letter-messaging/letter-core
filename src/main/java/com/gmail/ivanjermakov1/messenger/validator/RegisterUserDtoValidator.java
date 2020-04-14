@@ -1,9 +1,9 @@
 package com.gmail.ivanjermakov1.messenger.validator;
 
-import com.github.ivanjermakov.jtrue.core.Validatable;
-import com.github.ivanjermakov.jtrue.core.Validator;
 import com.github.ivanjermakov.jtrue.predicate.NotBlank;
 import com.github.ivanjermakov.jtrue.predicate.NotNull;
+import com.github.ivanjermakov.jtrue.validator.Validatable;
+import com.github.ivanjermakov.jtrue.validator.Validator;
 import com.gmail.ivanjermakov1.messenger.dto.RegisterUserDto;
 import com.gmail.ivanjermakov1.messenger.exception.InvalidEntityException;
 import org.springframework.stereotype.Component;

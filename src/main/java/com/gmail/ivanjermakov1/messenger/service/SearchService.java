@@ -1,8 +1,8 @@
 package com.gmail.ivanjermakov1.messenger.service;
 
-import com.github.ivanjermakov.jtrue.core.Validator;
 import com.github.ivanjermakov.jtrue.predicate.NotBlank;
 import com.github.ivanjermakov.jtrue.predicate.NotNull;
+import com.github.ivanjermakov.jtrue.validator.Validator;
 import com.gmail.ivanjermakov1.messenger.dto.PreviewDto;
 import com.gmail.ivanjermakov1.messenger.dto.UserDto;
 import com.gmail.ivanjermakov1.messenger.entity.User;
