@@ -8,10 +8,10 @@ jobs:
 
     services:
       postgres:
-        image: postgres:12.2
+        image: postgres
         env:
           POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: ""
+          POSTGRES_PASSWORD: postgres
           POSTGRES_DB: letter
         ports:
           - 5432:5432
@@ -31,4 +31,4 @@ jobs:
         run: gradle test -Dfileupload.path=$HOME/upload
         env:
           DB_USER: postgres
-          DB_PASSWORD: ""
+          DB_PASSWORD: postgres
