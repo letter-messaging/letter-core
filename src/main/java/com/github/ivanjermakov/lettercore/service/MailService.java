@@ -13,7 +13,7 @@ public class MailService {
 
 	private final static Logger LOG = LoggerFactory.getLogger(MailService.class);
 
-	@Value("${mail.from}")
+	@Value("${spring.mail.username}")
 	private String from;
 
 	private final JavaMailSender javaMailSender;

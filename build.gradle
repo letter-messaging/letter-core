@@ -27,7 +27,7 @@ dependencies {
     implementation "org.springframework.boot:spring-boot-starter-data-jpa:$springVersion"
     implementation "org.springframework.boot:spring-boot-starter-mail:$springVersion"
 
-    implementation "org.postgresql:postgresql:42.2.4"
+    implementation "org.postgresql:postgresql:42.2.12"
     implementation "dom4j:dom4j:1.6.1"
     implementation "com.atlassian.commonmark:commonmark:0.12.1"
     implementation "org.modelmapper:modelmapper:2.3.0"
