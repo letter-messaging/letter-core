@@ -1,9 +1,9 @@
 package com.github.ivanjermakov.lettercore.test.unit;
 
+import com.github.ivanjermakov.lettercore.auth.exception.AuthenticationException;
 import com.github.ivanjermakov.lettercore.config.AuthenticationControllerAdvice;
-import com.github.ivanjermakov.lettercore.entity.User;
-import com.github.ivanjermakov.lettercore.exception.AuthenticationException;
-import com.github.ivanjermakov.lettercore.service.UserService;
+import com.github.ivanjermakov.lettercore.user.entity.User;
+import com.github.ivanjermakov.lettercore.user.service.UserService;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;

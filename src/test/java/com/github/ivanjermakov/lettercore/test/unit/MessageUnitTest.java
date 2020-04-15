@@ -1,13 +1,13 @@
 package com.github.ivanjermakov.lettercore.test.unit;
 
+import com.github.ivanjermakov.lettercore.auth.exception.AuthenticationException;
+import com.github.ivanjermakov.lettercore.auth.exception.RegistrationException;
+import com.github.ivanjermakov.lettercore.common.exception.NoSuchEntityException;
+import com.github.ivanjermakov.lettercore.conversation.entity.Conversation;
+import com.github.ivanjermakov.lettercore.conversation.repository.UserConversationRepository;
+import com.github.ivanjermakov.lettercore.conversation.service.ConversationService;
 import com.github.ivanjermakov.lettercore.dto.TestingUser;
-import com.github.ivanjermakov.lettercore.entity.Conversation;
-import com.github.ivanjermakov.lettercore.exception.AuthenticationException;
-import com.github.ivanjermakov.lettercore.exception.NoSuchEntityException;
-import com.github.ivanjermakov.lettercore.exception.RegistrationException;
-import com.github.ivanjermakov.lettercore.repository.UserConversationRepository;
-import com.github.ivanjermakov.lettercore.service.ConversationService;
-import com.github.ivanjermakov.lettercore.service.MessageService;
+import com.github.ivanjermakov.lettercore.messaging.service.MessageService;
 import com.github.ivanjermakov.lettercore.service.TestingService;
 import org.junit.Ignore;
 import org.junit.Test;

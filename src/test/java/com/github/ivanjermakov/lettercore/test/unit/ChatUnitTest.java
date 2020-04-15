@@ -1,13 +1,13 @@
 package com.github.ivanjermakov.lettercore.test.unit;
 
-import com.github.ivanjermakov.lettercore.dto.NewChatDto;
+import com.github.ivanjermakov.lettercore.auth.exception.AuthenticationException;
+import com.github.ivanjermakov.lettercore.auth.exception.RegistrationException;
+import com.github.ivanjermakov.lettercore.conversation.dto.NewChatDto;
+import com.github.ivanjermakov.lettercore.conversation.entity.Conversation;
+import com.github.ivanjermakov.lettercore.conversation.service.ChatService;
 import com.github.ivanjermakov.lettercore.dto.TestingUser;
-import com.github.ivanjermakov.lettercore.entity.Conversation;
-import com.github.ivanjermakov.lettercore.exception.AuthenticationException;
-import com.github.ivanjermakov.lettercore.exception.RegistrationException;
-import com.github.ivanjermakov.lettercore.service.ChatService;
 import com.github.ivanjermakov.lettercore.service.TestingService;
-import com.github.ivanjermakov.lettercore.service.UserService;
+import com.github.ivanjermakov.lettercore.user.service.UserService;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.runner.RunWith;

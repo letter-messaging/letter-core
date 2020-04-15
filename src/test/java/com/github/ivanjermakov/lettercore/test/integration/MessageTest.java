@@ -1,15 +1,15 @@
 package com.github.ivanjermakov.lettercore.test.integration;
 
-import com.github.ivanjermakov.lettercore.controller.ConversationController;
-import com.github.ivanjermakov.lettercore.controller.MessageController;
-import com.github.ivanjermakov.lettercore.controller.MessagingController;
-import com.github.ivanjermakov.lettercore.dto.ConversationDto;
-import com.github.ivanjermakov.lettercore.dto.MessageDto;
-import com.github.ivanjermakov.lettercore.dto.NewMessageDto;
+import com.github.ivanjermakov.lettercore.auth.exception.AuthenticationException;
+import com.github.ivanjermakov.lettercore.auth.exception.AuthorizationException;
+import com.github.ivanjermakov.lettercore.auth.exception.RegistrationException;
+import com.github.ivanjermakov.lettercore.conversation.controller.ConversationController;
+import com.github.ivanjermakov.lettercore.conversation.dto.ConversationDto;
 import com.github.ivanjermakov.lettercore.dto.TestingUser;
-import com.github.ivanjermakov.lettercore.exception.AuthenticationException;
-import com.github.ivanjermakov.lettercore.exception.AuthorizationException;
-import com.github.ivanjermakov.lettercore.exception.RegistrationException;
+import com.github.ivanjermakov.lettercore.messaging.controller.MessageController;
+import com.github.ivanjermakov.lettercore.messaging.controller.MessagingController;
+import com.github.ivanjermakov.lettercore.messaging.dto.MessageDto;
+import com.github.ivanjermakov.lettercore.messaging.dto.NewMessageDto;
 import com.github.ivanjermakov.lettercore.service.TestingService;
 import org.junit.Assert;
 import org.junit.Before;

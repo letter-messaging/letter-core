@@ -1,12 +1,12 @@
 package com.github.ivanjermakov.lettercore.test.integration;
 
-import com.github.ivanjermakov.lettercore.controller.UserInfoController;
+import com.github.ivanjermakov.lettercore.auth.exception.AuthenticationException;
+import com.github.ivanjermakov.lettercore.auth.exception.AuthorizationException;
+import com.github.ivanjermakov.lettercore.auth.exception.RegistrationException;
 import com.github.ivanjermakov.lettercore.dto.TestingUser;
-import com.github.ivanjermakov.lettercore.dto.UserInfoDto;
-import com.github.ivanjermakov.lettercore.exception.AuthenticationException;
-import com.github.ivanjermakov.lettercore.exception.AuthorizationException;
-import com.github.ivanjermakov.lettercore.exception.RegistrationException;
 import com.github.ivanjermakov.lettercore.service.TestingService;
+import com.github.ivanjermakov.lettercore.user.controller.UserInfoController;
+import com.github.ivanjermakov.lettercore.user.dto.UserInfoDto;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;

@@ -1,13 +1,13 @@
 package com.github.ivanjermakov.lettercore.test.integration;
 
-import com.github.ivanjermakov.lettercore.controller.AuthenticationController;
-import com.github.ivanjermakov.lettercore.controller.RegistrationController;
-import com.github.ivanjermakov.lettercore.dto.RegisterUserDto;
-import com.github.ivanjermakov.lettercore.dto.UserDto;
-import com.github.ivanjermakov.lettercore.entity.User;
-import com.github.ivanjermakov.lettercore.exception.AuthenticationException;
-import com.github.ivanjermakov.lettercore.exception.RegistrationException;
-import com.github.ivanjermakov.lettercore.service.UserService;
+import com.github.ivanjermakov.lettercore.auth.controller.AuthController;
+import com.github.ivanjermakov.lettercore.auth.controller.RegistrationController;
+import com.github.ivanjermakov.lettercore.auth.exception.AuthenticationException;
+import com.github.ivanjermakov.lettercore.auth.exception.RegistrationException;
+import com.github.ivanjermakov.lettercore.user.dto.RegisterUserDto;
+import com.github.ivanjermakov.lettercore.user.dto.UserDto;
+import com.github.ivanjermakov.lettercore.user.entity.User;
+import com.github.ivanjermakov.lettercore.user.service.UserService;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -22,7 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class AuthenticationTest {
 
 	@Autowired
-	private AuthenticationController authenticationController;
+	private AuthController authController;
 
 	@Autowired
 	private UserService userService;
@@ -36,11 +36,11 @@ public class AuthenticationTest {
 				new RegisterUserDto("Jack", "Johnson", "jackj", "password")
 		);
 
-		String token = authenticationController.authenticate("jackj", "password");
+		String token = authController.authenticate("jackj", "password");
 
 		Assert.assertNotNull(token);
 
-		UserDto user = authenticationController.validate(
+		UserDto user = authController.validate(
 				userService.authenticate(token),
 				token
 		);
@@ -55,7 +55,7 @@ public class AuthenticationTest {
 				new RegisterUserDto("Jack", "Johnson", "jackj", "password")
 		);
 
-		authenticationController.authenticate("jackj", "not_password");
+		authController.authenticate("jackj", "not_password");
 	}
 
 	@Test(expected = AuthenticationException.class)
@@ -64,20 +64,20 @@ public class AuthenticationTest {
 				new RegisterUserDto("Jack", "Johnson", "jackj", "password")
 		);
 
-		String token = authenticationController.authenticate("jackj", "password");
+		String token = authController.authenticate("jackj", "password");
 
 		Assert.assertNotNull(token);
 
 		User user = userService.authenticate(token);
 
-		UserDto userDto = authenticationController.validate(user, token);
+		UserDto userDto = authController.validate(user, token);
 
 		Assert.assertNotNull(userDto);
 		Assert.assertEquals("jackj", userDto.login);
 
-		authenticationController.logout(user);
+		authController.logout(user);
 
-		authenticationController.validate(user, token);
+		authController.validate(user, token);
 	}
 
 }

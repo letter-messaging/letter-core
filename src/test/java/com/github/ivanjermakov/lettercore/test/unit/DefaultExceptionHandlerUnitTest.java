@@ -1,9 +1,9 @@
 package com.github.ivanjermakov.lettercore.test.unit;
 
+import com.github.ivanjermakov.lettercore.auth.exception.AuthenticationException;
+import com.github.ivanjermakov.lettercore.common.exception.NoSuchEntityException;
+import com.github.ivanjermakov.lettercore.common.exception.WebException;
 import com.github.ivanjermakov.lettercore.config.DefaultExceptionHandler;
-import com.github.ivanjermakov.lettercore.exception.AuthenticationException;
-import com.github.ivanjermakov.lettercore.exception.NoSuchEntityException;
-import com.github.ivanjermakov.lettercore.exception.WebException;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;

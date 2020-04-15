@@ -1,10 +1,10 @@
 package com.github.ivanjermakov.lettercore.test.integration;
 
-import com.github.ivanjermakov.lettercore.controller.AvatarController;
-import com.github.ivanjermakov.lettercore.dto.AvatarDto;
+import com.github.ivanjermakov.lettercore.auth.exception.AuthenticationException;
+import com.github.ivanjermakov.lettercore.auth.exception.RegistrationException;
 import com.github.ivanjermakov.lettercore.dto.TestingUser;
-import com.github.ivanjermakov.lettercore.exception.AuthenticationException;
-import com.github.ivanjermakov.lettercore.exception.RegistrationException;
+import com.github.ivanjermakov.lettercore.file.controller.AvatarController;
+import com.github.ivanjermakov.lettercore.file.dto.AvatarDto;
 import com.github.ivanjermakov.lettercore.service.TestingService;
 import org.junit.Assert;
 import org.junit.Test;

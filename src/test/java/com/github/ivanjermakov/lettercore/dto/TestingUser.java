@@ -1,6 +1,7 @@
 package com.github.ivanjermakov.lettercore.dto;
 
-import com.github.ivanjermakov.lettercore.entity.User;
+import com.github.ivanjermakov.lettercore.user.dto.UserDto;
+import com.github.ivanjermakov.lettercore.user.entity.User;
 
 public class TestingUser {
 

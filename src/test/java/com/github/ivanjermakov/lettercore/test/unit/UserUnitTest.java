@@ -1,11 +1,11 @@
 package com.github.ivanjermakov.lettercore.test.unit;
 
-import com.github.ivanjermakov.lettercore.entity.User;
-import com.github.ivanjermakov.lettercore.exception.AuthenticationException;
-import com.github.ivanjermakov.lettercore.exception.NoSuchEntityException;
-import com.github.ivanjermakov.lettercore.repository.UserRepository;
-import com.github.ivanjermakov.lettercore.service.HashService;
-import com.github.ivanjermakov.lettercore.service.UserService;
+import com.github.ivanjermakov.lettercore.auth.exception.AuthenticationException;
+import com.github.ivanjermakov.lettercore.common.exception.NoSuchEntityException;
+import com.github.ivanjermakov.lettercore.security.service.HashService;
+import com.github.ivanjermakov.lettercore.user.entity.User;
+import com.github.ivanjermakov.lettercore.user.repository.UserRepository;
+import com.github.ivanjermakov.lettercore.user.service.UserService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;

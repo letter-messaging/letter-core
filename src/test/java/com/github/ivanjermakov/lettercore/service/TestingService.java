@@ -1,12 +1,13 @@
 package com.github.ivanjermakov.lettercore.service;
 
-import com.github.ivanjermakov.lettercore.dto.RegisterUserDto;
+import com.github.ivanjermakov.lettercore.auth.exception.AuthenticationException;
+import com.github.ivanjermakov.lettercore.auth.exception.RegistrationException;
 import com.github.ivanjermakov.lettercore.dto.TestingUser;
-import com.github.ivanjermakov.lettercore.dto.UserDto;
-import com.github.ivanjermakov.lettercore.entity.User;
-import com.github.ivanjermakov.lettercore.exception.AuthenticationException;
-import com.github.ivanjermakov.lettercore.exception.RegistrationException;
-import com.github.ivanjermakov.lettercore.mapper.UserMapper;
+import com.github.ivanjermakov.lettercore.user.dto.RegisterUserDto;
+import com.github.ivanjermakov.lettercore.user.dto.UserDto;
+import com.github.ivanjermakov.lettercore.user.entity.User;
+import com.github.ivanjermakov.lettercore.user.mapper.UserMapper;
+import com.github.ivanjermakov.lettercore.user.service.UserService;
 import com.github.ivanjermakov.lettercore.util.Files;
 import com.google.common.base.Strings;
 import org.springframework.beans.factory.annotation.Autowired;

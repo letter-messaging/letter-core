@@ -1,6 +1,6 @@
 package com.github.ivanjermakov.lettercore.test.integration;
 
-import com.github.ivanjermakov.lettercore.service.MarkdownService;
+import com.github.ivanjermakov.lettercore.mail.service.MarkdownService;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;

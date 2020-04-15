@@ -1,9 +1,9 @@
 package com.github.ivanjermakov.lettercore.test.integration;
 
-import com.github.ivanjermakov.lettercore.controller.RegistrationController;
-import com.github.ivanjermakov.lettercore.dto.RegisterUserDto;
-import com.github.ivanjermakov.lettercore.exception.InvalidEntityException;
-import com.github.ivanjermakov.lettercore.exception.RegistrationException;
+import com.github.ivanjermakov.lettercore.auth.controller.RegistrationController;
+import com.github.ivanjermakov.lettercore.auth.exception.RegistrationException;
+import com.github.ivanjermakov.lettercore.common.exception.InvalidEntityException;
+import com.github.ivanjermakov.lettercore.user.dto.RegisterUserDto;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
