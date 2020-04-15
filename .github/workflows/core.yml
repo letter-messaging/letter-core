@@ -30,3 +30,6 @@ jobs:
 
       - name: run tests
         run: gradle test -Dfileupload.path=$HOME/upload
+        env:
+          DB_USER: postgres
+          DB_PASSWROD: postgres
