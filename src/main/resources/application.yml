@@ -1,0 +1,55 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/letter
+    username: ${DB_USER}
+    password: ${DB_PASSWORD}
+    driverClassName: org.postgresql.Driver
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+  mail:
+    username: ~
+    password: ~
+    host: ~
+
+server:
+  servlet:
+    context-path: /api
+  port: 8080
+
+sse:
+  timeout: 60000
+
+fileupload:
+  path: /D/upload/
+web:
+  static:
+    resources:
+      path: file/
+default:
+  avatar:
+    conversation:
+      path: default-avatar-conversation.png
+    chat:
+      path: default-avatar-conversation.png
+
+search:
+  result:
+    limit: 20
+
+online:
+  lifetime-days: 1
+
+twilio:
+  account:
+    sid: ~
+  auth:
+    token: ~
+  from:
+    number: ~
+
+logging:
+  level:
+    root: warn
+    com.gmail.ivanjermakov1.messenger: debug
