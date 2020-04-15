@@ -1,10 +1,10 @@
 package com.github.ivanjermakov.lettercore.config;
 
-import com.github.ivanjermakov.lettercore.exception.AuthenticationException;
-import com.github.ivanjermakov.lettercore.exception.AuthorizationException;
-import com.github.ivanjermakov.lettercore.exception.NoSuchEntityException;
-import com.github.ivanjermakov.lettercore.exception.WebException;
-import com.github.ivanjermakov.lettercore.service.ConversationService;
+import com.github.ivanjermakov.lettercore.auth.exception.AuthenticationException;
+import com.github.ivanjermakov.lettercore.auth.exception.AuthorizationException;
+import com.github.ivanjermakov.lettercore.common.exception.NoSuchEntityException;
+import com.github.ivanjermakov.lettercore.common.exception.WebException;
+import com.github.ivanjermakov.lettercore.conversation.service.ConversationService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
