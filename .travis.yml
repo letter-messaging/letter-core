@@ -6,7 +6,7 @@ services:
   - postgresql
 env:
   - DB_USER=postgres
-  - DB_PASSWORD=""
+  - DB_PASSWORD=
 script:
   - psql -a -U postgres -c 'create database letter;'
   - psql -a -U postgres -d letter -f src/main/resources/database.sql
