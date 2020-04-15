@@ -29,7 +29,7 @@ jobs:
           PGPASSWORD: postgres
 
       - name: run tests
-        run: gradle test -Dfileupload.path=$HOME/upload
+        run: gradle test -i -Dfileupload.path=$HOME/upload
         env:
           DB_USER: postgres
           DB_PASSWORD: postgres

@@ -9,4 +9,4 @@ env:
 script:
   - psql -a -U postgres -c 'create database letter;'
   - psql -a -U postgres -d letter -f src/main/resources/database.sql
-  - gradle test -Dfileupload.path=$HOME/upload
+  - gradle test -i -Dfileupload.path=$HOME/upload
