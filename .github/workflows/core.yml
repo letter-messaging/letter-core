@@ -15,8 +15,6 @@ jobs:
           POSTGRES_DB: letter
         ports:
           - 5432:5432
-        volumes:
-          - $HOME/database/postgis:/var/lib/postgresql/data
         options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
     steps:
       - uses: actions/checkout@v2
@@ -25,11 +23,8 @@ jobs:
         with:
           java-version: 11
 
-      - name: create db
-        run: psql -a -U postgres -c 'create database letter;'
-
       - name: run db script
-        run: psql -a -U postgres -d letter -f src/main/resources/database.sql
+        run: psql -a -h localhost -U postgres -d letter -f src/main/resources/database.sql
 
       - name: run tests
         run: gradle test -Dfileupload.path=$HOME/upload
