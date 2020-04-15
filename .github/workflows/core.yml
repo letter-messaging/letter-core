@@ -14,7 +14,7 @@ jobs:
           POSTGRES_PASSWORD: postgres
           POSTGRES_DB: letter
         ports:
-          - 5432:5432
+          - 5432/5432
         options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
 
     steps:
@@ -24,16 +24,14 @@ jobs:
         with:
           java-version: 11
 
+      - name: db is available
+        run: psql -U postgres
+
       - name: run db script
         run: psql -a -U postgres -d letter -f src/main/resources/database.sql
 
       - name: run tests
         run: gradle test -Dfileupload.path=$HOME/upload
         env:
-          PG_HOST: localhost
-          PG_USER: postgres
-          PG_DATABASE: postgres
-          PG_PASSWORD: postgres
-          PG_PORT: 5432
           DB_USER: postgres
           DB_PASSWORD: postgres
