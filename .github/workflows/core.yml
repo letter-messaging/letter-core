@@ -30,5 +30,10 @@ jobs:
       - name: run tests
         run: gradle test -Dfileupload.path=$HOME/upload
         env:
+          PG_HOST: localhost
+          PG_USER: postgres
+          PG_DATABASE: postgres
+          PG_PASSWORD: postgres
+          PG_PORT: 5432
           DB_USER: postgres
           DB_PASSWORD: postgres
