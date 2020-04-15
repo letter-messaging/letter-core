@@ -5,9 +5,8 @@ jdk:
 services:
   - postgresql
 env:
-  - DB_USER=postgres
-  - DB_PASSWORD=""
+  - DB_USER=postgres DB_PASSWORD=
 script:
   - psql -a -U postgres -c 'create database letter;'
   - psql -a -U postgres -d letter -f src/main/resources/database.sql
-  - gradle test -Dfileupload.path=$HOME/upload
+  - gradle test -i -Dfileupload.path=$HOME/upload
