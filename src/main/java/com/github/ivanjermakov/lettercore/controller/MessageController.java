@@ -2,11 +2,36 @@ package com.github.ivanjermakov.lettercore.controller;
 
 import com.github.ivanjermakov.lettercore.dto.MessageDto;
 import com.github.ivanjermakov.lettercore.entity.User;
+import com.github.ivanjermakov.lettercore.service.MessageService;
+import com.github.ivanjermakov.lettercore.service.MessagingService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-public interface MessageController {
+@RestController
+@RequestMapping("message")
+@Transactional
+public class MessageController {
+
+	private final MessageService messageService;
+	private final MessagingService messagingService;
+
+	@Autowired
+	public MessageController(MessageService messageService, MessagingService messagingService) {
+		this.messageService = messageService;
+		this.messagingService = messagingService;
+	}
 
 	/**
 	 * Get list of messages.
@@ -16,7 +41,13 @@ public interface MessageController {
 	 * @param pageable       pageable
 	 * @return list of messages. Return empty list on empty conversation
 	 */
-	List<MessageDto> get(User user, Long conversationId, Pageable pageable);
+	@GetMapping("get")
+	public List<MessageDto> get(@ModelAttribute User user,
+	                            @RequestParam("conversationId") Long conversationId,
+	                            @PageableDefault(direction = Sort.Direction.DESC, sort = {"sent"}) Pageable pageable) {
+		messagingService.processConversationRead(user, conversationId);
+		return messageService.get(user.id, conversationId, pageable);
+	}
 
 	/**
 	 * Delete list of messages.
@@ -25,6 +56,10 @@ public interface MessageController {
 	 * @param user           authenticated user. automatically maps, when {@literal Auth-Token} parameter present
 	 * @param deleteMessages list of messages to delete
 	 */
-	void delete(User user, List<MessageDto> deleteMessages);
+	@PostMapping("delete")
+	public void delete(@ModelAttribute User user,
+	                   @RequestBody List<MessageDto> deleteMessages) {
+		messageService.delete(user, deleteMessages);
+	}
 
 }

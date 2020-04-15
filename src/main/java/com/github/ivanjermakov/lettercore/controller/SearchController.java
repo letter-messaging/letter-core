@@ -3,12 +3,31 @@ package com.github.ivanjermakov.lettercore.controller;
 import com.github.ivanjermakov.lettercore.dto.PreviewDto;
 import com.github.ivanjermakov.lettercore.dto.UserDto;
 import com.github.ivanjermakov.lettercore.entity.User;
+import com.github.ivanjermakov.lettercore.exception.InvalidEntityException;
 import com.github.ivanjermakov.lettercore.exception.InvalidSearchFormatException;
+import com.github.ivanjermakov.lettercore.service.SearchService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-public interface SearchController {
+@RestController
+@RequestMapping("search")
+@Transactional
+public class SearchController {
+
+	private final SearchService searchService;
+
+	@Autowired
+	public SearchController(SearchService searchService) {
+		this.searchService = searchService;
+	}
 
 	/**
 	 * Find preview by companion login or first or last name, presented partially or fully in search query parameter
@@ -17,7 +36,12 @@ public interface SearchController {
 	 * @param search search query
 	 * @return list of found previews
 	 */
-	List<PreviewDto> searchConversations(User user, String search, Pageable pageable);
+	@GetMapping("conversations")
+	public List<PreviewDto> searchConversations(@ModelAttribute User user,
+	                                            @RequestParam("search") String search,
+	                                            Pageable pageable) throws InvalidEntityException {
+		return searchService.searchConversations(user, search, pageable);
+	}
 
 	/**
 	 * Find users by their login.
@@ -29,6 +53,11 @@ public interface SearchController {
 	 * @return list of found users
 	 * @throws InvalidSearchFormatException on invalid @param query
 	 */
-	List<UserDto> searchUsers(User user, String search, Pageable pageable);
+	@GetMapping("users")
+	public List<UserDto> searchUsers(@ModelAttribute User user,
+	                                 @RequestParam("search") String search,
+	                                 Pageable pageable) throws InvalidSearchFormatException {
+		return searchService.searchUsers(search, pageable);
+	}
 
 }

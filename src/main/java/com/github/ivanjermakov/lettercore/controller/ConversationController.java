@@ -3,8 +3,37 @@ package com.github.ivanjermakov.lettercore.controller;
 import com.github.ivanjermakov.lettercore.dto.ConversationDto;
 import com.github.ivanjermakov.lettercore.entity.User;
 import com.github.ivanjermakov.lettercore.exception.AuthenticationException;
+import com.github.ivanjermakov.lettercore.mapper.ConversationMapper;
+import com.github.ivanjermakov.lettercore.service.ConversationService;
+import com.github.ivanjermakov.lettercore.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
-public interface ConversationController {
+@RestController
+@RequestMapping("conversation")
+@Transactional
+public class ConversationController {
+
+	private final ConversationService conversationService;
+	private final UserService userService;
+
+	private ConversationMapper conversationMapper;
+
+	@Autowired
+	public ConversationController(ConversationService conversationService, UserService userService) {
+		this.conversationService = conversationService;
+		this.userService = userService;
+	}
+
+	@Autowired
+	public void setConversationMapper(ConversationMapper conversationMapper) {
+		this.conversationMapper = conversationMapper;
+	}
 
 	/**
 	 * Create conversation with specified user.
@@ -14,8 +43,12 @@ public interface ConversationController {
 	 * @param withLogin login of user to create conversation with
 	 * @return created conversation
 	 */
-//	TODO: use withId instead of withLogin to be more consistent
-	ConversationDto create(User user, String withLogin);
+	@GetMapping("create")
+	public ConversationDto create(@ModelAttribute User user, @RequestParam("with") String withLogin) {
+		return conversationMapper
+				.with(user)
+				.map(conversationService.create(user, userService.getUser(withLogin)));
+	}
 
 	/**
 	 * Hide conversation for calling user and delete all messages sent by him.
@@ -24,7 +57,10 @@ public interface ConversationController {
 	 * @param id   id of conversation to delete
 	 * @throws AuthenticationException on invalid @param token
 	 */
-	void delete(User user, Long id) throws AuthenticationException;
+	@GetMapping("delete")
+	public void delete(@ModelAttribute User user, @RequestParam("id") Long id) throws AuthenticationException {
+		conversationService.delete(user, conversationService.get(id));
+	}
 
 	/**
 	 * Hide conversation from calling user
@@ -32,6 +68,9 @@ public interface ConversationController {
 	 * @param user authenticated user. automatically maps, when {@literal Auth-Token} parameter present
 	 * @param id   id of conversation to hide
 	 */
-	void hide(User user, Long id);
+	@GetMapping("hide")
+	public void hide(@ModelAttribute User user, @RequestParam("id") Long id) {
+		conversationService.hide(user, conversationService.get(id));
+	}
 
 }

@@ -4,11 +4,30 @@ import com.github.ivanjermakov.lettercore.dto.NewDocumentDto;
 import com.github.ivanjermakov.lettercore.entity.User;
 import com.github.ivanjermakov.lettercore.exception.AuthorizationException;
 import com.github.ivanjermakov.lettercore.exception.NoSuchEntityException;
+import com.github.ivanjermakov.lettercore.service.DocumentService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 
-public interface DocumentController {
+@RestController
+@RequestMapping("document")
+@Transactional
+public class DocumentController {
+
+	private final DocumentService documentService;
+
+	@Autowired
+	public DocumentController(DocumentService documentService) {
+		this.documentService = documentService;
+	}
 
 	/**
 	 * Upload document.
@@ -18,7 +37,11 @@ public interface DocumentController {
 	 * @return uploaded document
 	 * @throws IOException on server file system error
 	 */
-	NewDocumentDto upload(User user, MultipartFile document) throws IOException;
+	@PostMapping("upload")
+	public NewDocumentDto upload(@ModelAttribute User user,
+	                             @RequestParam("document") MultipartFile document) throws IOException {
+		return documentService.upload(document);
+	}
 
 	/**
 	 * Delete document from certain message
@@ -28,6 +51,10 @@ public interface DocumentController {
 	 * @throws NoSuchEntityException  on invalid document id
 	 * @throws AuthorizationException if user is not an a sender of a message document attached to
 	 */
-	void delete(User user, Long documentId);
+	@GetMapping("delete")
+	public void delete(@ModelAttribute User user,
+	                   @RequestParam("documentId") Long documentId) throws AuthorizationException, NoSuchEntityException {
+		documentService.delete(user, documentId);
+	}
 
 }

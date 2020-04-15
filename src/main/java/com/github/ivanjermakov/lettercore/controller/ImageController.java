@@ -5,11 +5,30 @@ import com.github.ivanjermakov.lettercore.entity.User;
 import com.github.ivanjermakov.lettercore.exception.AuthorizationException;
 import com.github.ivanjermakov.lettercore.exception.InvalidEntityException;
 import com.github.ivanjermakov.lettercore.exception.NoSuchEntityException;
+import com.github.ivanjermakov.lettercore.service.ImageService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 
-public interface ImageController {
+@RestController
+@RequestMapping("image")
+@Transactional
+public class ImageController {
+
+	private final ImageService imageService;
+
+	@Autowired
+	public ImageController(ImageService imageService) {
+		this.imageService = imageService;
+	}
 
 	/**
 	 * Upload image.
@@ -21,7 +40,11 @@ public interface ImageController {
 	 * @throws InvalidEntityException on upload of invalid file (mostly caused by invalid file extension or file size
 	 *                                specified in @value {@code spring.servlet.multipart.max-file-size})
 	 */
-	NewImageDto upload(User user, MultipartFile image) throws IOException;
+	@PostMapping("upload")
+	public NewImageDto upload(@ModelAttribute User user,
+	                          @RequestParam("image") MultipartFile image) throws IOException, InvalidEntityException {
+		return imageService.upload(image);
+	}
 
 	/**
 	 * Delete image from certain message
@@ -31,6 +54,10 @@ public interface ImageController {
 	 * @throws NoSuchEntityException  on invalid image id
 	 * @throws AuthorizationException if user is not an a sender of a message image attached to
 	 */
-	void delete(User user, Long imageId);
+	@GetMapping("delete")
+	public void delete(@ModelAttribute User user,
+	                   @RequestParam("imageId") Long imageId) throws AuthorizationException, NoSuchEntityException {
+		imageService.delete(user, imageId);
+	}
 
 }
