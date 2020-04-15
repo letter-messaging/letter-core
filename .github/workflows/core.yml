@@ -25,6 +25,8 @@ jobs:
 
       - name: run db script
         run: psql -a -h localhost -U postgres -d letter -f src/main/resources/database.sql
+        env:
+          - PGPASSWORD: postgres
 
       - name: run tests
         run: gradle test -Dfileupload.path=$HOME/upload
