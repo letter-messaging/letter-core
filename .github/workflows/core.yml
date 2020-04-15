@@ -1,0 +1,30 @@
+name: core
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:12.2
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: ""
+          POSTGRES_DB: letter
+        ports:
+          - 5432:5432
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: actions/setup-java@v1
+        with:
+          java-version: 11
+
+      - name: run db script
+        run: psql -a -U postgres -d letter -f src/main/resources/database.sql
+
+      - name: run tests
+        run: gradle test -Dfileupload.path=$HOME/upload
