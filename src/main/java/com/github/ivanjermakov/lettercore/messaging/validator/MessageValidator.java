@@ -38,7 +38,7 @@ public class MessageValidator implements Validatable<Message> {
 							.rule(new NotNull<>(), "conversation id cannot be null")
 					)
 			)
-			.rule(m -> !attachmentValidator.validate(m) || !(m == null || m.text.isEmpty()), "message without text must contain attachments");
+			.rule(this::messageHasTextOrAttachments, "message without text must contain attachments");
 
 	@Override
 	public boolean validate(Message target) {
@@ -47,6 +47,10 @@ public class MessageValidator implements Validatable<Message> {
 
 	public void throwInvalid(Message target) throws InvalidEntityException {
 		validator.throwInvalid(target, m -> new InvalidEntityException(m));
+	}
+
+	private boolean messageHasTextOrAttachments(Message m) {
+		return !attachmentValidator.validate(m) || !(m == null || m.text.isEmpty());
 	}
 
 }

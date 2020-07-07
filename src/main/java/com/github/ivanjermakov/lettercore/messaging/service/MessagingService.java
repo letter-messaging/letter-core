@@ -105,10 +105,6 @@ public class MessagingService {
 		);
 	}
 
-	public void disconnect(Request<Action> request) {
-		requests.remove(request);
-	}
-
 	public MessageDto processNewMessage(User user, NewMessageDto newMessageDto) throws InvalidEntityException, AuthorizationException {
 		Conversation conversation = conversationService.get(newMessageDto.conversationId);
 

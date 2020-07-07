@@ -44,7 +44,7 @@ public class MessagingController {
 	 * @throws AuthenticationException on invalid @param token
 	 */
 	@GetMapping("listen")
-	public Flux<Action> getEvents(@RequestParam("token") String token) throws AuthenticationException {
+	public Flux<Action> getEvents(@RequestParam("Auth-Token") String token) throws AuthenticationException {
 		User user = userService.authenticate(token);
 
 		return Flux.create(sink -> messagingService.connect(new Request<>(user, sink)));

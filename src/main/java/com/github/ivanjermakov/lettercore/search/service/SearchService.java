@@ -8,12 +8,11 @@ import com.github.ivanjermakov.lettercore.conversation.dto.PreviewDto;
 import com.github.ivanjermakov.lettercore.conversation.mapper.PreviewMapper;
 import com.github.ivanjermakov.lettercore.conversation.repository.ConversationRepository;
 import com.github.ivanjermakov.lettercore.search.exception.InvalidSearchFormatException;
-import com.github.ivanjermakov.lettercore.user.dto.UserDto;
 import com.github.ivanjermakov.lettercore.user.entity.User;
-import com.github.ivanjermakov.lettercore.user.mapper.UserMapper;
 import com.github.ivanjermakov.lettercore.user.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -27,16 +26,14 @@ public class SearchService {
 	private final UserRepository userRepository;
 	private final ConversationRepository conversationRepository;
 
-	private final UserMapper userMapper;
 	private final PreviewMapper previewMapper;
 
 	@Value("${search.result.limit}")
 	private Integer searchResultLimit;
 
 	@Autowired
-	public SearchService(UserRepository userRepository, UserMapper userMapper, ConversationRepository conversationRepository, PreviewMapper previewMapper) {
+	public SearchService(UserRepository userRepository, ConversationRepository conversationRepository, PreviewMapper previewMapper) {
 		this.userRepository = userRepository;
-		this.userMapper = userMapper;
 		this.conversationRepository = conversationRepository;
 		this.previewMapper = previewMapper;
 	}
@@ -55,13 +52,14 @@ public class SearchService {
 				.collect(Collectors.toList());
 	}
 
-	public List<UserDto> searchUsers(String search, Pageable pageable) throws InvalidSearchFormatException {
+	public List<User> searchUsers(String search, Pageable pageable) throws InvalidSearchFormatException {
 		if (search.charAt(0) != '@') throw new InvalidSearchFormatException("user search must starts with '@'");
 
-		return userRepository.searchUsers(search, pageable)
-				.stream()
-				.map(userMapper::map)
-				.collect(Collectors.toList());
+		return userRepository.searchUsers(search, PageRequest.of(
+				pageable.getPageNumber(),
+				Math.min(searchResultLimit, pageable.getPageSize()),
+				pageable.getSort()
+		));
 	}
 
 }
