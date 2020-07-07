@@ -13,15 +13,15 @@ import java.util.function.Function;
 @Component
 public class RegisterUserDtoValidator implements Validatable<RegisterUserDto> {
 
-	private final Validator<String> stringValidator = new Validator<String>()
+	private final Function<Validator<String>, Validator<String>> stringValidatorFunction = v -> v
 			.rule(new NotNull<>(), "cannot be null")
 			.rule(new NotBlank(), "cannot be blank");
 
 	private final Validator<RegisterUserDto> validator = new Validator<RegisterUserDto>()
-			.field(ru -> ru.firstName, v -> stringValidator)
-			.field(ru -> ru.lastName, v -> stringValidator)
-			.field(ru -> ru.login, v -> stringValidator)
-			.field(ru -> ru.password, v -> stringValidator)
+			.field(ru -> ru.firstName, stringValidatorFunction)
+			.field(ru -> ru.lastName, stringValidatorFunction)
+			.field(ru -> ru.login, stringValidatorFunction)
+			.field(ru -> ru.password, stringValidatorFunction)
 			.field(ru -> ru.password, v -> v
 					.rule(p -> p.length() >= 8, "password must be between 8 and 32 characters long")
 					.rule(p -> p.length() <= 32, "password must be between 8 and 32 characters long")
