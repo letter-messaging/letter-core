@@ -2,6 +2,7 @@ package com.github.ivanjermakov.lettercore.auth.integration;
 
 import com.github.ivanjermakov.lettercore.auth.controller.AuthController;
 import com.github.ivanjermakov.lettercore.auth.controller.RegistrationController;
+import com.github.ivanjermakov.lettercore.auth.dto.AuthUserDto;
 import com.github.ivanjermakov.lettercore.auth.exception.AuthenticationException;
 import com.github.ivanjermakov.lettercore.auth.exception.RegistrationException;
 import com.github.ivanjermakov.lettercore.user.dto.RegisterUserDto;
@@ -36,7 +37,7 @@ public class AuthTest {
 				new RegisterUserDto("Jack", "Johnson", "jackj", "password")
 		);
 
-		String token = authController.authenticate("jackj", "password");
+		String token = authController.authenticate(new AuthUserDto("jackj", "password"));
 
 		Assert.assertNotNull(token);
 
@@ -55,7 +56,7 @@ public class AuthTest {
 				new RegisterUserDto("Jack", "Johnson", "jackj", "password")
 		);
 
-		authController.authenticate("jackj", "not_password");
+		authController.authenticate(new AuthUserDto("jackj", "not_password"));
 	}
 
 	@Test(expected = AuthenticationException.class)
@@ -64,7 +65,7 @@ public class AuthTest {
 				new RegisterUserDto("Jack", "Johnson", "jackj", "password")
 		);
 
-		String token = authController.authenticate("jackj", "password");
+		String token = authController.authenticate(new AuthUserDto("jackj", "password"));
 
 		Assert.assertNotNull(token);
 

@@ -1,5 +1,6 @@
 package com.github.ivanjermakov.lettercore.user.unit;
 
+import com.github.ivanjermakov.lettercore.auth.dto.AuthUserDto;
 import com.github.ivanjermakov.lettercore.auth.exception.AuthenticationException;
 import com.github.ivanjermakov.lettercore.common.exception.NoSuchEntityException;
 import com.github.ivanjermakov.lettercore.security.service.HashService;
@@ -44,7 +45,7 @@ public class UserUnitTest {
 		when(userRepository.findByLogin(anyString()))
 				.thenReturn(Optional.of(system));
 
-		userService.authenticate("system", "password");
+		userService.authenticate(new AuthUserDto("system", "password"));
 	}
 
 	@Test(expected = NoSuchEntityException.class)

@@ -1,5 +1,6 @@
 package com.github.ivanjermakov.lettercore.common.service;
 
+import com.github.ivanjermakov.lettercore.auth.dto.AuthUserDto;
 import com.github.ivanjermakov.lettercore.auth.exception.AuthenticationException;
 import com.github.ivanjermakov.lettercore.auth.exception.RegistrationException;
 import com.github.ivanjermakov.lettercore.common.dto.TestingUser;
@@ -32,7 +33,7 @@ public class TestingService {
 		RegisterUserDto registerUserDto = new RegisterUserDto(name, name, name, password);
 
 		userService.register(registerUserDto);
-		String userToken = userService.authenticate(name, password);
+		String userToken = userService.authenticate(new AuthUserDto(name, password));
 		User user = userService.authenticate(userToken);
 		UserDto userDto = userMapper.map(user);
 
@@ -46,7 +47,7 @@ public class TestingService {
 	public TestingUser getUser(String name) throws AuthenticationException {
 		String password = Strings.repeat(name, 4);
 
-		String userToken = userService.authenticate(name, password);
+		String userToken = userService.authenticate(new AuthUserDto(name, password));
 		User user = userService.authenticate(userToken);
 		UserDto userDto = userMapper.map(user);
 

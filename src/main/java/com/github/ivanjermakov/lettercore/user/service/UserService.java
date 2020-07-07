@@ -1,5 +1,6 @@
 package com.github.ivanjermakov.lettercore.user.service;
 
+import com.github.ivanjermakov.lettercore.auth.dto.AuthUserDto;
 import com.github.ivanjermakov.lettercore.auth.entity.Token;
 import com.github.ivanjermakov.lettercore.auth.exception.AuthenticationException;
 import com.github.ivanjermakov.lettercore.auth.exception.RegistrationException;
@@ -44,11 +45,11 @@ public class UserService {
 		this.hashService = hashService;
 	}
 
-	public String authenticate(String login, String password) throws AuthenticationException {
-		LOG.debug("authenticate user: @" + login);
-		Optional<User> user = userRepository.findByLogin(login);
+	public String authenticate(AuthUserDto authUser) throws AuthenticationException {
+		LOG.debug("authenticate user: @" + authUser.login);
+		Optional<User> user = userRepository.findByLogin(authUser.login);
 
-		if (!user.isPresent() || !hashService.check(password, user.get().hash))
+		if (!user.isPresent() || !hashService.check(authUser.password, user.get().hash))
 			throw new AuthenticationException("wrong credentials");
 
 //		even if the password matches, client won't receive @system's user token
