@@ -1,6 +1,7 @@
 package com.github.ivanjermakov.lettercore.auth.controller;
 
 import com.github.ivanjermakov.lettercore.auth.dto.AuthUserDto;
+import com.github.ivanjermakov.lettercore.auth.dto.TokenDto;
 import com.github.ivanjermakov.lettercore.auth.exception.AuthenticationException;
 import com.github.ivanjermakov.lettercore.user.dto.UserDto;
 import com.github.ivanjermakov.lettercore.user.entity.User;
@@ -10,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -35,9 +38,9 @@ public class AuthController {
 	 * @return user authentication token
 	 * @throws AuthenticationException on invalid credentials
 	 */
-	@GetMapping
-	public String authenticate(AuthUserDto user) throws AuthenticationException {
-		return userService.authenticate(user);
+	@PostMapping
+	public TokenDto authenticate(@RequestBody AuthUserDto user) throws AuthenticationException {
+		return new TokenDto(userService.authenticate(user));
 	}
 
 	/**
@@ -48,7 +51,7 @@ public class AuthController {
 	 * @return user
 	 * @throws AuthenticationException on invalid token
 	 */
-	@GetMapping("validate")
+	@GetMapping
 	public UserDto validate(@ModelAttribute User user,
 	                        @RequestHeader("Auth-Token") String token) throws AuthenticationException {
 		userService.authenticate(token);

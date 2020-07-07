@@ -37,7 +37,7 @@ public class AuthTest {
 				new RegisterUserDto("Jack", "Johnson", "jackj", "password")
 		);
 
-		String token = authController.authenticate(new AuthUserDto("jackj", "password"));
+		String token = authController.authenticate(new AuthUserDto("jackj", "password")).token;
 
 		Assert.assertNotNull(token);
 
@@ -65,7 +65,7 @@ public class AuthTest {
 				new RegisterUserDto("Jack", "Johnson", "jackj", "password")
 		);
 
-		String token = authController.authenticate(new AuthUserDto("jackj", "password"));
+		String token = authController.authenticate(new AuthUserDto("jackj", "password")).token;
 
 		Assert.assertNotNull(token);
 

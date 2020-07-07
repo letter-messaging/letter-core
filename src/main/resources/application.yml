@@ -12,6 +12,8 @@ spring:
     username: ~
     password: ~
     host: ~
+  jpa:
+    open-in-view: true
 
 server:
   servlet:
@@ -51,5 +53,5 @@ twilio:
 
 logging:
   level:
-    root: warn
+    root: info
     com.gmail.ivanjermakov1.messenger: debug
