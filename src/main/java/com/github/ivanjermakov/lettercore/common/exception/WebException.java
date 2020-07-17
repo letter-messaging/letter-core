@@ -3,12 +3,9 @@ package com.github.ivanjermakov.lettercore.common.exception;
 import org.springframework.http.HttpStatus;
 
 import javax.servlet.http.HttpServletRequest;
-import java.time.LocalDateTime;
-import java.time.ZoneOffset;
 
 public class WebException {
 
-	public Long timestamp = LocalDateTime.now().toEpochSecond(ZoneOffset.UTC);
 	public Integer status;
 	public String error;
 	public String message;

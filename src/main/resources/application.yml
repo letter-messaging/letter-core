@@ -43,14 +43,6 @@ search:
 online:
   lifetime-days: 1
 
-twilio:
-  account:
-    sid: ~
-  auth:
-    token: ~
-  from:
-    number: ~
-
 logging:
   level:
     root: info
