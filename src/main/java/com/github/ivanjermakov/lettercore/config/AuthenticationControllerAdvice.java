@@ -22,6 +22,7 @@ public class AuthenticationControllerAdvice {
 
 	/**
 	 * Mapping of {@literal token} header from request to {@link User} entity automatically
+	 * TODO: replace with optional
 	 *
 	 * @param request http request
 	 * @return mapped user. {@literal null} if request has no {@literal token} header

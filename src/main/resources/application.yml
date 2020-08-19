@@ -33,8 +33,6 @@ default:
   avatar:
     conversation:
       path: default-avatar-conversation.png
-    chat:
-      path: default-avatar-conversation.png
 
 search:
   result:

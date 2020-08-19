@@ -7,7 +7,7 @@ import java.time.LocalDate;
 
 public class AvatarDto {
 
-	@Value("${default.avatar.chat.path}")
+	@Value("${default.avatar.conversation.path}")
 	public String defaultConversationAvatarPath;
 
 	public Long id;

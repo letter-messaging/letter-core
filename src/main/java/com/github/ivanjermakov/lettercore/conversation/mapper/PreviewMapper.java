@@ -18,7 +18,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class PreviewMapper implements Mapper<Conversation, PreviewDto>, MapperBuilder<User> {
 
-	@Value("${default.avatar.chat.path}")
+	@Value("${default.avatar.conversation.path}")
 	private String defaultAvatarChatPath;
 
 	private MessageService messageService;
